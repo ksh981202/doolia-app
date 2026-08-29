@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" fill="none">
+  <rect width="600" height="800" fill="#FFFFFF"/>
+  <rect x="90" y="140" width="420" height="520" rx="28" stroke="#1F2937" stroke-width="8"/>
+  <text x="300" y="280" text-anchor="middle" font-size="72" font-family="Fredoka, sans-serif" fill="none" stroke="#1F2937" stroke-width="4">A B C</text>
+  <text x="300" y="390" text-anchor="middle" font-size="42" font-family="Fredoka, sans-serif" fill="none" stroke="#1F2937" stroke-width="3">a b c</text>
+  <path d="M160 500h280" stroke="#1F2937" stroke-width="6" stroke-dasharray="10 12"/>
+  <path d="M160 560h280" stroke="#1F2937" stroke-width="6"/>
+</svg>

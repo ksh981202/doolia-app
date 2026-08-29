@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" fill="none">
+  <rect width="600" height="800" fill="#FFF8EF"/>
+  <circle cx="300" cy="330" r="150" fill="#FFC857"/>
+  <circle cx="250" cy="310" r="18" fill="#2A221B"/>
+  <circle cx="350" cy="310" r="18" fill="#2A221B"/>
+  <path d="M240 390c40 40 80 40 120 0" stroke="#2A221B" stroke-width="14" stroke-linecap="round"/>
+  <path d="M180 220c-40-70 40-110 70-40" stroke="#E25538" stroke-width="16" stroke-linecap="round"/>
+  <path d="M420 220c40-70-40-110-70-40" stroke="#E25538" stroke-width="16" stroke-linecap="round"/>
+  <ellipse cx="300" cy="620" rx="160" ry="70" fill="#2BB8A8"/>
+  <text x="300" y="635" text-anchor="middle" font-size="36" font-family="Nunito, sans-serif" fill="#FFFDF9" font-weight="800">DOOLIA</text>
+</svg>

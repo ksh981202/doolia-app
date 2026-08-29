@@ -1,0 +1,190 @@
+import { PARENTING_TIPS, type ParentingTip, type ParentingTipBlock, type ParentingTipTopicId } from '@/data/parentingTipsData'
+import { supabase } from '@/lib/supabase'
+
+export type AdminTip = ParentingTip & {
+  id: string
+  views: number
+  published: boolean
+  bodyMarkdown: string
+}
+
+const LOCAL_KEY = 'doolia-admin-tips'
+
+function readLocal(): AdminTip[] {
+  try {
+    const raw = localStorage.getItem(LOCAL_KEY)
+    return raw ? (JSON.parse(raw) as AdminTip[]) : []
+  } catch {
+    return []
+  }
+}
+
+function writeLocal(items: AdminTip[]) {
+  localStorage.setItem(LOCAL_KEY, JSON.stringify(items))
+}
+
+export function markdownToBlocks(markdown: string): ParentingTipBlock[] {
+  const blocks: ParentingTipBlock[] = []
+  let list: string[] = []
+  const flushList = () => {
+    if (list.length) {
+      blocks.push({ type: 'ul', items: list })
+      list = []
+    }
+  }
+
+  for (const raw of markdown.split(/\r?\n/)) {
+    const line = raw.trim()
+    if (!line) {
+      flushList()
+      continue
+    }
+    if (line.startsWith('### ')) {
+      flushList()
+      blocks.push({ type: 'h3', text: line.slice(4) })
+      continue
+    }
+    if (line.startsWith('## ')) {
+      flushList()
+      blocks.push({ type: 'h2', text: line.slice(3) })
+      continue
+    }
+    if (line.startsWith('- ') || line.startsWith('* ')) {
+      list.push(line.slice(2))
+      continue
+    }
+    flushList()
+    blocks.push({ type: 'p', text: line })
+  }
+  flushList()
+  return blocks
+}
+
+function fromStatic(item: ParentingTip): AdminTip {
+  return {
+    ...item,
+    id: item.slug,
+    views: 0,
+    published: true,
+    bodyMarkdown: item.blocks
+      .map((block) => {
+        if (block.type === 'h2') return `## ${block.text}`
+        if (block.type === 'h3') return `### ${block.text}`
+        if (block.type === 'ul') return block.items.map((line) => `- ${line}`).join('\n')
+        return block.text
+      })
+      .join('\n\n'),
+  }
+}
+
+function fromRow(row: Record<string, unknown>): AdminTip {
+  const bodyMarkdown = String(row.body_markdown ?? '')
+  return {
+    id: String(row.id),
+    slug: String(row.slug),
+    title: String(row.title),
+    excerpt: String(row.excerpt ?? ''),
+    category: (row.category as ParentingTipTopicId) || 'cognition',
+    publishedAt: String(row.published_at ?? '').slice(0, 10) || new Date().toISOString().slice(0, 10),
+    readMinutes: Number(row.read_minutes ?? 5),
+    thumbnail: String(row.thumbnail_url ?? ''),
+    thumbnailAlt: String(row.thumbnail_alt ?? ''),
+    takeaways: Array.isArray(row.takeaways) ? (row.takeaways as string[]) : [],
+    blocks: markdownToBlocks(bodyMarkdown),
+    views: Number(row.views ?? 0),
+    published: row.published !== false,
+    bodyMarkdown,
+  }
+}
+
+export async function listAdminTips(): Promise<AdminTip[]> {
+  const local = readLocal()
+  const seed = PARENTING_TIPS.map(fromStatic)
+  if (supabase) {
+    const { data, error } = await supabase.from('parenting_tips').select('*').order('created_at', { ascending: false })
+    if (!error && data) {
+      const remote = data.map((row) => fromRow(row as Record<string, unknown>))
+      const bySlug = new Map(seed.map((item) => [item.slug, item]))
+      for (const item of remote) bySlug.set(item.slug, item)
+      for (const item of local) bySlug.set(item.slug, item)
+      return [...bySlug.values()]
+    }
+  }
+  const bySlug = new Map(seed.map((item) => [item.slug, item]))
+  for (const item of local) bySlug.set(item.slug, item)
+  return [...bySlug.values()]
+}
+
+export type TipDraft = {
+  id?: string
+  slug: string
+  title: string
+  excerpt: string
+  category: ParentingTipTopicId
+  thumbnail: string
+  readMinutes: number
+  published: boolean
+  bodyMarkdown: string
+  takeaways: string
+}
+
+export async function saveTip(draft: TipDraft) {
+  const takeaways = draft.takeaways
+    .split('\n')
+    .map((item) => item.replace(/^[-*]\s*/, '').trim())
+    .filter(Boolean)
+  const record: AdminTip = {
+    id: draft.id || crypto.randomUUID(),
+    slug: draft.slug.trim(),
+    title: draft.title.trim(),
+    excerpt: draft.excerpt.trim(),
+    category: draft.category,
+    publishedAt: new Date().toISOString().slice(0, 10),
+    readMinutes: draft.readMinutes || 5,
+    thumbnail: draft.thumbnail,
+    thumbnailAlt: draft.title,
+    takeaways,
+    blocks: markdownToBlocks(draft.bodyMarkdown),
+    views: 0,
+    published: draft.published,
+    bodyMarkdown: draft.bodyMarkdown,
+  }
+
+  if (supabase) {
+    const { error } = await supabase.from('parenting_tips').upsert({
+      id: record.id,
+      slug: record.slug,
+      title: record.title,
+      excerpt: record.excerpt,
+      category: record.category,
+      thumbnail_url: record.thumbnail,
+      thumbnail_alt: record.thumbnailAlt,
+      read_minutes: record.readMinutes,
+      published: record.published,
+      body_markdown: record.bodyMarkdown,
+      takeaways: record.takeaways,
+      published_at: record.publishedAt,
+      updated_at: new Date().toISOString(),
+    })
+    if (error) throw error
+  }
+
+  writeLocal([record, ...readLocal().filter((item) => item.slug !== record.slug)])
+  return record
+}
+
+export async function setTipPublished(id: string, published: boolean) {
+  if (supabase) {
+    const { error } = await supabase.from('parenting_tips').update({ published }).eq('id', id)
+    if (error) await supabase.from('parenting_tips').update({ published }).eq('slug', id)
+  }
+  writeLocal(readLocal().map((item) => (item.id === id || item.slug === id ? { ...item, published } : item)))
+}
+
+export async function deleteTip(id: string) {
+  if (supabase) {
+    await supabase.from('parenting_tips').delete().eq('id', id)
+    await supabase.from('parenting_tips').delete().eq('slug', id)
+  }
+  writeLocal(readLocal().filter((item) => item.id !== id && item.slug !== id))
+}

@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Fredoka", ui-rounded, sans-serif;
+  --font-sans: "Noto Sans KR", "Nunito", ui-sans-serif, system-ui, sans-serif;
+
+  --color-brand: #10b981;
+  --color-brand-dark: #059669;
+  --color-brand-deep: #047857;
+  --color-brand-soft: #ecfdf5;
+  --color-ink: #1f2937;
+  --color-muted: #6b7280;
+  --color-page: #f7fffb;
+  --color-paper: #ffffff;
+  --color-line: #e5e7eb;
+  --color-premium-from: #6d28d9;
+  --color-premium-via: #4f46e5;
+  --color-premium-to: #2563eb;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    background: var(--color-page);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+
+  button {
+    font-family: inherit;
+  }
+}
+
+@utility font-display {
+  font-family: var(--font-display);
+}
