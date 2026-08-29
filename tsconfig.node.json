@@ -19,5 +19,5 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.ts", "vite-plugin-r2-media.ts", "server/r2Media.ts", "api/admin/r2-media.ts"]
 }

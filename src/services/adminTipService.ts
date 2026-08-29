@@ -1,5 +1,6 @@
 import { PARENTING_TIPS, type ParentingTip, type ParentingTipBlock, type ParentingTipTopicId } from '@/data/parentingTipsData'
 import { supabase } from '@/lib/supabase'
+import { blocksToMarkdown } from '@/shared/lib/tipBody'
 
 export type AdminTip = ParentingTip & {
   id: string
@@ -66,14 +67,7 @@ function fromStatic(item: ParentingTip): AdminTip {
     id: item.slug,
     views: 0,
     published: true,
-    bodyMarkdown: item.blocks
-      .map((block) => {
-        if (block.type === 'h2') return `## ${block.text}`
-        if (block.type === 'h3') return `### ${block.text}`
-        if (block.type === 'ul') return block.items.map((line) => `- ${line}`).join('\n')
-        return block.text
-      })
-      .join('\n\n'),
+    bodyMarkdown: blocksToMarkdown(item.blocks),
   }
 }
 
@@ -187,4 +181,14 @@ export async function deleteTip(id: string) {
     await supabase.from('parenting_tips').delete().eq('slug', id)
   }
   writeLocal(readLocal().filter((item) => item.id !== id && item.slug !== id))
+}
+
+export async function getPublishedTipBySlug(slug: string): Promise<AdminTip | undefined> {
+  const items = await listAdminTips()
+  return items.find((item) => item.slug === slug && item.published)
+}
+
+export async function listPublishedTips(): Promise<AdminTip[]> {
+  const items = await listAdminTips()
+  return items.filter((item) => item.published)
 }

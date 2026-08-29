@@ -2,18 +2,41 @@ import { ArrowLeft, ChevronRight, Share2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { ParentingTipCard } from '@/components/parenting/ParentingTipCard'
+import { TipBody } from '@/components/parenting/TipBody'
 import {
   categoryLabel,
   formatTipDate,
   getParentingTip,
   getRelatedParentingTips,
+  type ParentingTip,
 } from '@/data/parentingTipsData'
+import { getPublishedTipBySlug, listPublishedTips, type AdminTip } from '@/services/adminTipService'
+import { tipBodySource } from '@/shared/lib/tipBody'
 
 export function ParentingTipDetailPage() {
   const { slug } = useParams()
-  const tip = slug ? getParentingTip(slug) : undefined
-  const related = slug ? getRelatedParentingTips(slug) : []
+  const [tip, setTip] = useState<ParentingTip | AdminTip | undefined>(() => (slug ? getParentingTip(slug) : undefined))
+  const [related, setRelated] = useState<ParentingTip[]>(() => (slug ? getRelatedParentingTips(slug) : []))
   const [copied, setCopied] = useState(false)
+  const [ready, setReady] = useState(() => Boolean(slug && getParentingTip(slug)))
+
+  useEffect(() => {
+    if (!slug) return
+    const fallback = getParentingTip(slug)
+    let cancelled = false
+    setTip(fallback)
+    setReady(Boolean(fallback))
+    void Promise.all([getPublishedTipBySlug(slug), listPublishedTips()]).then(([found, published]) => {
+      if (cancelled) return
+      setTip(found ?? fallback)
+      const others = published.filter((item) => item.slug !== slug)
+      setRelated(others.length ? others.slice(0, 3) : getRelatedParentingTips(slug))
+      setReady(true)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [slug])
 
   useEffect(() => {
     if (!tip) return
@@ -24,7 +47,15 @@ export function ParentingTipDetailPage() {
     }
   }, [tip])
 
-  if (!tip) return <Navigate to="/parenting-tips" replace />
+  if (!slug) return <Navigate to="/parenting-tips" replace />
+  if (ready && !tip) return <Navigate to="/parenting-tips" replace />
+  if (!tip) {
+    return (
+      <div className="px-4 py-16 text-center text-sm font-bold text-muted" aria-busy="true">
+        칼럼을 불러오는 중…
+      </div>
+    )
+  }
 
   const share = async () => {
     const url = window.location.href
@@ -87,34 +118,7 @@ export function ParentingTipDetailPage() {
           className="mt-8 w-full rounded-2xl object-cover sm:aspect-[16/9]"
         />
 
-        <div className="mt-10 space-y-6 text-lg leading-relaxed text-slate-700">
-          {tip.blocks.map((block, index) => {
-            if (block.type === 'h2') {
-              return (
-                <h2 key={index} className="pt-4 font-display text-2xl font-semibold text-ink">
-                  {block.text}
-                </h2>
-              )
-            }
-            if (block.type === 'h3') {
-              return (
-                <h3 key={index} className="text-xl font-extrabold text-ink">
-                  {block.text}
-                </h3>
-              )
-            }
-            if (block.type === 'ul') {
-              return (
-                <ul key={index} className="list-disc space-y-2 pl-6">
-                  {block.items.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              )
-            }
-            return <p key={index}>{block.text}</p>
-          })}
-        </div>
+        <TipBody source={tipBodySource(tip)} className="mt-10" />
 
         <aside className="mt-12 rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
           <p className="text-sm font-extrabold text-emerald-800">부모 실행 요약</p>
