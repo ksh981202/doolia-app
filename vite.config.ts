@@ -16,6 +16,9 @@ export default defineConfig(({ mode }) => {
         '@': path.resolve(rootDir, 'src'),
       },
     },
+    optimizeDeps: {
+      include: ['tinymce', '@tinymce/tinymce-react'],
+    },
     server: {
       port: 9999,
       strictPort: true,

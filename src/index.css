@@ -1,9 +1,10 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
 @theme {
   --font-display: "Fredoka", ui-rounded, sans-serif;
-  --font-sans: "Noto Sans KR", "Nunito", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Pretendard", -apple-system, "Noto Sans KR", sans-serif;
 
   --color-brand: #10b981;
   --color-brand-dark: #059669;
@@ -28,8 +29,10 @@
     margin: 0;
     min-width: 320px;
     background: var(--color-page);
-    color: var(--color-ink);
-    font-family: var(--font-sans);
+    color: #1e293b;
+    font-family: 'Pretendard', -apple-system, sans-serif;
+    font-size: 16px;
+    line-height: 1.8;
   }
 
   #root {
@@ -46,6 +49,52 @@
 }
 
 @layer components {
+  .tip-article {
+    max-width: 850px;
+    margin-left: auto;
+    margin-right: auto;
+    background: #ffffff;
+  }
+
+  .tip-body {
+    max-width: 850px;
+    margin-left: auto;
+    margin-right: auto;
+    background: #ffffff;
+    font-family: 'Pretendard', -apple-system, sans-serif;
+    font-size: 18px;
+    line-height: 1.8;
+    color: #1e293b;
+    word-break: keep-all;
+    --tw-prose-body: #1e293b;
+    --tw-prose-headings: #1e293b;
+    --tw-prose-bold: #1e293b;
+    --tw-prose-quotes: #1e293b;
+    --tw-prose-counters: #1e293b;
+    --tw-prose-bullets: #059669;
+    --tw-prose-links: #047857;
+  }
+
+  .tip-body p {
+    margin: 0 0 20px 0 !important;
+    font-size: 18px;
+    line-height: 1.8;
+    color: #1e293b;
+  }
+
+  .tip-body p:empty,
+  .tip-body p:has(br:only-child) {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 0 !important;
+    line-height: 0 !important;
+  }
+
+  .tip-body h2 {
+    margin: 36px 0 16px 0 !important;
+    line-height: 1.4;
+  }
+
   .tip-prose :where(table) {
     width: 100%;
     border-collapse: collapse;
@@ -66,7 +115,78 @@
   }
 
   .tip-prose :where(img) {
+    display: block;
     height: auto;
     max-width: 100%;
+    margin: 0;
   }
+
+  .tip-body .doolia-body-image {
+    display: block;
+    width: 100%;
+    margin: 36px 0;
+    float: none;
+    clear: both;
+    position: static;
+  }
+
+  .tip-body div[style*='ecfdf5'],
+  .tip-body div[style*='ECFDF5'],
+  .tip-body .tip-parent-summary {
+    position: static;
+    overflow: visible;
+    height: auto;
+    max-height: none;
+  }
+
+  .tip-body div[style*='height: 16px']:has(img),
+  .tip-body div[style*='height:16px']:has(img),
+  .tip-body div[style*='height: 24px']:has(img),
+  .tip-body div[style*='height:24px']:has(img) {
+    height: auto;
+  }
+}
+
+.tip-detail-page {
+  background: #ffffff;
+  min-height: 100%;
+}
+
+.tip-detail-page,
+.tip-article,
+.tip-body {
+  background: #ffffff;
+}
+
+.tip-body {
+  font-family: 'Pretendard', -apple-system, sans-serif;
+  font-size: 18px;
+  line-height: 1.8;
+  color: #1e293b;
+}
+
+.tip-body p {
+  font-size: 18px !important;
+  line-height: 1.8 !important;
+  color: #1e293b;
+}
+
+.tip-html-editor {
+  min-height: 480px;
+}
+
+.tip-wysiwyg-wrap .tox-tinymce {
+  border: 0 !important;
+  border-radius: 0;
+  background: #ffffff !important;
+}
+
+.tip-wysiwyg-wrap .tox-edit-area,
+.tip-wysiwyg-wrap .tox-edit-area__iframe {
+  background: #ffffff !important;
+}
+
+.tip-wysiwyg-wrap .tox-editor-header {
+  box-shadow: none !important;
+  border-bottom: 1px solid #d1fae5 !important;
 }

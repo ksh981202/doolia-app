@@ -15,6 +15,7 @@ export type R2MediaLibrary = {
 
 const LOCAL_KEY = 'doolia-r2-media-library'
 const API = '/api/admin/r2-media'
+const PRINTABLE_API = '/api/admin/r2-printables'
 const ALLOWED = new Set(['image/jpeg', 'image/jpg', 'image/png', 'image/webp'])
 
 function readLocal(): R2MediaItem[] {
@@ -116,4 +117,78 @@ export async function uploadR2MediaFile(file: File): Promise<R2MediaItem> {
   }
   writeLocal(mergeItems([item], readLocal()))
   return item
+}
+
+export async function uploadR2PrintableFile(file: File): Promise<R2MediaItem> {
+  if (!ALLOWED.has(file.type) && !/\.(jpe?g|png|webp)$/i.test(file.name)) {
+    throw new Error('JPG, PNG, WEBP 파일만 올릴 수 있습니다.')
+  }
+
+  try {
+    const response = await fetch(PRINTABLE_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        filename: file.name,
+        contentType: file.type || 'image/jpeg',
+        data: await fileToBase64(file),
+      }),
+    })
+    const payload = (await response.json()) as { item?: R2MediaItem; error?: string; connected?: boolean }
+    if (response.ok && payload.item?.url) {
+      return { ...payload.item, local: false }
+    }
+    const error = new Error(payload.error || 'R2 도안 업로드에 실패했습니다.') as Error & { connected?: boolean }
+    error.connected = Boolean(payload.connected)
+    throw error
+  } catch (error) {
+    if (error && typeof error === 'object' && 'connected' in error) throw error
+    const wrapped = new Error('R2 도안 업로드 API에 연결하지 못했습니다.') as Error & { connected?: boolean }
+    wrapped.connected = false
+    throw wrapped
+  }
+}
+
+function r2PrintableKeyFromValue(value: string) {
+  const raw = value.trim()
+  if (!raw || raw.startsWith('blob:') || raw.startsWith('data:')) return ''
+
+  let path = raw
+  try {
+    if (/^https?:\/\//i.test(raw)) {
+      path = decodeURIComponent(new URL(raw).pathname)
+    } else if (raw.startsWith('/')) {
+      path = decodeURIComponent(raw)
+    }
+  } catch {
+    return ''
+  }
+
+  const relative = path.replace(/^\/+/, '')
+  const marker = 'printables/'
+  const index = relative.indexOf(marker)
+  if (index < 0) return ''
+  const key = relative.slice(index)
+  const name = key.slice(marker.length)
+  if (!name || name.includes('/') || name.includes('\\') || name.includes('..')) return ''
+  return key
+}
+
+export async function deleteR2PrintableFiles(keysOrUrls: string[]) {
+  const keys = [...new Set(keysOrUrls.map(r2PrintableKeyFromValue).filter(Boolean))]
+  if (!keys.length) return { connected: false, deleted: [] as string[] }
+
+  const response = await fetch(PRINTABLE_API, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ keys }),
+  })
+  const payload = (await response.json()) as { deleted?: string[]; error?: string; connected?: boolean }
+  if (!response.ok) {
+    throw new Error(payload.error || 'R2 도안 파일 삭제에 실패했습니다.')
+  }
+  return {
+    connected: Boolean(payload.connected),
+    deleted: payload.deleted ?? keys,
+  }
 }

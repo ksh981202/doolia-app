@@ -41,14 +41,43 @@ export type ThemeFilterItem = (typeof THEME_FILTERS)[number]
 
 export const FEATURED_THEME_FILTERS = THEME_FILTERS.filter((item) => 'featured' in item && item.featured)
 
-const RANGE_RE = /(\d+)\s*-\s*(\d+)\s*세/
+const RANGE_RE = /(\d+)\s*[-~–—]\s*(\d+)\s*세/
 const SINGLE_RE = /(\d+)\s*세/
+const AGE_PAIR_RE = /(?:ages?\s*)?(\d+)\s*[-~–—]\s*(\d+)/i
+
+function parseAgeString(raw: string | undefined): { min: number; max: number } | null {
+  const source = raw?.trim()
+  if (!source) return null
+  const normalized = source
+    .toLowerCase()
+    .replace(/^만\s*/, '')
+    .replace(/\s*세\+?$/, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+  const compact = normalized.replace(/\s+/g, '')
+  if (compact === '2-3' || compact === '2~3' || compact === '2–3') return { min: 2, max: 3 }
+  if (compact === '4-5' || compact === '4~5' || compact === '4–5') return { min: 4, max: 5 }
+  if (compact === '6-7' || compact === '6~7' || compact === '6–7' || compact === '6-7+' || compact === '6~7+') {
+    return { min: 6, max: 7 }
+  }
+  const pair = normalized.match(AGE_PAIR_RE) ?? compact.match(AGE_PAIR_RE)
+  if (pair) return { min: Number(pair[1]), max: Number(pair[2]) }
+  return null
+}
 
 function inferAgeRange(item: Printable): { min: number; max: number } | null {
+  const fromColumns = parseAgeString(item.age_group_en) ?? parseAgeString(item.age_group)
+  if (fromColumns) return fromColumns
+
   const ranges: { min: number; max: number }[] = []
-  const blob = [item.title, item.title_ko, ...item.tags].join(' ')
+  const blob = [item.title, item.title_ko, item.age_group, item.age_group_en, ...item.tags].join(' ')
 
   for (const tag of item.tags) {
+    const fromTag = parseAgeString(tag)
+    if (fromTag) {
+      ranges.push(fromTag)
+      continue
+    }
     const range = tag.match(RANGE_RE)
     if (range) {
       ranges.push({ min: Number(range[1]), max: Number(range[2]) })
@@ -79,8 +108,38 @@ export function matchesAgeFilter(item: Printable, ageId: string) {
   return range.min <= filter.max && range.max >= filter.min
 }
 
+function themeHaystack(item: Printable) {
+  return [item.theme_en, item.theme_ko, ...item.tags]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase()
+}
+
+function normalizeThemeToken(value: string) {
+  return value.trim().toLowerCase().replace(/[\s_]+/g, '-')
+}
+
 export function matchesThemeFilter(item: Printable, themeId: string) {
-  const theme = THEME_FILTERS.find((item) => item.id === themeId) ?? THEME_FILTERS[0]
+  if (!themeId || themeId === 'all') return true
+  const theme = THEME_FILTERS.find((entry) => entry.id === themeId)
+  if (!theme || theme.id === 'all') return true
+
+  const id = normalizeThemeToken(theme.id)
+  const themeEn = normalizeThemeToken(item.theme_en)
+  const themeKo = item.theme_ko.trim().toLowerCase()
+  if (themeEn && (themeEn === id || themeEn.includes(id) || (themeEn.length >= 3 && id.includes(themeEn)))) {
+    return true
+  }
+
+  const tokens = theme.query
+    .split('|')
+    .map((token) => token.trim().toLowerCase())
+    .filter(Boolean)
+  if (themeKo && tokens.some((token) => themeKo.includes(token) || token.includes(themeKo))) return true
+  if (themeEn && tokens.some((token) => themeEn.includes(token))) return true
+
+  const hay = themeHaystack(item)
+  if (id && hay.includes(id)) return true
   return matchesQuery(item, theme.query)
 }
 

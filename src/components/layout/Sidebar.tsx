@@ -1,6 +1,6 @@
 import { ChevronDown } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
-import { Link, useLocation, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { CATALOG_GROUPS, categoryPath, getCatalogTopic } from '@/shared/config/catalog'
 import { AGE_BROWSE_ITEMS, isAgeFilterId } from '@/shared/config/smartFilters'
 import { cn } from '@/shared/lib/cn'
@@ -34,14 +34,18 @@ function itemClass(selected: boolean) {
 }
 
 export function Sidebar({ activeSlug, onNavigate }: SidebarProps) {
-  const location = useLocation()
   const [params] = useSearchParams()
   const ageParam = params.get('age') ?? ''
   const activeAge = isAgeFilterId(ageParam) && ageParam !== 'all' ? ageParam : null
   const categoryParam = params.get('category')
   const activeCategory =
     activeSlug ?? (categoryParam && getCatalogTopic(categoryParam) ? categoryParam : undefined)
-  const tipsActive = location.pathname === '/parenting-tips' || location.pathname.startsWith('/parenting-tips/')
+  // Temporarily hidden: restore with the sidebar parenting tips link below
+  // const tipsActive =
+  //   location.pathname === '/parenting-tips' ||
+  //   location.pathname.startsWith('/parenting-tips/') ||
+  //   location.pathname === '/tips' ||
+  //   location.pathname.startsWith('/tips/')
 
   const activeGroupId = CATALOG_GROUPS.find((group) =>
     group.children.some((child) => child.id === activeCategory),
@@ -99,6 +103,7 @@ export function Sidebar({ activeSlug, onNavigate }: SidebarProps) {
           </AccordionGroup>
         ))}
 
+        {/* Temporarily hidden: restore the parenting tips sidebar entry
         <Link
           to="/parenting-tips"
           onClick={onNavigate}
@@ -111,6 +116,7 @@ export function Sidebar({ activeSlug, onNavigate }: SidebarProps) {
         >
           📖 육아·놀이 팁
         </Link>
+        */}
       </nav>
 
       <div className="p-4">

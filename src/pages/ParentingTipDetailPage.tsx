@@ -51,7 +51,7 @@ export function ParentingTipDetailPage() {
   if (ready && !tip) return <Navigate to="/parenting-tips" replace />
   if (!tip) {
     return (
-      <div className="px-4 py-16 text-center text-sm font-bold text-muted" aria-busy="true">
+      <div className="tip-detail-page bg-white px-4 py-16 text-center text-sm font-bold text-muted" aria-busy="true">
         칼럼을 불러오는 중…
       </div>
     )
@@ -75,7 +75,7 @@ export function ParentingTipDetailPage() {
   }
 
   return (
-    <article className="px-4 py-8 sm:px-6 lg:px-8">
+    <article className="tip-detail-page bg-white px-4 py-8 sm:px-6 lg:px-8">
       <nav className="flex flex-wrap items-center gap-1 text-sm font-bold text-muted" aria-label="breadcrumb">
         <Link to="/" className="hover:text-brand">
           홈
@@ -88,7 +88,7 @@ export function ParentingTipDetailPage() {
         <span className="text-ink">{tip.title}</span>
       </nav>
 
-      <div className="mx-auto mt-6 max-w-3xl">
+      <div className="tip-article mt-6">
         <Link to="/parenting-tips" className="inline-flex items-center gap-1 text-sm font-bold text-emerald-700">
           <ArrowLeft size={16} />
           목록으로 돌아가기
@@ -112,22 +112,7 @@ export function ParentingTipDetailPage() {
           </button>
         </div>
 
-        <img
-          src={tip.thumbnail}
-          alt={tip.thumbnailAlt}
-          className="mt-8 w-full rounded-2xl object-cover sm:aspect-[16/9]"
-        />
-
         <TipBody source={tipBodySource(tip)} className="mt-10" />
-
-        <aside className="mt-12 rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
-          <p className="text-sm font-extrabold text-emerald-800">부모 실행 요약</p>
-          <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-emerald-950 sm:text-base">
-            {tip.takeaways.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </aside>
 
         <Link
           to="/parenting-tips"

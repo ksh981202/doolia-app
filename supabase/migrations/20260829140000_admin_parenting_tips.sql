@@ -1,5 +1,5 @@
--- Admin pipeline: extra printable columns, parenting_tips, storage, admin RLS
--- Compatible with existing public.printables + private.is_admin()
+-- Admin pipeline: extra printable columns, parenting_tips, storage
+-- PIN + anon-key admin client (no private.is_admin() dependency)
 
 alter table public.printables
   add column if not exists slug text,
@@ -48,40 +48,23 @@ comment on table public.parenting_tips is 'DOOLIA 육아·놀이 팁 칼럼';
 create index if not exists parenting_tips_published_idx
   on public.parenting_tips (published, published_at desc);
 
-grant select on table public.parenting_tips to anon, authenticated;
-grant insert, update, delete on table public.parenting_tips to authenticated;
+grant select, insert, update, delete on table public.parenting_tips to anon, authenticated;
 
 alter table public.parenting_tips enable row level security;
 alter table public.parenting_tips force row level security;
 
 drop policy if exists "parenting_tips_select_published" on public.parenting_tips;
-create policy "parenting_tips_select_published"
-on public.parenting_tips
-for select
-to anon, authenticated
-using (published = true or (select private.is_admin()));
-
 drop policy if exists "parenting_tips_insert_admin" on public.parenting_tips;
-create policy "parenting_tips_insert_admin"
-on public.parenting_tips
-for insert
-to authenticated
-with check ((select private.is_admin()));
-
 drop policy if exists "parenting_tips_update_admin" on public.parenting_tips;
-create policy "parenting_tips_update_admin"
-on public.parenting_tips
-for update
-to authenticated
-using ((select private.is_admin()))
-with check ((select private.is_admin()));
-
 drop policy if exists "parenting_tips_delete_admin" on public.parenting_tips;
-create policy "parenting_tips_delete_admin"
+drop policy if exists "parenting_tips_anon_all" on public.parenting_tips;
+
+create policy "parenting_tips_anon_all"
 on public.parenting_tips
-for delete
-to authenticated
-using ((select private.is_admin()));
+for all
+to anon, authenticated
+using (true)
+with check (true);
 
 insert into storage.buckets (id, name, public)
 values ('printables', 'printables', true)
@@ -97,25 +80,3 @@ on storage.objects
 for select
 to anon, authenticated
 using (bucket_id in ('printables', 'parenting-tips'));
-
-drop policy if exists "doolia_media_admin_insert" on storage.objects;
-create policy "doolia_media_admin_insert"
-on storage.objects
-for insert
-to authenticated
-with check (bucket_id in ('printables', 'parenting-tips') and (select private.is_admin()));
-
-drop policy if exists "doolia_media_admin_update" on storage.objects;
-create policy "doolia_media_admin_update"
-on storage.objects
-for update
-to authenticated
-using (bucket_id in ('printables', 'parenting-tips') and (select private.is_admin()))
-with check (bucket_id in ('printables', 'parenting-tips') and (select private.is_admin()));
-
-drop policy if exists "doolia_media_admin_delete" on storage.objects;
-create policy "doolia_media_admin_delete"
-on storage.objects
-for delete
-to authenticated
-using (bucket_id in ('printables', 'parenting-tips') and (select private.is_admin()));

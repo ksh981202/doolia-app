@@ -1,6 +1,7 @@
 import { HeroSearch } from '@/components/home/HeroSearch'
 import { ExploreByAge } from '@/components/home/ExploreByAge'
-import { ParentingTipsPreview } from '@/components/home/ParentingTipsPreview'
+// Temporarily hidden on home. Restore this import with <ParentingTipsPreview /> below.
+// import { ParentingTipsPreview } from '@/components/home/ParentingTipsPreview'
 import { PremiumBanner } from '@/components/home/PremiumBanner'
 import { TopicGrid } from '@/components/home/TopicGrid'
 import { TopDownloads } from '@/components/home/TopDownloads'
@@ -13,7 +14,8 @@ export function HomePage() {
       <TopDownloads />
       <ExploreByAge />
       <TopicGrid />
-      <ParentingTipsPreview />
+      {/* Temporarily hidden: restore to show home parenting tips cards */}
+      {/* <ParentingTipsPreview /> */}
       <PremiumBanner />
       <TrustMission />
     </>

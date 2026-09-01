@@ -1,4 +1,5 @@
 import type { Printable } from '@/db/types'
+import i18n from '@/i18n'
 import { ageGroupLabel, subcategoryLabel } from '@/shared/lib/printableMeta'
 
 function blob(printable: Printable) {
@@ -31,7 +32,39 @@ export function detailAgeLabel(printable: Printable) {
   return `${ageGroupLabel(printable.tags)} 권장`
 }
 
+function parentGuideForLanguage(printable: Printable) {
+  const lang = (i18n.resolvedLanguage || i18n.language || 'ko').slice(0, 2)
+  const byLang: Record<string, string> = {
+    ko: printable.parent_guide_ko,
+    en: printable.parent_guide_en,
+    ja: printable.parent_guide_ja,
+    es: printable.parent_guide_es,
+    de: printable.parent_guide_de,
+    fr: printable.parent_guide_fr,
+  }
+  return (
+    byLang[lang]?.trim() ||
+    printable.parent_guide_ko?.trim() ||
+    printable.parent_guide_en?.trim() ||
+    Object.values(byLang).find((value) => value?.trim())?.trim() ||
+    ''
+  )
+}
+
+function splitParentGuide(value: string) {
+  return value
+    .split(/\n+/)
+    .flatMap((line) => line.split(/(?<=\.)\s+/))
+    .map((part) => part.trim())
+    .filter(Boolean)
+}
+
 export function educationalBenefits(printable: Printable) {
+  const fromDb = [printable.benefit_1, printable.benefit_2, printable.benefit_3]
+    .map((item) => item?.trim())
+    .filter(Boolean)
+  if (fromDb.length) return fromDb
+
   const text = blob(printable)
   if (/감정|SEL/.test(text)) {
     return ['😊 감정 인식 & 표현', '💬 마음 나누기 대화', '🤝 공감 능력 키우기']
@@ -49,6 +82,9 @@ export function educationalBenefits(printable: Printable) {
 }
 
 export function parentCoachingTips(printable: Printable) {
+  const fromDb = splitParentGuide(parentGuideForLanguage(printable))
+  if (fromDb.length) return fromDb
+
   if (isTrexPrintable(printable) || printable.category === 'coloring') {
     return [
       '아이가 좋아하는 색으로 공룡을 마음껏 칠하게 해주고 정답을 강요하지 마세요.',

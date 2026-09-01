@@ -8,5 +8,6 @@ export {
   matchesQuery,
   mergePrintableCatalog,
   normalizePrintable,
+  selectHomePrintables,
 } from '@/services/printableService'
 export type { Printable } from '@/types/printable'

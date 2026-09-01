@@ -5,13 +5,17 @@ import { ParentingTipCard } from '@/components/parenting/ParentingTipCard'
 import {
   PARENTING_TIP_CATEGORIES,
   PARENTING_TIPS,
+  type ParentingTip,
   type ParentingTipCategoryId,
 } from '@/data/parentingTipsData'
+import { listPublishedTips } from '@/services/adminTipService'
 import { cn } from '@/shared/lib/cn'
+import { tipBodySource } from '@/shared/lib/tipBody'
 
 export function ParentingTipsPage() {
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState<ParentingTipCategoryId>('all')
+  const [tips, setTips] = useState<ParentingTip[]>(PARENTING_TIPS)
 
   useEffect(() => {
     const previous = document.title
@@ -21,20 +25,20 @@ export function ParentingTipsPage() {
     }
   }, [])
 
+  useEffect(() => {
+    void listPublishedTips().then(setTips)
+  }, [])
+
   const items = useMemo(() => {
     const keyword = query.trim().toLowerCase()
-    return PARENTING_TIPS.filter((tip) => {
+    return tips.filter((tip) => {
       const byCategory = category === 'all' || tip.category === category
       if (!byCategory) return false
       if (!keyword) return true
-      const blob = [
-        tip.title,
-        tip.excerpt,
-        ...tip.blocks.map((block) => ('text' in block ? block.text : block.items.join(' '))),
-      ].join(' ')
+      const blob = [tip.title, tip.excerpt, tipBodySource(tip), ...tip.takeaways].join(' ')
       return blob.toLowerCase().includes(keyword)
     })
-  }, [category, query])
+  }, [category, query, tips])
 
   return (
     <div className="px-4 py-6 sm:px-6 sm:py-8 lg:px-8">

@@ -1,4 +1,4 @@
-import { FileImage, LayoutDashboard, Menu, NotebookPen, X } from 'lucide-react'
+import { FileImage, LayoutDashboard, Menu, NotebookPen, Upload, X } from 'lucide-react'
 import { useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { cn } from '@/shared/lib/cn'
@@ -9,7 +9,8 @@ export function ProtectedAdminLayout() {
 
 const NAV = [
   { to: '/admin', label: '대시보드', icon: LayoutDashboard, end: true },
-  { to: '/admin/printables', label: '도안 관리', icon: FileImage, end: false },
+  { to: '/admin/printables', label: '도안 관리', icon: FileImage, end: true },
+  { to: '/admin/printables/upload', label: '대량 업로드', icon: Upload, end: true },
   { to: '/admin/tips', label: '육아 팁 관리', icon: NotebookPen, end: false },
 ]
 

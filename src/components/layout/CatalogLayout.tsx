@@ -6,10 +6,16 @@ import { Sidebar } from '@/components/layout/Sidebar'
 import { DownloadModal } from '@/features/download/ui/DownloadModal'
 import { getCatalogTopic } from '@/shared/config/catalog'
 import { resolveTypeSlug } from '@/shared/config/smartFilters'
+import { cn } from '@/shared/lib/cn'
+
+function isParentingTipDetail(pathname: string) {
+  return /^\/parenting-tips\/[^/]+\/?$/.test(pathname) || /^\/tips\/[^/]+\/?$/.test(pathname)
+}
 
 export function CatalogLayout() {
   const location = useLocation()
   const { slug } = useParams()
+  const tipDetail = isParentingTipDetail(location.pathname)
   const [params] = useSearchParams()
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const categoryQuery = params.get('category')
@@ -18,7 +24,7 @@ export function CatalogLayout() {
   const activeSlug = categorySlug ?? resolveTypeSlug(params.get('type')) ?? fromCategoryQuery
 
   return (
-    <div className="flex min-h-screen flex-col bg-page">
+    <div className={cn('flex min-h-screen flex-col', tipDetail ? 'bg-white' : 'bg-page')}>
       <Header />
       <div className="flex min-h-0 flex-1">
         <div className="hidden lg:flex">
@@ -39,9 +45,9 @@ export function CatalogLayout() {
           </div>
         ) : null}
 
-        <div className="flex min-w-0 flex-1 flex-col">
+        <div className={cn('flex min-w-0 flex-1 flex-col', tipDetail && 'bg-white')}>
           <CatalogHeader onMenu={() => setSidebarOpen(true)} />
-          <div className="min-w-0 flex-1">
+          <div className={cn('min-w-0 flex-1', tipDetail && 'bg-white')}>
             <Outlet />
           </div>
         </div>

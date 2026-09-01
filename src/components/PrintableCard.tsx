@@ -14,6 +14,20 @@ type PrintableCardProps = {
   variant?: 'home' | 'catalog'
 }
 
+function displayImage(printable: Printable) {
+  return (
+    printable.image_color_url ||
+    printable.image_bw_url ||
+    printable.line_art_url ||
+    printable.color_image_url ||
+    ''
+  )
+}
+
+function ageTags(printable: Printable) {
+  return [printable.age_group, printable.age_group_en, ...printable.tags].filter(Boolean)
+}
+
 export function PrintableCard({ printable, variant = 'home' }: PrintableCardProps) {
   if (variant === 'catalog') {
     return <CatalogPrintableCard printable={printable} />
@@ -49,7 +63,7 @@ function ShowcasePrintableCard({ printable }: { printable: Printable }) {
           <span className="font-extrabold text-emerald-600">{printable.downloads.toLocaleString()}회</span>
         </div>
         <img
-          src={printable.image_bw_url || printable.image_color_url}
+          src={displayImage(printable)}
           alt={printable.title_ko}
           loading="lazy"
           decoding="async"
@@ -58,7 +72,7 @@ function ShowcasePrintableCard({ printable }: { printable: Printable }) {
       </div>
       <div className="flex flex-col gap-1.5 bg-white p-4">
         <span className="inline-block w-fit rounded-md border border-emerald-100 bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-emerald-700">
-          {ageGroupLabel(printable.tags)}
+          {ageGroupLabel(ageTags(printable))}
         </span>
         <h3 className="truncate text-base font-bold text-gray-900 transition-colors group-hover:text-emerald-600">
           {printable.title_ko}
@@ -88,7 +102,7 @@ function CatalogPrintableCard({ printable }: { printable: Printable }) {
     >
       <div className="relative aspect-[3/4] overflow-hidden bg-brand-soft">
         <img
-          src={printable.image_color_url}
+          src={displayImage(printable)}
           alt={printable.title_ko}
           loading="lazy"
           decoding="async"
@@ -98,7 +112,7 @@ function CatalogPrintableCard({ printable }: { printable: Printable }) {
           FREE
         </span>
         <span className="absolute right-3 top-3 rounded-md bg-white/95 px-2 py-1 text-[11px] font-extrabold text-ink shadow-sm">
-          {ageBadge(printable.tags)}
+          {ageBadge(ageTags(printable))}
         </span>
       </div>
       <div className="space-y-3 p-3.5">

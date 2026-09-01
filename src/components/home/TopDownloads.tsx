@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { PrintableCard } from '@/components/PrintableCard'
 import { usePrintablesQuery } from '@/features/gallery/model/usePrintablesQuery'
-import { matchesPopularTab, matchesQuery } from '@/services/printableService'
+import { matchesPopularTab, matchesQuery, selectHomePrintables } from '@/services/printableService'
 import { POPULAR_TABS } from '@/shared/config/categories'
 import { cn } from '@/shared/lib/cn'
 import { useGalleryStore } from '@/shared/store/useGalleryStore'
@@ -16,8 +16,7 @@ export function TopDownloads() {
     const source = [...(data ?? [])]
       .filter((item) => matchesQuery(item, query))
       .filter((item) => matchesPopularTab(item, popularTab))
-      .sort((a, b) => b.downloads - a.downloads)
-    return source.slice(0, 8)
+    return selectHomePrintables(source, 8)
   }, [data, popularTab, query])
 
   return (

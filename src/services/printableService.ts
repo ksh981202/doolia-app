@@ -52,34 +52,76 @@ export function matchesPopularTab(item: Printable, tab: PopularTab) {
 }
 
 export function mergePrintableCatalog(items: Printable[]) {
-  const merged = [...items]
-  for (const demo of DEMO_PRINTABLES) {
-    if (merged.some((item) => item.id === demo.id || item.slug === demo.slug || item.title === demo.title)) {
-      continue
-    }
-    merged.push(demo)
+  if (items.length) return items
+  return DEMO_PRINTABLES
+}
+
+export function selectHomePrintables(items: Printable[], limit = 8) {
+  const recentSlots = Math.min(4, limit)
+  const byCreated = [...items].sort((a, b) => +new Date(b.created_at) - +new Date(a.created_at))
+  const byDownloads = [...items].sort(
+    (a, b) => b.downloads - a.downloads || +new Date(b.created_at) - +new Date(a.created_at),
+  )
+  const picked: Printable[] = []
+  const seen = new Set<string>()
+  for (const item of byCreated) {
+    if (picked.length >= recentSlots) break
+    if (seen.has(item.id)) continue
+    seen.add(item.id)
+    picked.push(item)
   }
-  return merged
+  for (const item of byDownloads) {
+    if (picked.length >= limit) break
+    if (seen.has(item.id)) continue
+    seen.add(item.id)
+    picked.push(item)
+  }
+  return picked
 }
 
 function findDemo(key: string) {
   return DEMO_PRINTABLES.find((item) => item.id === key || item.slug === key) ?? null
 }
 
-export async function fetchPrintables(category: GalleryCategory = 'all'): Promise<Printable[]> {
-  if (!supabase) {
-    return category === 'all' ? DEMO_PRINTABLES : DEMO_PRINTABLES.filter((item) => item.category === category)
+function isPubliclyListed(row: PrintableInput) {
+  return row.published !== false
+}
+
+export type FetchPrintablesOptions = {
+  includeUnpublished?: boolean
+}
+
+export async function fetchPrintables(
+  category: GalleryCategory = 'all',
+  options: FetchPrintablesOptions = {},
+): Promise<Printable[]> {
+  const includeUnpublished = Boolean(options.includeUnpublished)
+
+  const client = supabase
+  if (!client) {
+    const source = category === 'all' ? DEMO_PRINTABLES : DEMO_PRINTABLES.filter((item) => item.category === category)
+    return includeUnpublished ? source : source.filter((item) => item.published !== false)
   }
 
-  let query = supabase.from('printables').select('*').order('downloads', { ascending: false })
-  if (category !== 'all') {
-    query = query.eq('category', category)
+  const runQuery = (withPublishedFilter: boolean) => {
+    let query = client.from('printables').select('*').order('downloads', { ascending: false })
+    if (category !== 'all') query = query.eq('category', category)
+    if (withPublishedFilter) query = query.or('published.eq.true,published.is.null')
+    return query
   }
 
-  const { data, error } = await query
+  let { data, error } = await runQuery(!includeUnpublished)
+  if (error && !includeUnpublished) {
+    const retry = await runQuery(false)
+    data = retry.data
+    error = retry.error
+  }
   if (error) throw error
-  const items = (data ?? []).map((row) => normalizePrintable(row as PrintableInput))
-  return mergePrintableCatalog(items)
+
+  return (data ?? [])
+    .map((row) => row as PrintableInput)
+    .filter((row) => includeUnpublished || isPubliclyListed(row))
+    .map((row) => normalizePrintable(row))
 }
 
 export async function fetchPrintableById(id: string): Promise<Printable | null> {
@@ -88,14 +130,22 @@ export async function fetchPrintableById(id: string): Promise<Printable | null> 
 
   const byId = await supabase.from('printables').select('*').eq('id', id).maybeSingle()
   if (byId.error) throw byId.error
-  if (byId.data) return normalizePrintable(byId.data as PrintableInput)
+  if (byId.data) {
+    const row = byId.data as PrintableInput
+    if (row.published === false) return null
+    return normalizePrintable(row)
+  }
 
   const bySlug = await supabase.from('printables').select('*').eq('slug', id).maybeSingle()
   if (bySlug.error) {
     // slug 컬럼이 아직 없는 기존 스키마에서는 id 조회 결과만 사용한다.
     return demo
   }
-  if (bySlug.data) return normalizePrintable(bySlug.data as PrintableInput)
+  if (bySlug.data) {
+    const row = bySlug.data as PrintableInput
+    if (row.published === false) return null
+    return normalizePrintable(row)
+  }
   return demo
 }
 

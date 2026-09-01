@@ -1,5 +1,6 @@
 import { ChevronDown } from 'lucide-react'
 import { useEffect, useState, type ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { LightboxModal } from '@/components/LightboxModal'
 import { cn } from '@/shared/lib/cn'
 import { useDownloadStore } from '@/shared/store/useDownloadStore'
@@ -7,7 +8,27 @@ import type { Printable } from '@/types/printable'
 
 type PreviewMode = 'line' | 'color'
 
+function descriptionForLanguage(printable: Printable, language: string) {
+  const lang = language.slice(0, 2)
+  const byLang: Record<string, string> = {
+    ko: printable.description_ko,
+    en: printable.description_en,
+    ja: printable.description_ja,
+    es: printable.description_es,
+    de: printable.description_de,
+    fr: printable.description_fr,
+  }
+  return (
+    byLang[lang]?.trim() ||
+    printable.description_ko?.trim() ||
+    printable.description_en?.trim() ||
+    Object.values(byLang).find((value) => value?.trim())?.trim() ||
+    ''
+  )
+}
+
 export function A4Preview({ printable }: { printable: Printable }) {
+  const { i18n } = useTranslation()
   const [mode, setMode] = useState<PreviewMode>('line')
   const [openTip, setOpenTip] = useState(true)
   const [openTerms, setOpenTerms] = useState(false)
@@ -15,6 +36,9 @@ export function A4Preview({ printable }: { printable: Printable }) {
   const openModal = useDownloadStore((state) => state.openModal)
   const src = mode === 'line' ? printable.image_bw_url : printable.image_color_url
   const title = printable.title_ko
+  const descriptionText =
+    descriptionForLanguage(printable, i18n.resolvedLanguage || i18n.language || 'ko') ||
+    `${printable.title_ko || printable.title} 도안은 A4 용지에 맞춰 300DPI로 제작되었습니다. 두꺼운 색연필이나 수성 마카로 칠하면 선이 또렷하게 살아납니다.`
 
   return (
     <div>
@@ -84,9 +108,7 @@ export function A4Preview({ printable }: { printable: Printable }) {
 
       <div className="mt-8 space-y-3">
         <Accordion title="도안 소개 & 활용 팁" open={openTip} onToggle={() => setOpenTip((value) => !value)}>
-          {title} 도안은 A4 용지에 맞춰 300DPI로 제작되었습니다. 두꺼운 색연필이나 수성 마카로 칠하면
-          선이 또렷하게 살아납니다. 처음에는 큰 면부터 칠하고, 눈·이빨 같은 디테일은 마지막에 마무리해
-          보세요.
+          {descriptionText}
         </Accordion>
         <Accordion title="이용 안내" open={openTerms} onToggle={() => setOpenTerms((value) => !value)}>
           DOOLIA Printables 무료 도안은 가정 및 교실의 비상업적 인쇄에 한해 사용할 수 있습니다. 상업적

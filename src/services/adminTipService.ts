@@ -1,6 +1,6 @@
-import { PARENTING_TIPS, type ParentingTip, type ParentingTipBlock, type ParentingTipTopicId } from '@/data/parentingTipsData'
+import { type ParentingTip, type ParentingTipBlock, type ParentingTipTopicId } from '@/data/parentingTipsData'
 import { supabase } from '@/lib/supabase'
-import { blocksToMarkdown } from '@/shared/lib/tipBody'
+import { takeawaysFromValue } from '@/shared/lib/tipBody'
 
 export type AdminTip = ParentingTip & {
   id: string
@@ -61,18 +61,8 @@ export function markdownToBlocks(markdown: string): ParentingTipBlock[] {
   return blocks
 }
 
-function fromStatic(item: ParentingTip): AdminTip {
-  return {
-    ...item,
-    id: item.slug,
-    views: 0,
-    published: true,
-    bodyMarkdown: blocksToMarkdown(item.blocks),
-  }
-}
-
 function fromRow(row: Record<string, unknown>): AdminTip {
-  const bodyMarkdown = String(row.body_markdown ?? '')
+  const bodyMarkdown = String(row.body_markdown ?? row.content ?? '')
   return {
     id: String(row.id),
     slug: String(row.slug),
@@ -80,10 +70,10 @@ function fromRow(row: Record<string, unknown>): AdminTip {
     excerpt: String(row.excerpt ?? ''),
     category: (row.category as ParentingTipTopicId) || 'cognition',
     publishedAt: String(row.published_at ?? '').slice(0, 10) || new Date().toISOString().slice(0, 10),
-    readMinutes: Number(row.read_minutes ?? 5),
+    readMinutes: Number(row.read_minutes ?? row.read_time ?? 5),
     thumbnail: String(row.thumbnail_url ?? ''),
     thumbnailAlt: String(row.thumbnail_alt ?? ''),
-    takeaways: Array.isArray(row.takeaways) ? (row.takeaways as string[]) : [],
+    takeaways: takeawaysFromValue(row.takeaways ?? row.parent_summary),
     blocks: markdownToBlocks(bodyMarkdown),
     views: Number(row.views ?? 0),
     published: row.published !== false,
@@ -92,21 +82,11 @@ function fromRow(row: Record<string, unknown>): AdminTip {
 }
 
 export async function listAdminTips(): Promise<AdminTip[]> {
-  const local = readLocal()
-  const seed = PARENTING_TIPS.map(fromStatic)
   if (supabase) {
     const { data, error } = await supabase.from('parenting_tips').select('*').order('created_at', { ascending: false })
-    if (!error && data) {
-      const remote = data.map((row) => fromRow(row as Record<string, unknown>))
-      const bySlug = new Map(seed.map((item) => [item.slug, item]))
-      for (const item of remote) bySlug.set(item.slug, item)
-      for (const item of local) bySlug.set(item.slug, item)
-      return [...bySlug.values()]
-    }
+    if (!error && data) return data.map((row) => fromRow(row as Record<string, unknown>))
   }
-  const bySlug = new Map(seed.map((item) => [item.slug, item]))
-  for (const item of local) bySlug.set(item.slug, item)
-  return [...bySlug.values()]
+  return readLocal()
 }
 
 export type TipDraft = {
@@ -119,14 +99,9 @@ export type TipDraft = {
   readMinutes: number
   published: boolean
   bodyMarkdown: string
-  takeaways: string
 }
 
 export async function saveTip(draft: TipDraft) {
-  const takeaways = draft.takeaways
-    .split('\n')
-    .map((item) => item.replace(/^[-*]\s*/, '').trim())
-    .filter(Boolean)
   const record: AdminTip = {
     id: draft.id || crypto.randomUUID(),
     slug: draft.slug.trim(),
@@ -137,7 +112,7 @@ export async function saveTip(draft: TipDraft) {
     readMinutes: draft.readMinutes || 5,
     thumbnail: draft.thumbnail,
     thumbnailAlt: draft.title,
-    takeaways,
+    takeaways: [],
     blocks: markdownToBlocks(draft.bodyMarkdown),
     views: 0,
     published: draft.published,

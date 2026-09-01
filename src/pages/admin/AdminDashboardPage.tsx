@@ -49,9 +49,18 @@ export function AdminDashboardPage() {
         ))}
       </div>
 
+      <Link
+        to="/admin/printables/upload"
+        className="block rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm hover:border-emerald-200"
+      >
+        <p className="text-sm font-extrabold text-ink">대량 업로드 파이프라인</p>
+        <p className="mt-1 text-sm text-muted">TSV 메타데이터와 흑백/컬러 이미지를 드롭해 파일명으로 짝을 맞춘 뒤 일괄 등록합니다.</p>
+      </Link>
+
       <div className="rounded-2xl border border-emerald-100 bg-white p-5 text-sm leading-6 text-slate-600">
         <p className="font-extrabold text-ink">운영 체크리스트</p>
         <ul className="mt-2 list-disc space-y-1 pl-5">
+          <li>대량 등록은 TSV + 이미지 매칭 파이프라인(/admin/printables/upload)을 사용</li>
           <li>Supabase 마이그레이션 20260829140000_admin_parenting_tips.sql 적용</li>
           <li>Authentication 사용자 App Metadata에 role=admin 설정</li>
           <li>Storage 버킷 printables, parenting-tips 업로드 권한 확인</li>
