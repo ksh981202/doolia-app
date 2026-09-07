@@ -1,1 +1,1 @@
-export { Header } from '@/components/Header'
+export { Header, Header as MainHeader } from '@/components/Header'

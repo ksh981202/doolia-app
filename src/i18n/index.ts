@@ -16,12 +16,12 @@ const resources = {
   ko: {
     translation: {
       nav: {
-                    home: '홈',
-        coloring: '🎨 색칠공부',
-        brain: '🧠 두뇌발달',
-        habit: '🏡 루틴/습관',
-        tips: '📖 육아·놀이 팁',
-        premium: '🎁 프리미엄 묶음',
+        home: '홈',
+        playToolbox: '맞춤 놀이 도구함',
+        coloring: '색칠·창의',
+        brain: '두뇌·학습',
+        tips: '육아·놀이 팁',
+        premium: '프리미엄',
         cta: '무료 도안 보기',
       },
       language: '언어',
@@ -30,12 +30,12 @@ const resources = {
   en: {
     translation: {
       nav: {
-                    home: 'Home',
-        coloring: '🎨 Coloring',
-        brain: '🧠 Brain (I Spy / Maze)',
-        habit: '🏡 Routines',
-        tips: '📖 Parenting Tips',
-        premium: '🎁 Premium Bundle',
+        home: 'Home',
+        playToolbox: 'Play Toolbox',
+        coloring: 'Color & Create',
+        brain: 'Brain & Learn',
+        tips: 'Parenting Tips',
+        premium: 'Premium',
         cta: 'Browse free printables',
       },
       language: 'Language',
@@ -44,12 +44,12 @@ const resources = {
   ja: {
     translation: {
       nav: {
-                    home: 'ホーム',
-        coloring: '🎨 ぬりえ',
-        brain: '🧠 脳育（I Spy / 迷路）',
-        habit: '🏡 ルーティン',
-        tips: '📖 育児・遊びのヒント',
-        premium: '🎁 プレミアムセット',
+        home: 'ホーム',
+        playToolbox: 'カスタム遊びツール',
+        coloring: 'ぬりえ・創作',
+        brain: '脳育・学習',
+        tips: '育児・遊びのヒント',
+        premium: 'プレミアム',
         cta: '無料プリントを見る',
       },
       language: '言語',
@@ -58,12 +58,12 @@ const resources = {
   es: {
     translation: {
       nav: {
-                    home: 'Inicio',
-        coloring: '🎨 Colorear',
-        brain: '🧠 Cerebro (I Spy / Laberinto)',
-        habit: '🏡 Rutinas',
-        tips: '📖 Consejos para padres',
-        premium: '🎁 Pack premium',
+        home: 'Inicio',
+        playToolbox: 'Caja de juegos',
+        coloring: 'Color y creatividad',
+        brain: 'Cerebro y aprendizaje',
+        tips: 'Consejos para padres',
+        premium: 'Premium',
         cta: 'Ver plantillas gratis',
       },
       language: 'Idioma',
@@ -72,12 +72,12 @@ const resources = {
   de: {
     translation: {
       nav: {
-                    home: 'Start',
-        coloring: '🎨 Ausmalen',
-        brain: '🧠 Gehirn (I Spy / Labyrinth)',
-        habit: '🏡 Routinen',
-        tips: '📖 Tipps für Eltern',
-        premium: '🎁 Premium-Paket',
+        home: 'Start',
+        playToolbox: 'Spiel-Toolbox',
+        coloring: 'Malen & Kreativ',
+        brain: 'Gehirn & Lernen',
+        tips: 'Tipps für Eltern',
+        premium: 'Premium',
         cta: 'Kostenlose Vorlagen',
       },
       language: 'Sprache',
@@ -86,12 +86,12 @@ const resources = {
   fr: {
     translation: {
       nav: {
-                    home: 'Accueil',
-        coloring: '🎨 Coloriage',
-        brain: '🧠 Cerveau (I Spy / Labyrinthe)',
-        habit: '🏡 Routines',
-        tips: '📖 Conseils parents',
-        premium: '🎁 Pack premium',
+        home: 'Accueil',
+        playToolbox: 'Boîte à jeux',
+        coloring: 'Colorier et créer',
+        brain: 'Cerveau et apprentissage',
+        tips: 'Conseils parents',
+        premium: 'Premium',
         cta: 'Voir les imprimés gratuits',
       },
       language: 'Langue',

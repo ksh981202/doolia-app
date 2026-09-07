@@ -38,17 +38,18 @@ export function AppRouter() {
             <Route path="/terms" element={<TermsPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/premium" element={<PremiumPage />} />
-          </Route>
-          <Route element={<CatalogLayout />}>
-            <Route path="/category" element={<CategoryPage />} />
-            <Route path="/category/:slug" element={<CategoryPage />} />
-            <Route path="/situation/:situationId" element={<SituationPage />} />
-            <Route path="/situation/:situationId/:recipeId" element={<PlayRecipeDetailPage />} />
-            <Route path="/parenting-tips" element={<ParentingTipsPage />} />
-            <Route path="/parenting-tips/:slug" element={<ParentingTipDetailPage />} />
-            <Route path="/tips" element={<Navigate to="/parenting-tips" replace />} />
-            <Route path="/tips/:slug" element={<ParentingTipDetailPage />} />
-            <Route path="/bookmarks" element={<BookmarksPage />} />
+            <Route element={<CatalogLayout />}>
+              <Route path="/category" element={<CategoryPage />} />
+              <Route path="/category/:slug" element={<CategoryPage />} />
+              <Route path="/situation/:situationId" element={<SituationPage />} />
+              <Route path="/situation/:situationId/:recipeId" element={<PlayRecipeDetailPage />} />
+              <Route path="/parenting-tips" element={<ParentingTipsPage />} />
+              <Route path="/parenting-tips/:slug" element={<ParentingTipDetailPage />} />
+              <Route path="/tips" element={<Navigate to="/parenting-tips" replace />} />
+              <Route path="/tips/:slug" element={<ParentingTipDetailPage />} />
+              <Route path="/bookmarks" element={<BookmarksPage />} />
+              <Route path="/saved" element={<Navigate to="/bookmarks" replace />} />
+            </Route>
           </Route>
           <Route path="/admin/login" element={<Navigate to="/admin" replace />} />
           <Route element={<ProtectedAdminLayout />}>

@@ -12,7 +12,7 @@ function chipClass(active: boolean) {
     'inline-flex min-h-[40px] shrink-0 items-center whitespace-nowrap rounded-full px-3.5 py-2 text-sm transition sm:px-4',
     active
       ? 'bg-emerald-600 font-bold text-white shadow-sm'
-      : 'bg-white font-semibold text-ink/70 ring-1 ring-line hover:text-ink',
+      : 'bg-white font-medium text-ink/70 ring-1 ring-line hover:text-ink',
   )
 }
 

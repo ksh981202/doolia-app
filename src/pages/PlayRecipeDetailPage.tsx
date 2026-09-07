@@ -20,7 +20,7 @@ export function PlayRecipeDetailPage() {
   const printable = (data ?? []).find((item) => matchesQuery(item, recipe.printQuery)) ?? data?.[0] ?? null
 
   return (
-    <article className="px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+    <article>
       <nav className="flex flex-wrap items-center gap-1 text-sm font-bold text-muted" aria-label="breadcrumb">
         <Link to="/" className="hover:text-brand">
           홈

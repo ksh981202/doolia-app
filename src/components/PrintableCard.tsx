@@ -108,17 +108,17 @@ function CatalogPrintableCard({ printable }: { printable: Printable }) {
           decoding="async"
           className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
         />
-        <span className="absolute left-3 top-3 rounded-md bg-brand px-2 py-1 text-[11px] font-extrabold tracking-wide text-white shadow-sm">
+        <span className="absolute left-3 top-3 rounded-md bg-brand px-2 py-1 text-[11px] font-bold tracking-wide text-white shadow-sm">
           FREE
         </span>
-        <span className="absolute right-3 top-3 rounded-md bg-white/95 px-2 py-1 text-[11px] font-extrabold text-ink shadow-sm">
+        <span className="absolute right-3 top-3 rounded-md bg-white/95 px-2 py-1 text-[11px] font-bold text-ink shadow-sm">
           {ageBadge(ageTags(printable))}
         </span>
       </div>
       <div className="space-y-3 p-3.5">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
-            <h3 className="truncate text-[15px] font-bold text-ink">{printable.title_ko}</h3>
+            <h3 className="truncate text-base font-bold text-ink">{printable.title_ko}</h3>
             <p className="mt-1 text-xs font-medium text-muted">{CATEGORY_LABEL[printable.category]}</p>
           </div>
           <button
@@ -142,7 +142,7 @@ function CatalogPrintableCard({ printable }: { printable: Printable }) {
             event.stopPropagation()
             openModal(printable)
           }}
-          className="flex h-11 w-full cursor-pointer items-center justify-center gap-1.5 rounded-xl bg-brand text-sm font-extrabold text-white transition hover:bg-brand-dark"
+          className="flex h-11 w-full cursor-pointer items-center justify-center gap-1.5 rounded-xl bg-brand text-sm font-bold text-white transition hover:bg-brand-dark"
         >
           <Download size={16} />
           무료 PDF 다운로드

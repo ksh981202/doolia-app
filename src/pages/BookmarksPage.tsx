@@ -9,7 +9,7 @@ export function BookmarksPage() {
   const items = (data ?? []).filter((item) => ids.includes(item.id))
 
   return (
-    <div className="px-4 py-8 sm:px-6 lg:px-8">
+    <div>
       <h1 className="font-display text-3xl font-semibold">북마크</h1>
       <p className="mt-2 text-sm text-muted">저장한 도안을 한곳에서 다시 볼 수 있어요.</p>
       {isLoading ? (

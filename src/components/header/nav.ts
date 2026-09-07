@@ -2,11 +2,9 @@ import { CATALOG_GROUPS, categoryPath } from '@/shared/config/catalog'
 
 export const HEADER_NAV = [
   { to: '/', labelKey: 'nav.home', match: 'home' },
+  { to: '/situation/home', labelKey: 'nav.playToolbox', match: 'playToolbox' },
   { to: '/category/coloring-pages', labelKey: 'nav.coloring', match: 'coloring' },
   { to: '/category/ispy', labelKey: 'nav.brain', match: 'brain' },
-  { to: '/category/routine', labelKey: 'nav.habit', match: 'habit' },
-  // Temporarily hidden: restore with GNB/sidebar parenting tips menus
-  // { to: '/parenting-tips', labelKey: 'nav.tips', match: 'tips' },
   { to: '/premium', labelKey: 'nav.premium', match: 'premium' },
 ] as const
 
@@ -14,7 +12,6 @@ export type HeaderNavItem = (typeof HEADER_NAV)[number]
 
 const COLORING_SLUGS = new Set(['coloring-pages', 'tracing', 'letters', 'cutout'])
 const BRAIN_SLUGS = new Set(['ispy', 'odd-one', 'maze', 'dots', 'shadow'])
-const HABIT_SLUGS = new Set(['routine', 'emotion', 'puppets', 'board-game', 'season'])
 
 export const CATEGORY_NAV = CATALOG_GROUPS.map((group) => ({
   id: group.id,
@@ -39,16 +36,13 @@ export function isNavActive(item: HeaderNavItem, pathname: string, _hash = '') {
   switch (item.match) {
     case 'home':
       return pathname === '/'
-      case 'premium':
-        return pathname === '/premium'
-      // Temporarily hidden with HEADER_NAV parenting tips item
-      // case 'tips':
-      //   return pathname === '/parenting-tips' || pathname.startsWith('/parenting-tips/') || pathname === '/tips' || pathname.startsWith('/tips/')
-      case 'coloring':
+    case 'playToolbox':
+      return pathname.startsWith('/situation')
+    case 'premium':
+      return pathname === '/premium'
+    case 'coloring':
       return Boolean(slug && COLORING_SLUGS.has(slug))
     case 'brain':
       return Boolean(slug && BRAIN_SLUGS.has(slug))
-    case 'habit':
-      return Boolean(slug && HABIT_SLUGS.has(slug))
   }
 }

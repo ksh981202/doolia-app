@@ -1,4 +1,3 @@
-import { ChevronRight } from 'lucide-react'
 import { useMemo } from 'react'
 import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom'
 import { ThemeFilter } from '@/components/category/ThemeFilter'
@@ -28,7 +27,7 @@ function filterChipClass(active: boolean) {
     'inline-flex min-h-[40px] shrink-0 items-center rounded-full px-3.5 py-2 text-sm transition sm:px-4',
     active
       ? 'bg-emerald-600 font-bold text-white shadow-sm'
-      : 'bg-white font-semibold text-ink/70 ring-1 ring-line hover:text-ink',
+      : 'bg-white font-medium text-ink/70 ring-1 ring-line hover:text-ink',
   )
 }
 
@@ -118,27 +117,26 @@ export function CategoryPage() {
   }
 
   return (
-    <div className="px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
-      <nav className="flex flex-wrap items-center gap-1 text-sm font-bold text-muted" aria-label="breadcrumb">
-        <Link to="/" className="hover:text-brand">
-          홈
-        </Link>
-        <ChevronRight size={14} className="shrink-0" />
-        <span>{groupLabel}</span>
-        <ChevronRight size={14} className="shrink-0" />
-        <span className="break-keep text-ink">{topicLabel}</span>
-      </nav>
+    <div>
+      <div className="mb-6">
+        <nav className="mb-1 text-xs text-slate-500" aria-label="breadcrumb">
+          <Link to="/" className="hover:text-emerald-600">
+            홈
+          </Link>
+          <span> &gt; </span>
+          <span>{groupLabel}</span>
+          <span> &gt; </span>
+          <span className="font-medium text-slate-800">{topicLabel}</span>
+        </nav>
+        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">{title}</h1>
+        <p className="mt-1 text-sm font-normal text-slate-500">{description}</p>
+      </div>
 
-      <header className="mt-5 max-w-3xl">
-        <h1 className="break-keep font-display text-2xl font-semibold text-ink sm:text-3xl lg:text-4xl">{title}</h1>
-        <p className="mt-3 text-sm leading-7 text-muted sm:text-base">{description}</p>
-      </header>
-
-      <div className="mt-6 flex flex-col gap-6">
+      <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-4 rounded-2xl border border-emerald-100 bg-white p-4 sm:p-5">
           <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
             <div className="min-w-0 flex-1">
-              <p className="mb-2 text-xs font-bold text-slate-500">연령</p>
+              <p className="mb-2 text-xs font-bold text-slate-700">연령</p>
               <div className="flex flex-wrap gap-2" role="tablist" aria-label="연령 필터">
                 {AGE_FILTERS.map((item) => (
                   <button
@@ -154,7 +152,7 @@ export function CategoryPage() {
                 ))}
               </div>
             </div>
-            <label className="flex items-center gap-2 text-sm font-bold text-muted lg:pt-6">
+            <label className="flex items-center gap-2 text-xs font-bold text-muted sm:text-sm lg:pt-6">
               정렬
               <select
                 value={sort}
@@ -163,7 +161,7 @@ export function CategoryPage() {
                   next.set('sort', event.target.value)
                   setParams(next)
                 }}
-                className="h-10 rounded-full border border-line bg-white px-3 font-bold text-ink"
+                className="h-10 rounded-full border border-line bg-white px-3 text-xs font-bold text-ink sm:text-sm"
               >
                 <option value="popular">인기순</option>
                 <option value="latest">최신순</option>
@@ -172,7 +170,7 @@ export function CategoryPage() {
           </div>
 
           <div className="min-w-0">
-            <p className="mb-2 text-xs font-bold text-slate-500">주제</p>
+            <p className="mb-2 text-xs font-bold text-slate-700">주제</p>
             <ThemeFilter value={theme} onChange={(id) => setFilter('theme', id)} />
           </div>
         </div>
