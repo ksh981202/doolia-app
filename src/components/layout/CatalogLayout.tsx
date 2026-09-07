@@ -5,6 +5,7 @@ import { CatalogHeader } from '@/components/layout/CatalogHeader'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { DownloadModal } from '@/features/download/ui/DownloadModal'
 import { getCatalogTopic } from '@/shared/config/catalog'
+import { isSituationId } from '@/shared/config/playSituations'
 import { resolveTypeSlug } from '@/shared/config/smartFilters'
 import { cn } from '@/shared/lib/cn'
 
@@ -14,7 +15,7 @@ function isParentingTipDetail(pathname: string) {
 
 export function CatalogLayout() {
   const location = useLocation()
-  const { slug } = useParams()
+  const { slug, situationId } = useParams()
   const tipDetail = isParentingTipDetail(location.pathname)
   const [params] = useSearchParams()
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -22,13 +23,14 @@ export function CatalogLayout() {
   const fromCategoryQuery = getCatalogTopic(categoryQuery ?? undefined)?.topic.id
   const categorySlug = location.pathname.startsWith('/category') ? slug : undefined
   const activeSlug = categorySlug ?? resolveTypeSlug(params.get('type')) ?? fromCategoryQuery
+  const activeSituation = isSituationId(situationId) ? situationId : undefined
 
   return (
     <div className={cn('flex min-h-screen flex-col', tipDetail ? 'bg-white' : 'bg-page')}>
       <Header />
       <div className="flex min-h-0 flex-1">
         <div className="hidden lg:flex">
-          <Sidebar activeSlug={activeSlug} />
+          <Sidebar activeSlug={activeSlug} activeSituation={activeSituation} />
         </div>
 
         {sidebarOpen ? (
@@ -40,7 +42,7 @@ export function CatalogLayout() {
               onClick={() => setSidebarOpen(false)}
             />
             <div className="relative h-full w-[min(85vw,280px)] min-w-[260px] shadow-2xl">
-              <Sidebar activeSlug={activeSlug} onNavigate={() => setSidebarOpen(false)} />
+              <Sidebar activeSlug={activeSlug} activeSituation={activeSituation} onNavigate={() => setSidebarOpen(false)} />
             </div>
           </div>
         ) : null}

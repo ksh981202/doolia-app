@@ -67,7 +67,7 @@ export const CATALOG_GROUPS: CatalogGroup[] = [
         { id: 'trace', label: '선따기', query: '선따기|따라그리기' },
         { id: 'motor', label: '소근육', query: '소근육' },
       ]),
-      topic('letters', '알파벳&숫자', '알파벳|숫자|따라쓰기', '🔤', 150, [
+      topic('letters', '알파벳 & 숫자', '알파벳|숫자|따라쓰기', '🔤', 150, [
         { id: 'all', label: '전체', query: '' },
         { id: 'abc', label: '알파벳', query: '알파벳' },
         { id: 'numbers', label: '숫자', query: '숫자' },
@@ -106,7 +106,7 @@ export const CATALOG_GROUPS: CatalogGroup[] = [
         { id: 'star', label: '별', query: '별' },
         { id: 'numbers', label: '숫자', query: '숫자' },
       ]),
-      topic('shadow', '그림자맞추기', '그림자', '🌗', 24, [
+      topic('shadow', '그림자 맞추기', '그림자', '🌗', 24, [
         { id: 'all', label: '전체', query: '' },
         { id: 'vehicles', label: '탈것', query: '탈것' },
         { id: 'animals', label: '동물', query: '동물' },
@@ -136,7 +136,7 @@ export const CATALOG_GROUPS: CatalogGroup[] = [
         { id: 'all', label: '전체', query: '' },
         { id: 'family', label: '가족', query: '가족' },
       ]),
-      topic('season', '시즌&기념일', '크리스마스|할로윈|시즌|기념일', '🎉', 130, [
+      topic('season', '시즌 & 기념일', '크리스마스|할로윈|시즌|기념일', '🎉', 130, [
         { id: 'all', label: '전체', query: '' },
         { id: 'xmas', label: '크리스마스', query: '크리스마스' },
         { id: 'halloween', label: '할로윈', query: '할로윈' },

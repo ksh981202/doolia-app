@@ -5,9 +5,11 @@ import { CatalogLayout } from '@/components/layout/CatalogLayout'
 import { PageFallback } from '@/components/layout/PageFallback'
 import { ProtectedAdminLayout } from '@/layouts/AdminLayout'
 
-const HomePage = lazy(() => import('@/pages/HomePage'))
+const PlayHubPage = lazy(() => import('@/pages/PlayHubPage'))
 const PrintableDetailPage = lazy(() => import('@/pages/PrintableDetailPage'))
 const CategoryPage = lazy(() => import('@/pages/CategoryPage'))
+const SituationPage = lazy(() => import('@/pages/SituationPage'))
+const PlayRecipeDetailPage = lazy(() => import('@/pages/PlayRecipeDetailPage'))
 const ParentingTipsPage = lazy(() => import('@/pages/ParentingTipsPage'))
 const ParentingTipDetailPage = lazy(() => import('@/pages/ParentingTipDetailPage'))
 const BookmarksPage = lazy(() => import('@/pages/BookmarksPage').then((module) => ({ default: module.BookmarksPage })))
@@ -27,7 +29,8 @@ export function AppRouter() {
       <Suspense fallback={<PageFallback />}>
         <Routes>
           <Route element={<AppLayout />}>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<PlayHubPage />} />
+            <Route path="/v2" element={<PlayHubPage />} />
             <Route path="/printable/:id" element={<PrintableDetailPage />} />
             <Route path="/printables/:id" element={<PrintableDetailPage />} />
             <Route path="/about" element={<AboutPage />} />
@@ -39,6 +42,8 @@ export function AppRouter() {
           <Route element={<CatalogLayout />}>
             <Route path="/category" element={<CategoryPage />} />
             <Route path="/category/:slug" element={<CategoryPage />} />
+            <Route path="/situation/:situationId" element={<SituationPage />} />
+            <Route path="/situation/:situationId/:recipeId" element={<PlayRecipeDetailPage />} />
             <Route path="/parenting-tips" element={<ParentingTipsPage />} />
             <Route path="/parenting-tips/:slug" element={<ParentingTipDetailPage />} />
             <Route path="/tips" element={<Navigate to="/parenting-tips" replace />} />

@@ -1,21 +1,13 @@
-export const IMAGE_SLOT_COUNT = 5
-export const IMAGE_SLOTS = [1, 2, 3, 4, 5] as const
-export type ImageSlot = (typeof IMAGE_SLOTS)[number]
-
 export const BODY_IMAGE_STYLE =
   'width: 100%; max-width: 100%; height: auto; border-radius: 12px; margin: 24px 0; display: block;'
 
-export const PLACEHOLDER_BOX_STYLE =
-  'border: 2px dashed #6ee7b7; background: #ecfdf5; border-radius: 16px; padding: 24px; text-align: center; margin: 32px 0;'
-
-export function bodyImageTag(url: string, slot?: number) {
-  const slotAttr = slot ? ` data-slot="${slot}"` : ''
-  return `<img src="${url}" alt="DOOLIA AI 이미지"${slotAttr} style="${BODY_IMAGE_STYLE}" />`
+export function bodyImageTag(url: string) {
+  return `<img src="${url}" alt="" style="${BODY_IMAGE_STYLE}" />`
 }
 
 /** Block wrapper (div, not p) so TinyMCE cannot merge the image into a neighboring text paragraph. */
-export function bodyImageBlock(url: string, slot?: number) {
-  return `<div class="doolia-body-image">${bodyImageTag(url, slot)}</div>`
+export function bodyImageBlock(url: string) {
+  return `<div class="doolia-body-image">${bodyImageTag(url)}</div>`
 }
 
 function nodeHasOtherContent(parent: Element, keep: Node) {
@@ -231,112 +223,4 @@ export function ensureBodyImageBlocks(html: string) {
   if (!parsedRoot) return raw
   wrapImagesInRoot(parsedRoot)
   return parsedRoot.innerHTML
-}
-
-export function imagePlaceholderBlock(slot: number) {
-  return `<!-- 이미지 자리표시자 ${slot} -->
-<div style="${PLACEHOLDER_BOX_STYLE}">
-  <p style="color: #059669; font-weight: 800; margin: 0;">📷 [이미지 ${slot} 삽입 위치: 사진을 업로드하세요]</p>
-  <p style="color: #047857; font-size: 13px; margin: 8px 0 0;">(클릭하거나 드래그해서 지운 뒤, 사진을 넣을 수 있습니다)</p>
-</div>`
-}
-
-export function defaultTipBodyWithPlaceholders() {
-  return `## 소제목
-
-본문에 HTML과 마크다운을 함께 작성하세요.
-
-${IMAGE_SLOTS.map((slot) => imagePlaceholderBlock(slot)).join('\n\n')}`
-}
-
-function findMatchingDivEnd(source: string, divStart: number) {
-  const tokens = /<div\b|<\/div>/gi
-  tokens.lastIndex = divStart
-  let depth = 0
-  let match = tokens.exec(source)
-  while (match) {
-    if (match[0].toLowerCase().startsWith('<div')) depth += 1
-    else {
-      depth -= 1
-      if (depth === 0) return match.index + match[0].length
-    }
-    match = tokens.exec(source)
-  }
-  return -1
-}
-
-function findEnclosingDashedDiv(source: string, innerIndex: number) {
-  let from = innerIndex
-  while (from > 0) {
-    const idx = source.lastIndexOf('<div', from - 1)
-    if (idx < 0) return -1
-    const tagEnd = source.indexOf('>', idx)
-    if (tagEnd < 0 || tagEnd > innerIndex) return -1
-    const openTag = source.slice(idx, tagEnd + 1)
-    if (/#6ee7b7|#ecfdf5|dashed/i.test(openTag)) return idx
-    from = idx
-  }
-  return -1
-}
-
-function includeLeadingComment(source: string, divStart: number, slot: number) {
-  const windowStart = Math.max(0, divStart - 120)
-  const before = source.slice(windowStart, divStart)
-  const comment = before.match(new RegExp(`<!--\\s*이미지 자리표시자\\s*${slot}\\s*-->\\s*$`, 'i'))
-  return comment ? divStart - comment[0].length : divStart
-}
-
-export function findPlaceholderRange(source: string, slot: number): { start: number; end: number } | null {
-  const filled = new RegExp(
-    `<!--\\s*이미지 자리표시자\\s*${slot}\\s*-->\\s*<img\\b[^>]*\\/?>|<img\\b[^>]*data-slot=["']${slot}["'][^>]*\\/?>`,
-    'i',
-  )
-  const filledMatch = filled.exec(source)
-  if (filledMatch) {
-    return { start: filledMatch.index, end: filledMatch.index + filledMatch[0].length }
-  }
-
-  const comment = new RegExp(`<!--\\s*이미지 자리표시자\\s*${slot}\\s*-->`, 'i').exec(source)
-  const label = new RegExp(`📷?\\s*\\[?이미지\\s*${slot}\\s*삽입\\s*위치`, 'i').exec(source)
-
-  if (comment) {
-    const after = source.slice(comment.index)
-    const divRel = after.search(/<div\b/i)
-    if (divRel >= 0) {
-      const divStart = comment.index + divRel
-      const divEnd = findMatchingDivEnd(source, divStart)
-      if (divEnd > divStart) return { start: comment.index, end: divEnd }
-    }
-  }
-
-  if (label) {
-    const dashed = findEnclosingDashedDiv(source, label.index)
-    const divStart = dashed >= 0 ? dashed : source.lastIndexOf('<div', label.index)
-    if (divStart >= 0) {
-      const divEnd = findMatchingDivEnd(source, divStart)
-      if (divEnd > label.index) {
-        return { start: includeLeadingComment(source, divStart, slot), end: divEnd }
-      }
-    }
-  }
-
-  return null
-}
-
-export function hasImagePlaceholder(source: string, slot: number) {
-  return findPlaceholderRange(source, slot) != null
-}
-
-export function replaceImageSlot(source: string, slot: number, url: string) {
-  const range = findPlaceholderRange(source, slot)
-  if (!range) {
-    return {
-      ok: false as const,
-      next: source,
-      error: `본문에서 ${slot}번 초록 자리표시자(📷 [이미지 ${slot} 삽입 위치])를 찾지 못했습니다.`,
-    }
-  }
-  const tag = bodyImageBlock(url, slot)
-  const next = `${source.slice(0, range.start)}${tag}${source.slice(range.end)}`
-  return { ok: true as const, next }
 }

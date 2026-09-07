@@ -1,31 +1,7 @@
 import type { Editor } from 'tinymce'
-import {
-  BODY_IMAGE_STYLE,
-  bodyImageBlock,
-  closestOutermostCallout,
-  wrapImagesInRoot,
-} from '@/shared/lib/tipImagePlaceholder'
-import {
-  findEnclosingPlaceholder,
-  findPlaceholderBySlot,
-  readPlaceholderSlotFromElement,
-} from './placeholderDom'
+import { BODY_IMAGE_STYLE, bodyImageBlock, wrapImagesInRoot } from '@/shared/lib/tipImagePlaceholder'
 
-function imageAttributes(url: string, slot?: number) {
-  return {
-    src: url,
-    alt: 'DOOLIA AI 이미지',
-    style: BODY_IMAGE_STYLE,
-    ...(slot ? { 'data-slot': String(slot) } : {}),
-  }
-}
-
-function createImageBlock(editor: Editor, url: string, slot?: number) {
-  const wrap = editor.dom.create('div', { class: 'doolia-body-image' })
-  const image = editor.dom.create('img', imageAttributes(url, slot))
-  wrap.appendChild(image)
-  return wrap
-}
+export type CaretBookmark = ReturnType<Editor['selection']['getBookmark']>
 
 function applyForcedImageLayout(img: HTMLImageElement) {
   img.style.setProperty('display', 'block', 'important')
@@ -39,9 +15,10 @@ function applyForcedImageLayout(img: HTMLImageElement) {
 }
 
 let isolatingImages = false
+let skipIsolate = false
 
 export function isolateImagesFromText(editor: Editor) {
-  if (isolatingImages) return
+  if (skipIsolate || isolatingImages) return
   const body = editor.getBody()
   if (!body) return
   isolatingImages = true
@@ -55,63 +32,39 @@ export function isolateImagesFromText(editor: Editor) {
   }
 }
 
-function applyImageToElement(editor: Editor, target: HTMLElement, url: string, slot?: number) {
-  const resolvedSlot = slot ?? (readPlaceholderSlotFromElement(target) || undefined)
-  if (target.tagName === 'IMG') {
-    editor.dom.setAttribs(target, imageAttributes(url, resolvedSlot))
-    isolateImagesFromText(editor)
-    editor.selection.select(target)
-    editor.selection.collapse(false)
-    editor.nodeChanged()
-    editor.dispatch('change')
-    return true
-  }
-  const block = createImageBlock(editor, url, resolvedSlot)
-  editor.dom.replace(block, target)
-  const image = block.querySelector('img')
-  if (image) editor.selection.select(image)
-  editor.selection.collapse(false)
-  editor.nodeChanged()
-  editor.dispatch('change')
-  return true
+export function captureCaretBookmark(editor: Editor): CaretBookmark {
+  editor.focus()
+  return editor.selection.getBookmark(2, true)
 }
 
-export function selectPlaceholderSlot(editor: Editor, slot: number) {
-  const target = findPlaceholderBySlot(editor.getBody(), slot)
-  if (!target) return false
+export function insertImageAtCaret(editor: Editor, url: string, bookmark?: CaretBookmark | null) {
   editor.focus()
-  editor.selection.select(target)
-  editor.nodeChanged()
-  target.scrollIntoView({ block: 'center', behavior: 'smooth' })
-  return true
-}
-
-export function insertImageAtCaret(editor: Editor, url: string, slot?: number) {
-  editor.focus()
-  const body = editor.getBody()
-  const selected = editor.selection.getNode()
-  const around = findEnclosingPlaceholder(selected)
-  const bySlot = slot != null ? findPlaceholderBySlot(body, slot) : null
-  const target = around ?? bySlot
-  if (target) {
-    const ok = applyImageToElement(editor, target, url, slot)
-    isolateImagesFromText(editor)
-    return ok
+  if (bookmark) {
+    try {
+      editor.selection.moveToBookmark(bookmark)
+    } catch {
+      /* async picker/modal already cleared the native selection */
+    }
   }
-  const callout = closestOutermostCallout(selected, body)
-  if (callout?.parentNode) {
-    const block = createImageBlock(editor, url, slot)
-    callout.parentNode.insertBefore(block, callout.nextSibling)
-    isolateImagesFromText(editor)
-    const image = block.querySelector('img')
-    if (image) editor.selection.select(image)
-    editor.selection.collapse(false)
+
+  skipIsolate = true
+  try {
+    editor.insertContent(bodyImageBlock(url))
+    const inserted = editor.selection.getNode()
+    const wrap = inserted.closest('.doolia-body-image')
+    const image = wrap?.querySelector('img') ?? (inserted.tagName === 'IMG' ? inserted : null)
+    if (image instanceof HTMLImageElement) {
+      applyForcedImageLayout(image)
+      image.setAttribute('style', BODY_IMAGE_STYLE)
+      editor.selection.select(image)
+      editor.selection.collapse(false)
+    }
     editor.nodeChanged()
     editor.dispatch('change')
-    return true
+  } finally {
+    queueMicrotask(() => {
+      skipIsolate = false
+    })
   }
-  editor.insertContent(bodyImageBlock(url, slot))
-  isolateImagesFromText(editor)
-  editor.dispatch('change')
   return true
 }

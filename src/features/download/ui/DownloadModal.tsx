@@ -4,6 +4,7 @@ import { incrementPrintableDownloads } from '@/services/printableService'
 import type { Printable } from '@/types/printable'
 import { AD_COUNTDOWN_SECONDS, BRAND } from '@/shared/config/categories'
 import { cn } from '@/shared/lib/cn'
+import { generatePrintablePdf } from '@/shared/lib/generatePrintablePdf'
 import { useDownloadStore } from '@/shared/store/useDownloadStore'
 
 export function DownloadModal() {
@@ -31,7 +32,9 @@ function DownloadModalBody({
   onClose: () => void
 }) {
   const [secondsLeft, setSecondsLeft] = useState(AD_COUNTDOWN_SECONDS)
-  const ready = secondsLeft <= 0
+  const [generating, setGenerating] = useState(false)
+  const [error, setError] = useState('')
+  const ready = secondsLeft <= 0 && !generating
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -47,16 +50,17 @@ function DownloadModalBody({
   }, [])
 
   const handleDownload = async () => {
-    if (!ready) return
-    await incrementPrintableDownloads(printable.id)
-    const anchor = document.createElement('a')
-    anchor.href = printable.pdf_url
-    anchor.download = `${printable.title}.pdf`
-    anchor.target = '_blank'
-    anchor.rel = 'noopener noreferrer'
-    document.body.appendChild(anchor)
-    anchor.click()
-    anchor.remove()
+    if (!ready || generating) return
+    setError('')
+    setGenerating(true)
+    try {
+      await generatePrintablePdf(printable)
+      await incrementPrintableDownloads(printable.id)
+    } catch (caught) {
+      setError(caught instanceof Error && caught.message ? caught.message : 'PDF를 만들지 못했습니다.')
+    } finally {
+      setGenerating(false)
+    }
   }
 
   return (
@@ -115,6 +119,8 @@ function DownloadModalBody({
             </p>
           </div>
 
+          {error ? <p className="text-center text-sm font-bold text-red-600">{error}</p> : null}
+
           <button
             type="button"
             onClick={() => void handleDownload()}
@@ -126,13 +132,15 @@ function DownloadModalBody({
                 : 'cursor-not-allowed bg-line text-ink/40',
             )}
           >
-            {ready ? (
+            {generating ? (
+              'PDF 생성 중...'
+            ) : secondsLeft > 0 ? (
+              `광고 시청 중… ${secondsLeft}초`
+            ) : (
               <>
                 <Download size={20} />
                 PDF 다운로드
               </>
-            ) : (
-              `광고 시청 중… ${secondsLeft}초`
             )}
           </button>
         </div>

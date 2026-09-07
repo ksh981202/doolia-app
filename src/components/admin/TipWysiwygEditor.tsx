@@ -14,15 +14,13 @@ import { ImagePlus, Images } from 'lucide-react'
 import { uploadR2MediaFile } from '@/services/r2MediaService'
 import { cn } from '@/shared/lib/cn'
 import { sourceToEditorHtml } from '@/shared/lib/tipBody'
+import { bodyImageBlock, ensureBodyImageBlocks } from '@/shared/lib/tipImagePlaceholder'
 import {
-  IMAGE_SLOTS,
-  bodyImageBlock,
-  ensureBodyImageBlocks,
-  replaceImageSlot,
-  type ImageSlot,
-} from '@/shared/lib/tipImagePlaceholder'
-import { insertImageAtCaret, isolateImagesFromText, selectPlaceholderSlot } from './tipWysiwyg/insertTinyImage'
-import { findEnclosingPlaceholder } from './tipWysiwyg/placeholderDom'
+  captureCaretBookmark,
+  insertImageAtCaret,
+  isolateImagesFromText,
+  type CaretBookmark,
+} from './tipWysiwyg/insertTinyImage'
 import './tipWysiwyg/tinymceSetup'
 
 const ACCEPT = 'image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp'
@@ -93,8 +91,7 @@ th, td { border: 1px solid #e5e7eb; padding: 0.55rem 0.8rem; vertical-align: top
 `
 
 export type TipWysiwygEditorHandle = {
-  insertImage: (url: string, slot?: number) => boolean
-  selectSlot: (slot: number) => boolean
+  insertImage: (url: string) => boolean
 }
 
 type TipWysiwygEditorProps = {
@@ -111,6 +108,7 @@ export const TipWysiwygEditor = forwardRef<TipWysiwygEditorHandle, TipWysiwygEdi
     const pendingFileRef = useRef<((file: File | null) => void) | null>(null)
     const attachRef = useRef<() => void>(() => undefined)
     const libraryRef = useRef(onOpenLibrary)
+    const bookmarkRef = useRef<CaretBookmark | null>(null)
     const modeRef = useRef<'html' | 'visual'>(initialMode)
     const [mode, setMode] = useState<'html' | 'visual'>(initialMode)
     const [htmlDraft, setHtmlDraft] = useState(() => (initialMode === 'visual' ? sourceToEditorHtml(value) : value))
@@ -118,7 +116,6 @@ export const TipWysiwygEditor = forwardRef<TipWysiwygEditorHandle, TipWysiwygEdi
     const [note, setNote] = useState('')
 
     modeRef.current = mode
-    libraryRef.current = onOpenLibrary
 
     const pickFile = useCallback(() => {
       return new Promise<File | null>((resolve) => {
@@ -136,23 +133,23 @@ export const TipWysiwygEditor = forwardRef<TipWysiwygEditorHandle, TipWysiwygEdi
       [onChange],
     )
 
+    const captureCaret = useCallback(() => {
+      const editor = editorRef.current
+      if (modeRef.current === 'visual' && editor) {
+        bookmarkRef.current = captureCaretBookmark(editor)
+      }
+    }, [])
+
     const insertIntoEditor = useCallback(
-      (url: string, slot?: number) => {
+      (url: string) => {
         const editor = editorRef.current
         if (modeRef.current === 'visual' && editor) {
-          const ok = insertImageAtCaret(editor, url, slot)
+          const ok = insertImageAtCaret(editor, url, bookmarkRef.current)
+          bookmarkRef.current = null
           applyHtml(editor.getContent(), '커서 위치에 사진을 넣었습니다.')
           return ok
         }
-        if (slot) {
-          const replaced = replaceImageSlot(htmlDraft, slot, url)
-          if (!replaced.ok) {
-            setNote(replaced.error)
-            return false
-          }
-          applyHtml(replaced.next, `${slot}번 자리표시자를 이미지로 교체했습니다. 기본 글쓰기 모드에서 확인해 주세요.`)
-          return true
-        }
+        bookmarkRef.current = null
         applyHtml(`${htmlDraft.trim()}\n${bodyImageBlock(url)}`, 'HTML 모드라 본문 끝에 이미지를 넣었습니다. 글쓰기 모드에서 위치를 옮겨 주세요.')
         return true
       },
@@ -177,10 +174,17 @@ export const TipWysiwygEditor = forwardRef<TipWysiwygEditorHandle, TipWysiwygEdi
     }, [pickFile])
 
     const attachFromToolbar = useCallback(async () => {
+      captureCaret()
       const url = await pickAndUploadImage()
       if (url) insertIntoEditor(url)
-    }, [insertIntoEditor, pickAndUploadImage])
+    }, [captureCaret, insertIntoEditor, pickAndUploadImage])
 
+    const openLibrary = useCallback(() => {
+      captureCaret()
+      onOpenLibrary()
+    }, [captureCaret, onOpenLibrary])
+
+    libraryRef.current = openLibrary
     attachRef.current = () => {
       void attachFromToolbar()
     }
@@ -188,21 +192,7 @@ export const TipWysiwygEditor = forwardRef<TipWysiwygEditorHandle, TipWysiwygEdi
     useImperativeHandle(
       ref,
       () => ({
-        insertImage: (url: string, slot?: number) => insertIntoEditor(url, slot),
-        selectSlot: (slot: number) => {
-          const editor = editorRef.current
-          if (modeRef.current === 'visual' && editor) {
-            const ok = selectPlaceholderSlot(editor, slot)
-            setNote(
-              ok
-                ? `${slot}번 박스를 선택했습니다. 📷 사진 첨부를 누르면 이 자리가 사진으로 바뀝니다.`
-                : `${slot}번 자리표시자를 찾지 못했습니다.`,
-            )
-            return ok
-          }
-          setNote('기본 글쓰기 모드로 바꾼 뒤 자리표시자를 선택할 수 있습니다.')
-          return false
-        },
+        insertImage: (url: string) => insertIntoEditor(url),
       }),
       [insertIntoEditor],
     )
@@ -239,20 +229,6 @@ export const TipWysiwygEditor = forwardRef<TipWysiwygEditorHandle, TipWysiwygEdi
       const file = event.target.files?.[0] ?? null
       pendingFileRef.current?.(file)
       pendingFileRef.current = null
-    }
-
-    const onSlotClick = (slot: ImageSlot) => {
-      const editor = editorRef.current
-      if (mode === 'visual' && editor) {
-        const ok = selectPlaceholderSlot(editor, slot)
-        setNote(
-          ok
-            ? `${slot}번 박스를 선택했습니다. 📷 사진 첨부를 누르면 이 자리가 사진으로 바뀝니다.`
-            : `${slot}번 자리표시자가 없습니다.`,
-        )
-        return
-      }
-      setNote(`${slot}번을 고른 뒤 기본 글쓰기 모드에서 사진 첨부를 누르세요.`)
     }
 
     const tinyInit = useMemo(
@@ -297,12 +273,6 @@ export const TipWysiwygEditor = forwardRef<TipWysiwygEditorHandle, TipWysiwygEdi
             text: '라이브러리',
             tooltip: 'R2 미디어 라이브러리',
             onAction: () => libraryRef.current(),
-          })
-          editor.on('click', (event) => {
-            const target = event.target
-            if (!(target instanceof Element)) return
-            const box = findEnclosingPlaceholder(target)
-            if (box && box.tagName !== 'IMG') editor.selection.select(box)
           })
           editor.on('BeforeSetContent', (event) => {
             if (typeof event.content === 'string' && event.content.includes('<img')) {
@@ -377,23 +347,12 @@ export const TipWysiwygEditor = forwardRef<TipWysiwygEditorHandle, TipWysiwygEdi
             </button>
             <button
               type="button"
-              onClick={onOpenLibrary}
+              onClick={openLibrary}
               className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-emerald-200 bg-white px-3 text-xs font-extrabold text-emerald-800 hover:bg-emerald-50"
             >
               <Images size={15} />
               라이브러리
             </button>
-            <span className="text-xs font-extrabold text-emerald-800">자리표시자</span>
-            {IMAGE_SLOTS.map((slot) => (
-              <button
-                key={slot}
-                type="button"
-                onClick={() => onSlotClick(slot)}
-                className="inline-flex h-8 min-w-8 items-center justify-center rounded-full border border-emerald-200 bg-white px-2.5 text-xs font-extrabold text-emerald-800 hover:bg-emerald-50"
-              >
-                {slot}번
-              </button>
-            ))}
           </div>
         ) : (
           <button

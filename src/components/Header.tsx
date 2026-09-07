@@ -5,6 +5,7 @@ import { LanguageSwitcher } from '@/components/header/LanguageSwitcher'
 import { Logo } from '@/components/header/Logo'
 import { NavMenu } from '@/components/header/NavMenu'
 import { CATEGORY_NAV, type HeaderNavItem } from '@/components/header/nav'
+import { SITUATION_ITEMS, situationPath } from '@/shared/config/playSituations'
 
 function isLocalAdminHost() {
   if (import.meta.env.DEV) return true
@@ -73,6 +74,30 @@ export function Header() {
           <div className="mx-auto flex max-w-6xl flex-col gap-1">
             <NavMenu pathname={location.pathname} hash={location.hash} mobile onSelect={goToNav} />
             <div className="mt-3 space-y-3 border-t border-gray-100 pt-3">
+              <div>
+                <p className="flex items-center gap-2 px-3 text-[11px] font-extrabold tracking-wide text-emerald-800">
+                  <span>📦 5대 상황별 놀이 도구함</span>
+                  <span className="rounded-full bg-emerald-600 px-1.5 py-0.5 text-[10px] font-extrabold text-white">HIT</span>
+                </p>
+                <div className="mt-1 flex flex-col">
+                  {SITUATION_ITEMS.map((item) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => {
+                        setOpen(false)
+                        navigate(situationPath(item.id))
+                      }}
+                      className="rounded-xl px-3 py-2.5 text-left text-sm font-medium text-gray-700"
+                    >
+                      <span className="block break-keep">
+                        {item.emoji} {item.title}
+                      </span>
+                      <span className="mt-0.5 block text-[11px] text-slate-500">{item.sub}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
               {CATEGORY_NAV.map((group) => (
                 <div key={group.id}>
                   <p className="px-3 text-[11px] font-extrabold tracking-wide text-slate-500">
