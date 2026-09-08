@@ -1,7 +1,6 @@
 import { Bookmark, Download } from 'lucide-react'
 import type { KeyboardEvent } from 'react'
 import { useOpenPrintable } from '@/features/gallery/model/useOpenPrintable'
-import { CATEGORY_LABEL } from '@/shared/config/categories'
 import { ageBadge } from '@/shared/lib/ageBadge'
 import { cn } from '@/shared/lib/cn'
 import { cardCategoryMeta, ageGroupLabel, educationEffect } from '@/shared/lib/printableMeta'
@@ -100,13 +99,13 @@ function CatalogPrintableCard({ printable }: { printable: Printable }) {
       onClick={open}
       onKeyDown={(event) => openOnEnterOrSpace(event, open)}
     >
-      <div className="relative aspect-[3/4] overflow-hidden bg-brand-soft">
+      <div className="relative flex aspect-[3/4] w-full items-center justify-center overflow-hidden rounded-t-2xl bg-slate-50 p-3">
         <img
           src={displayImage(printable)}
           alt={printable.title_ko}
           loading="lazy"
           decoding="async"
-          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+          className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
         />
         <span className="absolute left-3 top-3 rounded-md bg-brand px-2 py-1 text-[11px] font-bold tracking-wide text-white shadow-sm">
           FREE
@@ -115,12 +114,9 @@ function CatalogPrintableCard({ printable }: { printable: Printable }) {
           {ageBadge(ageTags(printable))}
         </span>
       </div>
-      <div className="space-y-3 p-3.5">
-        <div className="flex items-start justify-between gap-2">
-          <div className="min-w-0">
-            <h3 className="truncate text-base font-bold text-ink">{printable.title_ko}</h3>
-            <p className="mt-1 text-xs font-medium text-muted">{CATEGORY_LABEL[printable.category]}</p>
-          </div>
+      <div className="p-3.5 sm:p-4">
+        <div className="mb-2.5 flex items-center justify-between gap-2">
+          <h3 className="min-w-0 truncate text-[15px] font-bold text-slate-900 sm:text-base">{printable.title_ko}</h3>
           <button
             type="button"
             onClick={(event) => {
@@ -128,7 +124,7 @@ function CatalogPrintableCard({ printable }: { printable: Printable }) {
               toggle(printable.id)
             }}
             className={cn(
-              'mt-0.5 inline-flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full',
+              'inline-flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full',
               bookmarked ? 'bg-brand-soft text-brand' : 'text-muted hover:bg-page',
             )}
             aria-label="북마크"
@@ -142,7 +138,7 @@ function CatalogPrintableCard({ printable }: { printable: Printable }) {
             event.stopPropagation()
             openModal(printable)
           }}
-          className="flex h-11 w-full cursor-pointer items-center justify-center gap-1.5 rounded-xl bg-brand text-sm font-bold text-white transition hover:bg-brand-dark"
+          className="flex h-9 w-full items-center justify-center gap-1.5 rounded-xl bg-emerald-600 text-xs font-bold text-white shadow-xs transition-all hover:bg-emerald-700 sm:h-10 sm:text-sm"
         >
           <Download size={16} />
           무료 PDF 다운로드

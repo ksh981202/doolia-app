@@ -17,7 +17,7 @@ export function CatalogLayout() {
 
   return (
     <>
-      <div className="mx-auto flex w-full max-w-7xl flex-1 items-start gap-8 px-4 py-6 sm:px-6">
+      <div className="mx-auto flex w-full max-w-[1600px] flex-1 items-start gap-6 px-4 py-6 sm:gap-8 sm:px-6 lg:px-8">
         <aside className="sticky top-24 hidden w-64 shrink-0 border-r border-slate-100 lg:block lg:w-[280px]">
           <Sidebar activeSlug={activeSlug} activeSituation={activeSituation} />
         </aside>

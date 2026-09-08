@@ -1,4 +1,4 @@
-import type { PrintableCategory } from '@/shared/config/categories'
+import { toPrintableCategory, type PrintableCategory } from '@/shared/config/categories'
 
 export type PrintableAssetType = 'bw' | 'color' | 'single' | (string & {})
 
@@ -63,7 +63,7 @@ export type PrintableInput = {
   title_es?: string | null
   title_de?: string | null
   title_fr?: string | null
-  category: PrintableCategory
+  category: PrintableCategory | string
   type?: string | null
   age_group?: string | null
   age_group_en?: string | null
@@ -122,7 +122,7 @@ export function normalizePrintable(row: PrintableInput): Printable {
     title_es: text(row.title_es),
     title_de: text(row.title_de),
     title_fr: text(row.title_fr),
-    category: row.category,
+    category: toPrintableCategory(row.category),
     type: text(row.type) || 'bw',
     age_group: text(row.age_group),
     age_group_en: text(row.age_group_en),

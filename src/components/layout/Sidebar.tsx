@@ -105,7 +105,17 @@ export function Sidebar({ activeSlug, onNavigate }: SidebarProps) {
           </div>
         </div>
 
-        <div className="space-y-4 rounded-2xl border border-slate-100 bg-slate-50/60 p-3 shadow-sm">
+        <div className="rounded-2xl border border-slate-100 bg-slate-50/60 p-3 shadow-sm">
+          <div className="mb-2.5 flex items-center justify-between border-b border-slate-200/60 px-2 py-1 pb-2">
+            <span className="flex items-center gap-1.5 text-sm font-bold text-slate-800">
+              <span>📚</span>
+              <span>무료 도안 모아보기</span>
+            </span>
+            <span className="rounded-full bg-slate-200/80 px-2 py-0.5 text-[11px] font-bold text-slate-700">
+              ALL
+            </span>
+          </div>
+          <div className="space-y-4">
           <AccordionGroup
             id="age"
             open={isOpen('age')}
@@ -144,6 +154,7 @@ export function Sidebar({ activeSlug, onNavigate }: SidebarProps) {
               ))}
             </AccordionGroup>
           ))}
+          </div>
         </div>
       </nav>
 

@@ -49,7 +49,35 @@ A4_PX = (
     int(A4_MM[0] / 25.4 * DPI),  # 2480
     int(A4_MM[1] / 25.4 * DPI),  # 3508
 )
-ALLOWED_CATEGORIES = {"coloring", "maze", "tracing", "alphabet", "numbers"}
+ALLOWED_CATEGORIES = {
+    # legacy 5
+    "coloring",
+    "maze",
+    "tracing",
+    "alphabet",
+    "numbers",
+    # canonical 14
+    "coloring-pages",
+    "letters",
+    "cutout",
+    "ispy",
+    "odd-one",
+    "dots",
+    "shadow",
+    "routine",
+    "emotion",
+    "puppets",
+    "board-game",
+    "season",
+}
+CATEGORY_ALIASES = {
+    "coloring": "coloring-pages",
+    "alphabet": "letters",
+    "numbers": "dots",
+    "odd_one": "odd-one",
+    "board_game": "board-game",
+    "alphabet_numbers": "letters",
+}
 IMAGE_EXTS = {".png", ".jpg", ".jpeg", ".webp"}
 WATERMARK = "© DOOLIA Printables"
 
@@ -270,17 +298,23 @@ def public_url(base: str, key: str) -> str:
     return f"{base.rstrip('/')}/{encoded_key}"
 
 
+def canonical_category(value: str) -> str:
+    key = utf8_text(value).strip().lower()
+    return CATEGORY_ALIASES.get(key, key)
+
+
 def process_one(path: Path, dry_run: bool) -> None:
     meta = parse_filename(path)
-    if meta.category not in ALLOWED_CATEGORIES:
+    if meta.category not in ALLOWED_CATEGORIES and meta.category not in CATEGORY_ALIASES:
         raise ValueError(f"Unsupported category '{meta.category}' for {path.name}")
+    category = canonical_category(meta.category)
 
     logger.info(
         "Processing %s -> title=%s slug=%s [%s]",
         path.name,
         meta.title,
         meta.slug,
-        meta.category,
+        category,
     )
     color_a4 = fit_to_a4(read_image(path))
     line_a4 = to_line_art(color_a4)
@@ -314,7 +348,7 @@ def process_one(path: Path, dry_run: bool) -> None:
     supabase = create_client(require_env("SUPABASE_URL"), require_env("SUPABASE_SERVICE_ROLE_KEY"))
     row = {
         "title": utf8_text(meta.title),
-        "category": utf8_text(meta.category),
+        "category": utf8_text(category),
         "tags": [utf8_text(tag) for tag in meta.tags],
         "color_image_url": public_url(public_base, keys["color"]),
         "line_art_url": public_url(public_base, keys["line"]),

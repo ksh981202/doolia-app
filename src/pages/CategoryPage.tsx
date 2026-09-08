@@ -20,7 +20,7 @@ import {
 } from '@/shared/config/smartFilters'
 import { cn } from '@/shared/lib/cn'
 
-const CARD_GRID = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'
+const CARD_GRID = 'mt-6 grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 lg:gap-6'
 
 function filterChipClass(active: boolean) {
   return cn(
@@ -50,11 +50,11 @@ export function CategoryPage() {
     if (!match && !browseAll) return []
     const source = [...(data ?? [])]
     const scoped = match
-      ? source
-          .filter((item) =>
-            match.topic.categoryFilter ? item.category === match.topic.categoryFilter : true,
-          )
-          .filter((item) => matchesQuery(item, match.topic.query))
+      ? source.filter((item) =>
+          match.topic.categoryFilter
+            ? item.category === match.topic.categoryFilter
+            : matchesQuery(item, match.topic.query),
+        )
       : source
     return scoped
       .filter((item) => matchesQuery(item, query))

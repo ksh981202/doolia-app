@@ -3,7 +3,7 @@
 
 @theme {
   --font-display: "Fredoka", ui-rounded, sans-serif;
-  --font-sans: "Pretendard", -apple-system, "Noto Sans KR", sans-serif;
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
 
   --color-brand: #10b981;
   --color-brand-dark: #059669;
@@ -22,6 +22,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    font-family: var(--font-sans);
   }
 
   body {
@@ -60,7 +61,7 @@
     margin-left: auto;
     margin-right: auto;
     background: #ffffff;
-    font-family: 'Pretendard', -apple-system, sans-serif;
+    font-family: var(--font-sans);
     font-size: 18px;
     line-height: 1.8;
     color: #1e293b;
@@ -158,7 +159,7 @@
 }
 
 .tip-body {
-  font-family: 'Pretendard', -apple-system, sans-serif;
+  font-family: var(--font-sans);
   font-size: 18px;
   line-height: 1.8;
   color: #1e293b;

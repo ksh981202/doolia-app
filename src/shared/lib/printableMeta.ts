@@ -35,13 +35,16 @@ export function educationEffect(printable: Printable) {
   return '🎨 색감 & 표현력'
 }
 
+export function formatAgeRange(source: string) {
+  const range = source.match(/(\d+)\s*[-~–—]\s*(\d+)/)
+  if (range) return `만 ${range[1]}~${range[2]}세`
+  const single = source.match(/(\d+)\s*세/)
+  if (single) return `만 ${single[1]}세`
+  return null
+}
+
 export function ageGroupLabel(tags: string[]) {
-  const matched = tags.find((tag) => /\d+\s*-\s*\d+\s*세/.test(tag) || tag.endsWith('세'))
-  if (!matched) return '만 3~6세'
-  const range = matched.replace(/\s/g, '').replace(/세$/, '')
-  const [from, to] = range.split('-')
-  if (from && to) return `만 ${from}~${to}세`
-  return `만 ${matched}`
+  return formatAgeRange(tags.join(' ')) ?? '만 3~6세'
 }
 
 export function subcategoryLabel(printable: Printable) {

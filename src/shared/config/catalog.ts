@@ -58,7 +58,7 @@ export const CATALOG_GROUPS: CatalogGroup[] = [
     subtitle: '기초 학습 & 창의',
     children: [
       topic('coloring-pages', '색칠공부', '', '🎨', 200, COLORING_SUBTAGS, {
-        categoryFilter: 'coloring',
+        categoryFilter: 'coloring-pages',
         description: '주제에 맞춰 고를 수 있는 고화질 색칠공부 도안입니다.',
       }),
       topic('tracing', '선 긋기 연습', '선따기|따라그리기|소근육', '✏️', 48, [
@@ -66,19 +66,19 @@ export const CATALOG_GROUPS: CatalogGroup[] = [
         { id: 'shape', label: '도형', query: '도형' },
         { id: 'trace', label: '선따기', query: '선따기|따라그리기' },
         { id: 'motor', label: '소근육', query: '소근육' },
-      ]),
+      ], { categoryFilter: 'tracing' }),
       topic('letters', '알파벳 & 숫자', '알파벳|숫자|따라쓰기', '🔤', 150, [
         { id: 'all', label: '전체', query: '' },
         { id: 'abc', label: '알파벳', query: '알파벳' },
         { id: 'numbers', label: '숫자', query: '숫자' },
         { id: 'trace', label: '따라쓰기', query: '따라쓰기' },
-      ]),
+      ], { categoryFilter: 'letters' }),
       topic('cutout', '종이 오리기', '오리기', '✂️', 16, [
         { id: 'all', label: '전체', query: '' },
         { id: 'animals', label: '동물', query: '동물' },
         { id: 'vehicles', label: '탈것', query: '탈것' },
         { id: 'season', label: '시즌', query: '크리스마스|할로윈' },
-      ]),
+      ], { categoryFilter: 'cutout' }),
     ],
   },
   {
@@ -91,26 +91,26 @@ export const CATALOG_GROUPS: CatalogGroup[] = [
         { id: 'all', label: '전체', query: '' },
         { id: 'animals', label: '동물', query: '동물|사자' },
         { id: 'easy', label: '쉬운 관찰', query: '초급|관찰' },
-      ]),
+      ], { categoryFilter: 'ispy' }),
       topic('odd-one', '다른그림찾기', '다른하나|다른그림', '👀', 28, [
         { id: 'all', label: '전체', query: '' },
         { id: 'animals', label: '동물', query: '동물' },
-      ]),
+      ], { categoryFilter: 'odd-one' }),
       topic('maze', '미로찾기', '미로', '🌀', 95, [
         { id: 'all', label: '전체', query: '' },
         { id: 'easy', label: '쉬운 미로', query: '초급' },
         { id: 'dino-maze', label: '공룡 미로', query: '공룡' },
-      ]),
+      ], { categoryFilter: 'maze' }),
       topic('dots', '점잇기', '점잇기', '🔢', 65, [
         { id: 'all', label: '전체', query: '' },
         { id: 'star', label: '별', query: '별' },
         { id: 'numbers', label: '숫자', query: '숫자' },
-      ]),
+      ], { categoryFilter: 'dots' }),
       topic('shadow', '그림자 맞추기', '그림자', '🌗', 24, [
         { id: 'all', label: '전체', query: '' },
         { id: 'vehicles', label: '탈것', query: '탈것' },
         { id: 'animals', label: '동물', query: '동물' },
-      ]),
+      ], { categoryFilter: 'shadow' }),
     ],
   },
   {
@@ -123,25 +123,25 @@ export const CATALOG_GROUPS: CatalogGroup[] = [
         { id: 'all', label: '전체', query: '' },
         { id: 'morning', label: '아침', query: '아침' },
         { id: 'habit', label: '생활습관', query: '습관' },
-      ]),
+      ], { categoryFilter: 'routine' }),
       topic('emotion', '감정 매칭카드', '감정', '😊', 20, [
         { id: 'all', label: '전체', query: '' },
         { id: 'sel', label: 'SEL', query: 'SEL|감정표현' },
-      ]),
+      ], { categoryFilter: 'emotion' }),
       topic('puppets', '손가락인형', '손가락인형', '🦊', 16, [
         { id: 'all', label: '전체', query: '' },
         { id: 'animals', label: '동물', query: '동물' },
-      ]),
+      ], { categoryFilter: 'puppets' }),
       topic('board-game', '한장 보드게임', '보드게임', '🎲', 12, [
         { id: 'all', label: '전체', query: '' },
         { id: 'family', label: '가족', query: '가족' },
-      ]),
+      ], { categoryFilter: 'board-game' }),
       topic('season', '시즌 & 기념일', '크리스마스|할로윈|시즌|기념일', '🎉', 130, [
         { id: 'all', label: '전체', query: '' },
         { id: 'xmas', label: '크리스마스', query: '크리스마스' },
         { id: 'halloween', label: '할로윈', query: '할로윈' },
         { id: 'birthday', label: '생일', query: '생일' },
-      ]),
+      ], { categoryFilter: 'season' }),
     ],
   },
 ]

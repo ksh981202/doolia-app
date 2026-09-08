@@ -41,7 +41,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-gray-100 bg-white/90 backdrop-blur-md">
-      <div className="mx-auto grid h-16 max-w-7xl grid-cols-[1fr_auto] items-center px-4 sm:h-20 sm:px-6 md:grid-cols-[1fr_auto_1fr]">
+      <div className="mx-auto grid h-16 w-full max-w-[1600px] grid-cols-[1fr_auto] items-center px-4 sm:h-20 sm:px-6 md:grid-cols-[1fr_auto_1fr] lg:px-8">
         <Logo onNavigate={() => setOpen(false)} />
         <NavMenu pathname={location.pathname} hash={location.hash} onSelect={goToNav} />
         <div className="flex items-center justify-self-end gap-2">
@@ -71,7 +71,7 @@ export function Header() {
 
       {open ? (
         <div className="border-t border-gray-100 bg-white/95 px-4 py-4 backdrop-blur-md md:hidden">
-          <div className="mx-auto flex max-w-7xl flex-col gap-1">
+          <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-1">
             <NavMenu pathname={location.pathname} hash={location.hash} mobile onSelect={goToNav} />
             <div className="mt-3 space-y-3 border-t border-gray-100 pt-3">
               <div>

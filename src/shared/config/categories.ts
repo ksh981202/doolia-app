@@ -1,9 +1,18 @@
 export const CATEGORIES = [
-  { id: 'coloring', label: '색칠공부', emoji: '🎨' },
-  { id: 'maze', label: '미로', emoji: '🌀' },
-  { id: 'tracing', label: '따라그리기', emoji: '✏️' },
-  { id: 'alphabet', label: '알파벳', emoji: '🔤' },
-  { id: 'numbers', label: '숫자', emoji: '🔢' },
+  { id: 'coloring-pages', label: '색칠공부', emoji: '🎨' },
+  { id: 'tracing', label: '선 긋기 연습', emoji: '✏️' },
+  { id: 'letters', label: '알파벳 & 숫자', emoji: '🔤' },
+  { id: 'cutout', label: '종이 오리기', emoji: '✂️' },
+  { id: 'ispy', label: '숨은그림찾기', emoji: '🔍' },
+  { id: 'odd-one', label: '다른그림찾기', emoji: '👀' },
+  { id: 'maze', label: '미로찾기', emoji: '🌀' },
+  { id: 'dots', label: '점잇기', emoji: '🔢' },
+  { id: 'shadow', label: '그림자 맞추기', emoji: '🌗' },
+  { id: 'routine', label: '루틴 체크차트', emoji: '📋' },
+  { id: 'emotion', label: '감정 매칭카드', emoji: '😊' },
+  { id: 'puppets', label: '손가락인형', emoji: '🦊' },
+  { id: 'board-game', label: '한장 보드게임', emoji: '🎲' },
+  { id: 'season', label: '시즌 & 기념일', emoji: '🎉' },
 ] as const
 
 export type PrintableCategory = (typeof CATEGORIES)[number]['id']
@@ -13,11 +22,42 @@ export const ALL_CATEGORY = 'all' as const
 export type GalleryCategory = typeof ALL_CATEGORY | PrintableCategory
 
 export const CATEGORY_LABEL: Record<PrintableCategory, string> = {
-  coloring: '색칠공부',
+  'coloring-pages': '색칠공부',
+  tracing: '선 긋기 연습',
+  letters: '알파벳 & 숫자',
+  cutout: '종이 오리기',
+  ispy: '숨은그림찾기',
+  'odd-one': '다른그림찾기',
   maze: '미로찾기',
-  tracing: '따라그리기',
-  alphabet: '알파벳',
-  numbers: '숫자놀이',
+  dots: '점잇기',
+  shadow: '그림자 맞추기',
+  routine: '루틴 체크차트',
+  emotion: '감정 매칭카드',
+  puppets: '손가락인형',
+  'board-game': '한장 보드게임',
+  season: '시즌 & 기념일',
+}
+
+const CATEGORY_ID_SET = new Set<string>(CATEGORIES.map((item) => item.id))
+
+/** Old DB / TSV values still accepted, then stored as a canonical slug. */
+export const LEGACY_CATEGORY_ALIASES: Record<string, PrintableCategory> = {
+  coloring: 'coloring-pages',
+  alphabet: 'letters',
+  numbers: 'dots',
+  odd_one: 'odd-one',
+  board_game: 'board-game',
+  alphabet_numbers: 'letters',
+}
+
+export function isPrintableCategory(value: string): value is PrintableCategory {
+  return CATEGORY_ID_SET.has(value)
+}
+
+export function toPrintableCategory(value: string | null | undefined): PrintableCategory {
+  const raw = value?.trim().toLowerCase() ?? ''
+  if (isPrintableCategory(raw)) return raw
+  return LEGACY_CATEGORY_ALIASES[raw] ?? 'coloring-pages'
 }
 
 export const AD_COUNTDOWN_SECONDS = 3

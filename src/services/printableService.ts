@@ -39,14 +39,18 @@ export function matchesPopularTab(item: Printable, tab: PopularTab) {
   if (tab === 'thinking') {
     return (
       item.category === 'maze' ||
+      item.category === 'ispy' ||
+      item.category === 'odd-one' ||
+      item.category === 'shadow' ||
+      item.category === 'dots' ||
       ['사고', '순서', '두뇌', '지구력', '원리', '미로', '점잇기'].some((token) => text.includes(token))
     )
   }
   return (
-    item.category === 'coloring' ||
+    item.category === 'coloring-pages' ||
+    item.category === 'cutout' ||
     item.category === 'tracing' ||
-    item.category === 'alphabet' ||
-    item.category === 'numbers' ||
+    item.category === 'letters' ||
     ['색칠', '알파벳', '선따기', '따라그리기'].some((token) => text.includes(token))
   )
 }

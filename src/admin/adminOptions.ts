@@ -1,5 +1,5 @@
 import { CATALOG_GROUPS } from '@/shared/config/catalog'
-import type { PrintableCategory } from '@/shared/config/categories'
+import { toPrintableCategory, type PrintableCategory } from '@/shared/config/categories'
 
 export const ADMIN_PRINTABLE_CATEGORIES = CATALOG_GROUPS.flatMap((group) =>
   group.children.map((child) => ({
@@ -10,20 +10,26 @@ export const ADMIN_PRINTABLE_CATEGORIES = CATALOG_GROUPS.flatMap((group) =>
 )
 
 const CATALOG_TO_PRINTABLE: Record<string, PrintableCategory> = {
-  'coloring-pages': 'coloring',
+  'coloring-pages': 'coloring-pages',
   tracing: 'tracing',
-  letters: 'alphabet',
-  cutout: 'coloring',
-  ispy: 'coloring',
-  'odd-one': 'coloring',
+  letters: 'letters',
+  cutout: 'cutout',
+  ispy: 'ispy',
+  'odd-one': 'odd-one',
   maze: 'maze',
-  dots: 'numbers',
-  shadow: 'coloring',
-  routine: 'coloring',
-  emotion: 'coloring',
-  puppets: 'coloring',
-  'board-game': 'coloring',
-  season: 'coloring',
+  dots: 'dots',
+  shadow: 'shadow',
+  routine: 'routine',
+  emotion: 'emotion',
+  puppets: 'puppets',
+  'board-game': 'board-game',
+  season: 'season',
+  coloring: 'coloring-pages',
+  alphabet: 'letters',
+  numbers: 'dots',
+  odd_one: 'odd-one',
+  board_game: 'board-game',
+  alphabet_numbers: 'letters',
 }
 
 export const AGE_OPTIONS = [
@@ -33,7 +39,7 @@ export const AGE_OPTIONS = [
 ] as const
 
 export function catalogToPrintableCategory(catalogSlug: string): PrintableCategory {
-  return CATALOG_TO_PRINTABLE[catalogSlug] ?? 'coloring'
+  return CATALOG_TO_PRINTABLE[catalogSlug] ?? toPrintableCategory(catalogSlug)
 }
 
 /** 30-column TSV/CSV header used by bulk import */
@@ -112,7 +118,7 @@ export function resolveCatalogSlug(...candidates: Array<string | undefined>) {
     const value = raw?.trim()
     if (!value) continue
     const lower = value.toLowerCase()
-    if (CATALOG_TO_PRINTABLE[lower]) return lower
+    if (CATALOG_TO_PRINTABLE[lower]) return CATALOG_TO_PRINTABLE[lower]
     if (CATEGORY_TO_CATALOG[lower]) return CATEGORY_TO_CATALOG[lower]
     const byId = ADMIN_PRINTABLE_CATEGORIES.find((item) => item.id === value || item.id === lower)
     if (byId) return byId.id

@@ -1,3 +1,4 @@
+import { Lightbulb, Package, Palette, Printer, Sparkles } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { categoryPath } from '@/shared/config/catalog'
@@ -17,8 +18,6 @@ const AGE_HUBS = [
     subtitle: '첫 시작 · 감각 자극 · 스킨십 눕방',
     tags: ['#첫색칠공부', '#기초선따기', '#쉬운오리기', '#감정모양'],
     cta: '만 2~3세 도안 모아보기',
-    card: 'border-emerald-100',
-    icon: 'bg-emerald-100',
     to: '/category?age=2-3',
   },
   {
@@ -28,8 +27,6 @@ const AGE_HUBS = [
     subtitle: '상자 변신 · 역할극 · 손가락 힘',
     tags: ['#쉬운미로', '#숨은그림찾기', '#숫자쓰기', '#루틴차트'],
     cta: '만 4~5세 도안 모아보기',
-    card: 'border-sky-100',
-    icon: 'bg-sky-100',
     to: '/category?age=4-5',
   },
   {
@@ -39,8 +36,6 @@ const AGE_HUBS = [
     subtitle: '자율 미션 · 1장 보드게임 · 사고력',
     tags: ['#복잡한미로', '#점잇기', '#알파벳쓰기', '#보드게임'],
     cta: '만 6~7세+ 도안 모아보기',
-    card: 'border-purple-100',
-    icon: 'bg-purple-100',
     to: '/category?age=6-7',
   },
 ] as const
@@ -119,6 +114,30 @@ const WHY_DOOLIA = [
   },
 ] as const
 
+const HERO_STATS = [
+  {
+    icon: Printer,
+    value: '500+',
+    label: '무료 프린트 도안',
+    hint: 'A4 초고화질 · 즉시 인쇄',
+    iconClass: 'bg-emerald-50 text-emerald-700',
+  },
+  {
+    icon: Sparkles,
+    value: '5대',
+    label: '상황별 맞춤 놀이',
+    hint: '집콕 · 10분 · 외출 · 잠자리 · 기념일',
+    iconClass: 'bg-teal-50 text-teal-700',
+  },
+  {
+    icon: Package,
+    value: '0원',
+    label: '집 안 재료로 시작',
+    hint: '회원가입 없이 바로 이용',
+    iconClass: 'bg-amber-50 text-amber-700',
+  },
+] as const
+
 export function PlayHubPage() {
   const navigate = useNavigate()
   const [activeCategoryTab, setActiveCategoryTab] = useState<CategoryTab>('kids')
@@ -135,20 +154,64 @@ export function PlayHubPage() {
         100% 영구 무료 · 회원가입 없음 · 집 안 0원 재료 · 초고화질 A4 즉시 인쇄
       </div>
 
-      <section className="bg-white px-4 pb-8 pt-12 text-center">
-        <div className="mx-auto max-w-4xl">
-          <div className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-emerald-200/60 bg-emerald-50 px-3.5 py-1.5 text-xs font-bold text-emerald-800 shadow-sm">
-            <span>✨ DOOLIA PLAY TOOLBOX</span>
-            <span className="text-emerald-400">|</span>
-            <span>오늘 바로 시작하는 맞춤 놀이</span>
+      <section className="mx-auto max-w-6xl px-4 pt-8">
+        <div className="relative mb-12 overflow-visible rounded-3xl border border-emerald-100/80 bg-gradient-to-br from-emerald-50/90 via-teal-50/40 to-amber-50/40 p-6 shadow-sm sm:p-10">
+          <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12">
+            <div className="lg:col-span-7">
+              <div className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-white/90 px-3.5 py-1.5 text-xs font-bold text-emerald-800 shadow-xs sm:text-sm">
+                <span>✨ DOOLIA PLAY TOOLBOX</span>
+                <span className="text-emerald-400">|</span>
+                <span>오늘 바로 시작하는 맞춤 놀이</span>
+              </div>
+              <h1 className="mb-3 text-2xl font-extrabold leading-tight text-slate-900 sm:text-3xl lg:text-4xl">
+                도안 1장 출력하고,
+                <br />
+                <span className="text-emerald-600">집 안 재료로 즉시 놀아요!</span>
+              </h1>
+              <p className="mb-6 text-sm font-medium text-slate-600 sm:text-base">
+                비싼 교구 없이도 아이와 매일 웃을 수 있도록,
+                <br />
+                쉽고 재미있는 5대 상황별 놀이법과 500+종 프린트 도안을 제공합니다.
+              </p>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <Link
+                  to={situationPath('home')}
+                  className="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white shadow-md transition-all hover:bg-emerald-700 hover:shadow-lg sm:text-base"
+                >
+                  <Lightbulb className="h-4 w-4 shrink-0" strokeWidth={2.5} />
+                  맞춤 놀이 도구함 열기 →
+                </Link>
+                <Link
+                  to={categoryPath('coloring-pages')}
+                  className="flex items-center justify-center gap-2 rounded-xl border border-slate-300/90 bg-white px-5 py-3 text-sm font-bold text-slate-800 shadow-xs transition-all hover:bg-slate-50 hover:shadow-md sm:text-base"
+                >
+                  <Palette className="h-4 w-4 shrink-0" strokeWidth={2.5} />
+                  인기 도안 인쇄하기
+                </Link>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5">
+              <div className="flex h-full flex-col justify-center gap-3 py-2">
+                {HERO_STATS.map((stat) => (
+                  <div
+                    key={stat.label}
+                    className="flex items-center gap-3.5 rounded-2xl border border-emerald-100/80 bg-white/90 px-4 py-3.5 shadow-sm"
+                  >
+                    <span className={cn('shrink-0 rounded-xl p-2.5', stat.iconClass)}>
+                      <stat.icon className="h-5 w-5" strokeWidth={2} />
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-base font-extrabold text-slate-900">
+                        {stat.value} {stat.label}
+                      </p>
+                      <p className="mt-0.5 text-[12px] font-medium text-slate-600 sm:text-[13px]">{stat.hint}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-          <h1 className="text-3xl font-black leading-tight tracking-tight text-slate-900 sm:text-4xl sm:leading-snug lg:text-[40px]">
-            아이와 뭘 할지 고민될 때,
-            <br />
-            <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-              함께 웃으며 시작하는 맞춤 놀이 도구함
-            </span>
-          </h1>
         </div>
       </section>
 
@@ -221,8 +284,8 @@ export function PlayHubPage() {
         </div>
       </section>
 
-      <section className="mx-auto my-14 max-w-6xl px-4">
-        <div className="rounded-3xl border border-emerald-100/70 bg-emerald-50/60 p-8 shadow-sm sm:p-12">
+      <section className="mx-auto max-w-6xl px-4">
+        <div className="relative my-12 overflow-hidden rounded-3xl border border-emerald-100/80 bg-gradient-to-br from-emerald-50/90 via-teal-50/40 to-amber-50/40 p-6 shadow-sm sm:p-10">
           <div className="mx-auto mb-10 max-w-2xl text-center">
             <span className="mb-2 inline-block text-xs font-bold uppercase tracking-widest text-emerald-600">
               WHY DOOLIA
@@ -238,7 +301,7 @@ export function PlayHubPage() {
             {WHY_DOOLIA.map((item) => (
               <div
                 key={item.title}
-                className="rounded-2xl border border-emerald-100/60 bg-white p-5 shadow-sm transition-colors hover:bg-emerald-50/80"
+                className="rounded-2xl border border-emerald-100/80 bg-white/90 p-5 shadow-sm"
               >
                 <div className="mb-3.5 text-3xl">{item.icon}</div>
                 <h3 className="mb-2 text-base font-bold text-slate-900">{item.title}</h3>
@@ -258,26 +321,25 @@ export function PlayHubPage() {
           {AGE_HUBS.map((hub) => (
             <article
               key={hub.id}
-              className={cn(
-                'rounded-3xl border bg-white p-6 shadow-sm transition-shadow hover:shadow-md sm:p-8',
-                hub.card,
-              )}
+              className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 p-6 shadow-sm backdrop-blur-xs transition-all duration-300 hover:border-emerald-200/80 hover:shadow-lg"
             >
-              <div className={cn('mb-4 flex h-12 w-12 items-center justify-center rounded-2xl text-2xl', hub.icon)}>
-                {hub.emoji}
-              </div>
-              <h3 className="mb-1 text-xl font-bold text-slate-900">{hub.title}</h3>
-              <p className="mb-6 text-sm font-medium text-slate-600">{hub.subtitle}</p>
-              <div className="mb-8 flex flex-wrap gap-2">
-                {hub.tags.map((tag) => (
-                  <span key={tag} className="rounded-full bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700">
-                    {tag}
-                  </span>
-                ))}
+              <div>
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald-100/60 bg-emerald-50/80 text-2xl transition-transform group-hover:scale-110">
+                  {hub.emoji}
+                </div>
+                <h3 className="mb-1 text-xl font-bold text-slate-900">{hub.title}</h3>
+                <p className="mb-6 text-sm font-medium text-slate-600">{hub.subtitle}</p>
+                <div className="mb-8 flex flex-wrap gap-2">
+                  {hub.tags.map((tag) => (
+                    <span key={tag} className="rounded-full bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
               <Link
                 to={hub.to}
-                className="flex w-full items-center justify-center gap-1 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-bold text-white transition-all hover:bg-emerald-700"
+                className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-emerald-600 py-3 text-sm font-bold text-white shadow-xs transition-all hover:bg-emerald-700"
               >
                 {hub.cta} →
               </Link>
@@ -289,7 +351,7 @@ export function PlayHubPage() {
       <section id="printable-library" className="mx-auto max-w-6xl scroll-mt-24 px-4 py-12">
         <div className="mb-8 text-center">
           <h2 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">📚 둘리아 무료 도안 라이브러리</h2>
-          <p className="mt-1 text-sm text-slate-500">원하는 학습 영역별 고화질 도안을 자유롭게 인쇄하세요.</p>
+          <p className="mt-1 text-sm font-medium text-slate-600">원하는 학습 영역별 고화질 도안을 자유롭게 인쇄하세요.</p>
           <div className="mt-6 inline-flex flex-wrap justify-center rounded-2xl bg-slate-200/70 p-1.5">
             {LIBRARY_TABS.map((tab) => (
               <button
@@ -308,19 +370,17 @@ export function PlayHubPage() {
         </div>
 
         <div className="rounded-3xl border border-slate-200/80 bg-white p-8 shadow-sm">
-          <div className={cn('grid grid-cols-2 gap-4', activeLibrary.cols)}>
+          <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 xl:grid-cols-5">
             {activeLibrary.items.map((item) => (
               <Link
                 key={item.slug}
                 to={categoryPath(item.slug)}
-                className={cn(
-                  'rounded-2xl border border-slate-100 bg-slate-50 p-5 text-center transition-colors',
-                  activeLibrary.hover,
-                )}
+                className="group flex flex-col items-center rounded-2xl border border-slate-100 bg-white p-5 text-center shadow-sm transition-all duration-200 hover:border-emerald-100 hover:shadow-md sm:p-6"
               >
-                <div className="mb-2 text-3xl">{item.icon}</div>
-                <h4 className="text-sm font-bold text-slate-900">{item.title}</h4>
-                <p className="mt-1 text-sm font-medium text-slate-600">{item.count}</p>
+                <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-xl bg-slate-50 text-3xl transition-colors group-hover:bg-emerald-50">
+                  {item.icon}
+                </div>
+                <h4 className="text-[15px] font-bold text-slate-900 transition-colors group-hover:text-emerald-700 sm:text-base">{item.title}</h4>
               </Link>
             ))}
           </div>

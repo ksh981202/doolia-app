@@ -1,6 +1,7 @@
 import type { Printable } from '@/db/types'
 import i18n from '@/i18n'
-import { ageGroupLabel, subcategoryLabel } from '@/shared/lib/printableMeta'
+import { CATEGORY_LABEL } from '@/shared/config/categories'
+import { ageGroupLabel, formatAgeRange } from '@/shared/lib/printableMeta'
 
 function blob(printable: Printable) {
   return [printable.title, printable.title_ko, printable.title_en, printable.category, ...printable.tags].join(' ')
@@ -21,7 +22,7 @@ export function detailBrandBadge(printable: Printable) {
   if (/감정|SEL|루틴|습관|손가락인형|보드게임|부모/.test(text)) {
     return { emoji: '🤝', label: 'DOOLIA FAMILY' }
   }
-  if (/숨은그림|다른하나|그림자|순서|미로|두뇌|사고/.test(text) || printable.category === 'maze') {
+  if (/숨은그림|다른하나|그림자|순서|미로|두뇌|사고/.test(text) || printable.category === 'maze' || printable.category === 'ispy' || printable.category === 'odd-one' || printable.category === 'shadow' || printable.category === 'dots') {
     return { emoji: '🧠', label: 'DOOLIA BRAIN' }
   }
   return { emoji: '🎨', label: 'DOOLIA KIDS' }
@@ -29,7 +30,139 @@ export function detailBrandBadge(printable: Printable) {
 
 export function detailAgeLabel(printable: Printable) {
   if (isTrexPrintable(printable)) return '만 3~5세 권장'
-  return `${ageGroupLabel(printable.tags)} 권장`
+  const label =
+    formatAgeRange([printable.age_group, printable.age_group_en, ...printable.tags].join(' ')) ??
+    ageGroupLabel(printable.tags)
+  return `${label} 권장`
+}
+
+function descriptionForLanguage(printable: Printable, language: string) {
+  const lang = language.slice(0, 2)
+  const byLang: Record<string, string> = {
+    ko: printable.description_ko,
+    en: printable.description_en,
+    ja: printable.description_ja,
+    es: printable.description_es,
+    de: printable.description_de,
+    fr: printable.description_fr,
+  }
+  return (
+    byLang[lang]?.trim() ||
+    printable.description_ko?.trim() ||
+    printable.description_en?.trim() ||
+    Object.values(byLang).find((value) => value?.trim())?.trim() ||
+    ''
+  )
+}
+
+export function printableIntro(printable: Printable, language?: string) {
+  const fromDb = descriptionForLanguage(printable, language || i18n.resolvedLanguage || i18n.language || 'ko')
+  if (fromDb) return fromDb
+  const age = detailAgeLabel(printable).replace(/\s*권장$/, '')
+  const name = printable.title_ko || printable.title
+  if (printable.category === 'coloring-pages') {
+    return `${age} 유아를 위한 왕쉬운 ${name} 도안입니다. 굵은 외곽선으로 처음 색칠을 시작하는 아이의 손가락 힘과 성취감을 길러줍니다.`
+  }
+  const category = CATEGORY_LABEL[printable.category]
+  return `${age} 유아를 위한 ${name} ${category} 도안입니다. 짧은 시간에도 성취감을 느낄 수 있도록 구성했어요.`
+}
+
+export type BrainPoint = { label: string }
+
+function stripLeadingEmoji(value: string) {
+  return value.replace(/^[\p{Extended_Pictographic}\uFE0F\u200D]+\s*/u, '').trim()
+}
+
+function benefitKey(label: string) {
+  return stripLeadingEmoji(label)
+    .replace(/\s+/g, '')
+    .replace(/적/g, '')
+    .replace(/[^\p{L}\p{N}]/gu, '')
+    .toLowerCase()
+}
+
+const CANONICAL_BENEFITS: Record<string, string> = {
+  시각인지능력: '시각 인지능력',
+  소근육발달: '소근육 발달',
+  손가락힘강화: '손가락 힘 강화',
+  색채감각: '색채 감각',
+}
+
+function canonicalBenefitLabel(label: string) {
+  const cleaned = stripLeadingEmoji(label)
+  return CANONICAL_BENEFITS[benefitKey(cleaned)] ?? cleaned
+}
+
+export function brainDevelopmentPoints(printable: Printable): BrainPoint[] {
+  const fromDb = [printable.benefit_1, printable.benefit_2, printable.benefit_3]
+    .map((item) => item?.trim())
+    .filter(Boolean)
+    .map((label) => canonicalBenefitLabel(label))
+
+  const text = blob(printable)
+  const byTheme: string[] =
+    /감정|SEL/.test(text)
+      ? ['감정 인식', '마음 나누기', '공감 능력']
+      : /루틴|습관/.test(text)
+        ? ['자립 습관', '스스로 해보기', '하루 루틴 감각']
+        : printable.category === 'maze' ||
+            printable.category === 'ispy' ||
+            printable.category === 'odd-one' ||
+            /미로|숨은그림|관찰|집중/.test(text)
+          ? ['관찰력 & 집중력', '시각 변별력', '과제 지구력']
+          : printable.category === 'tracing' || printable.category === 'letters'
+            ? ['소근육 운필력', '기초 학습력', '시선 추적']
+            : ['소근육 발달', '손가락 힘 강화', '시각 인지능력']
+
+  const seen = new Set<string>()
+  const labels: string[] = []
+  for (const label of [...fromDb, ...byTheme]) {
+    const key = benefitKey(label)
+    if (!key || seen.has(key)) continue
+    seen.add(key)
+    labels.push(canonicalBenefitLabel(label))
+    if (labels.length >= 3) break
+  }
+  return labels.map((label) => ({ label }))
+}
+
+function toHashtag(value: string) {
+  const compact = value
+    .replace(/^#/, '')
+    .replace(/\s+/g, '')
+    .replace(/~/g, '_')
+    .replace(/[^\p{L}\p{N}_]/gu, '')
+  return compact ? `#${compact}` : ''
+}
+
+export function keywordChips(printable: Printable): string[] {
+  const chips: string[] = []
+  const push = (value: string) => {
+    const tag = toHashtag(value)
+    if (tag && !chips.includes(tag)) chips.push(tag)
+  }
+
+  push(detailAgeLabel(printable).replace(/\s*권장$/, ''))
+
+  for (const tag of printable.tags) {
+    if (/세|age|years?/i.test(tag)) continue
+    push(tag)
+  }
+
+  if (printable.theme_ko) push(printable.theme_ko)
+  push(CATEGORY_LABEL[printable.category])
+
+  if (printable.category === 'coloring-pages') {
+    push('왕쉬운색칠')
+    push('굵은외곽선')
+    push('소근육발달')
+  }
+
+  for (const point of brainDevelopmentPoints(printable)) {
+    push(point.label)
+  }
+
+  return chips.slice(0, 6)
 }
 
 function parentGuideForLanguage(printable: Printable) {
@@ -75,19 +208,23 @@ export function educationalBenefits(printable: Printable) {
   if (/미로|숨은그림|관찰|집중/.test(text)) {
     return ['🎯 관찰력 & 집중력 향상', '🧠 시각 변별력', '⏳ 과제 지구력']
   }
-  if (printable.category === 'tracing' || printable.category === 'alphabet') {
+  if (printable.category === 'tracing' || printable.category === 'letters') {
     return ['✍️ 손가락 소근육 운필력', '🔤 기초 학습력', '👀 시선 추적 & 집중']
   }
-  return ['🎯 관찰·집중력', '✍️ 손가락 소근육', '🎨 색감·창의성']
+  return ['소근육 발달', '손가락 힘 강화', '시각적 인지능력']
+}
+
+export function parentCoachingTip(printable: Printable) {
+  return parentCoachingTips(printable)[0] ?? ''
 }
 
 export function parentCoachingTips(printable: Printable) {
   const fromDb = splitParentGuide(parentGuideForLanguage(printable))
   if (fromDb.length) return fromDb
 
-  if (isTrexPrintable(printable) || printable.category === 'coloring') {
+  if (isTrexPrintable(printable) || printable.category === 'coloring-pages') {
     return [
-      '아이가 좋아하는 색으로 공룡을 마음껏 칠하게 해주고 정답을 강요하지 마세요.',
+      '선을 벗어나도 괜찮으니 아이가 자유롭게 크레용을 쥐고 칠할 수 있도록 격려해 주세요.',
       '공룡 이빨이나 눈을 칠할 때 어떤 느낌인지 아이와 대화 나눠보세요.',
       '완성된 도안에 이름을 적고 방문이나 냉장고에 함께 붙여 자신감을 북돋워 주세요.',
     ]
@@ -122,7 +259,6 @@ export function megaBundleCopy(printable: Printable) {
   }
 }
 
-export function relatedSectionTitle(printable: Printable) {
-  const label = subcategoryLabel(printable)
-  return `${label} 도안 더 보기`
+export function relatedSectionTitle(_printable?: Printable) {
+  return '🎨 이 도안과 함께하면 좋은 추천 도안'
 }

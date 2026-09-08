@@ -1,98 +1,101 @@
-import { ChevronDown } from 'lucide-react'
-import { useEffect, useState, type ReactNode } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Download, Heart, Share2 } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { LightboxModal } from '@/components/LightboxModal'
 import { cn } from '@/shared/lib/cn'
+import { useBookmarkStore } from '@/shared/store/useBookmarkStore'
 import { useDownloadStore } from '@/shared/store/useDownloadStore'
 import type { Printable } from '@/types/printable'
 
 type PreviewMode = 'line' | 'color'
 
-function descriptionForLanguage(printable: Printable, language: string) {
-  const lang = language.slice(0, 2)
-  const byLang: Record<string, string> = {
-    ko: printable.description_ko,
-    en: printable.description_en,
-    ja: printable.description_ja,
-    es: printable.description_es,
-    de: printable.description_de,
-    fr: printable.description_fr,
-  }
-  return (
-    byLang[lang]?.trim() ||
-    printable.description_ko?.trim() ||
-    printable.description_en?.trim() ||
-    Object.values(byLang).find((value) => value?.trim())?.trim() ||
-    ''
-  )
-}
-
 export function A4Preview({ printable }: { printable: Printable }) {
-  const { i18n } = useTranslation()
   const [mode, setMode] = useState<PreviewMode>('line')
-  const [openTip, setOpenTip] = useState(true)
-  const [openTerms, setOpenTerms] = useState(false)
   const [isZoomed, setIsZoomed] = useState(false)
+  const [shareMsg, setShareMsg] = useState('')
   const openModal = useDownloadStore((state) => state.openModal)
+  const toggle = useBookmarkStore((state) => state.toggle)
+  const bookmarked = useBookmarkStore((state) => state.ids.includes(printable.id))
+  const likesCount = bookmarked ? 4 : 3
   const src = mode === 'line' ? printable.image_bw_url : printable.image_color_url
   const title = printable.title_ko
-  const descriptionText =
-    descriptionForLanguage(printable, i18n.resolvedLanguage || i18n.language || 'ko') ||
-    `${printable.title_ko || printable.title} 도안은 A4 용지에 맞춰 300DPI로 제작되었습니다. 두꺼운 색연필이나 수성 마카로 칠하면 선이 또렷하게 살아납니다.`
+
+  useEffect(() => {
+    if (!shareMsg) return
+    const timer = window.setTimeout(() => setShareMsg(''), 2000)
+    return () => window.clearTimeout(timer)
+  }, [shareMsg])
+
+  const share = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href)
+      setShareMsg('링크를 복사했어요')
+    } catch {
+      setShareMsg('복사에 실패했어요')
+    }
+  }
 
   return (
-    <div>
-      <div className="flex flex-row items-start gap-4">
-        <div className="flex w-20 shrink-0 flex-col gap-3 sm:w-24">
-          <p className="mb-1 text-xs font-bold text-gray-500">미리보기</p>
-          <button
-            type="button"
-            onClick={() => setMode('line')}
-            className={cn(
-              'aspect-[3/4] cursor-pointer overflow-hidden rounded-lg border-2 bg-white transition-all',
-              mode === 'line'
-                ? 'border-emerald-500 shadow-sm ring-2 ring-emerald-500/20'
-                : 'border-gray-200 opacity-70 hover:opacity-100',
-            )}
-            aria-label="흑백 도안"
-          >
-            <img
-              src={printable.image_bw_url}
-              alt=""
-              loading="lazy"
-              decoding="async"
-              className="h-full w-full object-contain"
-            />
-          </button>
-          <p className="text-center text-[10px] font-bold text-gray-500">흑백 도안</p>
-          <button
-            type="button"
-            onClick={() => setMode('color')}
-            className={cn(
-              'aspect-[3/4] cursor-pointer overflow-hidden rounded-lg border-2 bg-white transition-all',
-              mode === 'color'
-                ? 'border-emerald-500 shadow-sm ring-2 ring-emerald-500/20'
-                : 'border-gray-200 opacity-70 hover:opacity-100',
-            )}
-            aria-label="컬러 완성 예시"
-          >
-            <img
-              src={printable.image_color_url}
-              alt=""
-              loading="lazy"
-              decoding="async"
-              className="h-full w-full object-contain"
-            />
-          </button>
-          <p className="text-center text-[10px] font-bold text-gray-500">컬러 예시</p>
-        </div>
-
-        <A4Paper
-          src={src}
-          title={title}
-          mode={mode}
-          onZoom={() => setIsZoomed(true)}
+    <div className="flex items-start gap-4 sm:gap-5">
+      <div className="flex shrink-0 flex-col gap-3">
+        <ThumbnailButton
+          src={printable.image_bw_url}
+          label="흑백 도안"
+          active={mode === 'line'}
+          onClick={() => setMode('line')}
         />
+        <ThumbnailButton
+          src={printable.image_color_url}
+          label="컬러 예시"
+          active={mode === 'color'}
+          onClick={() => setMode('color')}
+        />
+      </div>
+
+      <div className="flex min-w-0 flex-1 flex-col gap-3">
+        <A4Paper src={src} title={title} mode={mode} onZoom={() => setIsZoomed(true)} />
+
+        <div className="relative mt-3 grid w-full grid-cols-3 gap-2">
+          <button
+            type="button"
+            onClick={() => toggle(printable.id)}
+            className={cn(
+              'flex cursor-pointer items-center justify-center gap-1.5 rounded-xl border px-2 py-3 text-xs font-bold shadow-2xs transition-all active:scale-[0.99] sm:text-sm',
+              bookmarked
+                ? 'border-rose-200 bg-rose-50/80 text-rose-600'
+                : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50',
+            )}
+            aria-pressed={bookmarked}
+            aria-label={bookmarked ? '좋아요 취소' : '좋아요'}
+          >
+            <Heart className={cn('h-4 w-4 text-rose-500', bookmarked && 'fill-rose-500')} />
+            <span>좋아요{likesCount > 0 ? ` ${likesCount}` : ''}</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => openModal(printable)}
+            title="A4 PDF 파일로 내 기기에 저장"
+            className="flex cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-2 py-3 text-xs font-bold text-slate-700 shadow-2xs transition-all hover:bg-slate-50 active:scale-[0.99] sm:text-sm"
+          >
+            <Download className="h-4 w-4 text-emerald-600" />
+            <span>PDF 저장</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => void share()}
+            className="flex cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-2 py-3 text-xs font-bold text-slate-700 shadow-2xs transition-all hover:bg-slate-50 active:scale-[0.99] sm:text-sm"
+          >
+            <Share2 className="h-4 w-4 text-slate-600" />
+            <span>공유</span>
+          </button>
+          {shareMsg ? (
+            <p
+              role="status"
+              className="pointer-events-none absolute -top-10 right-0 z-10 rounded-full bg-slate-900 px-3 py-1.5 text-xs font-bold text-white shadow-md"
+            >
+              {shareMsg}
+            </p>
+          ) : null}
+        </div>
       </div>
 
       <LightboxModal
@@ -105,17 +108,42 @@ export function A4Preview({ printable }: { printable: Printable }) {
           openModal(printable)
         }}
       />
-
-      <div className="mt-8 space-y-3">
-        <Accordion title="도안 소개 & 활용 팁" open={openTip} onToggle={() => setOpenTip((value) => !value)}>
-          {descriptionText}
-        </Accordion>
-        <Accordion title="이용 안내" open={openTerms} onToggle={() => setOpenTerms((value) => !value)}>
-          DOOLIA Printables 무료 도안은 가정 및 교실의 비상업적 인쇄에 한해 사용할 수 있습니다. 상업적
-          재판매, 재배포, 워터마크 제거는 허용되지 않습니다. © DOOLIA Printables
-        </Accordion>
-      </div>
     </div>
+  )
+}
+
+function ThumbnailButton({
+  src,
+  label,
+  active,
+  onClick,
+}: {
+  src: string
+  label: string
+  active: boolean
+  onClick: () => void
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      aria-pressed={active}
+      className={cn(
+        'flex h-28 w-20 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-2xl border-2 bg-white p-1.5 shadow-xs transition-all sm:h-32 sm:w-24',
+        active
+          ? 'border-emerald-600 shadow-md ring-2 ring-emerald-500/20'
+          : 'border-slate-200 opacity-70 hover:opacity-100',
+      )}
+    >
+      <img
+        src={src}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        className="h-full w-full rounded-xl object-contain"
+      />
+    </button>
   )
 }
 
@@ -150,24 +178,27 @@ function A4Paper({
   }, [src])
 
   return (
-    <div className="relative mx-auto flex min-w-0 flex-1 aspect-[1/1.414] max-w-[460px] items-center justify-center overflow-hidden rounded-xl border border-gray-200/90 bg-white p-6 shadow-2xl">
-      {!loaded ? <div className="absolute inset-0 animate-pulse bg-slate-200" /> : null}
-      <span className="absolute left-4 top-4 z-10 inline-flex items-center gap-1 rounded-full bg-gray-900/90 px-3 py-1 text-[11px] font-bold text-white backdrop-blur-md">
-        🖨️ A4 · 300 DPI
-      </span>
+    <div className="group relative flex aspect-[3/4] w-full items-center justify-center overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-4 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.08)]">
+      {!loaded ? <div className="absolute inset-0 animate-pulse bg-slate-100" /> : null}
+      {mode === 'line' ? (
+        <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 rounded-full bg-slate-900/75 px-2.5 py-1 text-[11px] font-bold text-white shadow-xs backdrop-blur-sm">
+          <span>🎨</span>
+          <span>좌측 썸네일로 색칠 예시 확인</span>
+        </div>
+      ) : null}
       <button
         type="button"
         onClick={onZoom}
-        className="absolute bottom-4 right-4 z-10 flex cursor-pointer items-center gap-1 rounded-lg bg-gray-900/80 px-3 py-1.5 text-xs font-bold text-white shadow-md backdrop-blur-sm transition-all hover:bg-gray-900"
+        className="absolute bottom-3 right-3 z-10 rounded-lg bg-slate-900/80 px-2.5 py-1 text-[11px] font-bold text-white opacity-0 shadow-sm backdrop-blur-sm transition-opacity hover:bg-slate-900 group-hover:opacity-100"
       >
-        🔍 크게 보기
+        크게 보기
       </button>
       <img
         src={src}
         alt={`${title} ${mode === 'line' ? '선화' : '컬러'} 미리보기`}
         decoding="async"
         className={cn(
-          'relative z-[1] max-h-full max-w-full cursor-zoom-in object-contain drop-shadow-sm',
+          'relative z-[1] h-full w-full cursor-zoom-in rounded-xl object-contain transition-transform duration-300 group-hover:scale-[1.02]',
           !loaded && 'opacity-0',
         )}
         onClick={onZoom}
@@ -175,32 +206,5 @@ function A4Paper({
         onError={() => setLoadedSrc(src)}
       />
     </div>
-  )
-}
-
-function Accordion({
-  title,
-  open,
-  onToggle,
-  children,
-}: {
-  title: string
-  open: boolean
-  onToggle: () => void
-  children: ReactNode
-}) {
-  return (
-    <section className="overflow-hidden rounded-2xl border border-gray-200/80 bg-white p-6 shadow-sm">
-      <button
-        type="button"
-        onClick={onToggle}
-        className="flex w-full items-center justify-between text-left text-sm font-extrabold"
-        aria-expanded={open}
-      >
-        {title}
-        <ChevronDown size={18} className={cn('text-muted transition', open && 'rotate-180')} />
-      </button>
-      {open ? <div className="mt-3 border-t border-gray-100 pt-3 text-sm leading-7 text-muted">{children}</div> : null}
-    </section>
   )
 }
