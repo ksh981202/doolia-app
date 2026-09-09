@@ -7,7 +7,7 @@ import { InfoSection } from '@/components/detail/InfoSection'
 import { RelatedPrintables } from '@/components/detail/RelatedPrintables'
 import { usePrintableQuery, usePrintablesQuery } from '@/features/gallery/model/usePrintablesQuery'
 import { DEMO_PRINTABLES } from '@/services/printableService'
-import { CATALOG_GROUPS, categoryPath } from '@/shared/config/catalog'
+import { CATALOG_GROUPS, categoryPath, matchesTopicCategory } from '@/shared/config/catalog'
 import { detailTitle, megaBundleCopy, relatedSectionTitle } from '@/shared/lib/detailCopy'
 import { formatAgeRange } from '@/shared/lib/printableMeta'
 import type { Printable } from '@/types/printable'
@@ -17,7 +17,7 @@ type DetailLocationState = { printable?: Printable }
 
 function catalogTopic(printable: Printable) {
   const byCategory = CATALOG_GROUPS.flatMap((group) => group.children).find(
-    (child) => child.categoryFilter === printable.category || child.id === printable.category,
+    (child) => matchesTopicCategory(printable.category, child) || child.id === printable.category,
   )
   if (byCategory) return byCategory
   const hay = [printable.title_ko, printable.title_en, ...printable.tags].join(' ').toLowerCase()

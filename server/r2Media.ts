@@ -63,6 +63,11 @@ export function publicObjectUrl(base: string, key: string) {
   return `${base.replace(/\/+$/, '')}/${encoded}`
 }
 
+function cacheBustedUrl(url: string) {
+  const join = url.includes('?') ? '&' : '?'
+  return `${url}${join}v=${Date.now()}`
+}
+
 function toItem(base: string, key: string, lastModified?: Date): R2MediaItem {
   const name = key.split('/').pop() || key
   return {
@@ -118,7 +123,11 @@ function contentTypeForImage(filename: string, contentType: string) {
 
 function printableObjectKey(filename: string) {
   const base = filename.replace(/\\/g, '/').split('/').pop() || 'image.jpg'
-  const cleaned = base.replace(/[^\w.\-가-힣]+/g, '-').replace(/-+/g, '-').replace(/^\-+|\-+$/g, '')
+  const cleaned = base
+    .replace(/[^\w.\-가-힣]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^\-+|\-+$/g, '')
+    .toLowerCase()
   const withExt = PRINTABLE_IMAGE_EXT.test(cleaned) ? cleaned : `${cleaned || 'image'}.jpg`
   return `${PRINTABLES_PREFIX}${withExt.slice(-160)}`
 }
@@ -207,10 +216,11 @@ export async function uploadR2Printable(
       Key: key,
       Body: bytes,
       ContentType: type,
-      CacheControl: 'public, max-age=31536000, immutable',
+      CacheControl: 'public, max-age=0, must-revalidate',
     }),
   )
-  return toItem(getR2PublicBase(env), key, new Date())
+  const item = toItem(getR2PublicBase(env), key, new Date())
+  return { ...item, url: cacheBustedUrl(item.url) }
 }
 
 const DELETE_OBJECT_CHUNK = 1000

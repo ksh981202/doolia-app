@@ -60,7 +60,22 @@ export function toPrintableCategory(value: string | null | undefined): Printable
   return LEGACY_CATEGORY_ALIASES[raw] ?? 'coloring-pages'
 }
 
-export const AD_COUNTDOWN_SECONDS = 3
+/** Canonical slug plus legacy DB/TSV values that map to it (`coloring` + `coloring-pages`). */
+export function printableCategoryMatchValues(category: PrintableCategory): string[] {
+  const aliases = Object.entries(LEGACY_CATEGORY_ALIASES)
+    .filter(([, mapped]) => mapped === category)
+    .map(([raw]) => raw)
+  return [...new Set([category, ...aliases])]
+}
+
+export function matchesPrintableCategory(
+  value: string | null | undefined,
+  expected: PrintableCategory,
+): boolean {
+  return toPrintableCategory(value) === expected
+}
+
+export const AD_COUNTDOWN_SECONDS = 0
 
 export const BRAND = {
   shortName: 'DOOLIA',

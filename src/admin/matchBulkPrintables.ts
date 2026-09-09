@@ -86,7 +86,8 @@ function typeVariant(type: string): 'b' | 'c' | null {
 }
 
 export function groupKeyForRow(row: ParsedPrintableRow) {
-  return basePrintableSlug(explicitImageName(row) || row.slug) || fileKey(row.slug)
+  const slug = fileKey(row.slug)
+  return slug ? basePrintableSlug(slug) : ''
 }
 
 function pickMetaRow(rows: ParsedPrintableRow[]) {
@@ -99,12 +100,22 @@ function pickMetaRow(rows: ParsedPrintableRow[]) {
 
 export function indexImageFiles(files: File[]) {
   const byName = new Map<string, File>()
+  const seen = new Map<string, number>()
+  const duplicates: string[] = []
   for (const file of files) {
     if (!isImageFile(file)) continue
-    const key = fileKey(file.name.toLowerCase().trim())
-    if (key) byName.set(key, file)
+    const key = fileKey(file.name)
+    if (!key) continue
+    const count = (seen.get(key) ?? 0) + 1
+    seen.set(key, count)
+    if (count === 1) byName.set(key, file)
+    else if (count === 2) duplicates.push(key)
   }
-  return byName
+  return { byName, duplicates }
+}
+
+export function duplicateDroppedImageNames(files: File[]) {
+  return indexImageFiles(files).duplicates
 }
 
 export function findImageFile(byName: Map<string, File>, wanted: string) {
@@ -148,19 +159,10 @@ function pairFilesShareGroupSlug(bwFile: File | undefined, colorFile: File | und
   return Boolean(base) && bwBase === base && colorBase === base && bwBase === colorBase
 }
 
-function findVariantFile(
-  byName: Map<string, File>,
-  groupedRows: ParsedPrintableRow[],
-  baseSlug: string,
-  variant: 'b' | 'c',
-) {
-  for (const row of groupedRows) {
-    if (rowVariant(row) !== variant) continue
-    const named = explicitImageName(row)
-    const hit = named ? findImageFile(byName, named) : undefined
-    if (acceptVariantFile(hit, baseSlug, variant)) return hit
-  }
-  return acceptVariantFile(findImageFile(byName, `${baseSlug}_${variant}.jpg`), baseSlug, variant)
+function findVariantFile(byName: Map<string, File>, baseSlug: string, variant: 'b' | 'c') {
+  const base = fileKey(baseSlug)
+  if (!base || base.startsWith('__row-')) return undefined
+  return acceptVariantFile(findImageFile(byName, `${base}_${variant}.jpg`), base, variant)
 }
 
 export function isPairCategory(row: ParsedPrintableRow) {
@@ -171,7 +173,7 @@ export function expectedImageNames(row: ParsedPrintableRow, mode: BulkImageMode)
   const base = groupKeyForRow(row)
   if (mode === 'single') {
     return {
-      bw: withDefaultExt(explicitImageName(row) || row.slug.trim() || base),
+      bw: withDefaultExt(base || fileKey(row.slug)),
       color: '',
     }
   }
@@ -182,7 +184,7 @@ export function expectedImageNames(row: ParsedPrintableRow, mode: BulkImageMode)
 }
 
 export function matchBulkPrintables(rows: ParsedPrintableRow[], files: File[]): BulkMatchRow[] {
-  const byName = indexImageFiles(files)
+  const { byName } = indexImageFiles(files)
   const groups = new Map<string, { index: number; rows: ParsedPrintableRow[] }>()
 
   for (const [index, row] of rows.entries()) {
@@ -199,22 +201,21 @@ export function matchBulkPrintables(rows: ParsedPrintableRow[], files: File[]): 
 
   return [...groups.entries()].map(([baseSlug, group]) => {
     const meta = pickMetaRow(group.rows)
-    const bwFile = findVariantFile(byName, group.rows, baseSlug, 'b')
-    const colorFile = findVariantFile(byName, group.rows, baseSlug, 'c')
-    const hasB = group.rows.some((row) => rowVariant(row) === 'b')
-    const hasC = group.rows.some((row) => rowVariant(row) === 'c')
-    const wantsPair = (hasB && hasC) || Boolean(bwFile && colorFile)
+    const slug = fileKey(baseSlug)
+    const bwFile = findVariantFile(byName, slug, 'b')
+    const colorFile = findVariantFile(byName, slug, 'c')
+    const wantsPair = Boolean(bwFile || colorFile || group.rows.some((row) => rowVariant(row)))
 
     if (wantsPair) {
-      const expectedBw = `${baseSlug}_b.jpg`
-      const expectedColor = `${baseSlug}_c.jpg`
+      const expectedBw = `${slug}_b.jpg`
+      const expectedColor = `${slug}_c.jpg`
       const missing: string[] = []
       if (!bwFile) missing.push(expectedBw)
       if (!colorFile) missing.push(expectedColor)
-      const slugAligned = pairFilesShareGroupSlug(bwFile, colorFile, baseSlug)
+      const slugAligned = pairFilesShareGroupSlug(bwFile, colorFile, slug)
       if (!slugAligned) {
-        if (bwFile && basePrintableSlug(bwFile.name) !== fileKey(baseSlug)) missing.push(expectedBw)
-        if (colorFile && basePrintableSlug(colorFile.name) !== fileKey(baseSlug)) missing.push(expectedColor)
+        if (bwFile && basePrintableSlug(bwFile.name) !== slug) missing.push(expectedBw)
+        if (colorFile && basePrintableSlug(colorFile.name) !== slug) missing.push(expectedColor)
         if (!missing.length) {
           missing.push(expectedBw)
           missing.push(expectedColor)
@@ -223,36 +224,36 @@ export function matchBulkPrintables(rows: ParsedPrintableRow[], files: File[]): 
       const matched = missing.length === 0 && slugAligned
       return {
         index: group.index,
-        row: { ...meta, slug: baseSlug, type: meta.type.trim() || 'bw' },
+        row: { ...meta, slug, type: meta.type.trim() || 'bw' },
         mode: 'pair' as const,
         status: matched ? 'matched' : 'missing',
         missing: [...new Set(missing)],
-        bwFile: fileMatchesVariant(bwFile, baseSlug, 'b') ? bwFile : undefined,
-        colorFile: fileMatchesVariant(colorFile, baseSlug, 'c') ? colorFile : undefined,
+        bwFile: fileMatchesVariant(bwFile, slug, 'b') ? bwFile : undefined,
+        colorFile: fileMatchesVariant(colorFile, slug, 'c') ? colorFile : undefined,
         expectedBw,
         expectedColor,
-        baseSlug,
+        baseSlug: slug,
       }
     }
 
-    const expectedBw = withDefaultExt(explicitImageName(meta) || meta.slug || baseSlug)
-    const found = findImageFile(byName, expectedBw) || bwFile || colorFile
+    const expectedBw = withDefaultExt(slug)
+    const found = findImageFile(byName, expectedBw)
     const singleFile =
-      found && basePrintableSlug(found.name) === fileKey(baseSlug || meta.slug) ? found : undefined
+      found && variantOf(found.name) === null && basePrintableSlug(found.name) === slug ? found : undefined
     const missing: string[] = []
-    if (!expectedBw) missing.push('파일명(slug 또는 image_url)')
+    if (!slug) missing.push('slug')
     else if (!singleFile) missing.push(expectedBw)
 
     return {
       index: group.index,
-      row: { ...meta, slug: baseSlug || meta.slug },
+      row: { ...meta, slug: slug || meta.slug },
       mode: 'single' as const,
       status: singleFile && missing.length === 0 ? 'matched' : 'missing',
       missing,
       bwFile: singleFile,
       expectedBw,
       expectedColor: '',
-      baseSlug: baseSlug || meta.slug,
+      baseSlug: slug || meta.slug,
     }
   })
 }

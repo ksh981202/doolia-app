@@ -4,8 +4,10 @@ import type { Printable } from '@/types/printable'
 
 export function usePrintablesQuery() {
   return useQuery({
-    queryKey: ['printables'],
+    queryKey: ['printables', 'all'],
     queryFn: () => fetchPrintables('all'),
+    staleTime: 0,
+    refetchOnMount: 'always',
   })
 }
 
@@ -20,7 +22,7 @@ export function usePrintableQuery(id: string | undefined) {
       if (!id) return undefined
       const cached = queryClient.getQueryData<Printable>(['printable', id])
       if (cached) return cached
-      const list = queryClient.getQueryData<Printable[]>(['printables'])
+      const list = queryClient.getQueryData<Printable[]>(['printables', 'all'])
       return list?.find((item) => item.id === id || item.slug === id)
     },
   })

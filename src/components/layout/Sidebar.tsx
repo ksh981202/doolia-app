@@ -111,9 +111,13 @@ export function Sidebar({ activeSlug, onNavigate }: SidebarProps) {
               <span>📚</span>
               <span>무료 도안 모아보기</span>
             </span>
-            <span className="rounded-full bg-slate-200/80 px-2 py-0.5 text-[11px] font-bold text-slate-700">
+            <Link
+              to="/category"
+              onClick={onNavigate}
+              className="rounded-full bg-slate-200/80 px-2 py-0.5 text-[11px] font-bold text-slate-700 hover:bg-emerald-600 hover:text-white"
+            >
               ALL
-            </span>
+            </Link>
           </div>
           <div className="space-y-4">
           <AccordionGroup

@@ -9,6 +9,7 @@ import {
   DEFAULT_CATEGORY_SLUG,
   categoryPath,
   getCatalogTopic,
+  matchesTopicCategory,
 } from '@/shared/config/catalog'
 import {
   AGE_FILTERS,
@@ -36,26 +37,26 @@ export function CategoryPage() {
   const [params, setParams] = useSearchParams()
   const typeSlug = resolveTypeSlug(params.get('type'))
   const categoryQuerySlug = getCatalogTopic(params.get('category') ?? undefined)?.topic.id
-  const browseAll = !slug
-  const match = getCatalogTopic(slug)
+  const browseAll = !slug || slug === 'all'
+  const match = browseAll ? undefined : getCatalogTopic(slug)
   const { data, isLoading } = usePrintablesQuery()
   const age = isAgeFilterId(params.get('age') ?? 'all') ? (params.get('age') ?? 'all') : 'all'
   const themeParam = params.get('theme') ?? params.get('tag') ?? 'all'
   const theme = isThemeFilterId(themeParam) ? themeParam : 'all'
-  const sort = params.get('sort') === 'latest' ? 'latest' : 'popular'
+  const sortParam = params.get('sort')
+  const sort = sortParam === 'popular' || sortParam === 'latest' ? sortParam : browseAll ? 'latest' : 'popular'
   const query = params.get('q') ?? ''
   const ageLabel = AGE_FILTERS.find((item) => item.id === age)?.label ?? '전체'
 
   const items = useMemo(() => {
     if (!match && !browseAll) return []
     const source = [...(data ?? [])]
-    const scoped = match
-      ? source.filter((item) =>
-          match.topic.categoryFilter
-            ? item.category === match.topic.categoryFilter
-            : matchesQuery(item, match.topic.query),
-        )
-      : source
+    const scoped =
+      browseAll || !match
+        ? source
+        : match.topic.categoryFilter
+          ? source.filter((item) => matchesTopicCategory(item.category, match.topic))
+          : source.filter((item) => matchesQuery(item, match.topic.query))
     return scoped
       .filter((item) => matchesQuery(item, query))
       .filter((item) => matchesAgeFilter(item, age))
@@ -63,7 +64,7 @@ export function CategoryPage() {
       .sort((a, b) =>
         sort === 'latest'
           ? +new Date(b.created_at) - +new Date(a.created_at)
-          : b.downloads - a.downloads,
+          : b.downloads - a.downloads || +new Date(b.created_at) - +new Date(a.created_at),
       )
   }, [age, browseAll, data, match, query, sort, theme])
 
@@ -198,7 +199,11 @@ export function CategoryPage() {
           ) : (
             <div className={CARD_GRID}>
               {items.map((printable) => (
-                <PrintableCard key={printable.id} printable={printable} variant="catalog" />
+                <PrintableCard
+                  key={printable.slug || printable.id}
+                  printable={printable}
+                  variant="catalog"
+                />
               ))}
             </div>
           )}

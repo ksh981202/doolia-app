@@ -1,4 +1,7 @@
-import type { PrintableCategory } from '@/shared/config/categories'
+import {
+  matchesPrintableCategory,
+  type PrintableCategory,
+} from '@/shared/config/categories'
 
 export type CatalogSubtag = {
   id: string
@@ -40,6 +43,7 @@ export const DEFAULT_CATEGORY_SLUG = 'coloring-pages'
 
 /** 이전 카테고리 URL을 새 메뉴 구조로 연결한다. */
 export const CATALOG_SLUG_ALIASES: Record<string, { slug: string; tag?: string }> = {
+  coloring: { slug: 'coloring-pages' },
   vehicles: { slug: 'coloring-pages', tag: 'vehicles' },
   dinosaur: { slug: 'coloring-pages', tag: 'dinosaur' },
   animals: { slug: 'coloring-pages', tag: 'animals' },
@@ -177,6 +181,12 @@ export function getCatalogTopic(slug: string | undefined) {
     if (child) return { group, topic: child }
   }
   return undefined
+}
+
+/** True when a printable belongs to a catalog topic, including legacy DB categories. */
+export function matchesTopicCategory(itemCategory: string | null | undefined, topic: CatalogTopic): boolean {
+  if (!topic.categoryFilter) return false
+  return matchesPrintableCategory(itemCategory, topic.categoryFilter)
 }
 
 export function categoryPath(slug: string) {

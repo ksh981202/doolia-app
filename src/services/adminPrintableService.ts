@@ -367,7 +367,7 @@ export async function uploadAdminFile(bucket: 'printables' | 'parenting-tips', f
   if (!supabase) {
     return URL.createObjectURL(file)
   }
-  const path = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`
+  const path = `${Date.now()}-${file.name.replace(/\s+/g, '-').toLowerCase()}`
   const { error } = await supabase.storage.from(bucket).upload(path, file, { upsert: true })
   if (error) throw error
   const { data } = supabase.storage.from(bucket).getPublicUrl(path)

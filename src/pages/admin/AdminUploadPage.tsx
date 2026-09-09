@@ -64,6 +64,12 @@ export function AdminUploadPage() {
         <p className="rounded-xl bg-emerald-50 px-3 py-2 text-sm font-bold text-emerald-800">{bulk.message}</p>
       ) : null}
       {doneNote ? <p className="rounded-xl bg-red-50 px-3 py-2 text-sm font-bold text-red-700">{doneNote}</p> : null}
+      {bulk.duplicateNames.length ? (
+        <p className="rounded-xl bg-red-50 px-3 py-2 text-sm font-bold text-red-700">
+          동일 파일명이 2개 이상입니다. 첫 파일만 사용하며 업로드할 수 없습니다:{' '}
+          {bulk.duplicateNames.join(', ')}
+        </p>
+      ) : null}
       {bulk.parseErrors.length ? (
         <p className="rounded-xl bg-amber-50 px-3 py-2 text-sm font-bold text-amber-800">{bulk.parseErrors.join(' / ')}</p>
       ) : null}
@@ -104,7 +110,7 @@ export function AdminUploadPage() {
         ) : null}
         <button
           type="button"
-          disabled={bulk.uploading || !bulk.matchedCount}
+          disabled={bulk.uploading || !bulk.matchedCount || bulk.duplicateNames.length > 0}
           onClick={() => void runUpload()}
           className="ml-auto h-10 rounded-full bg-emerald-600 px-4 text-xs font-extrabold text-white hover:bg-emerald-700 disabled:opacity-50"
         >

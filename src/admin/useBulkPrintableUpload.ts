@@ -1,5 +1,6 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useMemo, useState } from 'react'
-import { matchBulkPrintables, unmatchedImageFiles, type BulkMatchRow } from '@/admin/matchBulkPrintables'
+import { matchBulkPrintables, unmatchedImageFiles, duplicateDroppedImageNames, type BulkMatchRow } from '@/admin/matchBulkPrintables'
 import { parsePrintableSheet, type ParsedPrintableRow } from '@/admin/parsePrintableSheet'
 import { savePrintable, uploadAdminFile, draftFromParsedRow } from '@/services/adminPrintableService'
 
@@ -10,6 +11,7 @@ export type BulkUploadProgress = {
 }
 
 export function useBulkPrintableUpload() {
+  const queryClient = useQueryClient()
   const [tsvName, setTsvName] = useState('')
   const [parseErrors, setParseErrors] = useState<string[]>([])
   const [rows, setRows] = useState<ParsedPrintableRow[]>([])
@@ -20,6 +22,7 @@ export function useBulkPrintableUpload() {
 
   const matches = useMemo(() => matchBulkPrintables(rows, files), [files, rows])
   const unmatched = useMemo(() => unmatchedImageFiles(matches, files), [files, matches])
+  const duplicateNames = useMemo(() => duplicateDroppedImageNames(files), [files])
   const matchedCount = matches.filter((item) => item.status === 'matched').length
   const missingCount = matches.filter((item) => item.status === 'missing').length
 
@@ -52,6 +55,12 @@ export function useBulkPrintableUpload() {
   }, [])
 
   const uploadMatched = useCallback(async () => {
+    const duplicates = duplicateDroppedImageNames(files)
+    if (duplicates.length) {
+      const message = `동일 파일명이 ${duplicates.length}개입니다. 첫 파일만 인정되며 업로드를 중단합니다: ${duplicates.join(', ')}`
+      setMessage(message)
+      return { saved: 0, errors: [message] }
+    }
     const ready = matches.filter((item) => item.status === 'matched')
     if (!ready.length) {
       setMessage('매칭된 도안이 없습니다. TSV와 이미지 파일명을 확인하세요.')
@@ -90,12 +99,15 @@ export function useBulkPrintableUpload() {
         }
         setProgress({ current: index + 1, total: ready.length, label: title })
       }
+      if (saved > 0) {
+        await queryClient.invalidateQueries({ queryKey: ['printables'] })
+      }
       setMessage(`${saved}건 등록 완료.${errors.length ? ` 실패 ${errors.length}건.` : ''}`)
       return { saved, errors }
     } finally {
       setUploading(false)
     }
-  }, [matches])
+  }, [files, matches, queryClient])
 
   return {
     tsvName,
@@ -104,6 +116,7 @@ export function useBulkPrintableUpload() {
     files,
     matches,
     unmatched,
+    duplicateNames,
     matchedCount,
     missingCount,
     uploading,

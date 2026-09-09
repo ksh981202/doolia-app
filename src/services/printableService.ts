@@ -1,6 +1,11 @@
 import { supabase } from '@/db/supabase'
 import { DEMO_PRINTABLES } from '@/services/demoPrintables'
-import type { GalleryCategory, PopularTab } from '@/shared/config/categories'
+import {
+  matchesPrintableCategory,
+  printableCategoryMatchValues,
+  type GalleryCategory,
+  type PopularTab,
+} from '@/shared/config/categories'
 import {
   normalizePrintable,
   printableSearchText,
@@ -103,29 +108,42 @@ export async function fetchPrintables(
 
   const client = supabase
   if (!client) {
-    const source = category === 'all' ? DEMO_PRINTABLES : DEMO_PRINTABLES.filter((item) => item.category === category)
+    const source =
+      category === 'all'
+        ? DEMO_PRINTABLES
+        : DEMO_PRINTABLES.filter((item) => matchesPrintableCategory(item.category, category))
     return includeUnpublished ? source : source.filter((item) => item.published !== false)
   }
 
-  const runQuery = (withPublishedFilter: boolean) => {
-    let query = client.from('printables').select('*').order('downloads', { ascending: false })
-    if (category !== 'all') query = query.eq('category', category)
+  const runQuery = (withPublishedFilter: boolean, orderBy: 'created_at' | 'downloads') => {
+    let query = client
+      .from('printables')
+      .select('*')
+      .order(orderBy, { ascending: false })
+      .range(0, 999)
+    if (category !== 'all') query = query.in('category', printableCategoryMatchValues(category))
     if (withPublishedFilter) query = query.or('published.eq.true,published.is.null')
     return query
   }
 
-  let { data, error } = await runQuery(!includeUnpublished)
-  if (error && !includeUnpublished) {
-    const retry = await runQuery(false)
+  let { data, error } = await runQuery(!includeUnpublished, 'created_at')
+  if (error) {
+    const retry = await runQuery(false, 'created_at')
+    data = retry.data
+    error = retry.error
+  }
+  if (error) {
+    const retry = await runQuery(!includeUnpublished, 'downloads')
     data = retry.data
     error = retry.error
   }
   if (error) throw error
 
-  return (data ?? [])
-    .map((row) => row as PrintableInput)
-    .filter((row) => includeUnpublished || isPubliclyListed(row))
-    .map((row) => normalizePrintable(row))
+  const rows = (data ?? []).map((row) => row as PrintableInput)
+  const listed = includeUnpublished ? rows : rows.filter((row) => isPubliclyListed(row))
+  const scoped =
+    category === 'all' ? listed : listed.filter((row) => matchesPrintableCategory(row.category, category))
+  return scoped.map((row) => normalizePrintable(row))
 }
 
 export async function fetchPrintableById(id: string): Promise<Printable | null> {
