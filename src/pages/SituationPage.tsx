@@ -1,30 +1,37 @@
 import { Link, Navigate, useParams } from 'react-router-dom'
+import { SubpageHeader } from '@/components/layout/SubpageHeader'
 import { PLAY_SOLUTIONS, playRecipePath } from '@/shared/config/playSolutions'
 import { getSituation, isSituationId } from '@/shared/config/playSituations'
 
 export function SituationPage() {
   const { situationId } = useParams()
+  const browseAll = situationId === 'all'
   const situation = isSituationId(situationId) ? getSituation(situationId) : undefined
-  const recipes = isSituationId(situationId)
-    ? PLAY_SOLUTIONS.filter((item) => item.situation === situationId)
-    : []
+  const recipes = browseAll
+    ? PLAY_SOLUTIONS
+    : isSituationId(situationId)
+      ? PLAY_SOLUTIONS.filter((item) => item.situation === situationId)
+      : []
 
-  if (!situation) {
+  if (!browseAll && !situation) {
     return <Navigate to="/category" replace />
   }
 
+  const title = browseAll ? '맞춤 놀이 도구함' : (situation?.title ?? '')
+  const crumbs = browseAll
+    ? [
+        { label: '홈', to: '/' },
+        { label: '맞춤 놀이 도구함' },
+      ]
+    : [
+        { label: '홈', to: '/' },
+        { label: '맞춤 놀이 도구함', to: '/situation/all' },
+        { label: title },
+      ]
+
   return (
     <div>
-      <div className="mb-6">
-        <div className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-sm font-bold text-emerald-700">
-          🏷️ 5대 상황별 놀이 도구함
-        </div>
-        <h1 className="flex items-center gap-2 text-2xl font-bold text-slate-900 sm:text-3xl">
-          <span>{situation.emoji}</span>
-          <span>{situation.title}</span>
-        </h1>
-        <p className="mt-1 text-sm font-medium text-slate-600">{situation.headline}</p>
-      </div>
+      <SubpageHeader crumbs={crumbs} title={title} emoji={browseAll ? '📦' : situation?.emoji} />
 
       <section className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
         {recipes.map((card) => (

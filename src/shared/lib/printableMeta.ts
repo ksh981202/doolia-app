@@ -37,14 +37,17 @@ export function educationEffect(printable: Printable) {
 
 export function formatAgeRange(source: string) {
   const range = source.match(/(\d+)\s*[-~–—]\s*(\d+)/)
-  if (range) return `만 ${range[1]}~${range[2]}세`
+  if (range) {
+    const plus = Number(range[2]) >= 7 ? '+' : ''
+    return `${range[1]}~${range[2]}세${plus}`
+  }
   const single = source.match(/(\d+)\s*세/)
-  if (single) return `만 ${single[1]}세`
+  if (single) return `${single[1]}세`
   return null
 }
 
 export function ageGroupLabel(tags: string[]) {
-  return formatAgeRange(tags.join(' ')) ?? '만 3~6세'
+  return formatAgeRange(tags.filter(Boolean).join(' ')) ?? '전연령'
 }
 
 export function subcategoryLabel(printable: Printable) {

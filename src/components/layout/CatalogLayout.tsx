@@ -1,7 +1,7 @@
+import { Menu } from 'lucide-react'
 import { useState } from 'react'
 import { Outlet, useParams, useSearchParams } from 'react-router-dom'
 import { Sidebar } from '@/components/layout/Sidebar'
-import { TopSearchHeader } from '@/components/layout/TopSearchHeader'
 import { getCatalogTopic } from '@/shared/config/catalog'
 import { isSituationId } from '@/shared/config/playSituations'
 import { resolveTypeSlug } from '@/shared/config/smartFilters'
@@ -17,13 +17,21 @@ export function CatalogLayout() {
 
   return (
     <>
-      <div className="mx-auto flex w-full max-w-[1600px] flex-1 items-start gap-6 px-4 py-6 sm:gap-8 sm:px-6 lg:px-8">
-        <aside className="sticky top-24 hidden w-64 shrink-0 border-r border-slate-100 lg:block lg:w-[280px]">
+      <div className="mx-auto flex w-full max-w-7xl flex-1 items-start gap-6 py-6 sm:gap-8">
+        <aside className="sticky top-24 hidden w-64 min-w-64 shrink-0 lg:block lg:w-72 lg:min-w-72">
           <Sidebar activeSlug={activeSlug} activeSituation={activeSituation} />
         </aside>
 
-        <div className="min-w-0 flex-1">
-          <TopSearchHeader variant="inline" onMenu={() => setSidebarOpen(true)} />
+        <div className="min-w-0 flex-1 overflow-x-hidden">
+          <button
+            type="button"
+            onClick={() => setSidebarOpen(true)}
+            aria-label="카테고리 메뉴"
+            className="mb-4 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-sm font-bold text-slate-800 shadow-sm lg:hidden"
+          >
+            <Menu size={16} />
+            <span>카테고리</span>
+          </button>
           <Outlet />
         </div>
       </div>
@@ -36,7 +44,7 @@ export function CatalogLayout() {
             aria-label="메뉴 닫기"
             onClick={() => setSidebarOpen(false)}
           />
-          <div className="relative h-full w-[min(85vw,280px)] min-w-[260px] shadow-2xl">
+          <div className="relative h-full w-64 min-w-64 shadow-2xl lg:w-72">
             <Sidebar activeSlug={activeSlug} activeSituation={activeSituation} onNavigate={() => setSidebarOpen(false)} />
           </div>
         </div>

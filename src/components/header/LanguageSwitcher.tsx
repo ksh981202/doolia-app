@@ -31,7 +31,7 @@ export function LanguageSwitcher() {
         aria-label={t('language')}
       >
         <span aria-hidden>🌐</span>
-        <span className="hidden sm:inline">{current.flag}</span>
+        <span className="text-xs font-black tracking-wide">{current.code.toUpperCase()}</span>
       </button>
       {open ? (
         <ul

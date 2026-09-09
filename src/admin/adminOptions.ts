@@ -33,9 +33,9 @@ const CATALOG_TO_PRINTABLE: Record<string, PrintableCategory> = {
 }
 
 export const AGE_OPTIONS = [
-  { id: '2-3', label: '만 2~3세' },
-  { id: '4-5', label: '만 4~5세' },
-  { id: '6-7', label: '만 6~7세' },
+  { id: '2-3', label: '2~3세' },
+  { id: '4-5', label: '4~5세' },
+  { id: '6-7', label: '6~7세+' },
 ] as const
 
 export function catalogToPrintableCategory(catalogSlug: string): PrintableCategory {

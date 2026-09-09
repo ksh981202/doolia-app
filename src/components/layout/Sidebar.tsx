@@ -1,6 +1,5 @@
-import { ChevronDown } from 'lucide-react'
 import { useEffect, useState, type ReactNode } from 'react'
-import { Link, NavLink, useSearchParams } from 'react-router-dom'
+import { Link, NavLink, useLocation, useSearchParams } from 'react-router-dom'
 import { CATALOG_GROUPS, categoryPath, getCatalogTopic } from '@/shared/config/catalog'
 import { SITUATION_ITEMS, situationPath } from '@/shared/config/playSituations'
 import { AGE_BROWSE_ITEMS, isAgeFilterId } from '@/shared/config/smartFilters'
@@ -26,17 +25,10 @@ function catalogLink(slug: string, params: URLSearchParams) {
   return `${categoryPath(slug)}${search ? `?${search}` : ''}`
 }
 
-function itemClass(selected: boolean) {
-  return cn(
-    'block rounded-lg px-3 py-2.5 text-[14px] leading-normal',
-    selected
-      ? 'bg-emerald-50 font-bold text-emerald-700'
-      : 'font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900',
-  )
-}
-
 export function Sidebar({ activeSlug, onNavigate }: SidebarProps) {
+  const location = useLocation()
   const [params] = useSearchParams()
+  const catalogAllActive = location.pathname === '/category' && !location.search
   const ageParam = params.get('age') ?? ''
   const activeAge = isAgeFilterId(ageParam) && ageParam !== 'all' ? ageParam : null
   const categoryParam = params.get('category')
@@ -50,7 +42,7 @@ export function Sidebar({ activeSlug, onNavigate }: SidebarProps) {
     const ids: string[] = []
     if (activeAge) ids.push('age')
     if (activeGroupId) ids.push(activeGroupId)
-    else ids.push('age', 'kids')
+    else ids.push('kids')
     return [...new Set(ids)]
   })
 
@@ -71,18 +63,22 @@ export function Sidebar({ activeSlug, onNavigate }: SidebarProps) {
   }
 
   return (
-    <aside className="flex h-full min-h-0 w-full shrink-0 flex-col border-r border-line bg-white pr-6">
-      <nav className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto px-3 pb-4 pt-4" aria-label="카테고리">
-        <div className="rounded-2xl border border-emerald-100/80 bg-emerald-50/50 p-3 shadow-sm">
-          <div className="mb-2 flex items-center justify-between px-2 py-1.5">
-            <span className="flex items-center gap-1.5 text-sm font-bold text-slate-800">
-              <span>📦</span>
-              <span>5대 상황별 놀이 도구함</span>
+    <aside className="flex h-full min-h-0 w-64 shrink-0 select-none flex-col gap-5 rounded-3xl border border-slate-200/80 bg-slate-50/70 p-4 font-sans lg:w-72">
+      <nav className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto" aria-label="카테고리">
+        <div className="rounded-2xl border border-slate-200/70 bg-white p-3 shadow-2xs">
+          <Link
+            to="/situation/all"
+            onClick={onNavigate}
+            className="group mb-2.5 flex cursor-pointer items-center justify-between px-1"
+          >
+            <span className="flex items-center gap-1.5 text-[15px] font-bold tracking-tight text-slate-900 group-hover:text-emerald-700">
+              <span className="text-base">📦</span>
+              <span>맞춤 놀이 도구함</span>
             </span>
-            <span className="rounded-full bg-emerald-600 px-1.5 py-0.5 text-[11px] font-bold text-white shadow-sm">
+            <span className="rounded-full bg-emerald-600 px-1.5 py-0.5 text-[11px] font-bold text-white shadow-2xs">
               HIT
             </span>
-          </div>
+          </Link>
           <div className="space-y-1">
             {SITUATION_ITEMS.map((item) => (
               <NavLink
@@ -91,137 +87,152 @@ export function Sidebar({ activeSlug, onNavigate }: SidebarProps) {
                 onClick={onNavigate}
                 className={({ isActive }) =>
                   cn(
-                    'flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 transition-all',
+                    'flex items-center gap-2.5 rounded-xl px-3 py-2 text-[14.5px] font-bold tracking-tight transition-all',
                     isActive
-                      ? 'bg-emerald-600 text-white shadow-sm'
-                      : 'bg-white/80 text-slate-800 hover:bg-white hover:text-emerald-700',
+                      ? 'bg-emerald-50 font-extrabold text-emerald-900'
+                      : 'text-slate-800 hover:bg-emerald-50 hover:text-emerald-900',
                   )
                 }
               >
-                <span>{item.emoji}</span>
-                <span className="text-[14px] font-bold sm:text-[15px]">{item.title}</span>
+                <span className="text-base">{item.emoji}</span>
+                <span className="tracking-tight">{item.title}</span>
               </NavLink>
             ))}
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-100 bg-slate-50/60 p-3 shadow-sm">
-          <div className="mb-2.5 flex items-center justify-between border-b border-slate-200/60 px-2 py-1 pb-2">
-            <span className="flex items-center gap-1.5 text-sm font-bold text-slate-800">
-              <span>📚</span>
-              <span>무료 도안 모아보기</span>
-            </span>
-            <Link
-              to="/category"
-              onClick={onNavigate}
-              className="rounded-full bg-slate-200/80 px-2 py-0.5 text-[11px] font-bold text-slate-700 hover:bg-emerald-600 hover:text-white"
-            >
-              ALL
-            </Link>
-          </div>
-          <div className="space-y-4">
-          <AccordionGroup
-            id="age"
+        <Link
+          to="/category"
+          onClick={onNavigate}
+          className={cn(
+            'flex items-center justify-between rounded-2xl border px-4 py-3 text-[15px] font-bold tracking-tight shadow-2xs transition-all',
+            catalogAllActive
+              ? 'border-emerald-600 bg-emerald-600 text-white shadow-sm'
+              : 'border-slate-200/80 bg-white text-slate-900 hover:border-emerald-300 hover:bg-emerald-50',
+          )}
+        >
+          <span className="flex items-center gap-2">
+            <span className="text-base">📚</span>
+            <span>무료 도안 모아보기</span>
+          </span>
+          <span
+            className={cn(
+              'rounded-full px-1.5 py-0.5 text-[11px] font-bold',
+              catalogAllActive ? 'bg-white text-emerald-700' : 'bg-slate-100 text-slate-600',
+            )}
+          >
+            ALL
+          </span>
+        </Link>
+
+        <div className="space-y-1.5">
+          <AccordionCard
             open={isOpen('age')}
-            title="👶 연령별 모아보기"
+            icon="👶"
+            title="연령별 모아보기"
             onToggle={() => toggle('age')}
           >
             {AGE_BROWSE_ITEMS.map((item) => (
-              <Link
+              <SubMenuLink
                 key={item.id}
                 to={`/category?age=${item.id}`}
+                active={activeAge === item.id}
                 onClick={onNavigate}
-                className={cn(itemClass(activeAge === item.id), 'whitespace-nowrap')}
               >
                 {item.browseLabel}
-              </Link>
+              </SubMenuLink>
             ))}
-          </AccordionGroup>
+          </AccordionCard>
 
           {CATALOG_GROUPS.map((group) => (
-            <AccordionGroup
+            <AccordionCard
               key={group.id}
-              id={group.id}
               open={isOpen(group.id)}
-              title={`${group.emoji} ${group.label}`}
+              icon={group.emoji}
+              title={group.label}
               onToggle={() => toggle(group.id)}
             >
               {group.children.map((child) => (
-                <Link
+                <SubMenuLink
                   key={child.id}
                   to={catalogLink(child.id, params)}
+                  active={activeCategory === child.id}
                   onClick={onNavigate}
-                  className={cn(itemClass(activeCategory === child.id), 'whitespace-nowrap')}
                 >
                   {child.label}
-                </Link>
+                </SubMenuLink>
               ))}
-            </AccordionGroup>
+            </AccordionCard>
           ))}
-          </div>
         </div>
       </nav>
-
-      <div className="p-4">
-        <Link
-          to="/premium"
-          onClick={onNavigate}
-          className="flex h-12 items-center justify-center rounded-2xl bg-slate-900 text-[15px] font-bold text-white shadow-lg transition-colors hover:bg-slate-800"
-        >
-          MEGA 묶음집 ($4.99)
-        </Link>
-      </div>
     </aside>
   )
 }
 
-function AccordionGroup({
-  id,
+function SubMenuLink({
+  to,
+  active,
+  onClick,
+  children,
+}: {
+  to: string
+  active: boolean
+  onClick?: () => void
+  children: ReactNode
+}) {
+  return (
+    <Link
+      to={to}
+      onClick={onClick}
+      className={cn(
+        'group flex items-center gap-2.5 rounded-xl px-3 py-2 text-[13.5px] font-bold transition-all',
+        active
+          ? 'bg-emerald-50 font-extrabold text-emerald-900'
+          : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900',
+      )}
+    >
+      <span
+        className={cn(
+          'h-1.5 w-1.5 shrink-0 rounded-full transition-all',
+          active ? 'scale-125 bg-emerald-600' : 'bg-slate-300 group-hover:bg-slate-400',
+        )}
+      />
+      <span className="tracking-tight">{children}</span>
+    </Link>
+  )
+}
+
+function AccordionCard({
   open,
+  icon,
   title,
-  badge,
-  highlight,
   onToggle,
   children,
 }: {
-  id: string
   open: boolean
+  icon: string
   title: string
-  badge?: string
-  highlight?: boolean
   onToggle: () => void
   children: ReactNode
 }) {
   return (
-    <div className={cn('mb-0.5', highlight && 'rounded-2xl bg-emerald-50/80 p-1 ring-1 ring-emerald-100')}>
+    <div className="rounded-2xl border border-slate-200/70 bg-white p-2 shadow-2xs">
       <button
         type="button"
         onClick={onToggle}
-        className={cn(
-          'flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-[15px] font-bold text-slate-900',
-          highlight ? 'hover:bg-emerald-100/70' : 'hover:bg-emerald-50',
-        )}
+        className="flex w-full items-center justify-between rounded-xl px-2.5 py-2 text-[14.5px] font-bold tracking-tight text-slate-800 transition-colors hover:text-emerald-700"
         aria-expanded={open}
-        aria-controls={`sidebar-${id}`}
       >
-        <span className="flex min-w-0 items-center gap-2">
-          <span className="truncate">{title}</span>
-          {badge ? (
-            <span className="shrink-0 rounded-full bg-emerald-600 px-1.5 py-0.5 text-[11px] font-bold tracking-wide text-white">
-              {badge}
-            </span>
-          ) : null}
+        <span className="flex items-center gap-2">
+          <span className="text-base">{icon}</span>
+          <span>{title}</span>
         </span>
-        <ChevronDown size={16} className={cn('shrink-0 text-muted transition-transform duration-300', open && 'rotate-180')} />
+        <span className="text-xs text-slate-400">{open ? '▲' : '▼'}</span>
       </button>
-      <div
-        id={`sidebar-${id}`}
-        className={cn('grid transition-[grid-template-rows] duration-300 ease-out', open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]')}
-      >
-        <div className="min-h-0 overflow-hidden">
-          <div className="mb-1 ml-2 space-y-0.5 border-l border-line pb-1 pl-3">{children}</div>
-        </div>
-      </div>
+      {open ? (
+        <div className="mt-1 space-y-0.5 border-t border-slate-100 pt-1.5">{children}</div>
+      ) : null}
     </div>
   )
 }

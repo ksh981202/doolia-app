@@ -62,7 +62,7 @@ export function PrintableDetailPage() {
   if (!printable) {
     if (isPending || !isFetched) return <DetailSkeleton />
     return (
-      <div className="mx-auto max-w-[1600px] px-4 py-16 text-center text-muted sm:px-6 lg:px-8">
+      <div className="py-16 text-center text-muted">
         도안을 찾을 수 없어요.
       </div>
     )
@@ -80,7 +80,7 @@ export function PrintableDetailPage() {
 
   return (
     <div className="bg-page">
-      <main className="mx-auto w-full max-w-[1600px] px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+      <main className="py-6 sm:py-8">
         <nav className="mb-6 flex items-center gap-2 text-sm font-medium text-slate-500" aria-label="경로">
           {crumbs.map((crumb, index) => (
             <span key={`${crumb.label}-${index}`} className="inline-flex min-w-0 items-center gap-2">

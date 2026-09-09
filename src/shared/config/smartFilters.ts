@@ -10,9 +10,9 @@ type AgeFilter =
 
 export const AGE_FILTERS: AgeFilter[] = [
   { id: 'all', label: '전체' },
-  { id: '2-3', label: '만 2~3세 (영아)', browseLabel: '만 2~3세', min: 2, max: 3 },
-  { id: '4-5', label: '만 4~5세 (유아)', browseLabel: '만 4~5세', min: 4, max: 5 },
-  { id: '6-7', label: '만 6~7세 (취학전)', browseLabel: '만 6~7세+', min: 6, max: 7 },
+  { id: '2-3', label: '2~3세 (영아)', browseLabel: '2~3세', min: 2, max: 3 },
+  { id: '4-5', label: '4~5세 (유아)', browseLabel: '4~5세', min: 4, max: 5 },
+  { id: '6-7', label: '6~7세+ (취학전)', browseLabel: '6~7세+', min: 6, max: 7 },
 ]
 
 export const AGE_BROWSE_ITEMS = AGE_FILTERS.filter(
@@ -153,7 +153,7 @@ export function isThemeFilterId(value: string): value is ThemeFilterId {
 
 export const FINDER_AGES = AGE_FILTERS.filter((item) => item.id !== 'all').map((item) => ({
   id: item.id,
-  label: item.id === '2-3' ? '만 2~3세' : item.id === '4-5' ? '만 4~5세' : '만 6~7세',
+  label: item.id === '2-3' ? '2~3세' : item.id === '4-5' ? '4~5세' : '6~7세+',
 }))
 
 export const FINDER_THEMES = [

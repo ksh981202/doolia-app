@@ -1,7 +1,7 @@
 export function DetailSkeleton() {
   return (
     <div className="bg-page" aria-busy="true" aria-live="polite">
-      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="py-8">
         <div className="flex flex-wrap items-center gap-2">
           <div className="h-4 w-10 animate-pulse rounded bg-slate-200" />
           <div className="h-4 w-16 animate-pulse rounded bg-slate-200" />

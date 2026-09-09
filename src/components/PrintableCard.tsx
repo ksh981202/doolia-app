@@ -1,11 +1,8 @@
-import { Bookmark, Download } from 'lucide-react'
 import type { KeyboardEvent } from 'react'
+import { Link } from 'react-router-dom'
 import { useOpenPrintable } from '@/features/gallery/model/useOpenPrintable'
-import { ageBadge } from '@/shared/lib/ageBadge'
-import { cn } from '@/shared/lib/cn'
+import { printablePath } from '@/shared/config/catalog'
 import { cardCategoryMeta, ageGroupLabel, educationEffect } from '@/shared/lib/printableMeta'
-import { useBookmarkStore } from '@/shared/store/useBookmarkStore'
-import { useDownloadStore } from '@/shared/store/useDownloadStore'
 import type { Printable } from '@/types/printable'
 
 type PrintableCardProps = {
@@ -70,10 +67,10 @@ function ShowcasePrintableCard({ printable }: { printable: Printable }) {
         />
       </div>
       <div className="flex flex-col gap-1.5 bg-white p-4">
-        <span className="inline-block w-fit rounded-md border border-emerald-100 bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-emerald-700">
+        <span className="inline-block w-fit rounded-md border border-emerald-100 bg-emerald-50 px-2 py-0.5 text-[12px] font-bold text-emerald-700">
           {ageGroupLabel(ageTags(printable))}
         </span>
-        <h3 className="truncate text-base font-bold text-gray-900 transition-colors group-hover:text-emerald-600">
+        <h3 className="text-[16px] font-bold text-slate-900 line-clamp-1 transition-colors group-hover:text-emerald-600">
           {printable.title_ko}
         </h3>
         <p className="mt-0.5 flex items-center gap-1 truncate text-xs font-semibold text-slate-500">
@@ -85,65 +82,29 @@ function ShowcasePrintableCard({ printable }: { printable: Printable }) {
 }
 
 function CatalogPrintableCard({ printable }: { printable: Printable }) {
-  const openPrintable = useOpenPrintable()
-  const openModal = useDownloadStore((state) => state.openModal)
-  const toggle = useBookmarkStore((state) => state.toggle)
-  const bookmarked = useBookmarkStore((state) => state.ids.includes(printable.id))
-  const open = () => openPrintable(printable)
-
   return (
-    <article
-      role="link"
-      tabIndex={0}
-      className="group cursor-pointer overflow-hidden rounded-2xl border border-line bg-paper shadow-[0_8px_24px_rgba(16,185,129,0.08)] transition hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(16,185,129,0.14)]"
-      onClick={open}
-      onKeyDown={(event) => openOnEnterOrSpace(event, open)}
+    <Link
+      to={printablePath(printable.slug || printable.id)}
+      state={{ printable }}
+      className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-2xs transition-all duration-300 hover:-translate-y-1.5 hover:border-emerald-300 hover:shadow-xl"
     >
-      <div className="relative flex aspect-[3/4] w-full items-center justify-center overflow-hidden rounded-t-2xl bg-slate-50 p-3">
+      <div className="relative flex aspect-[3/4] items-center justify-center bg-white p-4">
         <img
           src={displayImage(printable)}
           alt={printable.title_ko}
           loading="lazy"
           decoding="async"
-          className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
+          className="max-h-full max-w-full object-contain"
         />
-        <span className="absolute left-3 top-3 rounded-md bg-brand px-2 py-1 text-[11px] font-bold tracking-wide text-white shadow-sm">
-          FREE
-        </span>
-        <span className="absolute right-3 top-3 rounded-md bg-white/95 px-2 py-1 text-[11px] font-bold text-ink shadow-sm">
-          {ageBadge(ageTags(printable))}
+        <span className="absolute top-2.5 right-2.5 z-10 rounded-full border border-emerald-200/70 bg-emerald-50/95 px-2.5 py-0.5 text-[11px] font-extrabold text-emerald-800 shadow-2xs backdrop-blur-2xs">
+          {ageGroupLabel(ageTags(printable))}
         </span>
       </div>
-      <div className="p-3.5 sm:p-4">
-        <div className="mb-2.5 flex items-center justify-between gap-2">
-          <h3 className="min-w-0 truncate text-[15px] font-bold text-slate-900 sm:text-base">{printable.title_ko}</h3>
-          <button
-            type="button"
-            onClick={(event) => {
-              event.stopPropagation()
-              toggle(printable.id)
-            }}
-            className={cn(
-              'inline-flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full',
-              bookmarked ? 'bg-brand-soft text-brand' : 'text-muted hover:bg-page',
-            )}
-            aria-label="북마크"
-          >
-            <Bookmark size={16} fill={bookmarked ? 'currentColor' : 'none'} />
-          </button>
-        </div>
-        <button
-          type="button"
-          onClick={(event) => {
-            event.stopPropagation()
-            openModal(printable)
-          }}
-          className="flex h-9 w-full items-center justify-center gap-1.5 rounded-xl bg-emerald-600 text-xs font-bold text-white shadow-xs transition-all hover:bg-emerald-700 sm:h-10 sm:text-sm"
-        >
-          <Download size={16} />
-          무료 PDF 다운로드
-        </button>
+      <div className="flex items-center justify-center border-t border-slate-100 bg-slate-50/80 px-4 py-3 text-center transition-colors group-hover:bg-emerald-50/50">
+        <h3 className="text-[15px] font-bold tracking-tight text-slate-800 line-clamp-1 group-hover:text-emerald-900">
+          {printable.title_ko}
+        </h3>
       </div>
-    </article>
+    </Link>
   )
 }

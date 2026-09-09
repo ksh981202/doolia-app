@@ -44,6 +44,18 @@ export const DEFAULT_CATEGORY_SLUG = 'coloring-pages'
 /** 이전 카테고리 URL을 새 메뉴 구조로 연결한다. */
 export const CATALOG_SLUG_ALIASES: Record<string, { slug: string; tag?: string }> = {
   coloring: { slug: 'coloring-pages' },
+  'line-tracing': { slug: 'tracing' },
+  'alphabet-numbers': { slug: 'letters' },
+  'scissor-skills': { slug: 'cutout' },
+  'hidden-pictures': { slug: 'ispy' },
+  'spot-differences': { slug: 'odd-one' },
+  'dot-to-dot': { slug: 'dots' },
+  'shadow-match': { slug: 'shadow' },
+  'routine-charts': { slug: 'routine' },
+  'emotion-cards': { slug: 'emotion' },
+  'finger-puppets': { slug: 'puppets' },
+  'board-games': { slug: 'board-game' },
+  seasonal: { slug: 'season' },
   vehicles: { slug: 'coloring-pages', tag: 'vehicles' },
   dinosaur: { slug: 'coloring-pages', tag: 'dinosaur' },
   animals: { slug: 'coloring-pages', tag: 'animals' },
@@ -57,7 +69,7 @@ export const CATALOG_SLUG_ALIASES: Record<string, { slug: string; tag?: string }
 export const CATALOG_GROUPS: CatalogGroup[] = [
   {
     id: 'kids',
-    label: 'DOOLIA Kids',
+    label: '기초 놀이·창의',
     emoji: '🎨',
     subtitle: '기초 학습 & 창의',
     children: [
@@ -87,7 +99,7 @@ export const CATALOG_GROUPS: CatalogGroup[] = [
   },
   {
     id: 'brain',
-    label: 'DOOLIA Brain',
+    label: '두뇌 놀이·사고력',
     emoji: '🧠',
     subtitle: '두뇌 발달 & 사고력',
     children: [
@@ -119,8 +131,8 @@ export const CATALOG_GROUPS: CatalogGroup[] = [
   },
   {
     id: 'family',
-    label: 'DOOLIA Family',
-    emoji: '🤝',
+    label: '생활 습관·함께놀이',
+    emoji: '💛',
     subtitle: '부모함께 & 습관',
     children: [
       topic('routine', '루틴 체크차트', '루틴', '📋', 18, [
@@ -167,7 +179,7 @@ function topic(
     count,
     subtags,
     categoryFilter: extra?.categoryFilter,
-    title: `무료 ${label} 프린트 도안 (A4 PDF)`,
+    title: `${label} 프린트 도안`,
     description:
       extra?.description ??
       `${label} 주제의 고화질 A4 선화 도안을 무료로 인쇄하세요. 가정과 교실에서 바로 쓸 수 있는 300DPI PDF입니다.`,

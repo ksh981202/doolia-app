@@ -5,7 +5,7 @@ import { CATALOG_GROUPS, categoryPath } from '@/shared/config/catalog'
 export function Footer() {
   return (
     <footer className="border-t border-line bg-white">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-3">
+      <div className="mx-auto grid w-full max-w-7xl gap-10 px-4 py-12 sm:px-6 lg:px-8 md:grid-cols-3">
         <div>
           <p className="font-display text-2xl font-semibold text-[#059669]">{BRAND.shortName}</p>
           <p className="mt-1 text-sm font-bold text-ink">{BRAND.name}</p>
@@ -49,7 +49,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-line">
-        <p className="mx-auto max-w-6xl px-4 py-5 text-xs text-muted sm:px-6">
+        <p className="mx-auto w-full max-w-7xl px-4 py-5 text-xs text-muted sm:px-6 lg:px-8">
           Copyright © {new Date().getFullYear()} {BRAND.name}. All rights reserved.
         </p>
       </div>

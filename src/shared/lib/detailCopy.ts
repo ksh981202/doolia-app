@@ -29,7 +29,7 @@ export function detailBrandBadge(printable: Printable) {
 }
 
 export function detailAgeLabel(printable: Printable) {
-  if (isTrexPrintable(printable)) return '만 3~5세 권장'
+  if (isTrexPrintable(printable)) return '3~5세 권장'
   const label =
     formatAgeRange([printable.age_group, printable.age_group_en, ...printable.tags].join(' ')) ??
     ageGroupLabel(printable.tags)

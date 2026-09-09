@@ -1,5 +1,5 @@
-import { ChevronRight } from 'lucide-react'
-import { Link, Navigate, useParams } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router-dom'
+import { SubpageHeader } from '@/components/layout/SubpageHeader'
 import { usePrintablesQuery } from '@/features/gallery/model/usePrintablesQuery'
 import { matchesQuery } from '@/services/printableService'
 import { getPlaySolution, situationEmoji } from '@/shared/config/playSolutions'
@@ -21,19 +21,18 @@ export function PlayRecipeDetailPage() {
 
   return (
     <article>
-      <nav className="flex flex-wrap items-center gap-1 text-sm font-bold text-muted" aria-label="breadcrumb">
-        <Link to="/" className="hover:text-brand">
-          홈
-        </Link>
-        <ChevronRight size={14} className="shrink-0" />
-        <Link to={situationPath(situation.id)} className="hover:text-brand">
-          {situation.emoji} {situation.title}
-        </Link>
-        <ChevronRight size={14} className="shrink-0" />
-        <span className="break-keep text-ink">{recipe.title}</span>
-      </nav>
+      <SubpageHeader
+        crumbs={[
+          { label: '홈', to: '/' },
+          { label: '맞춤 놀이 도구함', to: '/situation/all' },
+          { label: situation.title, to: situationPath(situation.id) },
+          { label: recipe.title },
+        ]}
+        title={recipe.title}
+        emoji={situation.emoji}
+      />
 
-      <div className="mx-auto mt-6 max-w-3xl">
+      <div className="mx-auto max-w-3xl">
         <div className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm">
           <div className="aspect-[16/10] overflow-hidden bg-slate-100">
             <img src={recipe.imageUrl} alt={recipe.title} className="h-full w-full object-cover" />
@@ -41,7 +40,6 @@ export function PlayRecipeDetailPage() {
           <div className="space-y-6 p-6 sm:p-8">
             <div>
               <p className="text-xs font-extrabold text-emerald-700">{recipe.situationLabel}</p>
-              <h1 className="mt-2 font-display text-2xl font-semibold text-ink sm:text-3xl">{recipe.title}</h1>
               <p className="mt-3 text-sm leading-7 text-slate-600 sm:text-base">{recipe.desc}</p>
             </div>
 

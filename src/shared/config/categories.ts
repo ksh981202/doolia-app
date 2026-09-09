@@ -131,7 +131,7 @@ export type BrandPillarId = (typeof NEED_FILTERS)[number]['pillarId'] | 'kids'
 export const BRAND_PILLARS = [
   {
     id: 'kids',
-    brand: 'DOOLIA Kids',
+    brand: '기초 놀이·창의',
     subtitle: '기초 학습 & 창의',
     emoji: '🎨',
     theme: {
@@ -150,7 +150,7 @@ export const BRAND_PILLARS = [
   },
   {
     id: 'brain',
-    brand: 'DOOLIA Brain',
+    brand: '두뇌 놀이·사고력',
     subtitle: '두뇌 발달 & 사고력',
     emoji: '🧠',
     theme: {
@@ -170,9 +170,9 @@ export const BRAND_PILLARS = [
   },
   {
     id: 'family',
-    brand: 'DOOLIA Family',
+    brand: '생활 습관·함께놀이',
     subtitle: '부모함께 & 습관',
-    emoji: '🤝',
+    emoji: '💛',
     theme: {
       panel: 'border-amber-100 bg-amber-50/50',
       card: 'border-amber-100 bg-gradient-to-br from-amber-50 to-orange-50',
@@ -206,3 +206,150 @@ export const TOPIC_CARDS = BRAND_PILLARS.flatMap((pillar) =>
     query: topic.label,
   })),
 )
+
+export type ThemeOption = {
+  id: string
+  name: string
+  icon?: string
+  query?: string
+}
+
+function themes(items: ThemeOption[]): ThemeOption[] {
+  return items
+}
+
+export const CATEGORY_THEMES: Record<string, ThemeOption[]> = {
+  'coloring-pages': themes([
+    { id: 'all', name: '전체' },
+    { id: 'dinosaur', name: '공룡', icon: '🦕', query: '공룡' },
+    { id: 'vehicles', name: '자동차·탈것', icon: '🚗', query: '자동차|탈것|소방차|경찰차|비행기|포크레인' },
+    { id: 'animals', name: '귀여운 동물', icon: '🐶', query: '동물|사자' },
+    { id: 'princess', name: '공주·판타지', icon: '👑', query: '공주|판타지|요정' },
+    { id: 'space-robot', name: '우주·로봇', icon: '🚀', query: '우주|로켓|로봇' },
+    { id: 'shapes', name: '기초선/도형', icon: '🌱', query: '도형|선따기|기초' },
+  ]),
+  'line-tracing': themes([
+    { id: 'all', name: '전체' },
+    { id: 'straight', name: '기초 직선', icon: '📏', query: '직선|기초선' },
+    { id: 'curve', name: '곡선·물결', icon: '〰️', query: '곡선|물결' },
+    { id: 'zigzag', name: '지그재그', icon: '⚡', query: '지그재그' },
+    { id: 'shapes', name: '도형 잇기', icon: '🔺', query: '도형' },
+    { id: 'drawing', name: '그림 완성', icon: '✏️', query: '그림|완성|따라그리기|선따기' },
+  ]),
+  'alphabet-numbers': themes([
+    { id: 'all', name: '전체' },
+    { id: 'alpha-upper', name: '알파벳 대문자', icon: '🔤', query: '대문자|알파벳' },
+    { id: 'alpha-lower', name: '알파벳 소문자', icon: '🔡', query: '소문자|알파벳' },
+    { id: 'num-1-20', name: '숫자 1-20', icon: '🔢', query: '숫자|1-20|1~20' },
+    { id: 'num-1-100', name: '숫자 1-100', icon: '🔟', query: '숫자|1-100|1~100' },
+    { id: 'words', name: '기초 단어', icon: '📝', query: '단어|따라쓰기' },
+  ]),
+  'scissor-skills': themes([
+    { id: 'all', name: '전체' },
+    { id: 'straight', name: '직선 오리기', icon: '✂️', query: '직선|오리기' },
+    { id: 'curves', name: '곡선/모양', icon: '🌀', query: '곡선|모양|오리기' },
+    { id: 'shapes', name: '도형 자르기', icon: '🔺', query: '도형|자르기|오리기' },
+    { id: 'paste-puzzle', name: '오려 붙이기', icon: '🧩', query: '붙이기|퍼즐|오리기' },
+    { id: '3d-craft', name: '입체 공작', icon: '📦', query: '입체|공작|만들기' },
+  ]),
+  'hidden-pictures': themes([
+    { id: 'all', name: '전체' },
+    { id: 'home', name: '일상·우리집', icon: '🏡', query: '집|일상|우리집' },
+    { id: 'forest', name: '숲속·자연', icon: '🌳', query: '숲|자연' },
+    { id: 'fairytale', name: '동화·판타지', icon: '🏰', query: '동화|판타지' },
+    { id: 'animals', name: '동물 친구들', icon: '🐾', query: '동물|사자' },
+  ]),
+  'spot-differences': themes([
+    { id: 'all', name: '전체' },
+    { id: 'easy', name: '초급 (3곳)', icon: '⭐', query: '초급|쉬운' },
+    { id: 'medium', name: '중급 (5곳)', icon: '⭐⭐', query: '중급' },
+    { id: 'hard', name: '고급 (7곳+)', icon: '⭐⭐⭐', query: '고급|어려운' },
+  ]),
+  maze: themes([
+    { id: 'all', name: '전체' },
+    { id: 'easy', name: '쉬운 미로', icon: '🟢', query: '초급|쉬운' },
+    { id: 'medium', name: '기본 미로', icon: '🟡', query: '중급|기본' },
+    { id: 'hard', name: '도전 미로', icon: '🔴', query: '고급|도전|어려운' },
+  ]),
+  'dot-to-dot': themes([
+    { id: 'all', name: '전체' },
+    { id: 'num-20', name: '숫자 1-20', icon: '🔢', query: '숫자|1-20|1~20' },
+    { id: 'num-50', name: '숫자 1-50', icon: '🔢', query: '숫자|1-50|1~50' },
+    { id: 'alpha', name: '알파벳 순서', icon: '🔤', query: '알파벳' },
+  ]),
+  'shadow-match': themes([
+    { id: 'all', name: '전체' },
+    { id: 'animals', name: '동물 그림자', icon: '🐶', query: '동물' },
+    { id: 'vehicles', name: '탈것 그림자', icon: '🚗', query: '탈것|자동차' },
+    { id: 'objects', name: '사물·음식', icon: '🍎', query: '사물|음식|과일' },
+  ]),
+  'routine-charts': themes([
+    { id: 'all', name: '전체' },
+    { id: 'morning', name: '아침 루틴', icon: '☀️', query: '아침|루틴' },
+    { id: 'bedtime', name: '잠자리 루틴', icon: '🌙', query: '잠자리|저녁|루틴' },
+    { id: 'hygiene', name: '양치·손씻기', icon: '🪥', query: '양치|손씻기|위생' },
+    { id: 'cleanup', name: '정리정돈', icon: '🧸', query: '정리|정돈|습관' },
+  ]),
+  'emotion-cards': themes([
+    { id: 'all', name: '전체' },
+    { id: 'happy', name: '기쁨·행복', icon: '😊', query: '기쁨|행복|감정' },
+    { id: 'sad', name: '슬픔·눈물', icon: '😢', query: '슬픔|눈물|감정' },
+    { id: 'angry', name: '화남·짜증', icon: '😡', query: '화|짜증|감정' },
+    { id: 'surprise', name: '놀람·두려움', icon: '😱', query: '놀람|두려움|감정' },
+  ]),
+  'finger-puppets': themes([
+    { id: 'all', name: '전체' },
+    { id: 'animals', name: '동물 인형', icon: '🐾', query: '동물|인형' },
+    { id: 'characters', name: '동화 캐릭터', icon: '👑', query: '동화|캐릭터|공주' },
+    { id: 'family', name: '가족 놀이', icon: '👨‍👩‍👧', query: '가족' },
+  ]),
+  'board-games': themes([
+    { id: 'all', name: '전체' },
+    { id: 'dice-race', name: '주사위 레이스', icon: '🎲', query: '주사위|레이스|보드게임' },
+    { id: 'bingo', name: '빙고·OX', icon: '🎯', query: '빙고|OX|보드게임' },
+    { id: 'ladder', name: '사다리 타기', icon: '🪜', query: '사다리|보드게임' },
+  ]),
+  seasonal: themes([
+    { id: 'all', name: '전체' },
+    { id: 'spring', name: '봄·입학', icon: '🌸', query: '봄|입학' },
+    { id: 'summer', name: '여름·방학', icon: '☀️', query: '여름|방학' },
+    { id: 'autumn', name: '가을·할로윈', icon: '🍁', query: '가을|할로윈' },
+    { id: 'winter', name: '겨울·크리스마스', icon: '❄️', query: '겨울|크리스마스' },
+    { id: 'birthday', name: '생일·축하', icon: '🎂', query: '생일|축하' },
+  ]),
+}
+
+/** Catalog route slugs → CATEGORY_THEMES keys */
+const CATEGORY_THEME_SLUG_ALIASES: Record<string, string> = {
+  tracing: 'line-tracing',
+  letters: 'alphabet-numbers',
+  cutout: 'scissor-skills',
+  ispy: 'hidden-pictures',
+  'odd-one': 'spot-differences',
+  dots: 'dot-to-dot',
+  shadow: 'shadow-match',
+  routine: 'routine-charts',
+  emotion: 'emotion-cards',
+  puppets: 'finger-puppets',
+  'board-game': 'board-games',
+  season: 'seasonal',
+}
+
+/** Older global theme query ids still used in shared URLs */
+const THEME_ID_ALIASES: Record<string, string> = {
+  fantasy: 'princess',
+  space: 'space-robot',
+  basics: 'shapes',
+}
+
+export function getCategoryThemes(slug?: string | null): ThemeOption[] | undefined {
+  if (!slug) return undefined
+  return CATEGORY_THEMES[slug] ?? CATEGORY_THEMES[CATEGORY_THEME_SLUG_ALIASES[slug]]
+}
+
+export function resolveCategoryThemeId(slug: string | undefined, themeId: string) {
+  const options = getCategoryThemes(slug)
+  if (!options) return themeId
+  const mapped = THEME_ID_ALIASES[themeId] ?? themeId
+  return options.some((item) => item.id === mapped) ? mapped : 'all'
+}

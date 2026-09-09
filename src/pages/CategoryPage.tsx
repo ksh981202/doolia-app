@@ -1,9 +1,11 @@
 import { useMemo } from 'react'
-import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom'
+import { Navigate, useParams, useSearchParams } from 'react-router-dom'
 import { ThemeFilter } from '@/components/category/ThemeFilter'
 import { PrintableCard } from '@/components/PrintableCard'
+import { SubpageHeader } from '@/components/layout/SubpageHeader'
 import { usePrintablesQuery } from '@/features/gallery/model/usePrintablesQuery'
 import { matchesQuery } from '@/services/printableService'
+import { getCategoryThemes, resolveCategoryThemeId } from '@/shared/config/categories'
 import {
   CATALOG_SLUG_ALIASES,
   DEFAULT_CATEGORY_SLUG,
@@ -25,10 +27,10 @@ const CARD_GRID = 'mt-6 grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 lg:grid-c
 
 function filterChipClass(active: boolean) {
   return cn(
-    'inline-flex min-h-[40px] shrink-0 items-center rounded-full px-3.5 py-2 text-sm transition sm:px-4',
+    'inline-flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-2 text-[13px] font-bold transition-all',
     active
-      ? 'bg-emerald-600 font-bold text-white shadow-sm'
-      : 'bg-white font-medium text-ink/70 ring-1 ring-line hover:text-ink',
+      ? 'bg-emerald-600 text-white shadow-2xs'
+      : 'border border-slate-200/90 bg-white text-slate-700 hover:bg-slate-50',
   )
 }
 
@@ -42,7 +44,12 @@ export function CategoryPage() {
   const { data, isLoading } = usePrintablesQuery()
   const age = isAgeFilterId(params.get('age') ?? 'all') ? (params.get('age') ?? 'all') : 'all'
   const themeParam = params.get('theme') ?? params.get('tag') ?? 'all'
-  const theme = isThemeFilterId(themeParam) ? themeParam : 'all'
+  const themeOptions = getCategoryThemes(match?.topic.id)
+  const theme = match
+    ? resolveCategoryThemeId(match.topic.id, themeParam)
+    : isThemeFilterId(themeParam)
+      ? themeParam
+      : 'all'
   const sortParam = params.get('sort')
   const sort = sortParam === 'popular' || sortParam === 'latest' ? sortParam : browseAll ? 'latest' : 'popular'
   const query = params.get('q') ?? ''
@@ -60,13 +67,18 @@ export function CategoryPage() {
     return scoped
       .filter((item) => matchesQuery(item, query))
       .filter((item) => matchesAgeFilter(item, age))
-      .filter((item) => matchesThemeFilter(item, theme))
+      .filter((item) => {
+        if (!themeOptions) return matchesThemeFilter(item, theme)
+        const option = themeOptions.find((entry) => entry.id === theme)
+        if (!option || option.id === 'all') return true
+        return matchesQuery(item, option.query ?? '')
+      })
       .sort((a, b) =>
         sort === 'latest'
           ? +new Date(b.created_at) - +new Date(a.created_at)
           : b.downloads - a.downloads || +new Date(b.created_at) - +new Date(a.created_at),
       )
-  }, [age, browseAll, data, match, query, sort, theme])
+  }, [age, browseAll, data, match, query, sort, theme, themeOptions])
 
   const destSlug = typeSlug ?? categoryQuerySlug
   if (browseAll && destSlug) {
@@ -90,16 +102,28 @@ export function CategoryPage() {
     return <Navigate to={categoryPath(DEFAULT_CATEGORY_SLUG)} replace />
   }
 
-  const groupLabel = match?.group.label ?? '연령별 탐색'
-  const topicLabel = match?.topic.label ?? ageLabel
   const title = match
-    ? match.topic.title
+    ? match.topic.label
     : age === 'all'
-      ? '무료 프린트 도안 전체보기'
+      ? '프린트 도안 전체보기'
       : `${ageLabel} 맞춤 도안`
-  const description = match
-    ? match.topic.description
-    : '우리 아이 나이에 맞는 발달 단계별 도안을 모두 모아 봤어요.'
+  const emoji = match ? match.topic.emoji : age === 'all' ? '📚' : '👶'
+  const crumbs = match
+    ? [
+        { label: '홈', to: '/' },
+        { label: match.group.label },
+        { label: match.topic.label },
+      ]
+    : age === 'all'
+      ? [
+          { label: '홈', to: '/' },
+          { label: '무료 도안 전체' },
+        ]
+      : [
+          { label: '홈', to: '/' },
+          { label: '무료 도안 전체', to: '/category' },
+          { label: ageLabel },
+        ]
 
   const setFilter = (key: 'age' | 'theme', value: string) => {
     const next = new URLSearchParams(params)
@@ -119,26 +143,14 @@ export function CategoryPage() {
 
   return (
     <div>
-      <div className="mb-6">
-        <nav className="mb-1 text-xs text-slate-500" aria-label="breadcrumb">
-          <Link to="/" className="hover:text-emerald-600">
-            홈
-          </Link>
-          <span> &gt; </span>
-          <span>{groupLabel}</span>
-          <span> &gt; </span>
-          <span className="font-medium text-slate-800">{topicLabel}</span>
-        </nav>
-        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">{title}</h1>
-        <p className="mt-1 text-sm font-normal text-slate-500">{description}</p>
-      </div>
+      <SubpageHeader crumbs={crumbs} title={title} emoji={emoji} />
 
-      <div className="flex flex-col gap-6">
-        <div className="flex flex-col gap-4 rounded-2xl border border-emerald-100 bg-white p-4 sm:p-5">
-          <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+      <div>
+        <div className="mb-8 space-y-4 rounded-2xl border border-slate-200/80 bg-slate-50/50 p-5">
+          <div className="flex flex-col gap-3 border-b border-slate-100 pb-4 lg:flex-row lg:items-start lg:justify-between">
             <div className="min-w-0 flex-1">
               <p className="mb-2 text-xs font-bold text-slate-700">연령</p>
-              <div className="flex flex-wrap gap-2" role="tablist" aria-label="연령 필터">
+              <div className="flex flex-wrap items-center gap-2 py-1" role="tablist" aria-label="연령 필터">
                 {AGE_FILTERS.map((item) => (
                   <button
                     key={item.id}
@@ -172,7 +184,7 @@ export function CategoryPage() {
 
           <div className="min-w-0">
             <p className="mb-2 text-xs font-bold text-slate-700">주제</p>
-            <ThemeFilter value={theme} onChange={(id) => setFilter('theme', id)} />
+            <ThemeFilter value={theme} onChange={(id) => setFilter('theme', id)} options={themeOptions} />
           </div>
         </div>
 
