@@ -1,14 +1,23 @@
-import { useMemo } from 'react'
+import { useMemo, useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { Search } from 'lucide-react'
 import { PrintableCard } from '@/components/PrintableCard'
 import { usePrintablesQuery } from '@/features/gallery/model/usePrintablesQuery'
 import { selectHomePrintables } from '@/services/printableService'
-import { categoryPath, printablePath } from '@/shared/config/catalog'
+import { printablePath } from '@/shared/config/catalog'
 import { situationPath } from '@/shared/config/playSituations'
 import { PLAY_SOLUTIONS, playRecipePath, type PlaySolution } from '@/shared/config/playSolutions'
 import type { Printable } from '@/types/printable'
 
 const RECOMMEND_ITEMS = PLAY_SOLUTIONS.slice(0, 4)
+
+const POPULAR_TAGS = [
+  { label: '🦕 공룡', keyword: '공룡' },
+  { label: '🦄 유니콘', keyword: '유니콘' },
+  { label: '🚗 자동차', keyword: '자동차' },
+  { label: '🔤 알파벳', keyword: '알파벳' },
+  { label: '🐶 동물', keyword: '동물' },
+] as const
 
 const WHY_DOOLIA = [
   {
@@ -45,6 +54,7 @@ function printableImage(printable: Printable) {
 
 export function PlayHubPage() {
   const navigate = useNavigate()
+  const [searchKeyword, setSearchKeyword] = useState('')
   const { data, isLoading } = usePrintablesQuery()
   const popular = useMemo(() => selectHomePrintables([...(data ?? [])], 8), [data])
   const showcase = useMemo(() => {
@@ -66,53 +76,83 @@ export function PlayHubPage() {
     navigate(playRecipePath(card.situation, card.id))
   }
 
+  const goToSearch = (keyword: string) => {
+    const next = keyword.trim()
+    if (!next) return
+    navigate(`/category?q=${encodeURIComponent(next)}`)
+  }
+
+  const handleSearchSubmit = (event: FormEvent) => {
+    event.preventDefault()
+    goToSearch(searchKeyword)
+  }
+
   const [front, left, right] = [showcase[0], showcase[1], showcase[2]]
 
   return (
     <div className="min-h-screen bg-white font-sans text-slate-900">
-      <section className="pt-8">
-        <div className="relative mb-10 overflow-visible rounded-3xl border border-emerald-100/80 bg-gradient-to-br from-emerald-50/70 via-teal-50/40 to-white p-6 shadow-xs sm:p-10">
-          <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12">
+      <section className="pt-6">
+        <div className="relative mb-10 overflow-visible rounded-3xl border border-emerald-100/80 bg-gradient-to-br from-emerald-50/70 via-teal-50/30 to-white px-6 py-6 shadow-2xs sm:px-10 sm:py-8">
+          <div className="grid grid-cols-1 items-center gap-6 lg:grid-cols-12 lg:gap-8">
             <div className="space-y-4 lg:col-span-7">
-              <div className="inline-flex items-center gap-2 rounded-full bg-emerald-600/10 px-3.5 py-1.5 text-xs font-black text-emerald-800">
-                <span>✨ DOOLIA PRINTABLES</span>
-                <span>·</span>
-                <span>100% 무료 A4 도안</span>
+              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200/60 bg-emerald-600/10 px-3.5 py-1.5 text-[12px] font-bold text-emerald-900 shadow-2xs backdrop-blur-xs">
+                <span className="text-emerald-700">✨</span>
+                <span>100% 무료</span>
+                <span className="font-normal text-emerald-300">·</span>
+                <span>회원가입 없음</span>
+                <span className="font-normal text-emerald-300">·</span>
+                <span className="font-extrabold text-emerald-800">A4 & US Letter 지원</span>
               </div>
-              <h1 className="text-2xl font-black leading-tight text-slate-900 sm:text-3xl lg:text-4xl">
-                도안 1장으로 채우는
+              <h1 className="text-2xl font-bold leading-snug tracking-tight text-slate-900 sm:text-3xl lg:text-[34px]">
+                아이와 함께 웃으며 만드는
                 <br />
-                <span className="text-emerald-700">우리 아이와의 행복한 놀이 시간</span>
+                <span className="font-extrabold text-emerald-700">매일매일 행복한 놀이 시간</span>
               </h1>
-              <p className="text-sm font-medium text-slate-600 sm:text-base">
-                비싼 교구 없이 집 안 재료와 도안 1장으로 즉시 시작하세요.
-                <br />
-                회원가입 없이 1초 만에 초고화질 A4로 바로 인쇄할 수 있습니다.
-              </p>
-              <div className="flex flex-wrap items-center gap-3 pt-2">
-                <Link
-                  to={categoryPath('coloring-pages')}
-                  className="inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-extrabold text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700"
-                >
-                  <span>🖍️ 무료 색칠 도안 보기</span>
-                  <span>→</span>
-                </Link>
-                <Link
-                  to={situationPath('home')}
-                  className="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-800 transition-all hover:bg-slate-50"
-                >
-                  📦 맞춤 놀이 도구함
-                </Link>
+              <form onSubmit={handleSearchSubmit} className="relative max-w-lg">
+                <div className="relative flex items-center">
+                  <Search
+                    size={20}
+                    className="pointer-events-none absolute left-4 text-slate-400"
+                    strokeWidth={2.5}
+                  />
+                  <input
+                    type="text"
+                    value={searchKeyword}
+                    onChange={(event) => setSearchKeyword(event.target.value)}
+                    placeholder="공룡, 유니콘, 자동차를 검색해 보세요"
+                    aria-label="도안 검색"
+                    className="w-full rounded-2xl border border-slate-200/90 bg-white py-3 pr-20 pl-11 text-[13.5px] font-medium text-slate-800 shadow-2xs placeholder:text-slate-400 transition-all focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+                  />
+                  <button
+                    type="submit"
+                    className="absolute right-2 rounded-xl bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow-xs transition-all hover:bg-emerald-700 active:scale-95"
+                  >
+                    검색
+                  </button>
+                </div>
+              </form>
+              <div className="flex flex-wrap items-center gap-2 pt-1.5">
+                <span className="mr-1 text-[13.5px] font-black text-slate-500">인기 검색어:</span>
+                {POPULAR_TAGS.map((tag) => (
+                  <button
+                    key={tag.keyword}
+                    type="button"
+                    onClick={() => goToSearch(tag.keyword)}
+                    className="rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-[13.5px] font-bold text-slate-700 shadow-2xs transition-all hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-900 active:scale-95"
+                  >
+                    {tag.label}
+                  </button>
+                ))}
               </div>
             </div>
 
-            <div className="relative flex items-center justify-center py-4 lg:col-span-5">
-              <div className="relative flex h-56 w-64 items-center justify-center sm:h-64 sm:w-72">
+            <div className="relative flex items-center justify-center lg:col-span-5">
+              <div className="relative flex h-52 w-56 items-center justify-center sm:w-64">
                 {left ? (
                   <Link
                     to={printablePath(left.slug || left.id)}
                     state={{ printable: left }}
-                    className="absolute top-2 -left-2 h-52 w-40 -rotate-6 rounded-2xl border border-slate-200 bg-white p-2 shadow-md transition-transform hover:-rotate-12"
+                    className="absolute top-1 -left-2 h-48 w-36 -rotate-6 rounded-2xl border border-slate-200 bg-white p-2 shadow-md transition-transform hover:-rotate-12"
                   >
                     <img
                       src={printableImage(left)}
@@ -121,13 +161,13 @@ export function PlayHubPage() {
                     />
                   </Link>
                 ) : (
-                  <div className="absolute top-2 -left-2 h-52 w-40 -rotate-6 animate-pulse rounded-2xl border border-slate-200 bg-white p-2 shadow-md" />
+                  <div className="absolute top-1 -left-2 h-48 w-36 -rotate-6 animate-pulse rounded-2xl border border-slate-200 bg-white p-2 shadow-md" />
                 )}
                 {right ? (
                   <Link
                     to={printablePath(right.slug || right.id)}
                     state={{ printable: right }}
-                    className="absolute top-2 -right-2 h-52 w-40 rotate-6 rounded-2xl border border-slate-200 bg-white p-2 shadow-md transition-transform hover:rotate-12"
+                    className="absolute top-1 -right-2 h-48 w-36 rotate-6 rounded-2xl border border-slate-200 bg-white p-2 shadow-md transition-transform hover:rotate-12"
                   >
                     <img
                       src={printableImage(right)}
@@ -136,15 +176,15 @@ export function PlayHubPage() {
                     />
                   </Link>
                 ) : (
-                  <div className="absolute top-2 -right-2 h-52 w-40 rotate-6 animate-pulse rounded-2xl border border-slate-200 bg-white p-2 shadow-md" />
+                  <div className="absolute top-1 -right-2 h-48 w-36 rotate-6 animate-pulse rounded-2xl border border-slate-200 bg-white p-2 shadow-md" />
                 )}
                 {front ? (
                   <Link
                     to={printablePath(front.slug || front.id)}
                     state={{ printable: front }}
-                    className="relative z-10 h-56 w-44 rounded-2xl border-2 border-emerald-500/40 bg-white p-2.5 shadow-xl"
+                    className="relative z-10 h-52 w-40 rounded-2xl border-2 border-emerald-500/40 bg-white p-2.5 shadow-xl"
                   >
-                    <span className="absolute top-3 right-3 rounded-full bg-emerald-600 px-2 py-0.5 text-[10px] font-black text-white">
+                    <span className="absolute top-2.5 right-2.5 rounded-full bg-emerald-600 px-2 py-0.5 text-[10px] font-black text-white">
                       인기 BEST
                     </span>
                     <img
@@ -154,7 +194,7 @@ export function PlayHubPage() {
                     />
                   </Link>
                 ) : (
-                  <div className="relative z-10 h-56 w-44 animate-pulse rounded-2xl border-2 border-emerald-500/40 bg-white p-2.5 shadow-xl" />
+                  <div className="relative z-10 h-52 w-40 animate-pulse rounded-2xl border-2 border-emerald-500/40 bg-white p-2.5 shadow-xl" />
                 )}
               </div>
             </div>

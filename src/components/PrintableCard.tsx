@@ -86,24 +86,24 @@ function CatalogPrintableCard({ printable }: { printable: Printable }) {
     <Link
       to={printablePath(printable.slug || printable.id)}
       state={{ printable }}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-2xs transition-all duration-300 hover:-translate-y-1.5 hover:border-emerald-300 hover:shadow-xl"
+      className="group block cursor-pointer overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-2xs transition-all hover:border-emerald-500/40 hover:shadow-md"
     >
-      <div className="relative flex aspect-[3/4] items-center justify-center bg-white p-4">
+      <div className="relative flex aspect-[3/4] items-center justify-center overflow-hidden bg-slate-50/50 p-3">
         <img
           src={displayImage(printable)}
-          alt={printable.title_ko}
+          alt={printable.title_ko || printable.title}
           loading="lazy"
           decoding="async"
-          className="max-h-full max-w-full object-contain"
+          className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
         />
-        <span className="absolute top-2.5 right-2.5 z-10 rounded-full border border-emerald-200/70 bg-emerald-50/95 px-2.5 py-0.5 text-[11px] font-extrabold text-emerald-800 shadow-2xs backdrop-blur-2xs">
+      </div>
+      <div className="flex items-center justify-between gap-2 border-t border-slate-100 bg-white px-3.5 py-3">
+        <h3 className="truncate text-[16px] font-bold text-slate-800 transition-colors group-hover:text-emerald-700">
+          {printable.title_ko || printable.title}
+        </h3>
+        <span className="shrink-0 rounded-md border border-emerald-200/60 bg-emerald-50 px-2 py-0.5 text-[13px] font-extrabold text-emerald-800">
           {ageGroupLabel(ageTags(printable))}
         </span>
-      </div>
-      <div className="flex items-center justify-center border-t border-slate-100 bg-slate-50/80 px-4 py-3 text-center transition-colors group-hover:bg-emerald-50/50">
-        <h3 className="text-[15px] font-bold tracking-tight text-slate-800 line-clamp-1 group-hover:text-emerald-900">
-          {printable.title_ko}
-        </h3>
       </div>
     </Link>
   )
