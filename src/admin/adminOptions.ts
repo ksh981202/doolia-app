@@ -1,45 +1,31 @@
 import { CATALOG_GROUPS } from '@/shared/config/catalog'
-import { toPrintableCategory, type PrintableCategory } from '@/shared/config/categories'
+import {
+  CATEGORIES,
+  resolvePrintableCategoryId,
+  toPrintableCategory,
+  type PrintableCategory,
+} from '@/shared/config/categories'
 
-export const ADMIN_PRINTABLE_CATEGORIES = CATALOG_GROUPS.flatMap((group) =>
+const CATALOG_ADMIN_CATEGORIES = CATALOG_GROUPS.flatMap((group) =>
   group.children.map((child) => ({
     id: child.id,
     label: `${child.emoji} ${child.label}`,
     group: group.label,
   })),
 )
+const CATALOG_ADMIN_IDS = new Set(CATALOG_ADMIN_CATEGORIES.map((item) => item.id))
 
-const CATALOG_TO_PRINTABLE: Record<string, PrintableCategory> = {
-  'coloring-pages': 'coloring-pages',
-  tracing: 'tracing',
-  letters: 'letters',
-  cutout: 'cutout',
-  ispy: 'ispy',
-  'odd-one': 'odd-one',
-  maze: 'maze',
-  dots: 'dots',
-  shadow: 'shadow',
-  routine: 'routine',
-  emotion: 'emotion',
-  puppets: 'puppets',
-  'board-game': 'board-game',
-  season: 'season',
-  coloring: 'coloring-pages',
-  alphabet: 'letters',
-  numbers: 'dots',
-  odd_one: 'odd-one',
-  board_game: 'board-game',
-  alphabet_numbers: 'letters',
-}
-
-export const AGE_OPTIONS = [
-  { id: '2-3', label: '2~3세' },
-  { id: '4-5', label: '4~5세' },
-  { id: '6-7', label: '6~7세+' },
-] as const
+export const ADMIN_PRINTABLE_CATEGORIES = [
+  ...CATALOG_ADMIN_CATEGORIES,
+  ...CATEGORIES.filter((item) => !CATALOG_ADMIN_IDS.has(item.id)).map((item) => ({
+    id: item.id,
+    label: `${item.emoji} ${item.label}`,
+    group: '기타',
+  })),
+]
 
 export function catalogToPrintableCategory(catalogSlug: string): PrintableCategory {
-  return CATALOG_TO_PRINTABLE[catalogSlug] ?? toPrintableCategory(catalogSlug)
+  return toPrintableCategory(catalogSlug)
 }
 
 /** 30-column TSV/CSV header used by bulk import */
@@ -105,21 +91,19 @@ export function resolveTsvColumn(header: string): PrintableTsvColumn | null {
   return PRINTABLE_TSV_ALIASES[name] ?? null
 }
 
-const CATEGORY_TO_CATALOG: Record<string, string> = {
-  coloring: 'coloring-pages',
-  maze: 'maze',
-  tracing: 'tracing',
-  alphabet: 'letters',
-  numbers: 'dots',
-}
+export const AGE_OPTIONS = [
+  { id: '2-3', label: '2~3세' },
+  { id: '4-5', label: '4~5세' },
+  { id: '6-7', label: '6~7세+' },
+] as const
 
 export function resolveCatalogSlug(...candidates: Array<string | undefined>) {
   for (const raw of candidates) {
+    const mapped = resolvePrintableCategoryId(raw)
+    if (mapped) return mapped
     const value = raw?.trim()
     if (!value) continue
     const lower = value.toLowerCase()
-    if (CATALOG_TO_PRINTABLE[lower]) return CATALOG_TO_PRINTABLE[lower]
-    if (CATEGORY_TO_CATALOG[lower]) return CATEGORY_TO_CATALOG[lower]
     const byId = ADMIN_PRINTABLE_CATEGORIES.find((item) => item.id === value || item.id === lower)
     if (byId) return byId.id
     const byLabel = ADMIN_PRINTABLE_CATEGORIES.find((item) => item.label.toLowerCase().includes(lower))

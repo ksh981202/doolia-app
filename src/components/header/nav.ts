@@ -1,17 +1,46 @@
 import { CATALOG_GROUPS, categoryPath } from '@/shared/config/catalog'
 
-export const HEADER_NAV = [
-  { to: '/', labelKey: 'nav.home', match: 'home' },
-  { to: '/situation/home', labelKey: 'nav.playToolbox', match: 'playToolbox' },
-  { to: '/category/coloring-pages', labelKey: 'nav.coloring', match: 'coloring' },
-  { to: '/category/ispy', labelKey: 'nav.brain', match: 'brain' },
-  { to: '/premium', labelKey: 'nav.premium', match: 'premium' },
+export const HEADER_NAV_ITEMS = [
+  {
+    id: 'themes',
+    label: '테마별 색칠도안',
+    icon: '🎨',
+    path: '/category/coloring-pages',
+  },
+  {
+    id: 'imagination',
+    label: '엉뚱발랄 상상나라',
+    icon: '✨',
+    path: '/category/coloring-pages?theme=imagination',
+  },
+  {
+    id: 'age',
+    label: '연령별 맞춤도안',
+    icon: '👶',
+    path: '/category/coloring-pages?age=2-3',
+  },
+  {
+    id: 'popular',
+    label: '지금 인기 도안',
+    icon: '🔥',
+    path: '/category/coloring-pages?sort=popular',
+  },
 ] as const
 
-export type HeaderNavItem = (typeof HEADER_NAV)[number]
+export type HeaderNavItem = (typeof HEADER_NAV_ITEMS)[number]
 
-const COLORING_SLUGS = new Set(['coloring-pages', 'tracing', 'letters', 'cutout'])
-const BRAIN_SLUGS = new Set(['ispy', 'odd-one', 'maze', 'dots', 'shadow'])
+export function isHeaderNavActive(item: HeaderNavItem, pathname: string, search: URLSearchParams) {
+  if (pathname !== '/category/coloring-pages') return false
+  const theme = search.get('theme') ?? search.get('tag') ?? ''
+  const age = search.get('age') ?? ''
+  const sort = search.get('sort') ?? ''
+  const hasAge = age === '2-3' || age === '4-5' || age === '6-7'
+
+  if (item.id === 'imagination') return theme === 'imagination'
+  if (item.id === 'age') return hasAge && theme !== 'imagination'
+  if (item.id === 'popular') return sort === 'popular' && theme !== 'imagination' && !hasAge
+  return theme !== 'imagination' && !hasAge && sort !== 'popular'
+}
 
 export const CATEGORY_NAV = CATALOG_GROUPS.map((group) => ({
   id: group.id,
@@ -26,23 +55,3 @@ export const CATEGORY_NAV = CATALOG_GROUPS.map((group) => ({
   })),
 }))
 
-function categorySlug(pathname: string) {
-  const match = pathname.match(/^\/category\/([^/]+)/)
-  return match?.[1]
-}
-
-export function isNavActive(item: HeaderNavItem, pathname: string, _hash = '') {
-  const slug = categorySlug(pathname)
-  switch (item.match) {
-    case 'home':
-      return pathname === '/'
-    case 'playToolbox':
-      return pathname.startsWith('/situation')
-    case 'premium':
-      return pathname === '/premium'
-    case 'coloring':
-      return Boolean(slug && COLORING_SLUGS.has(slug))
-    case 'brain':
-      return Boolean(slug && BRAIN_SLUGS.has(slug))
-  }
-}

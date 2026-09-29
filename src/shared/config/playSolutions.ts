@@ -14,6 +14,8 @@ export interface PlaySolution {
   badgeColor: string
   printQuery: string
   steps: [string, string, string]
+  prepTime?: string
+  location?: string
 }
 
 export const PLAY_SOLUTIONS: PlaySolution[] = [
@@ -236,7 +238,7 @@ export const PLAY_SOLUTIONS: PlaySolution[] = [
     age: '3~6세',
     material: '0원 컵',
     suppliesDetail: '도안 1장 + 종이컵 + 테이프',
-    imageUrl: 'https://images.unsplash.com/photo-1515488044360-fb630819f3ba?w=800&auto=format&fit=crop&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=600&auto=format&fit=crop&q=80',
     badgeColor: 'bg-amber-100 text-amber-800 border-amber-200',
     printQuery: '로봇|오리기|만들기|cutout',
     steps: ['로봇 도안을 인쇄해요.', '종이컵에 둘러 붙여요.', '거실을 탐험하는 로봇 놀이를 해요.'],
@@ -673,6 +675,22 @@ export function getPlaySolution(id: string | undefined) {
 
 export function playRecipePath(situationId: SituationId, recipeId: string) {
   return `/situation/${situationId}/${recipeId}`
+}
+
+const LOCATION_BY_SITUATION: Record<SituationId, string> = {
+  home: '실내',
+  quick: '어디서나',
+  outdoor: '외출',
+  bedtime: '실내',
+  special: '실내',
+}
+
+export function playPrepTime(item: PlaySolution) {
+  return item.prepTime ?? item.time ?? '5분'
+}
+
+export function playLocation(item: PlaySolution) {
+  return item.location ?? LOCATION_BY_SITUATION[item.situation] ?? '실내'
 }
 
 export function situationEmoji(id: SituationId) {

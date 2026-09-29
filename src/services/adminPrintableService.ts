@@ -1,5 +1,6 @@
 import { catalogToPrintableCategory, resolveCatalogSlug } from '@/admin/adminOptions'
 import type { ParsedPrintableRow } from '@/admin/parsePrintableSheet'
+import { convertToLosslessWebP } from '@/features/admin/lib/imageOptimization'
 import { supabase } from '@/lib/supabase'
 import { fetchPrintables } from '@/services/printableService'
 import { deleteR2PrintableFiles, uploadR2PrintableFile } from '@/services/r2MediaService'
@@ -353,10 +354,11 @@ export async function importPrintableRows(rows: ParsedPrintableRow[]) {
 
 export async function uploadAdminFile(bucket: 'printables' | 'parenting-tips', file: File) {
   const isImage = file.type.startsWith('image/') || /\.(jpe?g|png|webp)$/i.test(file.name)
+  const payload = bucket === 'printables' && isImage ? await convertToLosslessWebP(file) : file
 
   if (bucket === 'printables' && isImage) {
     try {
-      const item = await uploadR2PrintableFile(file)
+      const item = await uploadR2PrintableFile(payload)
       if (item.url) return item.url
     } catch (error) {
       const connected = Boolean(error && typeof error === 'object' && 'connected' in error && error.connected)
@@ -365,10 +367,10 @@ export async function uploadAdminFile(bucket: 'printables' | 'parenting-tips', f
   }
 
   if (!supabase) {
-    return URL.createObjectURL(file)
+    return URL.createObjectURL(payload)
   }
-  const path = `${Date.now()}-${file.name.replace(/\s+/g, '-').toLowerCase()}`
-  const { error } = await supabase.storage.from(bucket).upload(path, file, { upsert: true })
+  const path = `${Date.now()}-${payload.name.replace(/\s+/g, '-').toLowerCase()}`
+  const { error } = await supabase.storage.from(bucket).upload(path, payload, { upsert: true })
   if (error) throw error
   const { data } = supabase.storage.from(bucket).getPublicUrl(path)
   return data.publicUrl

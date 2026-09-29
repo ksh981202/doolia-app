@@ -1,8 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react'
-import { Link, NavLink, useLocation, useSearchParams } from 'react-router-dom'
-import { CATALOG_GROUPS, categoryPath, getCatalogTopic } from '@/shared/config/catalog'
-import { SITUATION_ITEMS, situationPath } from '@/shared/config/playSituations'
-import { AGE_BROWSE_ITEMS, isAgeFilterId } from '@/shared/config/smartFilters'
+import { Link, useLocation, useSearchParams } from 'react-router-dom'
+import { CATALOG_NAV_GROUPS, type CatalogNavItem } from '@/shared/config/catalog'
+import { isAgeFilterId } from '@/shared/config/smartFilters'
 import { cn } from '@/shared/lib/cn'
 
 type SidebarProps = {
@@ -11,48 +10,49 @@ type SidebarProps = {
   onNavigate?: () => void
 }
 
-function catalogLink(slug: string, params: URLSearchParams) {
-  const next = new URLSearchParams()
-  const age = params.get('age')
-  const theme = params.get('theme')
-  const query = params.get('q')
-  const sort = params.get('sort')
-  if (age) next.set('age', age)
-  if (theme) next.set('theme', theme)
-  if (query) next.set('q', query)
-  if (sort) next.set('sort', sort)
-  const search = next.toString()
-  return `${categoryPath(slug)}${search ? `?${search}` : ''}`
+const DEFAULT_OPEN_IDS = ['kids-age', 'kids-theme'] as const
+
+function navItemActive(item: CatalogNavItem, pathname: string, search: URLSearchParams) {
+  const url = new URL(item.path, 'http://doolia.local')
+  if (pathname !== url.pathname) {
+    if (url.searchParams.has('age') && pathname === '/category') {
+      const age = url.searchParams.get('age')
+      return Boolean(age) && search.get('age') === age
+    }
+    return false
+  }
+  for (const [key, value] of url.searchParams.entries()) {
+    if (search.get(key) !== value) return false
+  }
+  return true
 }
 
 export function Sidebar({ activeSlug, onNavigate }: SidebarProps) {
   const location = useLocation()
   const [params] = useSearchParams()
-  const catalogAllActive = location.pathname === '/category' && !location.search
+  const catalogAllActive = location.pathname === '/category' && !params.get('age') && !params.get('q')
+  const onKidsThemes = location.pathname === '/category/coloring-pages' || activeSlug === 'coloring-pages'
+  const onSeniorThemes = location.pathname === '/category/senior-art' || activeSlug === 'senior-art'
   const ageParam = params.get('age') ?? ''
-  const activeAge = isAgeFilterId(ageParam) && ageParam !== 'all' ? ageParam : null
-  const categoryParam = params.get('category')
-  const activeCategory =
-    activeSlug ?? (categoryParam && getCatalogTopic(categoryParam) ? categoryParam : undefined)
-  const activeGroupId = CATALOG_GROUPS.find((group) =>
-    group.children.some((child) => child.id === activeCategory),
-  )?.id
+  const onAgeBrowse = isAgeFilterId(ageParam) && ageParam !== 'all'
 
   const [openIds, setOpenIds] = useState<string[]>(() => {
-    const ids: string[] = []
-    if (activeAge) ids.push('age')
-    if (activeGroupId) ids.push(activeGroupId)
-    else ids.push('kids')
+    const ids: string[] = [...DEFAULT_OPEN_IDS]
+    if (onSeniorThemes) ids.push('senior-art')
+    if (onAgeBrowse) ids.push('kids-age')
     return [...new Set(ids)]
   })
 
   useEffect(() => {
-    const next: string[] = []
-    if (activeAge) next.push('age')
-    if (activeGroupId) next.push(activeGroupId)
-    if (next.length === 0) return
-    setOpenIds((current) => [...new Set([...current, ...next])])
-  }, [activeAge, activeGroupId])
+    setOpenIds((current) => {
+      const extra: string[] = []
+      if (onSeniorThemes) extra.push('senior-art')
+      if (onKidsThemes) extra.push('kids-theme')
+      if (onAgeBrowse) extra.push('kids-age')
+      if (extra.length === 0) return current
+      return [...new Set([...current, ...extra])]
+    })
+  }, [onAgeBrowse, onKidsThemes, onSeniorThemes])
 
   const isOpen = (id: string) => openIds.includes(id)
 
@@ -64,107 +64,52 @@ export function Sidebar({ activeSlug, onNavigate }: SidebarProps) {
 
   return (
     <aside className="flex h-full min-h-0 w-64 shrink-0 select-none flex-col gap-5 rounded-3xl border border-slate-200/80 bg-slate-50/70 p-4 font-sans lg:w-72">
-      <nav className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto" aria-label="카테고리">
-        <div className="rounded-2xl border border-slate-200/70 bg-white p-3 shadow-2xs">
-          <Link
-            to="/situation/all"
-            onClick={onNavigate}
-            className="group mb-2.5 flex cursor-pointer items-center justify-between px-1"
-          >
-            <span className="flex items-center gap-1.5 text-[15px] font-bold tracking-tight text-slate-900 group-hover:text-emerald-700">
-              <span className="text-base">📦</span>
-              <span>맞춤 놀이 도구함</span>
-            </span>
-            <span className="rounded-full bg-emerald-600 px-1.5 py-0.5 text-[11px] font-bold text-white shadow-2xs">
-              HIT
-            </span>
-          </Link>
-          <div className="space-y-1">
-            {SITUATION_ITEMS.map((item) => (
-              <NavLink
-                key={item.id}
-                to={situationPath(item.id)}
-                onClick={onNavigate}
-                className={({ isActive }) =>
-                  cn(
-                    'flex items-center gap-2.5 rounded-xl px-3 py-2 text-[14.5px] font-bold tracking-tight transition-all',
-                    isActive
-                      ? 'bg-emerald-50 font-extrabold text-emerald-900'
-                      : 'text-slate-800 hover:bg-emerald-50 hover:text-emerald-900',
-                  )
-                }
-              >
-                <span className="text-base">{item.emoji}</span>
-                <span className="tracking-tight">{item.title}</span>
-              </NavLink>
-            ))}
-          </div>
-        </div>
-
+      <nav className="flex min-h-0 flex-1 flex-col gap-1.5 overflow-y-auto" aria-label="카테고리">
         <Link
           to="/category"
           onClick={onNavigate}
           className={cn(
             'flex items-center justify-between rounded-2xl border px-4 py-3 text-[15px] font-bold tracking-tight shadow-2xs transition-all',
             catalogAllActive
-              ? 'border-emerald-600 bg-emerald-600 text-white shadow-sm'
+              ? 'border-emerald-600 bg-emerald-50 font-bold text-emerald-700 shadow-sm'
               : 'border-slate-200/80 bg-white text-slate-900 hover:border-emerald-300 hover:bg-emerald-50',
           )}
         >
           <span className="flex items-center gap-2">
             <span className="text-base">📚</span>
-            <span>무료 도안 모아보기</span>
+            <span>전체 색칠도안</span>
           </span>
           <span
             className={cn(
               'rounded-full px-1.5 py-0.5 text-[11px] font-bold',
-              catalogAllActive ? 'bg-white text-emerald-700' : 'bg-slate-100 text-slate-600',
+              catalogAllActive ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-600',
             )}
           >
             ALL
           </span>
         </Link>
 
-        <div className="space-y-1.5">
+        {CATALOG_NAV_GROUPS.map((group) => (
           <AccordionCard
-            open={isOpen('age')}
-            icon="👶"
-            title="연령별 모아보기"
-            onToggle={() => toggle('age')}
+            key={group.id}
+            open={isOpen(group.id)}
+            icon={group.icon}
+            title={group.name}
+            onToggle={() => toggle(group.id)}
           >
-            {AGE_BROWSE_ITEMS.map((item) => (
+            {group.items.map((item) => (
               <SubMenuLink
                 key={item.id}
-                to={`/category?age=${item.id}`}
-                active={activeAge === item.id}
+                to={item.path}
+                active={navItemActive(item, location.pathname, params)}
+                icon={item.icon}
                 onClick={onNavigate}
               >
-                {item.browseLabel}
+                {item.name}
               </SubMenuLink>
             ))}
           </AccordionCard>
-
-          {CATALOG_GROUPS.map((group) => (
-            <AccordionCard
-              key={group.id}
-              open={isOpen(group.id)}
-              icon={group.emoji}
-              title={group.label}
-              onToggle={() => toggle(group.id)}
-            >
-              {group.children.map((child) => (
-                <SubMenuLink
-                  key={child.id}
-                  to={catalogLink(child.id, params)}
-                  active={activeCategory === child.id}
-                  onClick={onNavigate}
-                >
-                  {child.label}
-                </SubMenuLink>
-              ))}
-            </AccordionCard>
-          ))}
-        </div>
+        ))}
       </nav>
     </aside>
   )
@@ -174,11 +119,13 @@ function SubMenuLink({
   to,
   active,
   onClick,
+  icon,
   children,
 }: {
   to: string
   active: boolean
   onClick?: () => void
+  icon?: string
   children: ReactNode
 }) {
   return (
@@ -188,16 +135,20 @@ function SubMenuLink({
       className={cn(
         'group flex items-center gap-2.5 rounded-xl px-3 py-2 text-[13.5px] font-bold transition-all',
         active
-          ? 'bg-emerald-50 font-extrabold text-emerald-900'
+          ? 'bg-emerald-50 font-bold text-emerald-700'
           : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900',
       )}
     >
-      <span
-        className={cn(
-          'h-1.5 w-1.5 shrink-0 rounded-full transition-all',
-          active ? 'scale-125 bg-emerald-600' : 'bg-slate-300 group-hover:bg-slate-400',
-        )}
-      />
+      {icon ? (
+        <span className="w-5 shrink-0 text-center text-sm leading-none">{icon}</span>
+      ) : (
+        <span
+          className={cn(
+            'h-1.5 w-1.5 shrink-0 rounded-full transition-all',
+            active ? 'scale-125 bg-emerald-600' : 'bg-slate-300 group-hover:bg-slate-400',
+          )}
+        />
+      )}
       <span className="tracking-tight">{children}</span>
     </Link>
   )

@@ -5,7 +5,7 @@ import { PrintableCard } from '@/components/PrintableCard'
 import { SubpageHeader } from '@/components/layout/SubpageHeader'
 import { usePrintablesQuery } from '@/features/gallery/model/usePrintablesQuery'
 import { matchesQuery } from '@/services/printableService'
-import { getCategoryThemes, resolveCategoryThemeId } from '@/shared/config/categories'
+import { getCategoryThemes, getThemeSubCategories, resolveCategoryThemeId, resolveThemeSubId } from '@/shared/config/categories'
 import {
   CATALOG_SLUG_ALIASES,
   DEFAULT_CATEGORY_SLUG,
@@ -23,7 +23,7 @@ import {
 } from '@/shared/config/smartFilters'
 import { cn } from '@/shared/lib/cn'
 
-const CARD_GRID = 'mt-6 grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 lg:gap-6'
+const CARD_GRID = 'mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'
 
 function filterChipClass(active: boolean) {
   return cn(
@@ -50,6 +50,11 @@ export function CategoryPage() {
     : isThemeFilterId(themeParam)
       ? themeParam
       : 'all'
+  const subOptions = getThemeSubCategories(theme)
+  const sub = resolveThemeSubId(theme, params.get('sub') ?? 'all')
+  const parentTheme = themeOptions?.find((item) => item.id === theme)
+  const chipOptions = subOptions ?? themeOptions
+  const chipValue = subOptions ? sub : theme
   const sortParam = params.get('sort')
   const sort = sortParam === 'popular' || sortParam === 'latest' ? sortParam : browseAll ? 'latest' : 'popular'
   const query = params.get('q') ?? ''
@@ -68,17 +73,25 @@ export function CategoryPage() {
       .filter((item) => matchesQuery(item, query))
       .filter((item) => matchesAgeFilter(item, age))
       .filter((item) => {
-        if (!themeOptions) return matchesThemeFilter(item, theme)
-        const option = themeOptions.find((entry) => entry.id === theme)
-        if (!option || option.id === 'all') return true
-        return matchesQuery(item, option.query ?? '')
+        const parentMatch = themeOptions
+          ? (() => {
+              const option = themeOptions.find((entry) => entry.id === theme)
+              if (!option || option.id === 'all') return true
+              return matchesQuery(item, option.query ?? '')
+            })()
+          : matchesThemeFilter(item, theme)
+        if (!parentMatch) return false
+        if (!subOptions || sub === 'all') return true
+        const subOption = subOptions.find((entry) => entry.id === sub)
+        if (!subOption || subOption.id === 'all') return true
+        return matchesQuery(item, subOption.query ?? '')
       })
       .sort((a, b) =>
         sort === 'latest'
           ? +new Date(b.created_at) - +new Date(a.created_at)
           : b.downloads - a.downloads || +new Date(b.created_at) - +new Date(a.created_at),
       )
-  }, [age, browseAll, data, match, query, sort, theme, themeOptions])
+  }, [age, browseAll, data, match, query, sort, sub, subOptions, theme, themeOptions])
 
   const destSlug = typeSlug ?? categoryQuerySlug
   if (browseAll && destSlug) {
@@ -103,16 +116,24 @@ export function CategoryPage() {
   }
 
   const title = match
-    ? match.topic.label
+    ? parentTheme && parentTheme.id !== 'all'
+      ? parentTheme.name
+      : match.topic.label
     : age === 'all'
       ? '프린트 도안 전체보기'
       : `${ageLabel} 맞춤 도안`
-  const emoji = match ? match.topic.emoji : age === 'all' ? '📚' : '👶'
+  const emoji = match
+    ? parentTheme?.icon || match.topic.emoji
+    : age === 'all'
+      ? '📚'
+      : '👶'
   const crumbs = match
     ? [
         { label: '홈', to: '/' },
-        { label: match.group.label },
-        { label: match.topic.label },
+        { label: match.group.label, to: '/category' },
+        ...(parentTheme && parentTheme.id !== 'all'
+          ? [{ label: parentTheme.name }]
+          : [{ label: match.topic.label }]),
       ]
     : age === 'all'
       ? [
@@ -125,9 +146,10 @@ export function CategoryPage() {
           { label: ageLabel },
         ]
 
-  const setFilter = (key: 'age' | 'theme', value: string) => {
+  const setFilter = (key: 'age' | 'theme' | 'sub', value: string) => {
     const next = new URLSearchParams(params)
     next.delete('tag')
+    if (key === 'theme') next.delete('sub')
     if (value === 'all') next.delete(key)
     else next.set(key, value)
     setParams(next)
@@ -138,6 +160,7 @@ export function CategoryPage() {
     next.delete('age')
     next.delete('theme')
     next.delete('tag')
+    next.delete('sub')
     setParams(next)
   }
 
@@ -183,8 +206,14 @@ export function CategoryPage() {
           </div>
 
           <div className="min-w-0">
-            <p className="mb-2 text-xs font-bold text-slate-700">주제</p>
-            <ThemeFilter value={theme} onChange={(id) => setFilter('theme', id)} options={themeOptions} />
+            <p className="mb-2 text-xs font-bold text-slate-700">
+              {subOptions && parentTheme ? parentTheme.name : '주제'}
+            </p>
+            <ThemeFilter
+              value={chipValue}
+              onChange={(id) => setFilter(subOptions ? 'sub' : 'theme', id)}
+              options={chipOptions}
+            />
           </div>
         </div>
 
@@ -198,7 +227,9 @@ export function CategoryPage() {
           ) : items.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-line bg-white px-6 py-12 text-center">
               <p className="text-sm font-semibold text-muted sm:text-base">
-                해당 조건의 도안이 아직 없습니다. 다른 필터를 선택해 보세요!
+                {match
+                  ? '해당 카테고리의 도안이 곧 업데이트됩니다!'
+                  : '해당 조건의 도안이 아직 없습니다. 다른 필터를 선택해 보세요!'}
               </p>
               <button
                 type="button"

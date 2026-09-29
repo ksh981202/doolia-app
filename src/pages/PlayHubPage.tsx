@@ -5,11 +5,7 @@ import { PrintableCard } from '@/components/PrintableCard'
 import { usePrintablesQuery } from '@/features/gallery/model/usePrintablesQuery'
 import { selectHomePrintables } from '@/services/printableService'
 import { printablePath } from '@/shared/config/catalog'
-import { situationPath } from '@/shared/config/playSituations'
-import { PLAY_SOLUTIONS, playRecipePath, type PlaySolution } from '@/shared/config/playSolutions'
 import type { Printable } from '@/types/printable'
-
-const RECOMMEND_ITEMS = PLAY_SOLUTIONS.slice(0, 4)
 
 const POPULAR_TAGS = [
   { label: '🦕 공룡', keyword: '공룡' },
@@ -21,24 +17,24 @@ const POPULAR_TAGS = [
 
 const WHY_DOOLIA = [
   {
-    icon: '📦',
-    title: '집 안 재료 그대로',
-    desc: '택배 상자, 종이컵 등 주변의 친숙한 재료를 활용합니다.',
+    icon: '🖨️',
+    title: '100% 무료 초고화질',
+    desc: '회원가입 없이 원하는 도안을 언제든 A4 표준 규격으로 즉시 인쇄하세요.',
   },
   {
-    icon: '💬',
-    title: '쉬운 놀이 꿀팁 & 대화',
-    desc: '어떻게 놀아줄지 막막할 때 바로 꺼내보는 대화 가이드.',
+    icon: '✏️',
+    title: '선명하고 깔끔한 라인',
+    desc: '아이들이 삐져나가지 않고 쉽게 칠할 수 있도록 선명하고 굵은 외곽선 도안을 제공합니다.',
   },
   {
-    icon: '✨',
-    title: '간편하고 깔끔한 놀이',
-    desc: '치우기 힘든 물기나 가루 없이 간결하게 즐기고 정리합니다.',
+    icon: '🎨',
+    title: '상상력 자극 12대 테마',
+    desc: '공룡, 자동차부터 상상나라까지 아이의 호기심과 발달 단계에 맞춘 큐레이션을 제공합니다.',
   },
   {
-    icon: '⚡',
-    title: '회원 가입 없는 즉시 인쇄',
-    desc: '회원가입이나 복잡한 절차 없이 원하는 도안을 바로 출력합니다.',
+    icon: '🌿',
+    title: '온가족 힐링 컬러링',
+    desc: '아이뿐 아니라 부모와 조부모님도 함께 즐길 수 있는 섬세한 시니어 도안까지 함께합니다.',
   },
 ] as const
 
@@ -72,14 +68,10 @@ export function PlayHubPage() {
     return picked
   }, [data])
 
-  const openRecipe = (card: PlaySolution) => {
-    navigate(playRecipePath(card.situation, card.id))
-  }
-
   const goToSearch = (keyword: string) => {
     const next = keyword.trim()
     if (!next) return
-    navigate(`/category?q=${encodeURIComponent(next)}`)
+    navigate(`/category/coloring-pages?q=${encodeURIComponent(next)}`)
   }
 
   const handleSearchSubmit = (event: FormEvent) => {
@@ -97,11 +89,7 @@ export function PlayHubPage() {
             <div className="space-y-4 lg:col-span-7">
               <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200/60 bg-emerald-600/10 px-3.5 py-1.5 text-[12px] font-bold text-emerald-900 shadow-2xs backdrop-blur-xs">
                 <span className="text-emerald-700">✨</span>
-                <span>100% 무료</span>
-                <span className="font-normal text-emerald-300">·</span>
-                <span>회원가입 없음</span>
-                <span className="font-normal text-emerald-300">·</span>
-                <span className="font-extrabold text-emerald-800">A4 & US Letter 지원</span>
+                <span>100% 무료 인쇄 · 회원가입 없음 · A4 & US Letter 지원</span>
               </div>
               <h1 className="text-2xl font-bold leading-snug tracking-tight text-slate-900 sm:text-3xl lg:text-[34px]">
                 아이와 함께 웃으며 만드는
@@ -119,7 +107,7 @@ export function PlayHubPage() {
                     type="text"
                     value={searchKeyword}
                     onChange={(event) => setSearchKeyword(event.target.value)}
-                    placeholder="공룡, 유니콘, 자동차를 검색해 보세요"
+                    placeholder="어떤 도안을 찾으시나요? (예: 공룡, 유니콘, 알파벳)"
                     aria-label="도안 검색"
                     className="w-full rounded-2xl border border-slate-200/90 bg-white py-3 pr-20 pl-11 text-[13.5px] font-medium text-slate-800 shadow-2xs placeholder:text-slate-400 transition-all focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
                   />
@@ -146,13 +134,13 @@ export function PlayHubPage() {
               </div>
             </div>
 
-            <div className="relative flex items-center justify-center lg:col-span-5">
-              <div className="relative flex h-52 w-56 items-center justify-center sm:w-64">
+            <div className="relative flex items-center justify-center py-2 lg:col-span-5">
+              <div className="relative flex h-52 w-60 items-center justify-center sm:h-56 sm:w-[17rem]">
                 {left ? (
                   <Link
                     to={printablePath(left.slug || left.id)}
                     state={{ printable: left }}
-                    className="absolute top-1 -left-2 h-48 w-36 -rotate-6 rounded-2xl border border-slate-200 bg-white p-2 shadow-md transition-transform hover:-rotate-12"
+                    className="absolute top-2 -left-3 h-48 w-36 -rotate-[8deg] rounded-2xl border border-slate-200/90 bg-white p-2 shadow-lg transition-transform duration-300 hover:-rotate-12 sm:h-52 sm:w-40"
                   >
                     <img
                       src={printableImage(left)}
@@ -161,13 +149,13 @@ export function PlayHubPage() {
                     />
                   </Link>
                 ) : (
-                  <div className="absolute top-1 -left-2 h-48 w-36 -rotate-6 animate-pulse rounded-2xl border border-slate-200 bg-white p-2 shadow-md" />
+                  <div className="absolute top-2 -left-3 h-48 w-36 -rotate-[8deg] animate-pulse rounded-2xl border border-slate-200/90 bg-white p-2 shadow-lg sm:h-52 sm:w-40" />
                 )}
                 {right ? (
                   <Link
                     to={printablePath(right.slug || right.id)}
                     state={{ printable: right }}
-                    className="absolute top-1 -right-2 h-48 w-36 rotate-6 rounded-2xl border border-slate-200 bg-white p-2 shadow-md transition-transform hover:rotate-12"
+                    className="absolute top-2 -right-3 h-48 w-36 rotate-[8deg] rounded-2xl border border-slate-200/90 bg-white p-2 shadow-lg transition-transform duration-300 hover:rotate-12 sm:h-52 sm:w-40"
                   >
                     <img
                       src={printableImage(right)}
@@ -176,16 +164,16 @@ export function PlayHubPage() {
                     />
                   </Link>
                 ) : (
-                  <div className="absolute top-1 -right-2 h-48 w-36 rotate-6 animate-pulse rounded-2xl border border-slate-200 bg-white p-2 shadow-md" />
+                  <div className="absolute top-2 -right-3 h-48 w-36 rotate-[8deg] animate-pulse rounded-2xl border border-slate-200/90 bg-white p-2 shadow-lg sm:h-52 sm:w-40" />
                 )}
                 {front ? (
                   <Link
                     to={printablePath(front.slug || front.id)}
                     state={{ printable: front }}
-                    className="relative z-10 h-52 w-40 rounded-2xl border-2 border-emerald-500/40 bg-white p-2.5 shadow-xl"
+                    className="relative z-10 h-52 w-40 rounded-2xl border-2 border-emerald-400/70 bg-white p-2.5 shadow-xl transition-transform duration-300 hover:scale-[1.02] sm:h-56 sm:w-44"
                   >
-                    <span className="absolute top-2.5 right-2.5 rounded-full bg-emerald-600 px-2 py-0.5 text-[10px] font-black text-white">
-                      인기 BEST
+                    <span className="absolute top-2.5 right-2.5 rounded-full bg-emerald-600 px-2 py-0.5 text-[10.5px] font-black text-white shadow-2xs">
+                      BEST
                     </span>
                     <img
                       src={printableImage(front)}
@@ -194,7 +182,7 @@ export function PlayHubPage() {
                     />
                   </Link>
                 ) : (
-                  <div className="relative z-10 h-52 w-40 animate-pulse rounded-2xl border-2 border-emerald-500/40 bg-white p-2.5 shadow-xl" />
+                  <div className="relative z-10 h-52 w-40 animate-pulse rounded-2xl border-2 border-emerald-400/70 bg-white p-2.5 shadow-xl sm:h-56 sm:w-44" />
                 )}
               </div>
             </div>
@@ -208,11 +196,11 @@ export function PlayHubPage() {
             지금 가장 인기 있는 도안
           </h2>
           <Link
-            to="/category"
+            to="/category/coloring-pages"
             className="flex items-center gap-1 text-[13.5px] font-bold text-slate-500 transition-colors hover:text-emerald-700"
           >
             <span>전체보기</span>
-            <span>&gt;</span>
+            <span>→</span>
           </Link>
         </div>
         {isLoading ? (
@@ -230,94 +218,29 @@ export function PlayHubPage() {
         )}
       </section>
 
-      <section id="play-toolbox" className="scroll-mt-24 bg-white py-6">
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-[22px]">
-            아이와 함께하는 행복한 놀이
+      <section className="my-12 mb-16 rounded-3xl border border-slate-100 bg-white p-8 shadow-sm sm:p-12">
+        <div className="mx-auto mb-10 max-w-xl space-y-2 text-center">
+          <span className="block text-xs font-bold uppercase tracking-widest text-emerald-600">
+            WHY DOOLIA
+          </span>
+          <h2 className="text-2xl font-extrabold tracking-tight text-slate-800 sm:text-3xl">
+            아이의 창의력을 깨우는 둘리아의 특별함
           </h2>
-          <Link
-            to={situationPath('home')}
-            className="flex items-center gap-1 text-[13.5px] font-bold text-slate-500 transition-colors hover:text-emerald-700"
-          >
-            <span>전체보기</span>
-            <span>&gt;</span>
-          </Link>
+          <p className="text-sm font-medium leading-relaxed text-slate-500">
+            복잡한 과정 없이 언제 어디서나 바로 인쇄해서 즐기는 고화질 색칠 놀이 도안
+          </p>
         </div>
-
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {RECOMMEND_ITEMS.map((card) => (
-            <article
-              key={card.id}
-              className="group flex cursor-pointer flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
-              onClick={() => openRecipe(card)}
+        <div className="grid grid-cols-1 gap-6 text-left sm:grid-cols-2 lg:grid-cols-4">
+          {WHY_DOOLIA.map((item) => (
+            <div
+              key={item.title}
+              className="rounded-2xl border border-emerald-100/60 bg-emerald-50/50 p-6"
             >
-              <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
-                <img
-                  src={card.imageUrl}
-                  alt={card.title}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                />
-              </div>
-
-              <div className="flex flex-1 flex-col justify-between p-4 sm:p-5">
-                <div>
-                  <h3 className="min-h-[48px] text-base font-bold leading-snug text-slate-900 line-clamp-2 transition-colors group-hover:text-emerald-700 sm:text-lg">
-                    {card.title}
-                  </h3>
-                  <div className="mb-4 mt-3.5 grid grid-cols-2 gap-2">
-                    <span className="flex items-center justify-center gap-1 rounded-lg border border-amber-200/80 bg-amber-50 px-2.5 py-1.5 text-sm font-medium text-amber-900">
-                      <span>👶</span>
-                      <span>{card.age}</span>
-                    </span>
-                    <span className="flex items-center justify-center gap-1 rounded-lg border border-emerald-200/80 bg-emerald-50 px-2.5 py-1.5 text-sm font-medium text-emerald-900">
-                      <span className="truncate">{card.situationLabel}</span>
-                    </span>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={(event) => {
-                    event.stopPropagation()
-                    openRecipe(card)
-                  }}
-                  className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-bold text-white shadow-sm shadow-emerald-600/20 transition-all hover:bg-emerald-700 active:bg-emerald-800"
-                >
-                  <span>👉</span>
-                  <span>바로 확인하기</span>
-                  <span className="text-emerald-200 transition-transform group-hover:translate-x-0.5">→</span>
-                </button>
-              </div>
-            </article>
+              <div className="mb-3 text-2xl">{item.icon}</div>
+              <h3 className="mb-1 text-base font-bold tracking-tight text-slate-800">{item.title}</h3>
+              <p className="text-xs font-medium leading-relaxed text-slate-600">{item.desc}</p>
+            </div>
           ))}
-        </div>
-      </section>
-
-      <section className="pb-16">
-        <div className="relative my-12 overflow-hidden rounded-3xl border border-emerald-100/80 bg-gradient-to-br from-emerald-50/90 via-teal-50/40 to-amber-50/40 p-6 shadow-sm sm:p-10">
-          <div className="mx-auto mb-10 max-w-2xl text-center">
-            <span className="mb-2 inline-block text-xs font-bold uppercase tracking-widest text-emerald-600">
-              WHY DOOLIA
-            </span>
-            <h2 className="text-2xl font-black leading-snug tracking-tight text-slate-900 sm:text-3xl">
-              부모의 마음을 편하게 해주는 둘리아의 특별함
-            </h2>
-            <p className="mt-3 text-sm font-normal text-slate-600 sm:text-base">
-              아이와의 놀이가 부담이나 스트레스가 되지 않도록 꼭 필요한 것만 담았습니다.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
-            {WHY_DOOLIA.map((item) => (
-              <div
-                key={item.title}
-                className="rounded-2xl border border-emerald-100/80 bg-white/90 p-5 shadow-sm"
-              >
-                <div className="mb-3.5 text-3xl">{item.icon}</div>
-                <h3 className="mb-2 text-base font-bold text-slate-900">{item.title}</h3>
-                <p className="min-h-[2.875rem] text-sm font-normal leading-relaxed text-slate-700">{item.desc}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
     </div>

@@ -1,8 +1,10 @@
 import { ChevronLeft, Search, Settings } from 'lucide-react'
 import { type FormEvent, useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { HEADER_NAV_ITEMS, isHeaderNavActive } from '@/components/header/nav'
 import { LanguageSwitcher } from '@/components/header/LanguageSwitcher'
 import { Logo } from '@/components/header/Logo'
+import { cn } from '@/shared/lib/cn'
 
 function isLocalAdminHost() {
   if (import.meta.env.DEV) return true
@@ -18,12 +20,6 @@ function isHomePath(pathname: string) {
 const iconButtonClass =
   'inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-50 hover:text-emerald-700'
 
-const HOME_NAV = [
-  { to: '/situation/home', icon: '📦', title: '맞춤 놀이 도구함' },
-  { to: '/category/coloring-pages', icon: '🎨', title: '기초 놀이·창의' },
-  { to: '/category?age=2-3', icon: '👶', title: '연령별 모아보기' },
-  { to: '/category', icon: '📚', title: '무료 도안 전체' },
-] as const
 
 export function Header() {
   const location = useLocation()
@@ -73,15 +69,20 @@ export function Header() {
         </div>
 
         {isHome ? (
-          <nav className="hidden items-center justify-center gap-1.5 md:flex lg:gap-2" aria-label="주요 메뉴">
-            {HOME_NAV.map((menu) => (
+          <nav className="hidden items-center justify-center gap-2 md:flex lg:gap-2.5" aria-label="주요 메뉴">
+            {HEADER_NAV_ITEMS.map((menu) => (
               <Link
-                key={menu.to}
-                to={menu.to}
-                className="inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-[14px] font-bold text-slate-700 transition-all hover:bg-emerald-50/70 hover:text-emerald-700 active:scale-98"
+                key={menu.id}
+                to={menu.path}
+                className={cn(
+                  'inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-2xl px-2.5 py-2 text-[12.5px] font-bold transition-all duration-200 hover:bg-emerald-50 hover:text-emerald-800 active:scale-98 lg:px-4 lg:text-[13.5px]',
+                  isHeaderNavActive(menu, location.pathname, params)
+                    ? 'bg-emerald-50 text-emerald-800'
+                    : 'text-slate-700',
+                )}
               >
                 <span className="text-base">{menu.icon}</span>
-                <span className="tracking-tight">{menu.title}</span>
+                <span className="tracking-tight">{menu.label}</span>
               </Link>
             ))}
           </nav>

@@ -12,7 +12,7 @@ export const AGE_FILTERS: AgeFilter[] = [
   { id: 'all', label: '전체' },
   { id: '2-3', label: '2~3세 (영아)', browseLabel: '2~3세', min: 2, max: 3 },
   { id: '4-5', label: '4~5세 (유아)', browseLabel: '4~5세', min: 4, max: 5 },
-  { id: '6-7', label: '6~7세+ (취학전)', browseLabel: '6~7세+', min: 6, max: 7 },
+  { id: '6-7', label: '6~7세+ (예비초등)', browseLabel: '6~7세+', min: 6, max: 7 },
 ]
 
 export const AGE_BROWSE_ITEMS = AGE_FILTERS.filter(

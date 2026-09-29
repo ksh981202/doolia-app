@@ -1,5 +1,20 @@
 import { toPrintableCategory, type PrintableCategory } from '@/shared/config/categories'
 
+export type { PrintableCategory }
+/** Public catalog slugs used by the coloring-first sidebar. */
+export type PublicPrintableCategory = 'coloring-pages' | 'senior-art'
+type _AssertPublicCategories = PublicPrintableCategory extends PrintableCategory ? true : never
+const _assertPublicCategories: _AssertPublicCategories = true
+void _assertPublicCategories
+export type NewMenuPrintableCategory =
+  | 'doolia-friends'
+  | 'verified-creators'
+  | 'family-healing'
+  | 'senior-art'
+type _AssertNewMenuCategories = NewMenuPrintableCategory extends PrintableCategory ? true : never
+const _assertNewMenuCategories: _AssertNewMenuCategories = true
+void _assertNewMenuCategories
+
 export type PrintableAssetType = 'bw' | 'color' | 'single' | (string & {})
 
 function text(value: unknown) {

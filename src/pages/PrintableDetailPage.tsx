@@ -7,7 +7,7 @@ import { InfoSection } from '@/components/detail/InfoSection'
 import { RelatedPrintables } from '@/components/detail/RelatedPrintables'
 import { usePrintableQuery, usePrintablesQuery } from '@/features/gallery/model/usePrintablesQuery'
 import { DEMO_PRINTABLES } from '@/services/printableService'
-import { CATALOG_GROUPS, categoryPath, matchesTopicCategory } from '@/shared/config/catalog'
+import { categoryPath, getAllCatalogTopics, matchesTopicCategory } from '@/shared/config/catalog'
 import { detailTitle, megaBundleCopy, relatedSectionTitle } from '@/shared/lib/detailCopy'
 import { formatAgeRange } from '@/shared/lib/printableMeta'
 import type { Printable } from '@/types/printable'
@@ -16,19 +16,15 @@ type Crumb = { label: string; to?: string }
 type DetailLocationState = { printable?: Printable }
 
 function catalogTopic(printable: Printable) {
-  const byCategory = CATALOG_GROUPS.flatMap((group) => group.children).find(
+  const topics = getAllCatalogTopics()
+  const byCategory = topics.find(
     (child) => matchesTopicCategory(printable.category, child) || child.id === printable.category,
   )
   if (byCategory) return byCategory
   const hay = [printable.title_ko, printable.title_en, ...printable.tags].join(' ').toLowerCase()
-  const match = CATALOG_GROUPS.flatMap((group) => group.children).find(
-    (child) => child.query && hay.includes(child.query.toLowerCase()),
-  )
+  const match = topics.find((child) => child.query && hay.includes(child.query.toLowerCase()))
   if (match) return match
-  return (
-    CATALOG_GROUPS.flatMap((group) => group.children).find((child) => child.id === 'coloring-pages') ??
-    CATALOG_GROUPS[0].children[0]
-  )
+  return topics.find((child) => child.id === 'coloring-pages') ?? topics[0]
 }
 
 function matchesKey(item: Printable, key: string | undefined) {

@@ -53,7 +53,11 @@ export function ThemeFilter({ value, onChange, options }: ThemeFilterProps) {
 
   if (categoryThemes) {
     return (
-      <div className="flex flex-wrap items-center gap-2 py-1" role="tablist" aria-label="주제 필터">
+      <div
+        className="-mx-1 flex max-h-36 flex-wrap content-start items-center gap-2 overflow-y-auto overflow-x-hidden px-1 py-1 sm:max-h-none"
+        role="tablist"
+        aria-label="주제 필터"
+      >
         {categoryThemes.map((item) => (
           <button
             key={item.id}
