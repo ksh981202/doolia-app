@@ -30,9 +30,13 @@ export type Printable = {
   title_ko: string
   title_en: string
   title_ja: string
+  title_zh?: string
   title_es: string
+  title_pt?: string
   title_de: string
   title_fr: string
+  title_it?: string
+  title_vi?: string
   category: PrintableCategory
   type: PrintableAssetType
   age_group: string
@@ -45,15 +49,23 @@ export type Printable = {
   parent_guide_ko: string
   parent_guide_en: string
   parent_guide_ja: string
+  parent_guide_zh?: string
   parent_guide_es: string
+  parent_guide_pt?: string
   parent_guide_de: string
   parent_guide_fr: string
+  parent_guide_it?: string
+  parent_guide_vi?: string
   description_ko: string
   description_en: string
   description_ja: string
+  description_zh?: string
   description_es: string
+  description_pt?: string
   description_de: string
   description_fr: string
+  description_it?: string
+  description_vi?: string
   tags: string[]
   imagination_question?: string
   difficulty?: PrintableDifficulty
@@ -78,9 +90,13 @@ export type PrintableInput = {
   title_ko?: string | null
   title_en?: string | null
   title_ja?: string | null
+  title_zh?: string | null
   title_es?: string | null
+  title_pt?: string | null
   title_de?: string | null
   title_fr?: string | null
+  title_it?: string | null
+  title_vi?: string | null
   category: PrintableCategory | string
   type?: string | null
   age_group?: string | null
@@ -93,16 +109,24 @@ export type PrintableInput = {
   parent_guide_ko?: string | null
   parent_guide_en?: string | null
   parent_guide_ja?: string | null
+  parent_guide_zh?: string | null
   parent_guide_es?: string | null
+  parent_guide_pt?: string | null
   parent_guide_de?: string | null
   parent_guide_fr?: string | null
+  parent_guide_it?: string | null
+  parent_guide_vi?: string | null
   description?: string | null
   description_ko?: string | null
   description_en?: string | null
   description_ja?: string | null
+  description_zh?: string | null
   description_es?: string | null
+  description_pt?: string | null
   description_de?: string | null
   description_fr?: string | null
+  description_it?: string | null
+  description_vi?: string | null
   tags?: string[] | null
   imagination_question?: string | null
   difficulty?: PrintableDifficulty | string | null
@@ -154,9 +178,13 @@ export function normalizePrintable(row: PrintableInput): Printable {
     title_ko,
     title_en,
     title_ja: text(row.title_ja),
+    title_zh: text(row.title_zh),
     title_es: text(row.title_es),
+    title_pt: text(row.title_pt),
     title_de: text(row.title_de),
     title_fr: text(row.title_fr),
+    title_it: text(row.title_it),
+    title_vi: text(row.title_vi),
     category: toPrintableCategory(row.category),
     type: text(row.type) || 'bw',
     age_group: text(row.age_group),
@@ -169,15 +197,23 @@ export function normalizePrintable(row: PrintableInput): Printable {
     parent_guide_ko: text(row.parent_guide_ko),
     parent_guide_en: text(row.parent_guide_en),
     parent_guide_ja: text(row.parent_guide_ja),
+    parent_guide_zh: text(row.parent_guide_zh),
     parent_guide_es: text(row.parent_guide_es),
+    parent_guide_pt: text(row.parent_guide_pt),
     parent_guide_de: text(row.parent_guide_de),
     parent_guide_fr: text(row.parent_guide_fr),
+    parent_guide_it: text(row.parent_guide_it),
+    parent_guide_vi: text(row.parent_guide_vi),
     description_ko,
     description_en: text(row.description_en),
     description_ja: text(row.description_ja),
+    description_zh: text(row.description_zh),
     description_es: text(row.description_es),
+    description_pt: text(row.description_pt),
     description_de: text(row.description_de),
     description_fr: text(row.description_fr),
+    description_it: text(row.description_it),
+    description_vi: text(row.description_vi),
     tags: row.tags ?? [],
     imagination_question: text(row.imagination_question) || undefined,
     difficulty: resolveDifficulty(row),
@@ -199,9 +235,13 @@ export function printableSearchText(item: Printable) {
     item.title_ko,
     item.title_en,
     item.title_ja,
+    item.title_zh,
     item.title_es,
+    item.title_pt,
     item.title_de,
     item.title_fr,
+    item.title_it,
+    item.title_vi,
     item.slug,
     item.category,
     item.theme_ko,

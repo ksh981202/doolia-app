@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { ChevronRight } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { PrintableCard } from '@/components/PrintableCard'
 import { relatedSectionTitle } from '@/shared/lib/detailCopy'
@@ -19,6 +20,7 @@ export function RelatedPrintables({
   categoryLabel?: string
   categoryTo?: string
 }) {
+  const { t } = useTranslation()
   const related = useMemo(() => pickRelatedPrintables(current, items), [current, items])
   if (!related.length) return null
 
@@ -31,7 +33,7 @@ export function RelatedPrintables({
             to={categoryTo}
             className="inline-flex shrink-0 items-center gap-0.5 text-sm font-bold text-emerald-700 hover:text-emerald-800"
           >
-            {categoryLabel} 더보기
+            {categoryLabel} {t('detail.viewMore', '더보기')}
             <ChevronRight className="h-4 w-4" />
           </Link>
         ) : null}

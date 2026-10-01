@@ -1,5 +1,6 @@
 import { Heart, Share2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { LightboxModal } from '@/components/LightboxModal'
 import { cn } from '@/shared/lib/cn'
 import { printableColorUrl, printableLineArtUrl } from '@/shared/utils/printableAssets'
@@ -9,6 +10,7 @@ import type { Printable } from '@/types/printable'
 type PreviewMode = 'line' | 'color'
 
 export function A4Preview({ printable }: { printable: Printable }) {
+  const { t } = useTranslation()
   const [mode, setMode] = useState<PreviewMode>('line')
   const [isZoomed, setIsZoomed] = useState(false)
   const [shareMsg, setShareMsg] = useState('')
@@ -18,7 +20,8 @@ export function A4Preview({ printable }: { printable: Printable }) {
   const lineSrc = printableLineArtUrl(printable)
   const colorSrc = printableColorUrl(printable)
   const previewSrc = mode === 'color' ? colorSrc : lineSrc
-  const title = printable.title_ko || printable.title
+  const title = printable.title || printable.title_ko
+  const likesLabel = t('detail.likes', '좋아요')
 
   useEffect(() => {
     if (!shareMsg) return
@@ -29,9 +32,9 @@ export function A4Preview({ printable }: { printable: Printable }) {
   const share = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href)
-      setShareMsg('링크를 복사했어요')
+      setShareMsg(t('detail.linkCopied', '링크를 복사했어요'))
     } catch {
-      setShareMsg('복사에 실패했어요')
+      setShareMsg(t('detail.copyFailed', '복사에 실패했어요'))
     }
   }
 
@@ -41,20 +44,27 @@ export function A4Preview({ printable }: { printable: Printable }) {
         <div className="flex shrink-0 flex-col gap-3">
           <ThumbnailButton
             src={lineSrc}
-            label="흑백 도안"
+            label={t('detail.thumbnailBw', '흑백 도안')}
             active={mode === 'line'}
             onClick={() => setMode('line')}
           />
           <ThumbnailButton
             src={colorSrc}
-            label="컬러 예시"
+            label={t('detail.thumbnailColor', '컬러 예시')}
             active={mode === 'color'}
             onClick={() => setMode('color')}
           />
         </div>
 
         <div className="flex min-w-0 flex-1 flex-col gap-3">
-          <A4Paper src={previewSrc} title={title} mode={mode} onZoom={() => setIsZoomed(true)} />
+          <A4Paper
+            src={previewSrc}
+            title={title}
+            mode={mode}
+            hint={t('detail.viewColorHint', '좌측 썸네일로 색칠 예시 확인')}
+            zoomLabel={t('detail.zoomIn', '크게 보기')}
+            onZoom={() => setIsZoomed(true)}
+          />
 
           <div className="relative grid w-full grid-cols-2 gap-3">
             <button
@@ -65,10 +75,12 @@ export function A4Preview({ printable }: { printable: Printable }) {
                 bookmarked ? 'border-rose-200 bg-rose-50/80 text-rose-600' : 'border-slate-200',
               )}
               aria-pressed={bookmarked}
-              aria-label={bookmarked ? '좋아요 취소' : '좋아요'}
+              aria-label={likesLabel}
             >
               <Heart className={cn('h-4 w-4 text-rose-500', bookmarked && 'fill-rose-500')} />
-              <span>좋아요 {likesCount}</span>
+              <span>
+                {likesLabel} {likesCount}
+              </span>
             </button>
             <button
               type="button"
@@ -76,7 +88,7 @@ export function A4Preview({ printable }: { printable: Printable }) {
               className="flex h-11 cursor-pointer items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white text-[14px] font-medium text-slate-700 transition-all hover:bg-slate-50 active:scale-[0.99]"
             >
               <Share2 className="h-4 w-4 text-slate-600" />
-              <span>공유하기</span>
+              <span>{t('detail.share', '공유하기')}</span>
             </button>
             {shareMsg ? (
               <p
@@ -91,7 +103,7 @@ export function A4Preview({ printable }: { printable: Printable }) {
       </div>
 
       <div id="doolia-print-sheet" className="hidden">
-        <img src={lineSrc} alt={`${title} 인쇄용 흑백 도안`} />
+        <img src={lineSrc} alt={title} />
       </div>
 
       <LightboxModal
@@ -142,12 +154,15 @@ function ThumbnailButton({
 function A4Paper({
   src,
   title,
-  mode,
+  hint,
+  zoomLabel,
   onZoom,
 }: {
   src: string
   title: string
   mode: PreviewMode
+  hint: string
+  zoomLabel: string
   onZoom: () => void
 }) {
   const [loadedSrc, setLoadedSrc] = useState<string | null>(null)
@@ -177,20 +192,20 @@ function A4Paper({
     <div className="group relative flex aspect-[3/4] w-full items-center justify-center overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-4 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.08)]">
       {!loaded ? <div className="absolute inset-0 animate-pulse bg-slate-100" /> : null}
       <div className="absolute top-3 left-3 z-10 rounded-full bg-slate-900/75 px-2.5 py-1 text-[11px] font-bold text-white shadow-xs backdrop-blur-sm">
-        👈 좌측 썸네일로 색칠 예시 확인
+        👈 {hint}
       </div>
       <button
         type="button"
         onClick={onZoom}
         className="absolute bottom-3 right-3 z-10 rounded-lg bg-slate-900/80 px-2.5 py-1 text-[11px] font-bold text-white opacity-0 shadow-sm backdrop-blur-sm transition-opacity hover:bg-slate-900 group-hover:opacity-100"
       >
-        크게 보기
+        {zoomLabel}
       </button>
       {src ? (
         <img
           key={src}
           src={src}
-          alt={`${title} ${mode === 'line' ? '선화' : '컬러'} 미리보기`}
+          alt={title}
           decoding="async"
           className={cn(
             'relative z-[1] h-full w-full cursor-zoom-in rounded-xl object-contain transition-all duration-300 group-hover:scale-[1.02]',

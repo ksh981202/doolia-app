@@ -6,6 +6,7 @@ import {
   setPrintablePublished,
   type AdminPrintable,
 } from '@/services/adminPrintableService'
+import { printablePath } from '@/shared/config/catalog'
 
 function formatDate(value: string) {
   const date = new Date(value)
@@ -111,7 +112,15 @@ export function AdminPrintablesPage() {
     <div className="space-y-6">
       <div>
         <h1 className="font-display text-2xl font-semibold text-ink">도안 관리</h1>
-        <p className="mt-1 text-sm text-muted">등록은 TSV 대량 업로드로 진행합니다. 목록에서 노출 상태와 삭제를 관리하세요.</p>
+        <p className="mt-1 text-sm text-muted">
+          등록은 TSV 대량 업로드로 진행합니다. 목록에서 노출 상태와 삭제를 관리하세요. 제목·썸네일을 누르면 사용자
+          상세페이지가 새 탭으로 열립니다.
+        </p>
+        <p className="mt-2 text-xs leading-5 text-slate-500">
+          이미지 매칭은 <span className="font-mono">{'{slug}_b'}</span> /{' '}
+          <span className="font-mono">{'{slug}_c'}</span> 파일명을 사용하며, 확장자는{' '}
+          <span className="font-semibold">.jpg / .png / .webp</span> 모두 호환됩니다.
+        </p>
       </div>
 
       <Link
@@ -179,7 +188,9 @@ export function AdminPrintablesPage() {
                   </td>
                 </tr>
               ) : (
-                items.map((item) => (
+                items.map((item) => {
+                  const detailHref = printablePath(item.slug || item.id)
+                  return (
                   <tr key={item.id} className="border-b border-slate-50 last:border-b-0 hover:bg-slate-50/70">
                     <td className="px-4 py-3">
                       <input
@@ -191,18 +202,22 @@ export function AdminPrintablesPage() {
                       />
                     </td>
                     <td className="px-3 py-3">
-                      <img
-                        src={item.image_color_url || item.image_bw_url}
-                        alt=""
-                        className="h-12 w-12 rounded-xl bg-slate-100 object-cover ring-1 ring-slate-100"
-                      />
+                      <a href={detailHref} target="_blank" rel="noopener noreferrer" className="block w-fit">
+                        <img
+                          src={item.image_color_url || item.image_bw_url}
+                          alt=""
+                          className="h-12 w-12 rounded-xl bg-slate-100 object-cover ring-1 ring-slate-100"
+                        />
+                      </a>
                     </td>
                     <td className="px-3 py-3">
                       <p className="font-mono text-[13px] font-bold tracking-tight text-slate-900">{item.slug || '-'}</p>
                     </td>
                     <td className="px-3 py-3">
-                      <p className="font-semibold text-slate-900">{item.title_ko || '-'}</p>
-                      <p className="mt-0.5 text-xs text-slate-400">{item.title_en || ''}</p>
+                      <a href={detailHref} target="_blank" rel="noopener noreferrer" className="block hover:underline">
+                        <p className="font-semibold text-slate-900">{item.title_ko || '-'}</p>
+                        <p className="mt-0.5 text-xs text-slate-400">{item.title_en || ''}</p>
+                      </a>
                     </td>
                     <td className="px-3 py-3 tabular-nums text-slate-600">{formatDate(item.created_at)}</td>
                     <td className="px-3 py-3">
@@ -235,7 +250,8 @@ export function AdminPrintablesPage() {
                       </button>
                     </td>
                   </tr>
-                ))
+                  )
+                })
               )}
             </tbody>
           </table>

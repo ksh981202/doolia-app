@@ -1,5 +1,6 @@
 import { ChevronRight } from 'lucide-react'
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { A4Preview } from '@/components/detail/A4Preview'
 import { DetailSkeleton } from '@/components/detail/DetailSkeleton'
@@ -8,7 +9,7 @@ import { RelatedPrintables } from '@/components/detail/RelatedPrintables'
 import { usePrintableQuery, usePrintablesQuery } from '@/features/gallery/model/usePrintablesQuery'
 import { DEMO_PRINTABLES } from '@/services/printableService'
 import { categoryPath, getAllCatalogTopics, matchesTopicCategory } from '@/shared/config/catalog'
-import { detailTitle, megaBundleCopy, relatedSectionTitle } from '@/shared/lib/detailCopy'
+import { detailTitle, megaBundleCopy } from '@/shared/lib/detailCopy'
 import type { Printable } from '@/types/printable'
 
 type Crumb = { label: string; to?: string }
@@ -31,6 +32,7 @@ function matchesKey(item: Printable, key: string | undefined) {
 }
 
 export function PrintableDetailPage() {
+  const { t, i18n } = useTranslation()
   const { id } = useParams()
   const location = useLocation()
   const fromState = (location.state as DetailLocationState | null)?.printable
@@ -51,13 +53,14 @@ export function PrintableDetailPage() {
     )
   }
 
-  const title = detailTitle(printable)
+  const title = detailTitle(printable, i18n.language || i18n.resolvedLanguage)
   const topic = catalogTopic(printable)
   const mega = megaBundleCopy(printable)
+  const topicLabel = t(`categories.${topic.id}`, topic.label)
 
   const crumbs: Crumb[] = [
-    { label: '홈', to: '/' },
-    { label: topic.label, to: categoryPath(topic.id) },
+    { label: t('nav.home'), to: '/' },
+    { label: topicLabel, to: categoryPath(topic.id) },
     { label: title },
   ]
 
@@ -91,8 +94,8 @@ export function PrintableDetailPage() {
         <RelatedPrintables
           current={printable}
           items={relatedPool}
-          topicLabel={relatedSectionTitle(printable)}
-          categoryLabel={topic.label}
+          topicLabel={t('detail.relatedTitle')}
+          categoryLabel={topicLabel}
           categoryTo={categoryPath(topic.id)}
         />
 

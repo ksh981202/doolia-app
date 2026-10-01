@@ -11,6 +11,10 @@ export function setAdminSession() {
   sessionStorage.setItem(SESSION_KEY, '1')
 }
 
+export function clearAdminSession() {
+  sessionStorage.removeItem(SESSION_KEY)
+}
+
 export function expectedAdminPin() {
   return (import.meta.env.VITE_ADMIN_PIN as string | undefined)?.trim() || 'doolia'
 }

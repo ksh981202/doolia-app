@@ -1,6 +1,7 @@
-import { FileImage, LayoutDashboard, Menu, NotebookPen, Upload, X } from 'lucide-react'
+import { FileImage, LayoutDashboard, Menu, Upload, X } from 'lucide-react'
 import { useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { clearAdminSession } from '@/admin/AdminGuard'
 import { cn } from '@/shared/lib/cn'
 
 export function ProtectedAdminLayout() {
@@ -8,10 +9,9 @@ export function ProtectedAdminLayout() {
 }
 
 const NAV = [
-  { to: '/admin', label: '대시보드', icon: LayoutDashboard, end: true },
-  { to: '/admin/printables', label: '도안 관리', icon: FileImage, end: true },
-  { to: '/admin/printables/upload', label: '대량 업로드', icon: Upload, end: true },
-  { to: '/admin/tips', label: '육아 팁 관리', icon: NotebookPen, end: false },
+  { to: '/admin', label: '📊 대시보드', icon: LayoutDashboard, end: true },
+  { to: '/admin/printables', label: '🎨 도안 관리', icon: FileImage, end: true },
+  { to: '/admin/printables/upload', label: '⬆️ 대량 업로드', icon: Upload, end: true },
 ]
 
 export function AdminLayout() {
@@ -19,6 +19,7 @@ export function AdminLayout() {
   const navigate = useNavigate()
 
   const logout = () => {
+    clearAdminSession()
     navigate('/', { replace: true })
   }
 
@@ -65,6 +66,9 @@ export function AdminLayout() {
               <p className="text-xs font-extrabold tracking-[0.16em] text-emerald-600">DOOLIA ADMIN</p>
             </div>
             {nav}
+            <button type="button" onClick={logout} className="mx-3 mb-4 mt-auto rounded-xl px-3 py-2 text-left text-sm font-bold text-slate-500 hover:bg-slate-50">
+              로그아웃
+            </button>
           </div>
         </div>
       ) : null}

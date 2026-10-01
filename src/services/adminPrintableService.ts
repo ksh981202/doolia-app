@@ -1,4 +1,4 @@
-import { catalogToPrintableCategory, resolveCatalogSlug } from '@/admin/adminOptions'
+import { catalogToPrintableCategory, PRINTABLE_LOCALE_FIELDS, resolveCatalogSlug } from '@/admin/adminOptions'
 import type { ParsedPrintableRow } from '@/admin/parsePrintableSheet'
 import { convertToLosslessWebP } from '@/features/admin/lib/imageOptimization'
 import { supabase } from '@/lib/supabase'
@@ -40,6 +40,57 @@ function str(value?: string | null) {
   return value?.trim() ?? ''
 }
 
+function normalizeAssetType(type?: string | null) {
+  const value = str(type).toLowerCase()
+  if (!value || value === 'coloring' || value === 'coloring-pages' || value === 'colouring') return 'bw'
+  return str(type) || 'bw'
+}
+
+function localeFieldsFrom(source: object) {
+  const record = source as Record<string, string | undefined | null>
+  return Object.fromEntries(PRINTABLE_LOCALE_FIELDS.map((key) => [key, str(record[key])])) as {
+    title_ko: string
+    title_en: string
+    title_ja: string
+    title_zh: string
+    title_es: string
+    title_pt: string
+    title_de: string
+    title_fr: string
+    title_it: string
+    title_vi: string
+    parent_guide_ko: string
+    parent_guide_en: string
+    parent_guide_ja: string
+    parent_guide_zh: string
+    parent_guide_es: string
+    parent_guide_pt: string
+    parent_guide_de: string
+    parent_guide_fr: string
+    parent_guide_it: string
+    parent_guide_vi: string
+    description_ko: string
+    description_en: string
+    description_ja: string
+    description_zh: string
+    description_es: string
+    description_pt: string
+    description_de: string
+    description_fr: string
+    description_it: string
+    description_vi: string
+  }
+}
+
+function missingColumnName(error: { message?: string } | null | undefined) {
+  const message = error?.message ?? ''
+  const match =
+    message.match(/Could not find the '([^']+)' column/i) ||
+    message.match(/column "([^"]+)" of relation/i) ||
+    message.match(/column ([a-z_][a-z0-9_]*) does not exist/i)
+  return match?.[1]
+}
+
 export type PrintableDraft = {
   id?: string
   slug: string
@@ -55,9 +106,13 @@ export type PrintableDraft = {
   description: string
   type?: string
   title_ja?: string
+  title_zh?: string
   title_es?: string
+  title_pt?: string
   title_de?: string
   title_fr?: string
+  title_it?: string
+  title_vi?: string
   category_ko?: string
   category_en?: string
   age_group?: string
@@ -70,15 +125,23 @@ export type PrintableDraft = {
   parent_guide_ko?: string
   parent_guide_en?: string
   parent_guide_ja?: string
+  parent_guide_zh?: string
   parent_guide_es?: string
+  parent_guide_pt?: string
   parent_guide_de?: string
   parent_guide_fr?: string
+  parent_guide_it?: string
+  parent_guide_vi?: string
   description_ko?: string
   description_en?: string
   description_ja?: string
+  description_zh?: string
   description_es?: string
+  description_pt?: string
   description_de?: string
   description_fr?: string
+  description_it?: string
+  description_vi?: string
 }
 
 export function draftFromParsedRow(
@@ -86,16 +149,14 @@ export function draftFromParsedRow(
   images?: { bw?: string; color?: string },
 ): PrintableDraft {
   const publishedRaw = str(row.published).toLowerCase()
+  const locales = localeFieldsFrom(row)
   return {
     id: str(row.id) || undefined,
     slug: str(row.slug).replace(/_[bc]$/i, '') || str(row.slug),
-    type: str(row.type) || 'bw',
-    title_ko: str(row.title_ko),
-    title_en: str(row.title_en),
-    title_ja: str(row.title_ja),
-    title_es: str(row.title_es),
-    title_de: str(row.title_de),
-    title_fr: str(row.title_fr),
+    type: normalizeAssetType(row.type),
+    ...locales,
+    title_ko: locales.title_ko,
+    title_en: locales.title_en,
     category_ko: str(row.category_ko),
     category_en: str(row.category_en),
     catalog_slug:
@@ -108,19 +169,8 @@ export function draftFromParsedRow(
     benefit_1: str(row.benefit_1),
     benefit_2: str(row.benefit_2),
     benefit_3: str(row.benefit_3),
-    parent_guide_ko: str(row.parent_guide_ko),
-    parent_guide_en: str(row.parent_guide_en),
-    parent_guide_ja: str(row.parent_guide_ja),
-    parent_guide_es: str(row.parent_guide_es),
-    parent_guide_de: str(row.parent_guide_de),
-    parent_guide_fr: str(row.parent_guide_fr),
-    description: str(row.description_ko) || str(row.description),
-    description_ko: str(row.description_ko) || str(row.description),
-    description_en: str(row.description_en),
-    description_ja: str(row.description_ja),
-    description_es: str(row.description_es),
-    description_de: str(row.description_de),
-    description_fr: str(row.description_fr),
+    description: locales.description_ko || str(row.description),
+    description_ko: locales.description_ko || str(row.description),
     tags: [row.tags, row.theme_ko, row.theme, row.category_ko].filter(Boolean).join(','),
     image_bw_url: images?.bw ?? str(row.image_bw_url) ?? str(row.image_url),
     image_color_url: images?.color ?? images?.bw ?? str(row.image_color_url),
@@ -149,38 +199,26 @@ function draftToRow(draft: PrintableDraft) {
   const id = draft.id || crypto.randomUUID()
   const category = catalogToPrintableCategory(catalogSlug)
   const titleKo = str(draft.title_ko)
+  const locales = localeFieldsFrom(draft)
   return {
     id,
     slug: str(draft.slug) || id,
-    type: str(draft.type) || 'bw',
+    type: normalizeAssetType(draft.type),
+    ...locales,
     title: titleKo,
     title_ko: titleKo,
-    title_en: str(draft.title_en) || titleKo,
-    title_ja: str(draft.title_ja),
-    title_es: str(draft.title_es),
-    title_de: str(draft.title_de),
-    title_fr: str(draft.title_fr),
+    title_en: locales.title_en || titleKo,
     category,
     catalog_slug: catalogSlug,
     age_group: ageGroup,
     age_group_en: str(draft.age_group_en),
+    theme_ko: str(draft.theme_ko),
     theme_en: str(draft.theme_en),
     benefit_1: str(draft.benefit_1),
     benefit_2: str(draft.benefit_2),
     benefit_3: str(draft.benefit_3),
-    parent_guide_ko: str(draft.parent_guide_ko),
-    parent_guide_en: str(draft.parent_guide_en),
-    parent_guide_ja: str(draft.parent_guide_ja),
-    parent_guide_es: str(draft.parent_guide_es),
-    parent_guide_de: str(draft.parent_guide_de),
-    parent_guide_fr: str(draft.parent_guide_fr),
     description: descriptionKo,
     description_ko: descriptionKo,
-    description_en: str(draft.description_en),
-    description_ja: str(draft.description_ja),
-    description_es: str(draft.description_es),
-    description_de: str(draft.description_de),
-    description_fr: str(draft.description_fr),
     tags,
     line_art_url: str(draft.image_bw_url),
     color_image_url: str(draft.image_color_url),
@@ -188,9 +226,39 @@ function draftToRow(draft: PrintableDraft) {
     image_color_url: str(draft.image_color_url),
     pdf_url: str(draft.pdf_url),
     published: draft.published,
-    views: 0,
-    downloads: 0,
   }
+}
+
+async function upsertPrintableRow(row: Record<string, unknown>) {
+  if (!supabase) return
+  const payload: Record<string, unknown> = { ...row }
+  let lastError: { message?: string } | null = null
+
+  for (let attempt = 0; attempt < 24; attempt += 1) {
+    const { error } = await supabase.from('printables').upsert(payload)
+    if (!error) return
+
+    const missing = missingColumnName(error)
+    if (missing && missing in payload) {
+      delete payload[missing]
+      lastError = error
+      continue
+    }
+
+    const bySlug = await supabase.from('printables').upsert(payload, { onConflict: 'slug' })
+    if (!bySlug.error) return
+
+    const slugMissing = missingColumnName(bySlug.error)
+    if (slugMissing && slugMissing in payload) {
+      delete payload[slugMissing]
+      lastError = bySlug.error
+      continue
+    }
+
+    throw bySlug.error
+  }
+
+  throw lastError ?? new Error('도안 저장에 실패했습니다.')
 }
 
 export async function listAdminPrintables(): Promise<AdminPrintable[]> {
@@ -213,7 +281,6 @@ export async function savePrintable(draft: PrintableDraft) {
   const record: AdminPrintable = {
     ...normalizePrintable({
       ...row,
-      theme_ko: str(draft.theme_ko),
       created_at: new Date().toISOString(),
     }),
     catalog_slug: row.catalog_slug,
@@ -222,27 +289,7 @@ export async function savePrintable(draft: PrintableDraft) {
   }
 
   if (supabase) {
-    const { error } = await supabase.from('printables').upsert(row)
-    if (error) {
-      const bySlug = await supabase.from('printables').upsert(row, { onConflict: 'slug' })
-      if (bySlug.error) {
-        const minimal = {
-          id: row.id,
-          title: row.title,
-          category: row.category,
-          tags: row.tags,
-          color_image_url: row.color_image_url,
-          line_art_url: row.line_art_url,
-          pdf_url: row.pdf_url,
-          slug: row.slug,
-        }
-        const retry = await supabase.from('printables').upsert(minimal)
-        if (retry.error) {
-          const last = await supabase.from('printables').upsert(minimal, { onConflict: 'slug' })
-          if (last.error) throw last.error
-        }
-      }
-    }
+    await upsertPrintableRow(row)
     await deleteLegacyVariantRows(slug)
   }
 

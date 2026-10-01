@@ -41,10 +41,22 @@ function stem(name: string) {
   return fileKey(name).replace(IMAGE_EXT, '')
 }
 
+const IMAGE_EXT_HINT = '.jpg/.png/.webp'
+
 function withDefaultExt(name: string) {
   const key = fileKey(name)
   if (!key) return ''
   return IMAGE_EXT.test(key) ? key : `${key}.jpg`
+}
+
+function expectedPairName(slug: string, variant: 'b' | 'c') {
+  return `${fileKey(slug)}_${variant}${IMAGE_EXT_HINT}`
+}
+
+function expectedSingleName(slug: string) {
+  const key = fileKey(slug)
+  if (!key) return ''
+  return IMAGE_EXT.test(key) ? key : `${key}${IMAGE_EXT_HINT}`
 }
 
 export function basePrintableSlug(value: string) {
@@ -80,7 +92,9 @@ function rowVariant(row: ParsedPrintableRow): 'b' | 'c' | null {
 
 function typeVariant(type: string): 'b' | 'c' | null {
   const value = type.trim().toLowerCase()
-  if (value === 'bw' || value === 'line' || value === 'b') return 'b'
+  if (!value || value === 'bw' || value === 'line' || value === 'b' || value === 'coloring' || value === 'coloring-pages' || value === 'colouring') {
+    return 'b'
+  }
   if (value === 'color' || value === 'colour' || value === 'c') return 'c'
   return null
 }
@@ -173,13 +187,13 @@ export function expectedImageNames(row: ParsedPrintableRow, mode: BulkImageMode)
   const base = groupKeyForRow(row)
   if (mode === 'single') {
     return {
-      bw: withDefaultExt(base || fileKey(row.slug)),
+      bw: expectedSingleName(base || fileKey(row.slug)),
       color: '',
     }
   }
   return {
-    bw: `${base}_b.jpg`,
-    color: `${base}_c.jpg`,
+    bw: expectedPairName(base, 'b'),
+    color: expectedPairName(base, 'c'),
   }
 }
 
@@ -207,8 +221,8 @@ export function matchBulkPrintables(rows: ParsedPrintableRow[], files: File[]): 
     const wantsPair = Boolean(bwFile || colorFile || group.rows.some((row) => rowVariant(row)))
 
     if (wantsPair) {
-      const expectedBw = `${slug}_b.jpg`
-      const expectedColor = `${slug}_c.jpg`
+      const expectedBw = expectedPairName(slug, 'b')
+      const expectedColor = expectedPairName(slug, 'c')
       const missing: string[] = []
       if (!bwFile) missing.push(expectedBw)
       if (!colorFile) missing.push(expectedColor)
@@ -236,8 +250,9 @@ export function matchBulkPrintables(rows: ParsedPrintableRow[], files: File[]): 
       }
     }
 
-    const expectedBw = withDefaultExt(slug)
-    const found = findImageFile(byName, expectedBw)
+    const lookupName = withDefaultExt(slug)
+    const expectedBw = expectedSingleName(slug)
+    const found = findImageFile(byName, lookupName)
     const singleFile =
       found && variantOf(found.name) === null && basePrintableSlug(found.name) === slug ? found : undefined
     const missing: string[] = []

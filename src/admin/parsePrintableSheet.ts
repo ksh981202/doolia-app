@@ -19,6 +19,7 @@ export type ParsedPrintableRow = Record<PrintableTsvColumn, string> & {
   theme: string
   age: string
   description: string
+  image_url: string
 }
 
 const EXTRA_HEADERS = [
@@ -27,6 +28,7 @@ const EXTRA_HEADERS = [
   'category',
   'image_bw_url',
   'image_color_url',
+  'image_url',
   'filename',
   'published',
   'pdf_url',
@@ -47,6 +49,7 @@ function emptyRow(): ParsedPrintableRow {
     category: '',
     image_bw_url: '',
     image_color_url: '',
+    image_url: '',
     filename: '',
     published: '',
     pdf_url: '',
@@ -84,17 +87,23 @@ function detectDelimiter(header: string) {
   return tabs >= commas ? '\t' : ','
 }
 
+function isPairTypeToken(type: string) {
+  const value = type.trim().toLowerCase()
+  return !value || value === 'bw' || value === 'coloring' || value === 'coloring-pages' || value === 'colouring'
+}
+
 function hydrateMatchingFields(row: ParsedPrintableRow) {
-  const imageName = row.image_url || row.image_bw_url || row.filename
-  row.image_url = row.image_url || imageName
+  const imageName = row.image_bw_url || row.image_url || row.filename
   row.image_bw_url = row.image_bw_url || imageName
+  row.image_url = row.image_url || imageName
   row.filename = row.filename || imageName
   row.catalog_slug = row.catalog_slug || resolveCatalogSlug(row.category_en, row.category_ko, row.category)
   row.category = row.category || row.category_en || row.catalog_slug || row.category_ko
+  row.theme_ko = row.theme_ko || row.theme
   row.theme = row.theme || row.theme_ko
   row.age = row.age || row.age_group
   row.description = row.description || row.description_ko
-  row.type = row.type.trim() || 'bw'
+  row.type = isPairTypeToken(row.type) ? 'bw' : row.type.trim()
   row.description_ko = row.description_ko || row.description
 }
 
@@ -104,18 +113,22 @@ export function parsePrintableSheet(text: string): { rows: ParsedPrintableRow[];
 
   const lines = source.split(/\r?\n/).filter((line) => line.trim())
   const delimiter = detectDelimiter(lines[0])
-  const headerCells = splitLine(lines[0], delimiter).map((cell) => cell.trim().toLowerCase())
-  const mapped = headerCells.map((name) => ({
-    column: resolveTsvColumn(name),
-    extra: EXTRA_HEADER_SET.has(name) ? (name as ExtraHeader) : null,
-    official: isPrintableTsvColumn(name),
-  }))
+  const headerCells = splitLine(lines[0], delimiter).map((cell) => cell.trim())
+  const mapped = headerCells.map((name) => {
+    const column = resolveTsvColumn(name)
+    const extraName = name.trim().toLowerCase()
+    return {
+      column,
+      extra: EXTRA_HEADER_SET.has(extraName) ? (extraName as ExtraHeader) : null,
+      official: isPrintableTsvColumn(name.trim().toLowerCase()),
+    }
+  })
 
   const known = mapped.filter((item) => item.column || item.extra).length
   if (known < 3) {
     return {
       rows: [],
-      errors: [`헤더를 읽지 못했습니다. 30개 컬럼 예: ${PRINTABLE_TSV_COLUMNS.join(', ')}`],
+      errors: [`헤더를 읽지 못했습니다. 43개 컬럼 예: ${PRINTABLE_TSV_COLUMNS.join(', ')}`],
     }
   }
 

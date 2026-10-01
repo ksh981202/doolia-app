@@ -55,7 +55,7 @@ export function AdminUploadPage() {
       <div>
         <h1 className="font-display text-2xl font-semibold text-ink">대량 업로드</h1>
         <p className="mt-1 text-sm text-muted">
-          TSV 메타데이터와 이미지 파일을 드롭하면 파일명으로 짝을 맞춘 뒤, 원본 해상도를 유지한 초고화질 WebP로
+          43컬럼 TSV 메타데이터와 이미지 파일을 드롭하면 파일명으로 짝을 맞춘 뒤, 원본 해상도를 유지한 초고화질 WebP로
           변환하여 Storage 업로드와 DB 등록을 진행합니다.
         </p>
         <p className="mt-2 break-all text-[11px] leading-5 text-slate-500">{PRINTABLE_TSV_HEADER}</p>
@@ -92,7 +92,7 @@ export function AdminUploadPage() {
         </FileDropZone>
         <FileDropZone
           label="2. 이미지 파일 (JPG / PNG / WEBP)"
-          hint="색칠공부: {slug}_b.jpg + {slug}_c.jpg · 일반: {slug}.jpg. 원본 픽셀은 축소하지 않고 WebP(품질 0.94)로 저장됩니다."
+          hint="색칠공부: {slug}_b + {slug}_c (확장자 .jpg / .png / .webp 모두 가능) · 일반: {slug}.jpg/.png/.webp. 원본 픽셀은 축소하지 않고 WebP(품질 0.94)로 저장됩니다."
           accept={IMAGE_ACCEPT}
           disabled={bulk.uploading}
           onFiles={onImageFiles}
