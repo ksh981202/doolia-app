@@ -16,6 +16,7 @@ const _assertNewMenuCategories: _AssertNewMenuCategories = true
 void _assertNewMenuCategories
 
 export type PrintableAssetType = 'bw' | 'color' | 'single' | (string & {})
+export type PrintableDifficulty = 'easy' | 'normal' | 'hard'
 
 function text(value: unknown) {
   return typeof value === 'string' ? value.trim() : ''
@@ -54,6 +55,8 @@ export type Printable = {
   description_de: string
   description_fr: string
   tags: string[]
+  imagination_question?: string
+  difficulty?: PrintableDifficulty
   image_bw_url: string
   image_color_url: string
   /** @deprecated image_color_url 사용 */
@@ -101,6 +104,8 @@ export type PrintableInput = {
   description_de?: string | null
   description_fr?: string | null
   tags?: string[] | null
+  imagination_question?: string | null
+  difficulty?: PrintableDifficulty | string | null
   image_bw_url?: string | null
   image_color_url?: string | null
   color_image_url?: string | null
@@ -114,6 +119,21 @@ export type PrintableInput = {
 
 /** DB row alias used by bulk import / select('*') mapping */
 export type PrintableRow = PrintableInput
+
+const DIFFICULTY_VALUES: PrintableDifficulty[] = ['easy', 'normal', 'hard']
+
+function resolveDifficulty(row: PrintableInput): PrintableDifficulty | undefined {
+  const raw = text(row.difficulty).toLowerCase()
+  if (raw === 'easy' || raw === '초급') return 'easy'
+  if (raw === 'normal' || raw === '중급') return 'normal'
+  if (raw === 'hard' || raw === '고급') return 'hard'
+  if (DIFFICULTY_VALUES.includes(raw as PrintableDifficulty)) return raw as PrintableDifficulty
+  const hay = [row.age_group, row.age_group_en, ...(row.tags ?? [])].join(' ')
+  if (/고급|어려|hard|6-7|6~7|7세/.test(hay)) return 'hard'
+  if (/초급|쉬운|easy|2-3|2~3|영아/.test(hay)) return 'easy'
+  if (/중급|normal|4-5|4~5/.test(hay)) return 'normal'
+  return undefined
+}
 
 export function printableSlug(id: string, slug?: string | null) {
   const value = slug?.trim()
@@ -159,6 +179,8 @@ export function normalizePrintable(row: PrintableInput): Printable {
     description_de: text(row.description_de),
     description_fr: text(row.description_fr),
     tags: row.tags ?? [],
+    imagination_question: text(row.imagination_question) || undefined,
+    difficulty: resolveDifficulty(row),
     image_bw_url,
     image_color_url,
     color_image_url: image_color_url,

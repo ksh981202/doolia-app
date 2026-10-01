@@ -60,6 +60,10 @@ export function printableIntro(printable: Printable, language?: string) {
   if (fromDb) return fromDb
   const age = detailAgeLabel(printable).replace(/\s*권장$/, '')
   const name = printable.title_ko || printable.title
+  const text = blob(printable)
+  if (/모양|도형|기초선|기하|파티/.test(text)) {
+    return '동그라미, 세모, 별 모양 요정들을 색칠하며 마음을 안정시키는 기초 도형 도안입니다.'
+  }
   if (printable.category === 'coloring-pages') {
     return `${age} 유아를 위한 왕쉬운 ${name} 도안입니다. 굵은 외곽선으로 처음 색칠을 시작하는 아이의 손가락 힘과 성취감을 길러줍니다.`
   }
@@ -110,9 +114,11 @@ export function brainDevelopmentPoints(printable: Printable): BrainPoint[] {
             printable.category === 'odd-one' ||
             /미로|숨은그림|관찰|집중/.test(text)
           ? ['관찰력 & 집중력', '시각 변별력', '과제 지구력']
-          : printable.category === 'tracing' || printable.category === 'letters'
+            : printable.category === 'tracing' || printable.category === 'letters'
             ? ['소근육 운필력', '기초 학습력', '시선 추적']
-            : ['소근육 발달', '손가락 힘 강화', '시각 인지능력']
+            : /모양|도형|기초선|기하/.test(text)
+              ? ['정서적 안정', '관찰 집중력', '모양 인지']
+              : ['창의적 사고', '소근육 발달', '색채 감각']
 
   const seen = new Set<string>()
   const labels: string[] = []
@@ -143,19 +149,19 @@ export function keywordChips(printable: Printable): string[] {
   }
 
   push(detailAgeLabel(printable).replace(/\s*권장$/, ''))
+  if (printable.theme_ko) push(printable.theme_ko)
+  else if (/도형|기초선|모양/.test(blob(printable))) push('기초선도형')
+  push(CATEGORY_LABEL[printable.category])
+
+  if (printable.category === 'coloring-pages' || /도형|기초선|모양/.test(blob(printable))) {
+    push('왕쉬운색칠')
+    push('굵은외곽선')
+    push('소근육발달')
+  }
 
   for (const tag of printable.tags) {
     if (/세|age|years?/i.test(tag)) continue
     push(tag)
-  }
-
-  if (printable.theme_ko) push(printable.theme_ko)
-  push(CATEGORY_LABEL[printable.category])
-
-  if (printable.category === 'coloring-pages') {
-    push('왕쉬운색칠')
-    push('굵은외곽선')
-    push('소근육발달')
   }
 
   for (const point of brainDevelopmentPoints(printable)) {
@@ -260,5 +266,5 @@ export function megaBundleCopy(printable: Printable) {
 }
 
 export function relatedSectionTitle(_printable?: Printable) {
-  return '🎨 이 도안과 함께하면 좋은 추천 도안'
+  return '🎨 함께 색칠하면 더 재미있는 연관 도안'
 }

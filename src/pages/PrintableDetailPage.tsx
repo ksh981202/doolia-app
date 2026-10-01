@@ -9,7 +9,6 @@ import { usePrintableQuery, usePrintablesQuery } from '@/features/gallery/model/
 import { DEMO_PRINTABLES } from '@/services/printableService'
 import { categoryPath, getAllCatalogTopics, matchesTopicCategory } from '@/shared/config/catalog'
 import { detailTitle, megaBundleCopy, relatedSectionTitle } from '@/shared/lib/detailCopy'
-import { formatAgeRange } from '@/shared/lib/printableMeta'
 import type { Printable } from '@/types/printable'
 
 type Crumb = { label: string; to?: string }
@@ -41,19 +40,7 @@ export function PrintableDetailPage() {
   const demo = DEMO_PRINTABLES.find((item) => matchesKey(item, id))
   const printable = data ?? seeded ?? demo
 
-  const related = useMemo(() => {
-    if (!printable) return []
-    const pool = catalog.data ?? DEMO_PRINTABLES
-    const others = pool.filter((item) => item.id !== printable.id)
-    const ageKey = formatAgeRange([printable.age_group, printable.age_group_en, ...printable.tags].join(' '))
-    const score = (item: Printable) => {
-      const sameCategory = item.category === printable.category ? 2 : 0
-      const itemAge = formatAgeRange([item.age_group, item.age_group_en, ...item.tags].join(' '))
-      const sameAge = ageKey && itemAge === ageKey ? 1 : 0
-      return sameCategory + sameAge
-    }
-    return [...others].sort((a, b) => score(b) - score(a) || b.downloads - a.downloads).slice(0, 4)
-  }, [catalog.data, printable])
+  const relatedPool = useMemo(() => catalog.data ?? DEMO_PRINTABLES, [catalog.data])
 
   if (!printable) {
     if (isPending || !isFetched) return <DetailSkeleton />
@@ -102,7 +89,8 @@ export function PrintableDetailPage() {
         </div>
 
         <RelatedPrintables
-          items={related}
+          current={printable}
+          items={relatedPool}
           topicLabel={relatedSectionTitle(printable)}
           categoryLabel={topic.label}
           categoryTo={categoryPath(topic.id)}

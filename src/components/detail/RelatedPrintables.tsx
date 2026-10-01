@@ -1,25 +1,31 @@
+import { useMemo } from 'react'
 import { ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { PrintableCard } from '@/components/PrintableCard'
+import { relatedSectionTitle } from '@/shared/lib/detailCopy'
+import { pickRelatedPrintables } from '@/shared/utils/relatedPrintables'
 import type { Printable } from '@/types/printable'
 
 export function RelatedPrintables({
+  current,
   items,
   topicLabel,
   categoryLabel,
   categoryTo,
 }: {
+  current: Printable
   items: Printable[]
-  topicLabel: string
+  topicLabel?: string
   categoryLabel?: string
   categoryTo?: string
 }) {
-  if (!items.length) return null
+  const related = useMemo(() => pickRelatedPrintables(current, items), [current, items])
+  if (!related.length) return null
 
   return (
     <section className="mt-12">
       <div className="mb-4 flex items-end justify-between gap-3">
-        <h2 className="text-xl font-bold text-slate-900">{topicLabel}</h2>
+        <h2 className="text-xl font-bold text-slate-900">{topicLabel || relatedSectionTitle(current)}</h2>
         {categoryTo && categoryLabel ? (
           <Link
             to={categoryTo}
@@ -31,7 +37,7 @@ export function RelatedPrintables({
         ) : null}
       </div>
       <div className="grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-4">
-        {items.map((printable) => (
+        {related.map((printable) => (
           <PrintableCard key={printable.id} printable={printable} variant="catalog" />
         ))}
       </div>

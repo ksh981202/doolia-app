@@ -34,9 +34,9 @@ export function SubpageHeader({ crumbs, title, emoji }: SubpageHeaderProps) {
           )
         })}
       </nav>
-      <h1 className="flex items-center gap-2 text-2xl font-bold tracking-tight text-slate-900 sm:text-[22px]">
-        {emoji ? <span>{emoji}</span> : null}
-        <span>{title}</span>
+      <h1 className="flex min-w-0 flex-wrap items-center gap-2 text-xl font-bold text-slate-800 sm:text-2xl">
+        {emoji ? <span className="shrink-0">{emoji}</span> : null}
+        <span className="min-w-0 break-keep">{title}</span>
       </h1>
     </div>
   )

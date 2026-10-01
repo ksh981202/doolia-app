@@ -190,3 +190,34 @@
   box-shadow: none !important;
   border-bottom: 1px solid #d1fae5 !important;
 }
+
+@media print {
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  #doolia-print-sheet,
+  #doolia-print-sheet * {
+    visibility: visible !important;
+  }
+
+  #doolia-print-sheet {
+    position: fixed;
+    inset: 0;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+  }
+
+  #doolia-print-sheet img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+}

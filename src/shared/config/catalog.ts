@@ -51,12 +51,49 @@ export const KIDS_THEME_NAV: SidebarThemeLink[] = [
   { id: 'seasons', emoji: '🌸', label: '계절 & 기념일' },
 ]
 
-export const SENIOR_THEME_NAV: SidebarThemeLink[] = [
-  { id: 'flowers', emoji: '🌸', label: '꽃 & 보태니컬 식물' },
-  { id: 'landscape', emoji: '⛰️', label: '평온한 자연 & 풍경' },
-  { id: 'memories', emoji: '🏡', label: '따뜻한 추억 & 일상' },
-  { id: 'tradition', emoji: '🎨', label: '한국 전통 & 쉬운 민화' },
-]
+export const HEALING_THEMES = [
+  {
+    id: 'flowers-plants',
+    name: '아름다운 꽃 & 식물',
+    icon: '🌸',
+    query: '꽃|식물|화초|정원|화분|장미|튤립|해바라기|들꽃|flower|plant|garden',
+    path: '/category/senior-art?theme=flowers-plants',
+  },
+  {
+    id: 'nature-landscapes',
+    name: '평온한 자연 & 풍경',
+    icon: '🏞️',
+    query: '자연|풍경|숲|바다|산|호수|오솔길|등대|해변|landscape|nature|scenery',
+    path: '/category/senior-art?theme=nature-landscapes',
+  },
+  {
+    id: 'healing-animals',
+    name: '힐링 동물 & 새',
+    icon: '🐾',
+    query: '동물|새|고양이|강아지|사슴|나비|힐링동물|bird|cat|dog|healing-animals',
+    path: '/category/senior-art?theme=healing-animals',
+  },
+  {
+    id: 'cozy-daily',
+    name: '따뜻한 일상 & 쉼',
+    icon: '🏡',
+    query: '일상|쉼|휴식|거실|창가|방|벽난로|소품|집|cozy|home|daily|rest',
+    path: '/category/senior-art?theme=cozy-daily',
+  },
+  {
+    id: 'simple-bold',
+    name: '쉬운 큰 그림 (굵은선 & 소품)',
+    icon: '👓',
+    query: '큰그림|굵은선|쉬운도안|과일|사과|소품|단순도안|시니어|어르신|large-print|bold|simple|easy',
+    path: '/category/senior-art?theme=simple-bold',
+  },
+] as const
+
+export const SENIOR_THEME_NAV: SidebarThemeLink[] = HEALING_THEMES.map((item) => ({
+  id: item.id,
+  emoji: item.icon,
+  label: item.name,
+}))
 
 export const SENIOR_THEMES = SENIOR_THEME_NAV
 
@@ -99,13 +136,13 @@ export const CATALOG_NAV_GROUPS: CatalogNavGroup[] = [
   },
   {
     id: 'senior-art',
-    name: '성인 & 시니어 컬러링',
+    name: '온가족 힐링 컬러링',
     icon: '🌿',
-    items: SENIOR_THEMES.map((item) => ({
+    items: HEALING_THEMES.map((item) => ({
       id: item.id,
-      name: item.label,
-      icon: item.emoji,
-      path: `/category/senior-art?theme=${item.id}`,
+      name: item.name,
+      icon: item.icon,
+      path: item.path,
     })),
   },
 ]
@@ -183,13 +220,13 @@ export const CATALOG_GROUPS: CatalogGroup[] = [
   },
   {
     id: 'healing',
-    label: '성인 & 시니어 컬러링',
+    label: '온가족 힐링 컬러링',
     emoji: '🌿',
-    subtitle: '힐링 컬러링',
+    subtitle: '자연과 쉼',
     children: [
-      topic('senior-art', '성인 & 시니어 컬러링', '시니어|어르신|인지|힐링', '🌿', 0, ALL_ONLY, {
+      topic('senior-art', '온가족 힐링 컬러링', '시니어|어르신|인지|힐링|꽃|자연|풍경', '🌿', 0, ALL_ONLY, {
         categoryFilter: 'senior-art',
-        description: '성인과 시니어를 위한 힐링 컬러링 도안입니다.',
+        description: '가족과 시니어가 함께 즐기는 평온한 힐링 컬러링 도안입니다.',
       }),
     ],
   },

@@ -19,7 +19,7 @@ export function Footer() {
         <div>
           <p className="text-xs font-extrabold tracking-[0.16em] text-muted">CATEGORIES</p>
           <div className="mt-3 flex flex-col gap-2 text-sm font-semibold">
-            {CATALOG_GROUPS.map((group) => (
+            {CATALOG_GROUPS.filter((group) => group.id !== 'healing').map((group) => (
               <Link
                 key={group.id}
                 to={categoryPath(group.children[0].id)}

@@ -16,9 +16,7 @@ import {
 import {
   AGE_FILTERS,
   isAgeFilterId,
-  isThemeFilterId,
   matchesAgeFilter,
-  matchesThemeFilter,
   resolveTypeSlug,
 } from '@/shared/config/smartFilters'
 import { cn } from '@/shared/lib/cn'
@@ -27,10 +25,39 @@ const CARD_GRID = 'mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'
 
 function filterChipClass(active: boolean) {
   return cn(
-    'inline-flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-2 text-[13px] font-bold transition-all',
+    'inline-flex shrink-0 items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-[13.5px] font-medium transition-all sm:text-sm',
     active
-      ? 'bg-emerald-600 text-white shadow-2xs'
+      ? 'bg-emerald-600 font-bold text-white shadow-sm'
       : 'border border-slate-200/90 bg-white text-slate-700 hover:bg-slate-50',
+  )
+}
+
+function SortSelect({
+  value,
+  onChange,
+  align,
+}: {
+  value: string
+  onChange: (value: string) => void
+  align?: 'lg'
+}) {
+  return (
+    <label
+      className={cn(
+        'flex shrink-0 items-center gap-2 text-xs font-bold text-muted sm:text-sm',
+        align === 'lg' ? 'lg:pt-5' : 'sm:pt-0.5',
+      )}
+    >
+      정렬
+      <select
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="h-10 rounded-full border border-line bg-white px-3 text-xs font-bold text-ink sm:text-sm"
+      >
+        <option value="popular">인기순</option>
+        <option value="latest">최신순</option>
+      </select>
+    </label>
   )
 }
 
@@ -44,17 +71,16 @@ export function CategoryPage() {
   const { data, isLoading } = usePrintablesQuery()
   const age = isAgeFilterId(params.get('age') ?? 'all') ? (params.get('age') ?? 'all') : 'all'
   const themeParam = params.get('theme') ?? params.get('tag') ?? 'all'
-  const themeOptions = getCategoryThemes(match?.topic.id)
-  const theme = match
-    ? resolveCategoryThemeId(match.topic.id, themeParam)
-    : isThemeFilterId(themeParam)
-      ? themeParam
-      : 'all'
+  const themeScopeSlug = match?.topic.id ?? DEFAULT_CATEGORY_SLUG
+  const themeOptions = getCategoryThemes(themeScopeSlug)
+  const theme = resolveCategoryThemeId(themeScopeSlug, themeParam)
   const subOptions = getThemeSubCategories(theme)
   const sub = resolveThemeSubId(theme, params.get('sub') ?? 'all')
   const parentTheme = themeOptions?.find((item) => item.id === theme)
-  const chipOptions = subOptions ?? themeOptions
-  const chipValue = subOptions ? sub : theme
+  const isSenior = match?.topic.id === 'senior-art'
+  const healingTheme = isSenior && parentTheme && parentTheme.id !== 'all' ? parentTheme : undefined
+  const themeLocked = Boolean(!browseAll && theme !== 'all')
+  const showSubChips = Boolean(theme !== 'all' && subOptions?.length)
   const sortParam = params.get('sort')
   const sort = sortParam === 'popular' || sortParam === 'latest' ? sortParam : browseAll ? 'latest' : 'popular'
   const query = params.get('q') ?? ''
@@ -71,15 +97,13 @@ export function CategoryPage() {
           : source.filter((item) => matchesQuery(item, match.topic.query))
     return scoped
       .filter((item) => matchesQuery(item, query))
-      .filter((item) => matchesAgeFilter(item, age))
+      .filter((item) => (isSenior ? true : matchesAgeFilter(item, age)))
       .filter((item) => {
-        const parentMatch = themeOptions
-          ? (() => {
-              const option = themeOptions.find((entry) => entry.id === theme)
-              if (!option || option.id === 'all') return true
-              return matchesQuery(item, option.query ?? '')
-            })()
-          : matchesThemeFilter(item, theme)
+        const parentMatch = (() => {
+          const option = themeOptions?.find((entry) => entry.id === theme)
+          if (!option || option.id === 'all') return true
+          return matchesQuery(item, option.query ?? '')
+        })()
         if (!parentMatch) return false
         if (!subOptions || sub === 'all') return true
         const subOption = subOptions.find((entry) => entry.id === sub)
@@ -91,7 +115,7 @@ export function CategoryPage() {
           ? +new Date(b.created_at) - +new Date(a.created_at)
           : b.downloads - a.downloads || +new Date(b.created_at) - +new Date(a.created_at),
       )
-  }, [age, browseAll, data, match, query, sort, sub, subOptions, theme, themeOptions])
+  }, [age, browseAll, data, isSenior, match, query, sort, sub, subOptions, theme, themeOptions])
 
   const destSlug = typeSlug ?? categoryQuerySlug
   if (browseAll && destSlug) {
@@ -115,36 +139,49 @@ export function CategoryPage() {
     return <Navigate to={categoryPath(DEFAULT_CATEGORY_SLUG)} replace />
   }
 
-  const title = match
-    ? parentTheme && parentTheme.id !== 'all'
-      ? parentTheme.name
-      : match.topic.label
-    : age === 'all'
-      ? '프린트 도안 전체보기'
-      : `${ageLabel} 맞춤 도안`
-  const emoji = match
-    ? parentTheme?.icon || match.topic.emoji
-    : age === 'all'
-      ? '📚'
-      : '👶'
-  const crumbs = match
+  const title = isSenior
+    ? healingTheme?.name ?? match?.topic.label ?? '온가족 힐링 컬러링'
+    : match
+      ? parentTheme && parentTheme.id !== 'all'
+        ? parentTheme.name
+        : match.topic.label
+      : age === 'all'
+        ? '전체 색칠도안'
+        : `${ageLabel} 맞춤 도안`
+  const emoji = isSenior
+    ? healingTheme?.icon || match?.topic.emoji || '🌿'
+    : match
+      ? parentTheme?.icon || match.topic.emoji
+      : age === 'all'
+        ? '🎨'
+        : '👶'
+  const crumbs = isSenior
     ? [
         { label: '홈', to: '/' },
-        { label: match.group.label, to: '/category' },
-        ...(parentTheme && parentTheme.id !== 'all'
-          ? [{ label: parentTheme.name }]
-          : [{ label: match.topic.label }]),
+        {
+          label: '온가족 힐링 컬러링',
+          ...(healingTheme ? { to: categoryPath('senior-art') } : {}),
+        },
+        ...(healingTheme ? [{ label: healingTheme.name }] : []),
       ]
-    : age === 'all'
+    : match
       ? [
           { label: '홈', to: '/' },
-          { label: '무료 도안 전체' },
+          { label: match.group.label, to: '/category' },
+          ...(parentTheme && parentTheme.id !== 'all'
+            ? [{ label: parentTheme.name }]
+            : [{ label: match.topic.label }]),
         ]
-      : [
-          { label: '홈', to: '/' },
-          { label: '무료 도안 전체', to: '/category' },
-          { label: ageLabel },
-        ]
+      : age === 'all'
+        ? [
+            { label: '홈', to: '/' },
+            { label: '전체 색칠도안' },
+          ]
+        : [
+            { label: '홈', to: '/' },
+            { label: '전체 색칠도안', to: '/category' },
+            { label: ageLabel },
+          ]
 
   const setFilter = (key: 'age' | 'theme' | 'sub', value: string) => {
     const next = new URLSearchParams(params)
@@ -169,52 +206,111 @@ export function CategoryPage() {
       <SubpageHeader crumbs={crumbs} title={title} emoji={emoji} />
 
       <div>
-        <div className="mb-8 space-y-4 rounded-2xl border border-slate-200/80 bg-slate-50/50 p-5">
-          <div className="flex flex-col gap-3 border-b border-slate-100 pb-4 lg:flex-row lg:items-start lg:justify-between">
-            <div className="min-w-0 flex-1">
-              <p className="mb-2 text-xs font-bold text-slate-700">연령</p>
-              <div className="flex flex-wrap items-center gap-2 py-1" role="tablist" aria-label="연령 필터">
-                {AGE_FILTERS.map((item) => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    role="tab"
-                    aria-selected={age === item.id}
-                    onClick={() => setFilter('age', item.id)}
-                    className={filterChipClass(age === item.id)}
-                  >
-                    {item.label}
-                  </button>
-                ))}
+        <div
+          className={cn(
+            'rounded-2xl border border-slate-200/80 bg-slate-50/50 p-4 sm:p-5',
+            isSenior || themeLocked ? 'mb-5 space-y-2.5' : 'mb-6 space-y-3',
+          )}
+        >
+          {isSenior ? (
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0 flex-1">
+                <p className="mb-1.5 text-sm font-bold text-slate-700">세부 주제</p>
+                <ThemeFilter
+                  value={themeLocked && showSubChips ? sub : theme}
+                  onChange={(id) => setFilter(themeLocked && showSubChips ? 'sub' : 'theme', id)}
+                  options={themeLocked && showSubChips ? subOptions : themeOptions}
+                  variant={themeLocked && showSubChips ? 'sub' : 'parent'}
+                  showExpandCaret={false}
+                />
               </div>
-            </div>
-            <label className="flex items-center gap-2 text-xs font-bold text-muted sm:text-sm lg:pt-6">
-              정렬
-              <select
+              <SortSelect
                 value={sort}
-                onChange={(event) => {
+                onChange={(value) => {
                   const next = new URLSearchParams(params)
-                  next.set('sort', event.target.value)
+                  next.set('sort', value)
                   setParams(next)
                 }}
-                className="h-10 rounded-full border border-line bg-white px-3 text-xs font-bold text-ink sm:text-sm"
+              />
+            </div>
+          ) : (
+            <>
+              <div
+                className={cn(
+                  'flex flex-col gap-2 lg:flex-row lg:items-start lg:justify-between',
+                  themeLocked ? 'border-b border-slate-100 pb-2.5' : 'border-b border-slate-100 pb-3',
+                )}
               >
-                <option value="popular">인기순</option>
-                <option value="latest">최신순</option>
-              </select>
-            </label>
-          </div>
+                <div className="min-w-0 flex-1">
+                  <p className="mb-1.5 text-sm font-bold text-slate-700">연령</p>
+                  <div className="flex flex-wrap items-center gap-1.5" role="tablist" aria-label="연령 필터">
+                    {AGE_FILTERS.map((item) => (
+                      <button
+                        key={item.id}
+                        type="button"
+                        role="tab"
+                        aria-selected={age === item.id}
+                        onClick={() => setFilter('age', item.id)}
+                        className={filterChipClass(age === item.id)}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <SortSelect
+                  value={sort}
+                  onChange={(value) => {
+                    const next = new URLSearchParams(params)
+                    next.set('sort', value)
+                    setParams(next)
+                  }}
+                  align="lg"
+                />
+              </div>
 
-          <div className="min-w-0">
-            <p className="mb-2 text-xs font-bold text-slate-700">
-              {subOptions && parentTheme ? parentTheme.name : '주제'}
-            </p>
-            <ThemeFilter
-              value={chipValue}
-              onChange={(id) => setFilter(subOptions ? 'sub' : 'theme', id)}
-              options={chipOptions}
-            />
-          </div>
+              {themeLocked ? (
+                showSubChips ? (
+                  <div className="min-w-0">
+                    <p className="mb-1.5 text-sm font-bold text-slate-700">세부 주제</p>
+                    <ThemeFilter
+                      value={sub}
+                      onChange={(id) => setFilter('sub', id)}
+                      options={subOptions}
+                      variant="sub"
+                      showExpandCaret={false}
+                    />
+                  </div>
+                ) : null
+              ) : (
+                <div className="min-w-0 space-y-3">
+                  <div>
+                    <p className="mb-1.5 text-sm font-bold text-slate-700">주제</p>
+                    <ThemeFilter
+                      value={theme}
+                      onChange={(id) => setFilter('theme', id)}
+                      options={themeOptions}
+                      variant="parent"
+                    />
+                  </div>
+                  {showSubChips ? (
+                    <div className="mt-3 rounded-2xl border border-emerald-100/80 bg-emerald-50/50 p-3.5">
+                      <p className="mb-2 flex items-center gap-1.5 text-xs font-bold text-emerald-800 sm:text-sm">
+                        <span aria-hidden>{parentTheme?.icon || '✨'}</span>
+                        <span>{parentTheme?.name || '이 테마'} 세부 도안 모아보기</span>
+                      </p>
+                      <ThemeFilter
+                        value={sub}
+                        onChange={(id) => setFilter('sub', id)}
+                        options={subOptions}
+                        variant="sub"
+                      />
+                    </div>
+                  ) : null}
+                </div>
+              )}
+            </>
+          )}
         </div>
 
         <section id="category-grid" className="scroll-mt-24">
