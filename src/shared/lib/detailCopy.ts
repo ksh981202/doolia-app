@@ -178,6 +178,9 @@ const BENEFIT_ALIASES: Record<string, string> = {
   기초학습력: '기초학습력',
   시선추적: '시선추적',
   모양인지: '모양인지',
+  표현력향상: '표현력향상',
+  상상력자극: '상상력자극',
+  감정조절: '감정조절',
 }
 
 const BENEFIT_I18N: Record<string, Record<string, string>> = {
@@ -401,6 +404,39 @@ const BENEFIT_I18N: Record<string, Record<string, string>> = {
     it: 'Forme',
     vi: 'Nhận dạng hình',
   },
+  표현력향상: {
+    en: 'Expression',
+    ja: '表現力',
+    zh: '表達力',
+    es: 'Expresión',
+    pt: 'Expressão',
+    de: 'Ausdruck',
+    fr: 'Expression',
+    it: 'Espressione',
+    vi: 'Diễn đạt',
+  },
+  상상력자극: {
+    en: 'Imagination',
+    ja: '想像力',
+    zh: '想像力',
+    es: 'Imaginación',
+    pt: 'Imaginação',
+    de: 'Fantasie',
+    fr: 'Imagination',
+    it: 'Immaginazione',
+    vi: 'Tưởng tượng',
+  },
+  감정조절: {
+    en: 'Emotional Regulation',
+    ja: '感情のコントロール',
+    zh: '情緒調節',
+    es: 'Regulación emocional',
+    pt: 'Regulação emocional',
+    de: 'Emotionsregulation',
+    fr: 'Régulation émotionnelle',
+    it: 'Regolazione emotiva',
+    vi: 'Điều hòa cảm xúc',
+  },
 }
 
 export function localizeBenefit(label: string, lang: string): string {
@@ -562,22 +598,6 @@ export function parentCoachingTips(printable: Printable) {
   ]
 }
 
-export function megaBundleCopy(printable: Printable) {
-  const text = blob(printable)
-  if (/공룡|티라노/.test(text)) {
-    return {
-      title: 'DOOLIA 공룡 두뇌발달 MEGA 패키지',
-      price: '₩4,900',
-      description: '공룡 색칠·미로·점잇기 50종 일괄 다운로드',
-    }
-  }
-  return {
-    title: 'DOOLIA 두뇌·습관 MEGA 패키지',
-    price: '₩4,900',
-    description: '색칠·두뇌놀이·루틴 활동지 50종 일괄 다운로드',
-  }
-}
-
 export function relatedSectionTitle(_printable?: Printable) {
-  return i18n.t('detail.relatedTitle')
+  return i18n.t('detail.relatedTitle', '🎨 함께 추천하는 도안')
 }

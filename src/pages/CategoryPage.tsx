@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Navigate, useParams, useSearchParams } from 'react-router-dom'
 import { ThemeFilter } from '@/components/category/ThemeFilter'
 import { PrintableCard } from '@/components/PrintableCard'
@@ -62,6 +63,7 @@ function SortSelect({
 }
 
 export function CategoryPage() {
+  const { t } = useTranslation()
   const { slug } = useParams()
   const [params, setParams] = useSearchParams()
   const typeSlug = resolveTypeSlug(params.get('type'))
@@ -140,13 +142,13 @@ export function CategoryPage() {
   }
 
   const title = isSenior
-    ? healingTheme?.name ?? match?.topic.label ?? '온가족 힐링 컬러링'
+    ? healingTheme?.name ?? t('categories.senior-art', match?.topic.label ?? '온가족 힐링 컬러링')
     : match
       ? parentTheme && parentTheme.id !== 'all'
-        ? parentTheme.name
-        : match.topic.label
+        ? t(`categories.${parentTheme.id}`, parentTheme.name)
+        : t(`categories.${match.topic.id}`, match.topic.label)
       : age === 'all'
-        ? '전체 색칠도안'
+        ? t('catalog.allCategory', '전체 색칠도안 (ALL)')
         : `${ageLabel} 맞춤 도안`
   const emoji = isSenior
     ? healingTheme?.icon || match?.topic.emoji || '🌿'

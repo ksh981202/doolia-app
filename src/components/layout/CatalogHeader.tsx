@@ -1,5 +1,6 @@
 import { Bookmark, Menu, Search } from 'lucide-react'
 import { type FormEvent } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { DEFAULT_CATEGORY_SLUG, categoryPath } from '@/shared/config/catalog'
 import { useBookmarkStore } from '@/shared/store/useBookmarkStore'
@@ -9,6 +10,7 @@ type CatalogHeaderProps = {
 }
 
 export function CatalogHeader({ onMenu }: CatalogHeaderProps) {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation()
   const [params, setParams] = useSearchParams()
@@ -50,7 +52,7 @@ export function CatalogHeader({ onMenu }: CatalogHeaderProps) {
         <input
           value={query}
           onChange={(event) => applyQuery(event.target.value)}
-          placeholder="도안 이름, 공룡, 자동차를 검색하세요"
+          placeholder={t('header.searchPlaceholder', '도안 이름, 놀이 아이디어를 검색하세요')}
           className="h-9 min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted"
         />
       </form>

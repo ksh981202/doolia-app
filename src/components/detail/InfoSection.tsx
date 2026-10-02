@@ -4,7 +4,6 @@ import {
   brainDevelopmentPoints,
   detailAgeLabel,
   detailTitle,
-  keywordChips,
   printableIntro,
   printableQuestion,
 } from '@/shared/lib/detailCopy'
@@ -38,14 +37,13 @@ export function InfoSection({ printable }: { printable: Printable }) {
   const note = printableIntro(printable, locale)
   const question = printableQuestion(printable, locale)
   const points = brainDevelopmentPoints(printable, locale)
-  const chips = keywordChips(printable, locale)
   const likesCount = bookmarked ? 4 : 3
   const viewsCount = printable.views || 17
   const titleBreak = isCjkLocale(locale) ? 'break-keep' : 'break-words'
 
   return (
     <aside>
-      <div className="mb-4">
+      <div>
         <div className="flex flex-wrap items-center gap-2">
           <span className="inline-flex items-center rounded-xl border border-amber-200/60 bg-amber-50 px-3 py-1.5 text-[13px] font-bold text-amber-800">
             {age}
@@ -57,7 +55,7 @@ export function InfoSection({ printable }: { printable: Printable }) {
         <h1 className="my-2.5 break-all text-[22px] font-extrabold leading-snug tracking-tight text-slate-900 sm:text-[26px] md:text-[28px]">
           {title}
         </h1>
-        <div className="mb-3 flex items-center gap-3.5 text-[13px] font-medium text-slate-500">
+        <div className="mb-5 flex items-center gap-3.5 text-[13px] font-medium text-slate-500 sm:mb-6">
           <div className="flex items-center gap-1.5">
             <Heart className="h-4 w-4 fill-rose-500 text-rose-500" />
             <span>
@@ -71,18 +69,6 @@ export function InfoSection({ printable }: { printable: Printable }) {
             </span>
           </div>
         </div>
-        {chips.length ? (
-          <div className="flex flex-wrap gap-1.5">
-            {chips.map((chip) => (
-              <span
-                key={chip}
-                className="inline-flex items-center rounded-lg bg-slate-100/90 px-3 py-1.5 text-[13px] font-medium text-slate-600"
-              >
-                {chip}
-              </span>
-            ))}
-          </div>
-        ) : null}
       </div>
 
       <div className="space-y-3">
@@ -104,15 +90,25 @@ export function InfoSection({ printable }: { printable: Printable }) {
               <span aria-hidden>🎨</span>
               <span>{t('detail.benefitsHeader')}</span>
             </p>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
               {points.map((point) => (
-                <span
+                <div
                   key={point.label}
-                  className="flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-center text-[14px] font-bold text-slate-700 shadow-sm sm:text-[14.5px]"
+                  className="flex min-h-[42px] min-w-0 items-center justify-center gap-1 rounded-xl border border-slate-200/80 bg-white px-2 py-1.5 text-center shadow-xs sm:gap-1.5 sm:rounded-2xl sm:px-3 sm:py-2"
                 >
-                  <span aria-hidden>{pointEmoji(point.label)}</span>
-                  <span>{point.label}</span>
-                </span>
+                  <span aria-hidden className="shrink-0 text-sm sm:text-base">
+                    {pointEmoji(point.label)}
+                  </span>
+                  <span
+                    lang={locale}
+                    className={cn(
+                      'min-w-0 text-center font-semibold leading-tight break-words hyphens-auto text-slate-700',
+                      point.label.length >= 10 ? 'text-[11.5px] sm:text-[13px]' : 'text-[12px] sm:text-[13.5px]',
+                    )}
+                  >
+                    {point.label}
+                  </span>
+                </div>
               ))}
             </div>
           </div>

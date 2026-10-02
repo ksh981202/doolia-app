@@ -3,7 +3,6 @@ import { ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { PrintableCard } from '@/components/PrintableCard'
-import { relatedSectionTitle } from '@/shared/lib/detailCopy'
 import { pickRelatedPrintables } from '@/shared/utils/relatedPrintables'
 import type { Printable } from '@/types/printable'
 
@@ -25,9 +24,9 @@ export function RelatedPrintables({
   if (!related.length) return null
 
   return (
-    <section className="mt-12">
+    <section className="mt-12 mb-12">
       <div className="mb-4 flex items-end justify-between gap-3">
-        <h2 className="text-xl font-bold text-slate-900">{topicLabel || relatedSectionTitle(current)}</h2>
+        <h2 className="text-lg font-bold text-slate-800 sm:text-xl">{topicLabel || t('detail.relatedTitle', '🎨 함께 추천하는 도안')}</h2>
         {categoryTo && categoryLabel ? (
           <Link
             to={categoryTo}

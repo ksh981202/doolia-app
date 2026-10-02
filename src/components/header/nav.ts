@@ -3,25 +3,25 @@ import { CATALOG_GROUPS, categoryPath } from '@/shared/config/catalog'
 export const HEADER_NAV_ITEMS = [
   {
     id: 'themes',
-    label: '테마별 색칠도안',
+    labelKey: 'nav.allPrintables',
     icon: '🎨',
     path: '/category/coloring-pages',
   },
   {
     id: 'imagination',
-    label: '엉뚱발랄 상상나라',
+    labelKey: 'nav.imagination',
     icon: '✨',
     path: '/category/coloring-pages?theme=imagination',
   },
   {
     id: 'age',
-    label: '연령별 맞춤도안',
+    labelKey: 'nav.byAge',
     icon: '👶',
     path: '/category/coloring-pages?age=2-3',
   },
   {
     id: 'popular',
-    label: '지금 인기 도안',
+    labelKey: 'nav.popular',
     icon: '🔥',
     path: '/category/coloring-pages?sort=popular',
   },
@@ -54,4 +54,3 @@ export const CATEGORY_NAV = CATALOG_GROUPS.map((group) => ({
     to: categoryPath(child.id),
   })),
 }))
-

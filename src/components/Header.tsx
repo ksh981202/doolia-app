@@ -1,5 +1,6 @@
 import { ChevronLeft, Search, Settings } from 'lucide-react'
 import { type FormEvent, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { HEADER_NAV_ITEMS, isHeaderNavActive } from '@/components/header/nav'
 import { LanguageSwitcher } from '@/components/header/LanguageSwitcher'
@@ -22,6 +23,7 @@ const iconButtonClass =
 
 
 export function Header() {
+  const { t } = useTranslation()
   const location = useLocation()
   const navigate = useNavigate()
   const [params, setParams] = useSearchParams()
@@ -82,7 +84,7 @@ export function Header() {
                 )}
               >
                 <span className="text-base">{menu.icon}</span>
-                <span className="tracking-tight">{menu.label}</span>
+                <span className="tracking-tight">{t(menu.labelKey)}</span>
               </Link>
             ))}
           </nav>
@@ -91,8 +93,8 @@ export function Header() {
             <button
               type="button"
               onClick={() => navigate(-1)}
-              aria-label="뒤로 가기"
-              title="뒤로가기"
+              aria-label={t('detail.back', '뒤로 가기')}
+              title={t('detail.back', '뒤로 가기')}
               className={iconButtonClass}
             >
               <ChevronLeft size={18} strokeWidth={2} />
@@ -109,7 +111,7 @@ export function Header() {
                   setQuery(value)
                   if (isCategory) applyQuery(value)
                 }}
-                placeholder="도안 이름, 놀이 아이디어를 검색하세요"
+                placeholder={t('header.searchPlaceholder', '도안 이름, 놀이 아이디어를 검색하세요')}
                 className="w-full rounded-full border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-4 text-sm text-slate-800 placeholder:text-slate-400 transition-all focus:border-emerald-500 focus:bg-white focus:outline-none"
               />
             </form>

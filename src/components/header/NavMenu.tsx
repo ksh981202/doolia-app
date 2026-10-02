@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { HEADER_NAV_ITEMS, isHeaderNavActive, type HeaderNavItem } from '@/components/header/nav'
 import { cn } from '@/shared/lib/cn'
@@ -13,6 +14,7 @@ export function NavMenu({
   mobile?: boolean
   onSelect?: (item: HeaderNavItem) => void
 }) {
+  const { t } = useTranslation()
   return (
     <nav
       className={
@@ -40,7 +42,7 @@ export function NavMenu({
           )}
         >
           <span className="text-base">{item.icon}</span>
-          <span className="tracking-tight">{item.label}</span>
+          <span className="tracking-tight">{t(item.labelKey)}</span>
         </Link>
       ))}
     </nav>

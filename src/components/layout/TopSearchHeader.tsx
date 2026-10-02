@@ -1,5 +1,6 @@
 import { Bookmark, ChevronLeft, Menu, Search } from 'lucide-react'
 import { type FormEvent, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { DEFAULT_CATEGORY_SLUG, categoryPath } from '@/shared/config/catalog'
 import { cn } from '@/shared/lib/cn'
@@ -15,6 +16,7 @@ function isHomePath(pathname: string) {
 }
 
 export function TopSearchHeader({ onMenu, variant = 'sticky' }: TopSearchHeaderProps) {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation()
   const [params, setParams] = useSearchParams()
@@ -93,7 +95,7 @@ export function TopSearchHeader({ onMenu, variant = 'sticky' }: TopSearchHeaderP
               setQuery(value)
               if (isCategory) applyQuery(value)
             }}
-            placeholder="도안 이름, 놀이 아이디어를 검색하세요"
+            placeholder={t('header.searchPlaceholder', '도안 이름, 놀이 아이디어를 검색하세요')}
             className={cn(
               'w-full rounded-full border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-4 text-sm text-slate-800 placeholder:text-slate-400 transition-all focus:border-emerald-500 focus:bg-white focus:outline-none',
               inline && 'shadow-sm',

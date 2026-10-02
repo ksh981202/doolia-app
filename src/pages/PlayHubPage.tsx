@@ -1,64 +1,52 @@
 import { useMemo, useState, type FormEvent } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 import { Search } from 'lucide-react'
 import { PrintableCard } from '@/components/PrintableCard'
 import { usePrintablesQuery } from '@/features/gallery/model/usePrintablesQuery'
 import { selectHomePrintables } from '@/services/printableService'
 import { printablePath } from '@/shared/config/catalog'
+import { pickLocalized } from '@/shared/lib/detailCopy'
 import type { Printable } from '@/types/printable'
 
-const POPULAR_TAGS = ['공룡', '유니콘', '자동차', '상상나라', '귀여운 동물'] as const
+const POPULAR_TAGS = [
+  { id: 'dino', q: '공룡' },
+  { id: 'unicorn', q: '유니콘' },
+  { id: 'car', q: '자동차' },
+  { id: 'imagination', q: '상상나라' },
+  { id: 'animals', q: '귀여운 동물' },
+] as const
 
-const WHY_DOOLIA = [
-  {
-    icon: '🖨️',
-    title: '100% 무료 초고화질',
-    desc: '회원가입 없이 원하는 도안을 언제든 A4 표준 규격으로 즉시 인쇄하세요.',
-  },
-  {
-    icon: '✏️',
-    title: '선명하고 깔끔한 라인',
-    desc: '아이들이 삐져나가지 않고 쉽게 칠할 수 있도록 선명하고 굵은 외곽선 도안을 제공합니다.',
-  },
-  {
-    icon: '🎨',
-    title: '상상력 자극 12대 테마',
-    desc: '공룡, 자동차부터 상상나라까지 아이의 호기심과 발달 단계에 맞춘 큐레이션을 제공합니다.',
-  },
-  {
-    icon: '👶',
-    title: '연령별 맞춤 난이도',
-    desc: '2~3세 첫 색칠부터 6~7세+ 집중력 발달까지 아이의 소근육 성장에 딱 맞는 도안을 제공합니다.',
-  },
+const WHY_ITEMS = [
+  { id: 'hd', icon: '🖨️' },
+  { id: 'ink', icon: '✏️' },
+  { id: 'variety', icon: '🎨' },
+  { id: 'safe', icon: '🛡️' },
 ] as const
 
 const HOT_THEMES = [
   {
+    id: 'dino',
     to: '/category/coloring-pages?theme=dinosaur',
     icon: '🦖',
-    title: '공룡 & 탈것',
-    desc: '티라노부터 소방차까지 인기 폭발',
     className: 'bg-gradient-to-br from-amber-50 to-orange-50/60 border-orange-100/80',
   },
   {
+    id: 'princess',
     to: '/category/coloring-pages?theme=princess',
     icon: '👑',
-    title: '공주 & 유니콘',
-    desc: '반짝반짝 드레스와 마법의 성',
     className: 'bg-gradient-to-br from-pink-50 to-rose-50/60 border-pink-100/80',
   },
   {
+    id: 'imagination',
     to: '/category/coloring-pages?theme=imagination',
     icon: '✨',
-    title: '엉뚱발랄 상상나라',
-    desc: '창의력 쑥쑥 과자행성과 마법',
     className: 'bg-gradient-to-br from-emerald-50 to-teal-50/60 border-emerald-100/80',
   },
   {
+    id: 'firstColor',
     to: '/category/coloring-pages?age=2-3',
     icon: '👶',
-    title: '2~3세 첫 색칠',
-    desc: '소근육 발달을 돕는 굵은선 도안',
     className: 'bg-gradient-to-br from-blue-50 to-indigo-50/60 border-blue-100/80',
   },
 ] as const
@@ -82,10 +70,11 @@ function lineImage(printable: Printable) {
 }
 
 function HeroSplitPreview({ printable }: { printable: Printable }) {
+  const { i18n } = useTranslation()
   const colorSrc = colorImage(printable)
   const lineSrc = lineImage(printable)
   const grayscaleFallback = lineSrc === colorSrc
-  const alt = printable.title_ko || printable.title
+  const alt = pickLocalized(printable, 'title', i18n.language) || printable.title
 
   return (
     <div className="relative min-h-0 flex-1 overflow-hidden rounded-xl bg-slate-50">
@@ -112,6 +101,7 @@ function HeroSplitPreview({ printable }: { printable: Printable }) {
 }
 
 export function PlayHubPage() {
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const [searchKeyword, setSearchKeyword] = useState('')
   const { data, isLoading } = usePrintablesQuery()
@@ -152,11 +142,11 @@ export function PlayHubPage() {
             <div className="space-y-4 lg:col-span-7">
               <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200/60 bg-emerald-600/10 px-3.5 py-1.5 text-[12px] font-bold text-emerald-900 shadow-2xs backdrop-blur-xs">
                 <span className="text-emerald-700">✨</span>
-                <span>100% 무료 인쇄 · 회원가입 없음 · 초고화질 A4 지원</span>
+                <span>{t('home.badge')}</span>
               </div>
               <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-slate-800 sm:text-4xl lg:text-5xl">
-                아이의 상상력을 무한히 펼치는 <br className="hidden sm:inline" />
-                <span className="text-emerald-600">프리미엄 무료 색칠도안</span>
+                {t('home.titleLead')} <br className="hidden sm:inline" />
+                <span className="text-emerald-600">{t('home.titleAccent')}</span>
               </h1>
               <form onSubmit={handleSearchSubmit} className="relative max-w-lg">
                 <div className="relative flex items-center">
@@ -169,28 +159,28 @@ export function PlayHubPage() {
                     type="text"
                     value={searchKeyword}
                     onChange={(event) => setSearchKeyword(event.target.value)}
-                    placeholder="어떤 도안을 찾으시나요? (예: 공룡, 유니콘, 자동차)"
-                    aria-label="도안 검색"
+                    placeholder={t('header.searchPlaceholder', '도안 이름, 놀이 아이디어를 검색하세요')}
+                    aria-label={t('header.searchPlaceholder', '도안 이름, 놀이 아이디어를 검색하세요')}
                     className="w-full rounded-2xl border border-slate-200/90 bg-white py-3 pr-20 pl-11 text-[13.5px] font-medium text-slate-800 shadow-2xs placeholder:text-slate-400 transition-all focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
                   />
                   <button
                     type="submit"
                     className="absolute right-2 rounded-xl bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow-xs transition-all hover:bg-emerald-700 active:scale-95"
                   >
-                    검색
+                    {t('home.searchBtn')}
                   </button>
                 </div>
               </form>
               <div className="flex flex-wrap items-center gap-2 pt-1.5">
-                <span className="mr-1 text-[13.5px] font-black text-slate-500">인기 검색어:</span>
+                <span className="mr-1 text-[13.5px] font-black text-slate-500">{t('home.popularLabel')}</span>
                 {POPULAR_TAGS.map((tag) => (
                   <button
-                    key={tag}
+                    key={tag.id}
                     type="button"
-                    onClick={() => goToSearch(tag)}
+                    onClick={() => goToSearch(tag.q)}
                     className="rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-[13.5px] font-bold text-slate-700 shadow-2xs transition-all hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-900 active:scale-95"
                   >
-                    {tag}
+                    {t(`home.tags.${tag.id}`)}
                   </button>
                 ))}
               </div>
@@ -206,7 +196,7 @@ export function PlayHubPage() {
                   >
                     <img
                       src={printableImage(left)}
-                      alt={left.title_ko || left.title}
+                      alt={pickLocalized(left, 'title', i18n.language) || left.title}
                       className="h-full w-full rounded-xl bg-slate-50 object-contain"
                     />
                   </Link>
@@ -221,7 +211,7 @@ export function PlayHubPage() {
                   >
                     <img
                       src={printableImage(right)}
-                      alt={right.title_ko || right.title}
+                      alt={pickLocalized(right, 'title', i18n.language) || right.title}
                       className="h-full w-full rounded-xl bg-slate-50 object-contain"
                     />
                   </Link>
@@ -235,11 +225,11 @@ export function PlayHubPage() {
                     className="relative z-10 flex h-[15.75rem] w-[11.5rem] flex-col rounded-2xl border-2 border-emerald-400/70 bg-white p-2.5 shadow-xl transition-transform duration-300 hover:scale-[1.02] sm:h-[17.5rem] sm:w-48"
                   >
                     <span className="mb-1.5 inline-flex w-fit items-center rounded-full bg-emerald-600 px-2 py-0.5 text-[10px] font-black leading-none text-white shadow-2xs sm:text-[10.5px]">
-                      ✨ A4 무료 인쇄 도안
+                      ✨ {t('home.previewBadge')}
                     </span>
                     <HeroSplitPreview printable={front} />
                     <p className="mt-1.5 text-center text-[10px] font-semibold tracking-tight text-slate-500">
-                      컬러 완성 예시 & 흑백 라인 도안
+                      {t('home.previewCaption')}
                     </p>
                   </Link>
                 ) : (
@@ -257,8 +247,8 @@ export function PlayHubPage() {
                 className={`group rounded-3xl border p-5 text-left transition-all hover:shadow-lg ${item.className}`}
               >
                 <div className="mb-3 text-3xl transition-transform group-hover:scale-110">{item.icon}</div>
-                <h3 className="mb-1 text-base font-bold text-slate-800 sm:text-lg">{item.title}</h3>
-                <p className="text-xs text-slate-500 sm:text-sm">{item.desc}</p>
+                <h3 className="mb-1 text-base font-bold text-slate-800 sm:text-lg">{t(`home.hot.${item.id}.title`)}</h3>
+                <p className="text-xs text-slate-500 sm:text-sm">{t(`home.hot.${item.id}.desc`)}</p>
               </Link>
             ))}
           </div>
@@ -268,13 +258,13 @@ export function PlayHubPage() {
       <section id="popular-gallery" className="scroll-mt-24 pb-4">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-[22px]">
-            지금 가장 인기 있는 도안
+            {t('home.popularHeading')}
           </h2>
           <Link
             to="/category/coloring-pages"
             className="flex items-center gap-1 text-[13.5px] font-bold text-slate-500 transition-colors hover:text-emerald-700"
           >
-            <span>전체보기</span>
+            <span>{t('home.viewAll')}</span>
             <span>→</span>
           </Link>
         </div>
@@ -299,21 +289,21 @@ export function PlayHubPage() {
             WHY DOOLIA
           </span>
           <h2 className="text-2xl font-extrabold tracking-tight text-slate-800 sm:text-3xl">
-            아이의 창의력을 깨우는 둘리아의 특별함
+            {t('home.whyTitle')}
           </h2>
           <p className="text-sm font-medium leading-relaxed text-slate-500">
-            복잡한 과정 없이 언제 어디서나 바로 인쇄해서 즐기는 고화질 색칠 놀이 도안
+            {t('home.whySubtitle')}
           </p>
         </div>
         <div className="grid grid-cols-1 gap-6 text-left sm:grid-cols-2 lg:grid-cols-4">
-          {WHY_DOOLIA.map((item) => (
+          {WHY_ITEMS.map((item) => (
             <div
-              key={item.title}
+              key={item.id}
               className="rounded-3xl border border-emerald-100/80 bg-emerald-50/50 p-7 transition-all hover:shadow-md sm:p-8"
             >
               <div className="mb-4 inline-block text-3xl sm:text-4xl">{item.icon}</div>
-              <h3 className="mb-2.5 text-lg font-bold tracking-tight text-slate-800 sm:text-xl">{item.title}</h3>
-              <p className="text-sm font-normal leading-relaxed text-slate-600 sm:text-[14.5px]">{item.desc}</p>
+              <h3 className="mb-2.5 text-lg font-bold tracking-tight text-slate-800 sm:text-xl">{t(`home.why.${item.id}.title`)}</h3>
+              <p className="text-sm font-normal leading-relaxed text-slate-600 sm:text-[14.5px]">{t(`home.why.${item.id}.desc`)}</p>
             </div>
           ))}
         </div>

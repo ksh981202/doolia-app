@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { getCategoryThemes, type ThemeOption } from '@/shared/config/categories'
 import { cn } from '@/shared/lib/cn'
 
@@ -18,9 +19,9 @@ function chipClass(active: boolean) {
   )
 }
 
-function chipLabel(item: ThemeOption, variant: 'parent' | 'sub') {
-  if (variant === 'sub' || !item.icon) return item.name
-  return `${item.icon} ${item.name}`
+function chipLabel(item: ThemeOption, variant: 'parent' | 'sub', name: string) {
+  if (variant === 'sub' || !item.icon) return name
+  return `${item.icon} ${name}`
 }
 
 export function ThemeFilter({
@@ -30,6 +31,7 @@ export function ThemeFilter({
   variant = 'parent',
   showExpandCaret,
 }: ThemeFilterProps) {
+  const { t } = useTranslation()
   const expandCaret = showExpandCaret ?? variant === 'parent'
   const chips = options?.length ? options : getCategoryThemes('coloring-pages')
   if (!chips?.length) return null
@@ -52,7 +54,7 @@ export function ThemeFilter({
           onClick={() => onChange(item.id)}
           className={chipClass(value === item.id)}
         >
-          {chipLabel(item, variant)}
+          {chipLabel(item, variant, t(`categories.${item.id}`, item.name))}
           {expandCaret && value === item.id && item.id !== 'all' ? (
             <span aria-hidden className="text-[10px] leading-none opacity-90">
               ▾

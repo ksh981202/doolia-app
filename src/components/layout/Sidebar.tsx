@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import { CATALOG_NAV_GROUPS, type CatalogNavItem } from '@/shared/config/catalog'
 import { isAgeFilterId } from '@/shared/config/smartFilters'
@@ -28,6 +29,7 @@ function navItemActive(item: CatalogNavItem, pathname: string, search: URLSearch
 }
 
 export function Sidebar({ activeSlug, onNavigate }: SidebarProps) {
+  const { t } = useTranslation()
   const location = useLocation()
   const [params] = useSearchParams()
   const catalogAllActive =
@@ -89,7 +91,7 @@ export function Sidebar({ activeSlug, onNavigate }: SidebarProps) {
           >
             📚
           </span>
-          <span>전체 색칠도안 (ALL)</span>
+          <span>{t('catalog.allCategory', '전체 색칠도안 (ALL)')}</span>
         </span>
       </Link>
 
@@ -110,7 +112,7 @@ export function Sidebar({ activeSlug, onNavigate }: SidebarProps) {
                 icon={item.icon}
                 onClick={onNavigate}
               >
-                {item.name}
+                {t(`categories.${item.id}`, item.name)}
               </SubMenuLink>
             ))}
           </AccordionCard>

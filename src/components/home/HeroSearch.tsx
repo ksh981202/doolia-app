@@ -1,11 +1,13 @@
 import { Search } from 'lucide-react'
 import type { FormEvent } from 'react'
+import { useTranslation } from 'react-i18next'
 import { QuickFinder } from '@/components/home/QuickFinder'
 import { POPULAR_KEYWORDS } from '@/shared/config/categories'
 import { cn } from '@/shared/lib/cn'
 import { scrollToPopularGallery, useGalleryStore } from '@/shared/store/useGalleryStore'
 
 export function HeroSearch() {
+  const { t } = useTranslation()
   const query = useGalleryStore((state) => state.query)
   const setQuery = useGalleryStore((state) => state.setQuery)
   const applyKeyword = useGalleryStore((state) => state.applyKeyword)
@@ -39,7 +41,7 @@ export function HeroSearch() {
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="집중력, 감정, 아침 루틴을 검색해 보세요"
+            placeholder={t('header.searchPlaceholder', '도안 이름, 놀이 아이디어를 검색하세요')}
             className="h-12 min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted/80 sm:text-base"
           />
           <button

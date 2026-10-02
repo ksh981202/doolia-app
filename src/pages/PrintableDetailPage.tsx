@@ -9,7 +9,7 @@ import { RelatedPrintables } from '@/components/detail/RelatedPrintables'
 import { usePrintableQuery, usePrintablesQuery } from '@/features/gallery/model/usePrintablesQuery'
 import { DEMO_PRINTABLES } from '@/services/printableService'
 import { categoryPath, getAllCatalogTopics, matchesTopicCategory } from '@/shared/config/catalog'
-import { detailTitle, megaBundleCopy } from '@/shared/lib/detailCopy'
+import { detailTitle } from '@/shared/lib/detailCopy'
 import type { Printable } from '@/types/printable'
 
 type Crumb = { label: string; to?: string }
@@ -48,14 +48,13 @@ export function PrintableDetailPage() {
     if (isPending || !isFetched) return <DetailSkeleton />
     return (
       <div className="py-16 text-center text-muted">
-        도안을 찾을 수 없어요.
+        {t('detail.notFound', '도안을 찾을 수 없어요.')}
       </div>
     )
   }
 
   const title = detailTitle(printable, i18n.language || i18n.resolvedLanguage)
   const topic = catalogTopic(printable)
-  const mega = megaBundleCopy(printable)
   const topicLabel = t(`categories.${topic.id}`, topic.label)
 
   const crumbs: Crumb[] = [
@@ -67,7 +66,7 @@ export function PrintableDetailPage() {
   return (
     <div className="bg-page">
       <main className="py-6 sm:py-8">
-        <nav className="mb-6 flex items-center gap-2 text-sm font-medium text-slate-500" aria-label="경로">
+        <nav className="mb-6 flex items-center gap-2 text-sm font-medium text-slate-500" aria-label="Breadcrumb">
           {crumbs.map((crumb, index) => (
             <span key={`${crumb.label}-${index}`} className="inline-flex min-w-0 items-center gap-2">
               {index > 0 ? <ChevronRight size={14} className="shrink-0 text-slate-400" /> : null}
@@ -94,26 +93,10 @@ export function PrintableDetailPage() {
         <RelatedPrintables
           current={printable}
           items={relatedPool}
-          topicLabel={t('detail.relatedTitle')}
+          topicLabel={t('detail.relatedTitle', '🎨 함께 추천하는 도안')}
           categoryLabel={topicLabel}
           categoryTo={categoryPath(topic.id)}
         />
-
-        <section className="mt-8 flex flex-col gap-4 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-xs sm:flex-row sm:items-center sm:justify-between sm:p-6">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-wider text-emerald-600">MEGA 패키지</p>
-            <h2 className="mt-1 text-lg font-extrabold text-slate-900 sm:text-xl">{mega.title}</h2>
-            <p className="mt-1 text-sm font-medium text-slate-500">
-              {mega.price} · {mega.description}
-            </p>
-          </div>
-          <Link
-            to="/premium"
-            className="inline-flex h-11 shrink-0 items-center justify-center rounded-xl bg-slate-900 px-5 text-sm font-bold text-white hover:bg-slate-800"
-          >
-            패키지 한 번에 받기
-          </Link>
-        </section>
       </main>
     </div>
   )

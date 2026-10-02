@@ -60,8 +60,6 @@ export function A4Preview({ printable }: { printable: Printable }) {
           <A4Paper
             src={previewSrc}
             title={title}
-            mode={mode}
-            hint={t('detail.viewColorHint', '좌측 썸네일로 색칠 예시 확인')}
             zoomLabel={t('detail.zoomIn', '크게 보기')}
             onZoom={() => setIsZoomed(true)}
           />
@@ -154,14 +152,11 @@ function ThumbnailButton({
 function A4Paper({
   src,
   title,
-  hint,
   zoomLabel,
   onZoom,
 }: {
   src: string
   title: string
-  mode: PreviewMode
-  hint: string
   zoomLabel: string
   onZoom: () => void
 }) {
@@ -191,9 +186,6 @@ function A4Paper({
   return (
     <div className="group relative flex aspect-[3/4] w-full items-center justify-center overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-4 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.08)]">
       {!loaded ? <div className="absolute inset-0 animate-pulse bg-slate-100" /> : null}
-      <div className="absolute top-3 left-3 z-10 rounded-full bg-slate-900/75 px-2.5 py-1 text-[11px] font-bold text-white shadow-xs backdrop-blur-sm">
-        👈 {hint}
-      </div>
       <button
         type="button"
         onClick={onZoom}
