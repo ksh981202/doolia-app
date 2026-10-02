@@ -44,10 +44,10 @@ const HOT_THEMES = [
     className: 'bg-gradient-to-br from-emerald-50 to-teal-50/60 border-emerald-100/80',
   },
   {
-    id: 'firstColor',
-    to: '/category/coloring-pages?age=2-3',
-    icon: '👶',
-    className: 'bg-gradient-to-br from-blue-50 to-indigo-50/60 border-blue-100/80',
+    id: 'animals',
+    to: '/category/coloring-pages?theme=animals',
+    icon: '🐶',
+    className: 'bg-gradient-to-br from-amber-500/10 to-orange-500/10 border-amber-100/80 hover:border-amber-300/80',
   },
 ] as const
 
@@ -77,7 +77,7 @@ function HeroSplitPreview({ printable }: { printable: Printable }) {
   const alt = pickLocalized(printable, 'title', i18n.language) || printable.title
 
   return (
-    <div className="relative min-h-0 flex-1 overflow-hidden rounded-xl bg-slate-50">
+    <div className="relative h-full w-full overflow-hidden rounded-xl bg-slate-50">
       <img src={colorSrc} alt={alt} className="h-full w-full object-contain" />
       <img
         src={lineSrc}
@@ -222,18 +222,12 @@ export function PlayHubPage() {
                   <Link
                     to={printablePath(front.slug || front.id)}
                     state={{ printable: front }}
-                    className="relative z-10 flex h-[15.75rem] w-[11.5rem] flex-col rounded-2xl border-2 border-emerald-400/70 bg-white p-2.5 shadow-xl transition-transform duration-300 hover:scale-[1.02] sm:h-[17.5rem] sm:w-48"
+                    className="relative z-10 block h-[15.75rem] w-[11.5rem] overflow-hidden rounded-2xl border-2 border-emerald-400/70 bg-white p-2 shadow-xl transition-transform duration-300 hover:scale-[1.02] sm:h-[17.5rem] sm:w-48"
                   >
-                    <span className="mb-1.5 inline-flex w-fit items-center rounded-full bg-emerald-600 px-2 py-0.5 text-[10px] font-black leading-none text-white shadow-2xs sm:text-[10.5px]">
-                      ✨ {t('home.previewBadge')}
-                    </span>
                     <HeroSplitPreview printable={front} />
-                    <p className="mt-1.5 text-center text-[10px] font-semibold tracking-tight text-slate-500">
-                      {t('home.previewCaption')}
-                    </p>
                   </Link>
                 ) : (
-                  <div className="relative z-10 h-[15.75rem] w-[11.5rem] animate-pulse rounded-2xl border-2 border-emerald-400/70 bg-white p-2.5 shadow-xl sm:h-[17.5rem] sm:w-48" />
+                  <div className="relative z-10 h-[15.75rem] w-[11.5rem] animate-pulse overflow-hidden rounded-2xl border-2 border-emerald-400/70 bg-white p-2 shadow-xl sm:h-[17.5rem] sm:w-48" />
                 )}
               </div>
             </div>
