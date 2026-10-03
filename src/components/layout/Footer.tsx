@@ -25,12 +25,15 @@ export function Footer() {
         <div>
           <p className="font-display text-2xl font-semibold text-[#059669]">{BRAND.shortName}</p>
           <p className="mt-1 text-sm font-bold text-ink">{BRAND.name}</p>
-          <p className="mt-3 max-w-sm text-sm leading-6 text-muted">{t('footer.blurb')}</p>
-          <p className="mt-4 text-xs leading-5 text-muted">{t('footer.affiliate')}</p>
+          <div className="mt-3 max-w-sm space-y-1 text-[13.5px] font-normal leading-relaxed text-slate-500 sm:text-[14px]">
+            <p>{t('footer.blurb')}</p>
+            <p className="font-medium text-slate-600">{t('footer.tagline')}</p>
+          </div>
+          <p className="mt-4 text-[13px] leading-5 text-muted">{t('footer.affiliate')}</p>
         </div>
         <div>
-          <p className="text-xs font-extrabold tracking-[0.16em] text-muted">{t('footer.categories')}</p>
-          <div className="mt-3 flex flex-col gap-2 text-sm font-semibold">
+          <p className="text-[12.5px] font-bold tracking-[0.16em] text-muted sm:text-[13px]">{t('footer.categories')}</p>
+          <div className="mt-3 flex flex-col gap-2 text-[14px] font-semibold sm:text-[14.5px]">
             {CATEGORY_LINKS.map((item) => (
               <Link key={item.to} to={item.to} className="text-ink/80 hover:text-[#059669]">
                 {t(item.key)}
@@ -39,8 +42,8 @@ export function Footer() {
           </div>
         </div>
         <div>
-          <p className="text-xs font-extrabold tracking-[0.16em] text-muted">{t('footer.legal')}</p>
-          <div className="mt-3 flex flex-col gap-2 text-sm font-semibold">
+          <p className="text-[12.5px] font-bold tracking-[0.16em] text-muted sm:text-[13px]">{t('footer.legal')}</p>
+          <div className="mt-3 flex flex-col gap-2 text-[14px] font-semibold sm:text-[14.5px]">
             {LEGAL_LINKS.map((item) => (
               <Link key={item.to} to={item.to} className="text-ink/80 hover:text-[#059669]">
                 {t(item.key)}
@@ -50,7 +53,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-line">
-        <p className="mx-auto w-full max-w-7xl px-4 py-5 text-xs text-muted sm:px-6 lg:px-8">
+        <p className="mx-auto w-full max-w-7xl px-4 py-5 text-[13px] text-muted sm:px-6 sm:text-[13.5px] lg:px-8">
           {t('footer.copyright', { year: new Date().getFullYear(), brand: BRAND.name })}
         </p>
       </div>

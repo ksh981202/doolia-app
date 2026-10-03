@@ -17,37 +17,69 @@ const POPULAR_TAGS = [
   { id: 'animals', q: '귀여운 동물' },
 ] as const
 
-const WHY_ITEMS = [
-  { id: 'hd', icon: '🖨️' },
-  { id: 'ink', icon: '✏️' },
-  { id: 'variety', icon: '🎨' },
-  { id: 'safe', icon: '🛡️' },
+const WHY_DOOLIA = [
+  {
+    key: 'hd',
+    icon: '🖨️',
+    cardBg: 'bg-emerald-50/70 border-emerald-100/90',
+    titleColor: 'text-emerald-950',
+    descColor: 'text-emerald-800/70',
+  },
+  {
+    key: 'ink',
+    icon: '✏️',
+    cardBg: 'bg-amber-50/70 border-amber-100/90',
+    titleColor: 'text-amber-950',
+    descColor: 'text-amber-800/70',
+  },
+  {
+    key: 'variety',
+    icon: '🎨',
+    cardBg: 'bg-purple-50/70 border-purple-100/90',
+    titleColor: 'text-purple-950',
+    descColor: 'text-purple-800/70',
+  },
+  {
+    key: 'safe',
+    icon: '🛡️',
+    cardBg: 'bg-blue-50/70 border-blue-100/90',
+    titleColor: 'text-blue-950',
+    descColor: 'text-blue-800/70',
+  },
 ] as const
 
 const HOT_THEMES = [
   {
-    id: 'dino',
+    key: 'dino',
     to: '/category/coloring-pages?theme=dinosaur',
     icon: '🦖',
-    className: 'bg-gradient-to-br from-amber-50 to-orange-50/60 border-orange-100/80',
+    cardBg: 'bg-amber-50/70 border-amber-100/90 hover:border-amber-300',
+    titleColor: 'text-amber-950',
+    descColor: 'text-amber-800/70',
   },
   {
-    id: 'princess',
+    key: 'princess',
     to: '/category/coloring-pages?theme=princess',
     icon: '👑',
-    className: 'bg-gradient-to-br from-pink-50 to-rose-50/60 border-pink-100/80',
+    cardBg: 'bg-pink-50/70 border-pink-100/90 hover:border-pink-300',
+    titleColor: 'text-pink-950',
+    descColor: 'text-pink-800/70',
   },
   {
-    id: 'imagination',
+    key: 'imagination',
     to: '/category/coloring-pages?theme=imagination',
     icon: '✨',
-    className: 'bg-gradient-to-br from-emerald-50 to-teal-50/60 border-emerald-100/80',
+    cardBg: 'bg-emerald-50/70 border-emerald-100/90 hover:border-emerald-300',
+    titleColor: 'text-emerald-950',
+    descColor: 'text-emerald-800/70',
   },
   {
-    id: 'animals',
+    key: 'animals',
     to: '/category/coloring-pages?theme=animals',
     icon: '🐶',
-    className: 'bg-gradient-to-br from-amber-500/10 to-orange-500/10 border-amber-100/80 hover:border-amber-300/80',
+    cardBg: 'bg-orange-50/70 border-orange-100/90 hover:border-orange-300',
+    titleColor: 'text-orange-950',
+    descColor: 'text-orange-800/70',
   },
 ] as const
 
@@ -144,7 +176,7 @@ export function PlayHubPage() {
                 <span className="text-emerald-700">✨</span>
                 <span>{t('home.badge')}</span>
               </div>
-              <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-slate-800 sm:text-4xl lg:text-5xl">
+              <h1 className="text-3xl font-bold leading-tight tracking-tight text-slate-800 sm:text-4xl lg:text-5xl">
                 {t('home.titleLead')} <br className="hidden sm:inline" />
                 <span className="text-emerald-600">{t('home.titleAccent')}</span>
               </h1>
@@ -172,7 +204,7 @@ export function PlayHubPage() {
                 </div>
               </form>
               <div className="flex flex-wrap items-center gap-2 pt-1.5">
-                <span className="mr-1 text-[13.5px] font-black text-slate-500">{t('home.popularLabel')}</span>
+                <span className="mr-1 text-[13.5px] font-semibold text-slate-500">{t('home.popularLabel')}</span>
                 {POPULAR_TAGS.map((tag) => (
                   <button
                     key={tag.id}
@@ -233,16 +265,28 @@ export function PlayHubPage() {
             </div>
           </div>
 
-          <div className="mt-8 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
             {HOT_THEMES.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
-                className={`group rounded-3xl border p-5 text-left transition-all hover:shadow-lg ${item.className}`}
+                className={`group flex flex-row items-center justify-start gap-4 rounded-2xl border px-5 py-4 text-left transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xs ${item.cardBg}`}
               >
-                <div className="mb-3 text-3xl transition-transform group-hover:scale-110">{item.icon}</div>
-                <h3 className="mb-1 text-base font-bold text-slate-800 sm:text-lg">{t(`home.hot.${item.id}.title`)}</h3>
-                <p className="text-xs text-slate-500 sm:text-sm">{t(`home.hot.${item.id}.desc`)}</p>
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/90 bg-white text-2xl shadow-xs transition-transform duration-300 group-hover:scale-110">
+                  <span>{item.icon}</span>
+                </div>
+                <div className="flex min-w-0 flex-col items-start text-left">
+                  <h3
+                    className={`w-full truncate text-left text-[17px] font-bold leading-snug tracking-tight sm:text-[18px] ${item.titleColor}`}
+                  >
+                    {t(`home.hot.${item.key}.title`)}
+                  </h3>
+                  <p
+                    className={`mt-0.5 w-full truncate text-left text-[13.5px] font-medium leading-normal sm:text-[14.5px] ${item.descColor}`}
+                  >
+                    {t(`home.hot.${item.key}.desc`)}
+                  </p>
+                </div>
               </Link>
             ))}
           </div>
@@ -278,26 +322,38 @@ export function PlayHubPage() {
       </section>
 
       <section className="my-12 mb-16 rounded-3xl border border-slate-100 bg-white p-8 shadow-sm sm:p-12">
-        <div className="mx-auto mb-10 max-w-xl space-y-2 text-center">
+        <div className="mx-auto max-w-3xl space-y-2 text-center">
           <span className="block text-xs font-bold uppercase tracking-widest text-emerald-600">
             WHY DOOLIA
           </span>
-          <h2 className="text-2xl font-extrabold tracking-tight text-slate-800 sm:text-3xl">
+          <h2 className="mx-auto max-w-3xl break-keep text-2xl font-bold leading-snug tracking-tight text-slate-900 [overflow-wrap:anywhere] sm:text-3xl md:text-4xl">
             {t('home.whyTitle')}
           </h2>
-          <p className="text-sm font-medium leading-relaxed text-slate-500">
+          <p className="mx-auto max-w-2xl break-keep text-sm font-medium leading-relaxed text-slate-500">
             {t('home.whySubtitle')}
           </p>
         </div>
-        <div className="grid grid-cols-1 gap-6 text-left sm:grid-cols-2 lg:grid-cols-4">
-          {WHY_ITEMS.map((item) => (
+        <div className="mx-auto mt-10 grid w-full max-w-6xl grid-cols-1 gap-3.5 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+          {WHY_DOOLIA.map((item) => (
             <div
-              key={item.id}
-              className="rounded-3xl border border-emerald-100/80 bg-emerald-50/50 p-7 transition-all hover:shadow-md sm:p-8"
+              key={item.key}
+              className={`group flex flex-row items-center justify-start gap-3.5 rounded-2xl border p-4 text-left transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xs ${item.cardBg}`}
             >
-              <div className="mb-4 inline-block text-3xl sm:text-4xl">{item.icon}</div>
-              <h3 className="mb-2.5 text-lg font-bold tracking-tight text-slate-800 sm:text-xl">{t(`home.why.${item.id}.title`)}</h3>
-              <p className="text-sm font-normal leading-relaxed text-slate-600 sm:text-[14.5px]">{t(`home.why.${item.id}.desc`)}</p>
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/90 bg-white text-2xl shadow-xs transition-transform duration-300 group-hover:scale-110">
+                <span>{item.icon}</span>
+              </div>
+              <div className="flex min-w-0 flex-1 flex-col items-start text-left">
+                <h3
+                  className={`w-full truncate text-left text-[17px] font-bold leading-snug tracking-tight sm:text-[18px] ${item.titleColor}`}
+                >
+                  {t(`home.why.${item.key}.title`)}
+                </h3>
+                <p
+                  className={`mt-0.5 w-full truncate text-left text-[13.5px] font-medium leading-normal sm:text-[14.5px] ${item.descColor}`}
+                >
+                  {t(`home.why.${item.key}.desc`)}
+                </p>
+              </div>
             </div>
           ))}
         </div>

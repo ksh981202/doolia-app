@@ -77,14 +77,14 @@ export function Header() {
                 key={menu.id}
                 to={menu.path}
                 className={cn(
-                  'inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-2xl px-2.5 py-2 text-[12.5px] font-bold transition-all duration-200 hover:bg-emerald-50 hover:text-emerald-800 active:scale-98 lg:px-4 lg:text-[13.5px]',
+                  'flex shrink-0 items-center gap-2 whitespace-nowrap rounded-xl px-3.5 py-2 text-[16px] font-bold text-slate-800 transition-all hover:bg-slate-50 hover:text-emerald-600',
                   isHeaderNavActive(menu, location.pathname, params)
-                    ? 'bg-emerald-50 text-emerald-800'
-                    : 'text-slate-700',
+                    ? 'bg-emerald-50 text-emerald-800 hover:bg-emerald-50 hover:text-emerald-800'
+                    : '',
                 )}
               >
-                <span className="text-base">{menu.icon}</span>
-                <span className="tracking-tight">{t(menu.labelKey)}</span>
+                <span className="text-[18px] leading-none">{menu.icon}</span>
+                <span className="text-[16px] font-bold leading-none">{t(menu.labelKey)}</span>
               </Link>
             ))}
           </nav>

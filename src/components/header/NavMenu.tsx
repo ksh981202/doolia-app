@@ -30,19 +30,19 @@ export function NavMenu({
           to={item.path}
           onClick={() => onSelect?.(item)}
           className={cn(
-            'inline-flex items-center gap-1.5 font-bold transition-all duration-200',
+            'flex items-center gap-2 font-bold transition-all',
             mobile
-              ? 'w-full justify-start rounded-xl px-3 py-3 text-left text-sm'
-              : 'rounded-2xl px-4 py-2 text-[13.5px] hover:bg-emerald-50 hover:text-emerald-800 active:scale-98',
+              ? 'w-full justify-start rounded-xl px-3 py-3 text-left text-[16px] text-slate-800'
+              : 'shrink-0 rounded-xl px-3.5 py-2 text-[16px] text-slate-800 hover:bg-slate-50 hover:text-emerald-600',
             isHeaderNavActive(item, pathname, search)
               ? mobile
                 ? 'bg-emerald-50 text-emerald-700'
-                : 'bg-emerald-50 text-emerald-800'
-              : 'text-slate-700',
+                : 'bg-emerald-50 text-emerald-800 hover:bg-emerald-50 hover:text-emerald-800'
+              : '',
           )}
         >
-          <span className="text-base">{item.icon}</span>
-          <span className="tracking-tight">{t(item.labelKey)}</span>
+          <span className="text-[18px] leading-none">{item.icon}</span>
+          <span className="text-[16px] font-bold leading-none">{t(item.labelKey)}</span>
         </Link>
       ))}
     </nav>

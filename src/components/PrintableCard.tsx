@@ -1,4 +1,3 @@
-import { Eye, Heart, Printer } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { getCategoryThemes } from '@/shared/config/categories'
@@ -89,30 +88,33 @@ export function PrintableCard({ printable }: PrintableCardProps) {
         />
       </div>
 
-      <div className="w-full space-y-1.5 border-t border-slate-100 bg-white p-3">
-        <p className="truncate text-[11px] font-semibold tracking-tight text-slate-400 sm:text-[12px]">
-          {theme ? `${age} · ${theme}` : age}
-        </p>
-        <h3 className="line-clamp-2 w-full break-words text-[14px] font-bold leading-snug text-slate-800 transition-colors group-hover:text-emerald-600 sm:text-[15px]">
-          {title}
-        </h3>
-        <div className="flex items-center justify-between pt-0.5">
-          <div className="flex items-center gap-2.5 text-[11px] font-medium text-slate-400 sm:text-[12px]">
-            <span className="inline-flex items-center gap-1">
-              <Heart className="h-3.5 w-3.5 fill-rose-500 text-rose-500" />
-              <span>{likesCount}</span>
+      <div className="flex flex-1 flex-col justify-between bg-white p-3.5 sm:p-4">
+        <div>
+          <div className="mb-1 flex items-center gap-1.5 text-[12px] font-medium text-slate-400 sm:text-[12.5px]">
+            <span>{age}</span>
+            {theme ? (
+              <>
+                <span>·</span>
+                <span className="truncate">{theme}</span>
+              </>
+            ) : null}
+          </div>
+          <h3 className="line-clamp-2 break-words text-[14.5px] font-bold leading-snug text-slate-800 transition-colors group-hover:text-emerald-600 sm:text-[15px]">
+            {title}
+          </h3>
+        </div>
+        <div className="mt-3 flex items-center justify-between border-t border-slate-100/80 pt-2 text-[12px] font-medium text-slate-400">
+          <div className="flex items-center gap-2.5">
+            <span className="flex items-center gap-1 transition-colors hover:text-rose-500">
+              <span className="text-xs text-rose-500">♥</span> {likesCount}
             </span>
-            <span className="inline-flex items-center gap-1">
-              <Eye className="h-3.5 w-3.5 text-slate-400" />
-              <span>{viewsCount.toLocaleString(locale)}</span>
+            <span className="flex items-center gap-1">
+              <span className="text-xs">👁</span> {viewsCount.toLocaleString(locale)}
             </span>
           </div>
-          <span
-            aria-hidden
-            className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-500 transition-colors group-hover:border-emerald-200 group-hover:bg-emerald-50 group-hover:text-emerald-600"
-          >
-            <Printer className="h-3.5 w-3.5" />
-          </span>
+          <div className="flex h-7 w-7 items-center justify-center rounded-full border border-slate-200/60 bg-slate-50 text-slate-500 shadow-xs transition-all group-hover:border-emerald-500 group-hover:bg-emerald-500 group-hover:text-white">
+            <span className="text-[13px]">🖨️</span>
+          </div>
         </div>
       </div>
     </Link>
