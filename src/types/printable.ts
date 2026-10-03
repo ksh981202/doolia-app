@@ -76,6 +76,7 @@ export type Printable = {
   /** @deprecated image_bw_url 사용 */
   line_art_url: string
   pdf_url: string
+  likes: number
   views: number
   downloads: number
   created_at: string
@@ -135,7 +136,10 @@ export type PrintableInput = {
   color_image_url?: string | null
   line_art_url?: string | null
   pdf_url: string
+  likes?: number | null
+  likes_count?: number | null
   views?: number | null
+  views_count?: number | null
   downloads?: number | null
   created_at: string
   published?: boolean | null
@@ -222,7 +226,8 @@ export function normalizePrintable(row: PrintableInput): Printable {
     color_image_url: image_color_url,
     line_art_url: image_bw_url,
     pdf_url: row.pdf_url,
-    views: row.views ?? 0,
+    likes: row.likes ?? row.likes_count ?? 0,
+    views: row.views ?? row.views_count ?? 0,
     downloads: row.downloads ?? 0,
     created_at: row.created_at,
     published: row.published !== false,

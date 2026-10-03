@@ -176,6 +176,17 @@ export async function incrementPrintableViews(id: string) {
   await supabase.rpc('increment_printable_views', { p_id: id })
 }
 
+export async function incrementPrintableLikes(id: string, delta: 1 | -1) {
+  if (!supabase || id.startsWith('demo-') || id.startsWith('mock-')) return
+  try {
+    const primary = await supabase.rpc('increment_printable_likes', { p_id: id, p_delta: delta })
+    if (!primary.error) return
+    await supabase.rpc('increment_likes', { printable_id: id, p_delta: delta })
+  } catch {
+    /* RPC/column may not be deployed yet — local toggle still works */
+  }
+}
+
 export async function incrementPrintableDownloads(id: string) {
   if (!supabase || id.startsWith('demo-') || id.startsWith('mock-')) return
   await supabase.rpc('increment_printable_downloads', { p_id: id })

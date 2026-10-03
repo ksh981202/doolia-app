@@ -8,7 +8,7 @@ import {
   printableQuestion,
 } from '@/shared/lib/detailCopy'
 import { cn } from '@/shared/lib/cn'
-import { useBookmarkStore } from '@/shared/store/useBookmarkStore'
+import { usePrintableSocial } from '@/shared/store/usePrintableEngagement'
 import { useDownloadStore } from '@/shared/store/useDownloadStore'
 import type { Printable } from '@/types/printable'
 
@@ -22,14 +22,12 @@ function pointEmoji(label: string) {
   return '✨'
 }
 
-function isCjkLocale(locale: string) {
-  return /^(ko|ja|zh)/i.test(locale)
-}
+const TEXT_WRAP = 'min-w-0 break-words [overflow-wrap:anywhere]'
 
 export function InfoSection({ printable }: { printable: Printable }) {
   const { t, i18n } = useTranslation()
   const openModal = useDownloadStore((state) => state.openModal)
-  const bookmarked = useBookmarkStore((state) => state.ids.includes(printable.id))
+  const { isLiked, likesCount, viewsCount } = usePrintableSocial(printable)
   const locale = i18n.language || i18n.resolvedLanguage || 'ko'
   const title = detailTitle(printable, locale)
   const age = detailAgeLabel(printable, locale)
@@ -37,12 +35,9 @@ export function InfoSection({ printable }: { printable: Printable }) {
   const note = printableIntro(printable, locale)
   const question = printableQuestion(printable, locale)
   const points = brainDevelopmentPoints(printable, locale)
-  const likesCount = bookmarked ? 4 : 3
-  const viewsCount = printable.views || 17
-  const titleBreak = isCjkLocale(locale) ? 'break-keep' : 'break-words'
 
   return (
-    <aside>
+    <aside className="min-w-0 w-full">
       <div>
         <div className="flex flex-wrap items-center gap-2">
           <span className="inline-flex items-center rounded-xl border border-amber-200/60 bg-amber-50 px-3 py-1.5 text-[13px] font-bold text-amber-800">
@@ -57,7 +52,7 @@ export function InfoSection({ printable }: { printable: Printable }) {
         </h1>
         <div className="mb-5 flex items-center gap-3.5 text-[13px] font-medium text-slate-500 sm:mb-6">
           <div className="flex items-center gap-1.5">
-            <Heart className="h-4 w-4 fill-rose-500 text-rose-500" />
+            <Heart className={cn('h-4 w-4 text-rose-500', isLiked && 'fill-rose-500')} />
             <span>
               {likesCount} {t('detail.likes')}
             </span>
@@ -71,26 +66,26 @@ export function InfoSection({ printable }: { printable: Printable }) {
         </div>
       </div>
 
-      <div className="space-y-3">
+      <div className="min-w-0 space-y-3">
         {note ? (
-          <div className="rounded-2xl border border-emerald-100 bg-emerald-50/40 p-4 sm:p-5">
+          <div className="min-w-0 w-full rounded-2xl border border-emerald-100 bg-emerald-50/40 p-4 sm:p-5">
             <p className="mb-2 flex items-center gap-2 text-[16px] font-bold text-emerald-700">
               <span aria-hidden>🧚</span>
               <span>DOOLIA'S NOTE</span>
             </p>
-            <p className={cn('text-[15px] font-medium leading-relaxed text-slate-700 sm:text-[15.5px]', titleBreak)}>
+            <p className={cn('text-[15px] font-medium leading-relaxed text-slate-700 sm:text-[15.5px]', TEXT_WRAP)}>
               “{note}”
             </p>
           </div>
         ) : null}
 
         {points.length ? (
-          <div className="rounded-2xl border border-slate-200/70 bg-slate-50/60 p-4 sm:p-5">
-            <p className="mb-3 flex items-center gap-2 text-[16px] font-bold text-slate-800">
+          <div className="min-w-0 w-full rounded-2xl border border-slate-200/70 bg-slate-50/60 p-4 sm:p-5">
+            <p className="mb-3 flex min-w-0 items-center gap-2 text-[16px] font-bold text-slate-800">
               <span aria-hidden>🎨</span>
-              <span>{t('detail.benefitsHeader')}</span>
+              <span className={TEXT_WRAP}>{t('detail.benefitsHeader')}</span>
             </p>
-            <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
+            <div className="grid min-w-0 grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-2.5">
               {points.map((point) => (
                 <div
                   key={point.label}
@@ -102,7 +97,8 @@ export function InfoSection({ printable }: { printable: Printable }) {
                   <span
                     lang={locale}
                     className={cn(
-                      'min-w-0 text-center font-semibold leading-tight break-words hyphens-auto text-slate-700',
+                      TEXT_WRAP,
+                      'text-center font-semibold leading-tight hyphens-auto text-slate-700',
                       point.label.length >= 10 ? 'text-[11.5px] sm:text-[13px]' : 'text-[12px] sm:text-[13.5px]',
                     )}
                   >
@@ -115,12 +111,12 @@ export function InfoSection({ printable }: { printable: Printable }) {
         ) : null}
 
         {question ? (
-          <div className="rounded-2xl border border-amber-200/80 bg-amber-50/50 p-4 sm:p-5">
-            <p className="mb-2 flex items-center gap-2 text-[16px] font-bold text-amber-900">
+          <div className="min-w-0 w-full rounded-2xl border border-amber-200/80 bg-amber-50/50 p-4 sm:p-5">
+            <p className="mb-2 flex min-w-0 items-center gap-2 text-[16px] font-bold text-amber-900">
               <span aria-hidden>💬</span>
-              <span>{t('detail.askChild')}</span>
+              <span className={TEXT_WRAP}>{t('detail.askChild')}</span>
             </p>
-            <p className={cn('text-[15px] font-bold leading-relaxed text-slate-900 sm:text-[15.5px]', titleBreak)}>
+            <p className={cn('text-[15px] font-bold leading-relaxed text-slate-900 sm:text-[15.5px]', TEXT_WRAP)}>
               “{question}”
             </p>
           </div>
@@ -130,26 +126,28 @@ export function InfoSection({ printable }: { printable: Printable }) {
       <button
         type="button"
         onClick={() => openModal(printable)}
-        className="mt-5 flex min-h-16 w-full cursor-pointer items-center justify-center rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-3 text-[16px] font-extrabold leading-snug tracking-wide text-white shadow-md transition-all hover:from-emerald-700 hover:to-teal-700 hover:shadow-lg active:scale-[0.99] sm:px-6 sm:text-[17px]"
+        className="mt-5 flex min-h-16 w-full min-w-0 cursor-pointer items-center justify-center rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-3 text-[16px] font-extrabold leading-snug tracking-wide text-white shadow-md transition-all hover:from-emerald-700 hover:to-teal-700 hover:shadow-lg active:scale-[0.99] sm:px-6 sm:text-[17px]"
       >
         <Printer className="mr-2 h-5 w-5 shrink-0" />
-        {t('detail.printCta')}
+        <span className={TEXT_WRAP}>{t('detail.printCta')}</span>
       </button>
 
-      <div className="mt-2.5 flex items-center justify-between gap-1 rounded-xl border border-slate-100 bg-slate-50/90 px-3.5 py-2.5 text-[12px] font-medium text-slate-600 sm:text-[13px]">
-        <div className="flex min-w-0 items-center gap-1.5">
-          <span>📄</span>
-          <span className="leading-snug">{t('detail.specFit')}</span>
+      <div className="mt-3 grid min-w-0 grid-cols-2 gap-3">
+        <div className="flex min-w-0 items-center justify-center gap-2 rounded-xl border border-slate-200/70 bg-slate-50 px-3 py-2.5 text-slate-700">
+          <svg className="h-4 w-4 shrink-0 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span className="truncate text-[13px] font-semibold tracking-tight sm:text-[13.5px]">
+            {t('detail.specFit', '표준 용지 맞춤')}
+          </span>
         </div>
-        <span className="text-slate-200">|</span>
-        <div className="flex min-w-0 items-center gap-1.5">
-          <span>🖨️</span>
-          <span className="leading-snug">{t('detail.specInk')}</span>
-        </div>
-        <span className="text-slate-200">|</span>
-        <div className="flex min-w-0 items-center gap-1.5">
-          <span>⚡</span>
-          <span className="leading-snug">{t('detail.specHd')}</span>
+        <div className="flex min-w-0 items-center justify-center gap-2 rounded-xl border border-slate-200/70 bg-slate-50 px-3 py-2.5 text-slate-700">
+          <svg className="h-4 w-4 shrink-0 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+          </svg>
+          <span className="truncate text-[13px] font-semibold tracking-tight sm:text-[13.5px]">
+            {t('detail.specQuality', '선명한 고화질 인쇄')}
+          </span>
         </div>
       </div>
     </aside>

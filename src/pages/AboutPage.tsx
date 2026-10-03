@@ -103,7 +103,7 @@ export function AboutPage() {
         </div>
       </section>
 
-      <section className="relative left-1/2 w-screen -translate-x-1/2 border-t border-slate-100 bg-slate-50 px-4 py-20 text-center">
+      <section className="w-full max-w-full overflow-hidden border-t border-slate-100 bg-slate-50 px-4 py-20 text-center">
         <h3 className="text-lg font-light tracking-wide text-slate-900 sm:text-xl">Contact DOOLIA</h3>
         <p className="mt-2 text-sm font-light text-slate-500">
           {isKo

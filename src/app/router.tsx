@@ -1,12 +1,12 @@
-import { lazy, Suspense } from 'react'
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { lazy, Suspense, useLayoutEffect } from 'react'
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { CatalogLayout } from '@/components/layout/CatalogLayout'
 import { PageFallback } from '@/components/layout/PageFallback'
 import { ProtectedAdminLayout } from '@/layouts/AdminLayout'
+import PrintableDetailPage from '@/pages/PrintableDetailPage'
 
 const PlayHubPage = lazy(() => import('@/pages/PlayHubPage'))
-const PrintableDetailPage = lazy(() => import('@/pages/PrintableDetailPage'))
 const CategoryPage = lazy(() => import('@/pages/CategoryPage'))
 const SituationPage = lazy(() => import('@/pages/SituationPage'))
 const PlayRecipeDetailPage = lazy(() => import('@/pages/PlayRecipeDetailPage'))
@@ -23,9 +23,20 @@ const AdminPrintablesPage = lazy(() => import('@/pages/admin/AdminPrintablesPage
 const AdminUploadPage = lazy(() => import('@/pages/admin/AdminUploadPage'))
 const AdminTipsPage = lazy(() => import('@/pages/admin/AdminTipsPage'))
 
+function ScrollToTop() {
+  const { pathname } = useLocation()
+
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  }, [pathname])
+
+  return null
+}
+
 export function AppRouter() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Suspense fallback={<PageFallback />}>
         <Routes>
           <Route element={<AppLayout />}>

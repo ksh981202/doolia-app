@@ -40,7 +40,7 @@ const WHY_DOOLIA = [
     descColor: 'text-purple-800/70',
   },
   {
-    key: 'safe',
+    key: 'free',
     icon: '🛡️',
     cardBg: 'bg-blue-50/70 border-blue-100/90',
     titleColor: 'text-blue-950',
@@ -169,12 +169,12 @@ export function PlayHubPage() {
   return (
     <div className="min-h-screen bg-white font-sans text-slate-900">
       <section className="pt-6">
-        <div className="relative mb-10 overflow-visible rounded-3xl border border-emerald-100/80 bg-gradient-to-br from-emerald-50/70 via-teal-50/30 to-white px-6 py-6 shadow-2xs sm:px-10 sm:py-8">
+        <div className="relative mb-10 overflow-hidden rounded-3xl border border-emerald-100/80 bg-gradient-to-br from-emerald-50/70 via-teal-50/30 to-white px-6 py-6 shadow-2xs sm:px-10 sm:py-8">
           <div className="grid grid-cols-1 items-center gap-6 lg:grid-cols-12 lg:gap-8">
             <div className="space-y-4 lg:col-span-7">
-              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200/60 bg-emerald-600/10 px-3.5 py-1.5 text-[12px] font-bold text-emerald-900 shadow-2xs backdrop-blur-xs">
+              <div className="inline-flex max-w-full flex-wrap items-center justify-center gap-2 rounded-full border border-emerald-200/60 bg-emerald-600/10 px-3 py-1.5 text-center text-[12px] font-bold text-emerald-900 shadow-2xs backdrop-blur-xs">
                 <span className="text-emerald-700">✨</span>
-                <span>{t('home.badge')}</span>
+                <span className="min-w-0 break-words">{t('home.badge')}</span>
               </div>
               <h1 className="text-3xl font-bold leading-tight tracking-tight text-slate-800 sm:text-4xl lg:text-5xl">
                 {t('home.titleLead')} <br className="hidden sm:inline" />
@@ -218,8 +218,8 @@ export function PlayHubPage() {
               </div>
             </div>
 
-            <div className="relative flex items-center justify-center py-2 lg:col-span-5">
-              <div className="relative flex h-64 w-64 items-center justify-center sm:h-72 sm:w-[19rem]">
+            <div className="relative my-2 flex items-center justify-center overflow-hidden py-2 sm:my-6 lg:col-span-5">
+              <div className="relative flex h-64 w-64 scale-90 items-center justify-center sm:h-72 sm:w-[19rem] sm:scale-100">
                 {left ? (
                   <Link
                     to={printablePath(left.slug || left.id)}
@@ -265,25 +265,23 @@ export function PlayHubPage() {
             </div>
           </div>
 
-          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
+          <div className="mt-6 grid grid-cols-2 gap-2.5 sm:mt-8 sm:gap-3.5 lg:grid-cols-4">
             {HOT_THEMES.map((item) => (
               <Link
-                key={item.to}
+                key={item.key}
                 to={item.to}
-                className={`group flex flex-row items-center justify-start gap-4 rounded-2xl border px-5 py-4 text-left transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xs ${item.cardBg}`}
+                className={`flex items-center gap-2.5 rounded-2xl border p-3 text-left transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xs sm:p-4 ${item.cardBg}`}
               >
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/90 bg-white text-2xl shadow-xs transition-transform duration-300 group-hover:scale-110">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-xl shadow-xs sm:h-11 sm:w-11 sm:text-2xl">
                   <span>{item.icon}</span>
                 </div>
-                <div className="flex min-w-0 flex-col items-start text-left">
+                <div className="min-w-0 flex-1">
                   <h3
-                    className={`w-full truncate text-left text-[17px] font-bold leading-snug tracking-tight sm:text-[18px] ${item.titleColor}`}
+                    className={`truncate text-[13.5px] font-bold leading-snug sm:text-[15px] ${item.titleColor}`}
                   >
                     {t(`home.hot.${item.key}.title`)}
                   </h3>
-                  <p
-                    className={`mt-0.5 w-full truncate text-left text-[13.5px] font-medium leading-normal sm:text-[14.5px] ${item.descColor}`}
-                  >
+                  <p className={`mt-0.5 hidden truncate text-[11px] sm:block sm:text-[12px] ${item.descColor}`}>
                     {t(`home.hot.${item.key}.desc`)}
                   </p>
                 </div>
@@ -344,7 +342,7 @@ export function PlayHubPage() {
               </div>
               <div className="flex min-w-0 flex-1 flex-col items-start text-left">
                 <h3
-                  className={`w-full truncate text-left text-[17px] font-bold leading-snug tracking-tight sm:text-[18px] ${item.titleColor}`}
+                  className={`w-full truncate text-left text-[13px] font-bold leading-snug tracking-tight sm:text-[14.5px] ${item.titleColor}`}
                 >
                   {t(`home.why.${item.key}.title`)}
                 </h3>

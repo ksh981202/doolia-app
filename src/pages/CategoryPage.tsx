@@ -22,7 +22,7 @@ import {
 } from '@/shared/config/smartFilters'
 import { cn } from '@/shared/lib/cn'
 
-const CARD_GRID = 'mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'
+const CARD_GRID = 'mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4'
 
 function filterChipClass(active: boolean) {
   return cn(

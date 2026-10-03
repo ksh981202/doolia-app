@@ -1,10 +1,11 @@
-import { ChevronLeft, Search, Settings } from 'lucide-react'
+import { ChevronLeft, Menu, Search, Settings, X } from 'lucide-react'
 import { type FormEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { HEADER_NAV_ITEMS, isHeaderNavActive } from '@/components/header/nav'
 import { LanguageSwitcher } from '@/components/header/LanguageSwitcher'
 import { Logo } from '@/components/header/Logo'
+import { NavMenu } from '@/components/header/NavMenu'
 import { cn } from '@/shared/lib/cn'
 
 function isLocalAdminHost() {
@@ -29,12 +30,26 @@ export function Header() {
   const [params, setParams] = useSearchParams()
   const urlQuery = params.get('q') ?? ''
   const [query, setQuery] = useState(urlQuery)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const isHome = isHomePath(location.pathname)
   const isCategory = location.pathname.startsWith('/category')
 
   useEffect(() => {
     setQuery(urlQuery)
   }, [urlQuery])
+
+  useEffect(() => {
+    setIsMobileMenuOpen(false)
+  }, [location.pathname, location.search])
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) return
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsMobileMenuOpen(false)
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [isMobileMenuOpen])
 
   useEffect(() => {
     if (location.pathname !== '/') return
@@ -119,6 +134,16 @@ export function Header() {
         )}
 
         <div className="flex items-center justify-self-end gap-2">
+          <button
+            type="button"
+            className={cn(iconButtonClass, 'md:hidden')}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-nav-drawer"
+            aria-label={isMobileMenuOpen ? t('detail.back', '메뉴 닫기') : '메뉴 열기'}
+            onClick={() => setIsMobileMenuOpen((open) => !open)}
+          >
+            {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
           <LanguageSwitcher />
           {isLocalAdminHost() ? (
             <button
@@ -133,6 +158,29 @@ export function Header() {
           ) : null}
         </div>
       </div>
+
+      {isMobileMenuOpen ? (
+        <div className="fixed inset-0 z-50 md:hidden">
+          <button
+            type="button"
+            className="absolute inset-0 bg-slate-900/40"
+            aria-label={t('detail.back', '메뉴 닫기')}
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          <div
+            id="mobile-nav-drawer"
+            className="absolute inset-y-0 right-0 flex w-[min(20rem,86vw)] flex-col bg-white p-4 shadow-2xl"
+          >
+            <p className="mb-3 px-1 text-xs font-bold tracking-widest text-slate-400">MENU</p>
+            <NavMenu
+              pathname={location.pathname}
+              search={params}
+              mobile
+              onSelect={() => setIsMobileMenuOpen(false)}
+            />
+          </div>
+        </div>
+      ) : null}
     </header>
   )
 }

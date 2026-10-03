@@ -3,6 +3,7 @@ export {
   fetchPrintableById,
   fetchPrintables,
   incrementPrintableDownloads,
+  incrementPrintableLikes,
   incrementPrintableViews,
   matchesPopularTab,
   matchesQuery,

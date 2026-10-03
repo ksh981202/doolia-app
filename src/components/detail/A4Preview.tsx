@@ -1,27 +1,70 @@
 import { Heart, Share2 } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LightboxModal } from '@/components/LightboxModal'
 import { cn } from '@/shared/lib/cn'
-import { printableColorUrl, printableLineArtUrl } from '@/shared/utils/printableAssets'
-import { useBookmarkStore } from '@/shared/store/useBookmarkStore'
+import { getDisplayImageUrl, printableColorUrl, printableLineArtUrl } from '@/shared/utils/printableAssets'
+import { usePrintableSocial } from '@/shared/store/usePrintableEngagement'
 import type { Printable } from '@/types/printable'
 
 type PreviewMode = 'line' | 'color'
 
+const PREVIEW_WIDTH = 640
+const THUMB_WIDTH = 240
+const LIGHTBOX_WIDTH = 1400
+
+function prefetchImage(url: string) {
+  if (!url) return
+  const img = new Image()
+  img.src = url
+}
+
+function waitForImage(url: string) {
+  return new Promise<void>((resolve) => {
+    if (!url) {
+      resolve()
+      return
+    }
+    const img = new Image()
+    const done = () => resolve()
+    img.onload = done
+    img.onerror = done
+    img.src = url
+    if (img.complete) resolve()
+  })
+}
+
 export function A4Preview({ printable }: { printable: Printable }) {
   const { t } = useTranslation()
-  const [mode, setMode] = useState<PreviewMode>('line')
+  const [mode, setMode] = useState<PreviewMode>('color')
   const [isZoomed, setIsZoomed] = useState(false)
   const [shareMsg, setShareMsg] = useState('')
-  const toggle = useBookmarkStore((state) => state.toggle)
-  const bookmarked = useBookmarkStore((state) => state.ids.includes(printable.id))
-  const likesCount = bookmarked ? 4 : 3
+  const [printSrc, setPrintSrc] = useState('')
+  const printingRef = useRef(false)
+  const { isLiked, likesCount, toggleLike } = usePrintableSocial(printable)
   const lineSrc = printableLineArtUrl(printable)
   const colorSrc = printableColorUrl(printable)
-  const previewSrc = mode === 'color' ? colorSrc : lineSrc
+  const linePreview = getDisplayImageUrl(lineSrc, PREVIEW_WIDTH)
+  const colorPreview = getDisplayImageUrl(colorSrc, PREVIEW_WIDTH)
+  const previewSrc = mode === 'color' ? colorPreview : linePreview
+  const previewFallback = mode === 'color' ? colorSrc : lineSrc
   const title = printable.title || printable.title_ko
   const likesLabel = t('detail.likes', '좋아요')
+
+  useEffect(() => {
+    prefetchImage(mode === 'color' ? linePreview : colorPreview)
+  }, [mode, linePreview, colorPreview])
+
+  useEffect(() => {
+    if (!previewSrc) return
+    const link = document.createElement('link')
+    link.rel = 'preload'
+    link.as = 'image'
+    link.href = previewSrc
+    link.setAttribute('fetchpriority', 'high')
+    document.head.appendChild(link)
+    return () => link.remove()
+  }, [previewSrc])
 
   useEffect(() => {
     if (!shareMsg) return
@@ -38,18 +81,32 @@ export function A4Preview({ printable }: { printable: Printable }) {
     }
   }
 
+  const requestPrint = async () => {
+    if (printingRef.current) return
+    printingRef.current = true
+    setPrintSrc(lineSrc)
+    try {
+      await waitForImage(lineSrc)
+      window.print()
+    } finally {
+      printingRef.current = false
+    }
+  }
+
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-start gap-4 sm:gap-5">
         <div className="flex shrink-0 flex-col gap-3">
           <ThumbnailButton
-            src={lineSrc}
+            src={getDisplayImageUrl(lineSrc, THUMB_WIDTH)}
+            fallbackSrc={lineSrc}
             label={t('detail.thumbnailBw', '흑백 도안')}
             active={mode === 'line'}
             onClick={() => setMode('line')}
           />
           <ThumbnailButton
-            src={colorSrc}
+            src={getDisplayImageUrl(colorSrc, THUMB_WIDTH)}
+            fallbackSrc={colorSrc}
             label={t('detail.thumbnailColor', '컬러 예시')}
             active={mode === 'color'}
             onClick={() => setMode('color')}
@@ -59,6 +116,7 @@ export function A4Preview({ printable }: { printable: Printable }) {
         <div className="flex min-w-0 flex-1 flex-col gap-3">
           <A4Paper
             src={previewSrc}
+            fallbackSrc={previewFallback}
             title={title}
             zoomLabel={t('detail.zoomIn', '크게 보기')}
             onZoom={() => setIsZoomed(true)}
@@ -67,15 +125,15 @@ export function A4Preview({ printable }: { printable: Printable }) {
           <div className="relative grid w-full grid-cols-2 gap-3">
             <button
               type="button"
-              onClick={() => toggle(printable.id)}
+              onClick={toggleLike}
               className={cn(
                 'flex h-11 cursor-pointer items-center justify-center gap-2 rounded-xl border bg-white text-[14px] font-medium text-slate-700 transition-all hover:bg-slate-50 active:scale-[0.99]',
-                bookmarked ? 'border-rose-200 bg-rose-50/80 text-rose-600' : 'border-slate-200',
+                isLiked ? 'border-rose-200 bg-rose-50/80 text-rose-600' : 'border-slate-200',
               )}
-              aria-pressed={bookmarked}
+              aria-pressed={isLiked}
               aria-label={likesLabel}
             >
-              <Heart className={cn('h-4 w-4 text-rose-500', bookmarked && 'fill-rose-500')} />
+              <Heart className={cn('h-4 w-4 text-rose-500', isLiked && 'fill-rose-500')} />
               <span>
                 {likesLabel} {likesCount}
               </span>
@@ -101,17 +159,17 @@ export function A4Preview({ printable }: { printable: Printable }) {
       </div>
 
       <div id="doolia-print-sheet" className="hidden">
-        <img src={lineSrc} alt={title} />
+        {printSrc ? <img src={printSrc} alt={title} /> : null}
       </div>
 
       <LightboxModal
         open={isZoomed}
-        src={previewSrc}
+        src={getDisplayImageUrl(previewFallback, LIGHTBOX_WIDTH) || previewSrc}
         title={title}
         onClose={() => setIsZoomed(false)}
         onPrint={() => {
           setIsZoomed(false)
-          window.print()
+          void requestPrint()
         }}
       />
     </div>
@@ -120,15 +178,23 @@ export function A4Preview({ printable }: { printable: Printable }) {
 
 function ThumbnailButton({
   src,
+  fallbackSrc,
   label,
   active,
   onClick,
 }: {
   src: string
+  fallbackSrc: string
   label: string
   active: boolean
   onClick: () => void
 }) {
+  const [current, setCurrent] = useState(src)
+
+  useEffect(() => {
+    setCurrent(src)
+  }, [src])
+
   return (
     <button
       type="button"
@@ -140,8 +206,17 @@ function ThumbnailButton({
         active ? 'border-2 border-emerald-500' : 'border border-slate-200 opacity-80 hover:opacity-100',
       )}
     >
-      {src ? (
-        <img src={src} alt="" className="h-full w-full rounded-xl object-contain" />
+      {current ? (
+        <img
+          src={current}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="h-full w-full rounded-xl object-contain"
+          onError={() => {
+            if (fallbackSrc && current !== fallbackSrc) setCurrent(fallbackSrc)
+          }}
+        />
       ) : (
         <span className="px-1 text-center text-[10px] font-bold text-slate-400">{label}</span>
       )}
@@ -151,41 +226,26 @@ function ThumbnailButton({
 
 function A4Paper({
   src,
+  fallbackSrc,
   title,
   zoomLabel,
   onZoom,
 }: {
   src: string
+  fallbackSrc: string
   title: string
   zoomLabel: string
   onZoom: () => void
 }) {
-  const [loadedSrc, setLoadedSrc] = useState<string | null>(null)
-  const loaded = loadedSrc === src
+  const [activeSrc, setActiveSrc] = useState(src)
 
   useEffect(() => {
-    if (!src) {
-      setLoadedSrc(src)
-      return
-    }
-    const image = document.createElement('img')
-    image.src = src
-    if (image.complete && image.naturalWidth > 0) {
-      setLoadedSrc(src)
-      return
-    }
-    const markLoaded = () => setLoadedSrc(src)
-    image.addEventListener('load', markLoaded)
-    image.addEventListener('error', markLoaded)
-    return () => {
-      image.removeEventListener('load', markLoaded)
-      image.removeEventListener('error', markLoaded)
-    }
+    setActiveSrc(src)
   }, [src])
 
   return (
     <div className="group relative flex aspect-[3/4] w-full items-center justify-center overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-4 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.08)]">
-      {!loaded ? <div className="absolute inset-0 animate-pulse bg-slate-100" /> : null}
+      {!activeSrc ? <div className="absolute inset-0 animate-pulse bg-slate-100" /> : null}
       <button
         type="button"
         onClick={onZoom}
@@ -193,19 +253,18 @@ function A4Paper({
       >
         {zoomLabel}
       </button>
-      {src ? (
+      {activeSrc ? (
         <img
-          key={src}
-          src={src}
+          src={activeSrc}
           alt={title}
-          decoding="async"
-          className={cn(
-            'relative z-[1] h-full w-full cursor-zoom-in rounded-xl object-contain transition-all duration-300 group-hover:scale-[1.02]',
-            loaded ? 'opacity-100' : 'opacity-0',
-          )}
+          loading="eager"
+          decoding="sync"
+          {...{ fetchpriority: 'high' }}
+          className="relative z-[1] h-full w-full cursor-zoom-in rounded-xl object-contain group-hover:scale-[1.02]"
           onClick={onZoom}
-          onLoad={() => setLoadedSrc(src)}
-          onError={() => setLoadedSrc(src)}
+          onError={() => {
+            if (fallbackSrc && activeSrc !== fallbackSrc) setActiveSrc(fallbackSrc)
+          }}
         />
       ) : null}
     </div>

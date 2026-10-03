@@ -4,7 +4,8 @@ import { getCategoryThemes } from '@/shared/config/categories'
 import { printablePath } from '@/shared/config/catalog'
 import { pickLocalized } from '@/shared/lib/detailCopy'
 import { matchesQuery } from '@/services/printableService'
-import { useBookmarkStore } from '@/shared/store/useBookmarkStore'
+import { getDisplayImageUrl } from '@/shared/utils/printableAssets'
+import { usePrintableSocial } from '@/shared/store/usePrintableEngagement'
 import type { Printable } from '@/types/printable'
 
 type PrintableCardProps = {
@@ -65,40 +66,42 @@ export function PrintableCard({ printable }: PrintableCardProps) {
     printable.theme_ko ||
     printable.theme_en ||
     t(`categories.${printable.category}`, '')
-  const bookmarked = useBookmarkStore((state) => state.ids.includes(printable.id))
-  const likesCount = bookmarked ? 4 : 3
-  const viewsCount = printable.views || 17
+  const { isLiked, likesCount, viewsCount } = usePrintableSocial(printable)
 
   return (
     <Link
       to={printablePath(printable.slug || printable.id)}
       state={{ printable }}
       className="group block cursor-pointer overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-2xs transition-all hover:-translate-y-0.5 hover:border-emerald-500/50 hover:shadow-md"
+      onPointerDown={() => {
+        const line = printable.image_bw_url || printable.line_art_url
+        if (!line) return
+        const img = new Image()
+        img.src = getDisplayImageUrl(line, 640)
+      }}
     >
       <div className="relative flex aspect-[3/4] items-center justify-center overflow-hidden bg-slate-50/40 p-4">
         <span className="pointer-events-none absolute top-12 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-full bg-slate-900/80 px-2.5 py-1 text-[11px] font-bold text-white opacity-0 shadow-sm backdrop-blur-xs transition-opacity duration-300 group-hover:opacity-100">
           🖨️ {t('detail.previewBw', '흑백 도안 미리보기')}
         </span>
         <img
-          src={displayImage(printable)}
+          src={getDisplayImageUrl(displayImage(printable), 640)}
           alt={title}
           className="h-full w-full object-contain transition-all duration-300 ease-in-out group-hover:scale-105 group-hover:contrast-125 group-hover:grayscale"
           loading="lazy"
           decoding="async"
+          onError={(event) => {
+            const original = displayImage(printable)
+            if (original && event.currentTarget.src !== original) event.currentTarget.src = original
+          }}
         />
       </div>
 
       <div className="flex flex-1 flex-col justify-between bg-white p-3.5 sm:p-4">
         <div>
-          <div className="mb-1 flex items-center gap-1.5 text-[12px] font-medium text-slate-400 sm:text-[12.5px]">
-            <span>{age}</span>
-            {theme ? (
-              <>
-                <span>·</span>
-                <span className="truncate">{theme}</span>
-              </>
-            ) : null}
-          </div>
+          <p className="mb-1 truncate text-[13px] font-bold tracking-tight text-emerald-600 sm:text-[13.5px]">
+            {theme ? `${age} · ${theme}` : age}
+          </p>
           <h3 className="line-clamp-2 break-words text-[14.5px] font-bold leading-snug text-slate-800 transition-colors group-hover:text-emerald-600 sm:text-[15px]">
             {title}
           </h3>

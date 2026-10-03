@@ -1,5 +1,5 @@
 import { ChevronRight } from 'lucide-react'
-import { useMemo } from 'react'
+import { useEffect, useLayoutEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { A4Preview } from '@/components/detail/A4Preview'
@@ -10,6 +10,7 @@ import { usePrintableQuery, usePrintablesQuery } from '@/features/gallery/model/
 import { DEMO_PRINTABLES } from '@/services/printableService'
 import { categoryPath, getAllCatalogTopics, matchesTopicCategory } from '@/shared/config/catalog'
 import { detailTitle } from '@/shared/lib/detailCopy'
+import { usePrintableEngagement } from '@/shared/store/usePrintableEngagement'
 import type { Printable } from '@/types/printable'
 
 type Crumb = { label: string; to?: string }
@@ -43,6 +44,16 @@ export function PrintableDetailPage() {
   const printable = data ?? seeded ?? demo
 
   const relatedPool = useMemo(() => catalog.data ?? DEMO_PRINTABLES, [catalog.data])
+  const recordView = usePrintableEngagement((state) => state.recordView)
+
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  }, [id])
+
+  useEffect(() => {
+    if (!printable) return
+    recordView(printable)
+  }, [printable, recordView])
 
   if (!printable) {
     if (isPending || !isFetched) return <DetailSkeleton />
@@ -82,10 +93,10 @@ export function PrintableDetailPage() {
         </nav>
 
         <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-12">
-          <div className="lg:col-span-7">
+          <div className="min-w-0 w-full lg:col-span-7">
             <A4Preview printable={{ ...printable, title }} />
           </div>
-          <div className="lg:col-span-5">
+          <div className="flex min-w-0 w-full flex-col gap-6 lg:col-span-5">
             <InfoSection printable={{ ...printable, title }} />
           </div>
         </div>
