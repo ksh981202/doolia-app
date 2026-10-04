@@ -14,7 +14,8 @@ import {
 import { cn } from '@/shared/lib/cn'
 import { detailTitle } from '@/shared/lib/detailCopy'
 import { generatePrintablePdf } from '@/shared/lib/generatePrintablePdf'
-import { printableLineArtUrl } from '@/shared/utils/printableAssets'
+import { printFooterMarkup } from '@/shared/lib/printFooter'
+import { printableViewUrl } from '@/shared/utils/printableAssets'
 import { useDownloadStore } from '@/shared/store/useDownloadStore'
 
 function escapeHtml(value: string) {
@@ -44,14 +45,41 @@ function printDocumentHtml(title: string, imgUrl: string) {
     <meta charset="utf-8" />
     <title>${safeTitle}</title>
     <style>
-      @page { size: auto; margin: 0; }
-      html, body { margin: 0; height: 100%; background: #fff; }
-      body { display: flex; align-items: center; justify-content: center; }
-      img { max-width: 90%; max-height: 90%; object-fit: contain; }
+      @page { size: A4 portrait; margin: 0; }
+      html, body { margin: 0; width: 210mm; height: 297mm; background: #fff; }
+      .print-page {
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        width: 210mm;
+        height: 297mm;
+        padding: 8mm 8mm 6mm;
+      }
+      .print-page img { flex: 1; width: 100%; min-height: 0; object-fit: contain; }
+      .print-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-top: 3mm;
+        padding: 1.5mm 2mm 0;
+        border-top: 0.4pt solid #cbd5e1;
+        color: #64748b;
+        font-family: "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+        font-size: 10px;
+        font-weight: 500;
+      }
+      .print-footer-brand { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+      .print-footer-name { color: #334155; font-weight: 700; }
+      .print-footer-sep { color: #94a3b8; }
+      .print-footer-legal { color: #94a3b8; font-size: 9.5px; text-align: right; }
     </style>
   </head>
   <body>
-    <img src="${safeUrl}" alt="${safeTitle}" onload="window.focus(); window.print();" />
+    <div class="print-page">
+      <img src="${safeUrl}" alt="${safeTitle}" onload="window.focus(); window.print();" />
+      ${printFooterMarkup()}
+    </div>
   </body>
 </html>`
 }
@@ -104,13 +132,15 @@ function DownloadModalBody({
   onClose: () => void
 }) {
   const { t, i18n } = useTranslation()
+  const viewMode = useDownloadStore((state) => state.viewMode)
+  const setViewMode = useDownloadStore((state) => state.setViewMode)
   const [secondsLeft, setSecondsLeft] = useState(AD_COUNTDOWN_SECONDS)
   const [generating, setGenerating] = useState(false)
   const [error, setError] = useState('')
   const ready = secondsLeft <= 0 && !generating
   const lang = (i18n.language || i18n.resolvedLanguage || 'ko').split('-')[0]
   const title = detailTitle(printable, i18n.language || i18n.resolvedLanguage)
-  const previewSrc = printableLineArtUrl(printable)
+  const previewSrc = printableViewUrl(printable, viewMode)
   const affiliateLink = getAffiliateLink(affiliate, lang)
   const affiliateBadge = pickAffiliateText(affiliate.badge, lang)
   const affiliateHeadline = pickAffiliateText(affiliate.headline, lang)
@@ -139,7 +169,7 @@ function DownloadModalBody({
     setError('')
     setGenerating(true)
     try {
-      await generatePrintablePdf(printable)
+      await generatePrintablePdf(printable, { variant: viewMode })
       await incrementPrintableDownloads(printable.id)
     } catch (caught) {
       setError(caught instanceof Error && caught.message ? caught.message : 'PDF를 만들지 못했습니다.')
@@ -149,7 +179,7 @@ function DownloadModalBody({
   }
 
   const handleDirectPrint = () => {
-    const imgUrl = safePrintUrl(printableLineArtUrl(printable))
+    const imgUrl = safePrintUrl(printableViewUrl(printable, viewMode))
     const printTitle = title || 'DOOLIA Printable'
     if (!imgUrl) {
       setError(t('detail.notFound', '도안을 찾을 수 없어요.'))
@@ -204,12 +234,48 @@ function DownloadModalBody({
         <div className="grid max-h-[92vh] grid-cols-1 divide-y divide-slate-100 overflow-y-auto md:grid-cols-2 md:divide-x md:divide-y-0">
           <div className="flex min-h-0 flex-col space-y-4 p-6 sm:p-7">
             <div>
-              <span className="rounded-full border border-emerald-200/50 bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-emerald-600">
-                {t('detail.printPreview', 'PRINT PREVIEW')}
-              </span>
+              <div className="mb-2 flex items-center justify-between gap-2 pr-10 md:pr-0">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-emerald-50 px-3 py-1 text-[12.5px] font-bold text-emerald-800">
+                  🖨️ {t('detail.printPreview', 'PRINT PREVIEW')}
+                </span>
+                <div
+                  className="inline-flex rounded-lg border border-slate-200 bg-slate-100 p-0.5 text-xs font-semibold"
+                  role="tablist"
+                  aria-label={t('detail.previewMode', '도안 보기')}
+                >
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={viewMode === 'bw'}
+                    onClick={() => setViewMode('bw')}
+                    className={cn(
+                      'rounded-md px-2.5 py-1 transition-all',
+                      viewMode === 'bw'
+                        ? 'bg-white font-bold text-emerald-700 shadow-sm'
+                        : 'text-slate-500 hover:text-slate-800',
+                    )}
+                  >
+                    🖨️ {t('detail.thumbnailBw', '흑백 도안')}
+                  </button>
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={viewMode === 'color'}
+                    onClick={() => setViewMode('color')}
+                    className={cn(
+                      'rounded-md px-2.5 py-1 transition-all',
+                      viewMode === 'color'
+                        ? 'bg-white font-bold text-emerald-700 shadow-sm'
+                        : 'text-slate-500 hover:text-slate-800',
+                    )}
+                  >
+                    🎨 {t('detail.thumbnailColor', '컬러 예시')}
+                  </button>
+                </div>
+              </div>
               <h2
                 id="download-modal-title"
-                className="mt-1.5 truncate text-lg font-extrabold text-slate-900 sm:text-xl"
+                className="mb-3 truncate text-[19px] font-bold leading-snug tracking-tight text-slate-900 sm:text-[20px]"
               >
                 {title}
               </h2>
@@ -229,7 +295,7 @@ function DownloadModalBody({
               <button
                 type="button"
                 onClick={handleDirectPrint}
-                className="flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-emerald-600 px-3 py-3 text-[14px] font-bold text-white shadow-sm transition-all hover:bg-emerald-700 active:scale-[0.98]"
+                className="flex h-[46px] cursor-pointer items-center justify-center gap-2 rounded-xl bg-emerald-600 px-3 text-[14.5px] font-bold text-white shadow-sm transition-all hover:bg-emerald-700 active:scale-[0.98]"
               >
                 <Printer className="h-4 w-4 shrink-0" />
                 <span className="truncate">{t('detail.printNowBtn', '즉시 바로 인쇄')}</span>
@@ -239,7 +305,7 @@ function DownloadModalBody({
                 onClick={() => void handleDownload()}
                 disabled={!ready}
                 className={cn(
-                  'flex items-center justify-center gap-2 rounded-xl px-3 py-3 text-[14px] font-bold transition-all',
+                  'flex h-[46px] items-center justify-center gap-2 rounded-xl px-3 text-[14.5px] font-bold transition-all',
                   ready
                     ? 'cursor-pointer bg-slate-100 text-slate-700 hover:bg-slate-200 active:scale-[0.98]'
                     : 'cursor-not-allowed bg-slate-100 text-slate-400',
@@ -259,55 +325,55 @@ function DownloadModalBody({
 
           <div className="flex min-h-0 flex-col justify-between space-y-3.5 p-6 sm:p-7">
             <div>
-              <span className="rounded-full border border-emerald-200/50 bg-emerald-50 px-2.5 py-0.5 text-[11.5px] font-bold uppercase tracking-wider text-emerald-700">
+              <span className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-emerald-50 px-3.5 py-1 text-[13px] font-bold tracking-tight text-emerald-900 sm:text-[13.5px]">
                 {affiliateBadge}
               </span>
-              <h3 className="mt-1.5 text-lg font-extrabold text-slate-900 sm:text-[21px]">
+              <h3 className="mt-1.5 line-clamp-1 text-[18px] font-bold leading-snug tracking-tight text-slate-900 sm:text-[20px]">
                 {affiliateHeadline}
               </h3>
             </div>
 
-            <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-slate-200/60 bg-slate-100 shadow-xs">
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-slate-100 bg-slate-100 shadow-sm">
               <img src={affiliate.image} alt={affiliateHeadline} className="h-full w-full object-cover" />
             </div>
 
-            <div className="space-y-2.5">
-              <div className="flex items-start gap-2.5 rounded-xl border border-amber-200/70 bg-amber-50/80 px-4 py-3">
-                <span className="shrink-0 text-lg">⚠️</span>
-                <p className="break-keep text-[14px] font-bold leading-snug text-amber-950 sm:text-[14.5px]">
+            <div>
+              <div className="my-2 flex items-center justify-center gap-2.5 rounded-xl border border-amber-200/80 bg-amber-50/90 px-4 py-2.5">
+                <span className="flex-shrink-0 text-base">⚠️</span>
+                <p className="text-center text-[13.5px] font-semibold leading-normal tracking-tight text-amber-950 sm:text-[14px]">
                   {affiliatePain}
                 </p>
               </div>
 
-              <div className="space-y-2.5 rounded-xl border border-slate-200/60 bg-slate-50/90 p-4">
-                <p className="flex items-center gap-2 text-[14px] font-extrabold text-slate-900 sm:text-[14.5px]">
-                  <span className="text-base text-emerald-600">💡</span>
+              <div className="space-y-2 rounded-xl border border-slate-100 bg-slate-50 p-3.5">
+                <p className="mb-1 flex items-center gap-1.5 text-[12.5px] font-bold text-slate-700">
+                  <span>💡</span>
                   <span>{affiliateGuide}</span>
                 </p>
-                <ul className="space-y-2 text-[13.5px] font-semibold text-slate-700 sm:text-[14px]">
-                  <li className="flex items-center gap-2.5">
-                    <span className="shrink-0 text-base font-extrabold text-emerald-600">✔</span>
+                <ul className="space-y-2">
+                  <li className="flex items-start gap-2 text-[13px] font-medium leading-snug text-slate-700 sm:text-[13.5px]">
+                    <span className="mt-0.5 flex-shrink-0 font-bold text-emerald-500">✓</span>
                     <span>{affiliateBenefit1}</span>
                   </li>
-                  <li className="flex items-center gap-2.5">
-                    <span className="shrink-0 text-base font-extrabold text-emerald-600">✔</span>
+                  <li className="flex items-start gap-2 text-[13px] font-medium leading-snug text-slate-700 sm:text-[13.5px]">
+                    <span className="mt-0.5 flex-shrink-0 font-bold text-emerald-500">✓</span>
                     <span>{affiliateBenefit2}</span>
                   </li>
                 </ul>
               </div>
             </div>
 
-            <div className="pt-0.5">
+            <div>
               <a
                 href={affiliateLink}
                 target="_blank"
                 rel="noopener noreferrer sponsored"
-                className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3.5 text-[15px] font-extrabold text-white shadow-md shadow-indigo-600/20 transition-all hover:bg-indigo-700 active:scale-[0.98] sm:text-[15.5px]"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 py-3.5 text-[15px] font-bold text-white shadow-md transition-all hover:bg-indigo-700 active:scale-[0.99] sm:text-[16px]"
               >
                 <span>{affiliateCta}</span>
                 <ExternalLink className="h-4 w-4 shrink-0 text-white" />
               </a>
-              <p className="mt-2 text-center text-[11px] text-slate-400">
+              <p className="mt-1.5 text-center text-[11.5px] tracking-tight text-slate-400">
                 {t('detail.affiliateDisclaimer', '제휴 활동의 일환으로 일정 수수료를 지급받을 수 있습니다.')}
               </p>
             </div>

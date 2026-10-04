@@ -3,7 +3,9 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LightboxModal } from '@/components/LightboxModal'
 import { cn } from '@/shared/lib/cn'
+import { PRINT_FOOTER_BRAND, PRINT_FOOTER_LEGAL, PRINT_FOOTER_SITE } from '@/shared/lib/printFooter'
 import { getDisplayImageUrl, printableColorUrl, printableLineArtUrl } from '@/shared/utils/printableAssets'
+import { useDownloadStore } from '@/shared/store/useDownloadStore'
 import { usePrintableSocial } from '@/shared/store/usePrintableEngagement'
 import type { Printable } from '@/types/printable'
 
@@ -42,6 +44,11 @@ export function A4Preview({ printable }: { printable: Printable }) {
   const [printSrc, setPrintSrc] = useState('')
   const printingRef = useRef(false)
   const { isLiked, likesCount, toggleLike } = usePrintableSocial(printable)
+  const setViewMode = useDownloadStore((state) => state.setViewMode)
+
+  useEffect(() => {
+    setViewMode(mode === 'color' ? 'color' : 'bw')
+  }, [mode, setViewMode])
   const lineSrc = printableLineArtUrl(printable)
   const colorSrc = printableColorUrl(printable)
   const linePreview = getDisplayImageUrl(lineSrc, PREVIEW_WIDTH)
@@ -52,8 +59,9 @@ export function A4Preview({ printable }: { printable: Printable }) {
   const likesLabel = t('detail.likes', '좋아요')
 
   useEffect(() => {
+    prefetchImage(getDisplayImageUrl(lineSrc, THUMB_WIDTH))
     prefetchImage(mode === 'color' ? linePreview : colorPreview)
-  }, [mode, linePreview, colorPreview])
+  }, [mode, linePreview, colorPreview, lineSrc])
 
   useEffect(() => {
     if (!previewSrc) return
@@ -159,7 +167,19 @@ export function A4Preview({ printable }: { printable: Printable }) {
       </div>
 
       <div id="doolia-print-sheet" className="hidden">
-        {printSrc ? <img src={printSrc} alt={title} /> : null}
+        {printSrc ? (
+          <>
+            <img src={printSrc} alt={title} />
+            <div className="print-footer">
+              <div className="print-footer-brand">
+                <span className="print-footer-name">{PRINT_FOOTER_BRAND}</span>
+                <span className="print-footer-sep">|</span>
+                <span>{PRINT_FOOTER_SITE}</span>
+              </div>
+              <div className="print-footer-legal">{PRINT_FOOTER_LEGAL}</div>
+            </div>
+          </>
+        ) : null}
       </div>
 
       <LightboxModal
@@ -190,9 +210,11 @@ function ThumbnailButton({
   onClick: () => void
 }) {
   const [current, setCurrent] = useState(src)
+  const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
     setCurrent(src)
+    setLoaded(false)
   }, [src])
 
   return (
@@ -202,21 +224,33 @@ function ThumbnailButton({
       aria-pressed={active}
       aria-label={label}
       className={cn(
-        'flex aspect-square w-20 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-2xl bg-white p-1.5 transition-all sm:w-24',
+        'relative flex aspect-square w-20 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-2xl bg-white p-1.5 transition-all sm:w-24',
         active ? 'border-2 border-emerald-500' : 'border border-slate-200 opacity-80 hover:opacity-100',
       )}
     >
       {current ? (
-        <img
-          src={current}
-          alt=""
-          loading="lazy"
-          decoding="async"
-          className="h-full w-full rounded-xl object-contain"
-          onError={() => {
-            if (fallbackSrc && current !== fallbackSrc) setCurrent(fallbackSrc)
-          }}
-        />
+        <>
+          {!loaded ? <span className="absolute inset-1 animate-pulse rounded-xl bg-slate-100" /> : null}
+          <img
+            key={current}
+            src={current}
+            alt=""
+            loading="eager"
+            decoding="async"
+            {...{ fetchpriority: 'high' }}
+            className={cn('relative z-[1] h-full w-full rounded-xl object-contain', loaded ? 'opacity-100' : 'opacity-0')}
+            onLoad={() => setLoaded(true)}
+            ref={(node) => {
+              if (node?.complete && node.naturalWidth > 0) queueMicrotask(() => setLoaded(true))
+            }}
+            onError={() => {
+              if (fallbackSrc && current !== fallbackSrc) {
+                setLoaded(false)
+                setCurrent(fallbackSrc)
+              }
+            }}
+          />
+        </>
       ) : (
         <span className="px-1 text-center text-[10px] font-bold text-slate-400">{label}</span>
       )}
@@ -238,14 +272,16 @@ function A4Paper({
   onZoom: () => void
 }) {
   const [activeSrc, setActiveSrc] = useState(src)
+  const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
     setActiveSrc(src)
+    setLoaded(false)
   }, [src])
 
   return (
     <div className="group relative flex aspect-[3/4] w-full items-center justify-center overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-4 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.08)]">
-      {!activeSrc ? <div className="absolute inset-0 animate-pulse bg-slate-100" /> : null}
+      {!loaded ? <div className="absolute inset-0 animate-pulse bg-slate-100" /> : null}
       <button
         type="button"
         onClick={onZoom}
@@ -255,15 +291,26 @@ function A4Paper({
       </button>
       {activeSrc ? (
         <img
+          key={activeSrc}
           src={activeSrc}
           alt={title}
           loading="eager"
           decoding="sync"
           {...{ fetchpriority: 'high' }}
-          className="relative z-[1] h-full w-full cursor-zoom-in rounded-xl object-contain group-hover:scale-[1.02]"
+          className={cn(
+            'relative z-[1] h-full w-full cursor-zoom-in rounded-xl object-contain group-hover:scale-[1.02]',
+            loaded ? 'opacity-100' : 'opacity-0',
+          )}
           onClick={onZoom}
+          onLoad={() => setLoaded(true)}
+          ref={(node) => {
+            if (node?.complete && node.naturalWidth > 0) queueMicrotask(() => setLoaded(true))
+          }}
           onError={() => {
-            if (fallbackSrc && activeSrc !== fallbackSrc) setActiveSrc(fallbackSrc)
+            if (fallbackSrc && activeSrc !== fallbackSrc) {
+              setLoaded(false)
+              setActiveSrc(fallbackSrc)
+            }
           }}
         />
       ) : null}

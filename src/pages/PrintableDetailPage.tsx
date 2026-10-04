@@ -94,7 +94,7 @@ export function PrintableDetailPage() {
 
         <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-12">
           <div className="min-w-0 w-full lg:col-span-7">
-            <A4Preview printable={{ ...printable, title }} />
+            <A4Preview key={printable.id || printable.slug} printable={{ ...printable, title }} />
           </div>
           <div className="flex min-w-0 w-full flex-col gap-6 lg:col-span-5">
             <InfoSection printable={{ ...printable, title }} />

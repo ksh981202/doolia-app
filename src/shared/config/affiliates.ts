@@ -26,6 +26,19 @@ export interface AffiliateItem {
   amazonUrl: string
 }
 
+export const AFFILIATE_BADGE: LocalizedText = {
+  ko: '🎨 즐거운 미술놀이를 위한 준비물 추천',
+  en: '🎨 Recommended Supplies for Fun Art Play',
+  ja: '🎨 楽しいお絵描き遊びにおすすめの準備アイテム',
+  zh: '🎨 讓畫畫更有趣的必備用品推薦',
+  es: '🎨 Materiales recomendados para colorear y divertirse',
+  pt: '🎨 Materiais recomendados para uma pintura divertida',
+  de: '🎨 Empfohlenes Zubehör für fröhlichen Malspaß',
+  fr: '🎨 Fournitures recommandées pour un coloriage amusant',
+  it: '🎨 Materiali consigliati per un disegno divertente',
+  vi: '🎨 Gợi ý dụng cụ vẽ cho giờ chơi thêm vui',
+}
+
 export const AFFILIATE_GUIDE_TITLE: LocalizedText = {
   ko: '이런 점을 확인해보세요',
   en: 'Look for these details',
@@ -43,18 +56,7 @@ export const AFFILIATE_ITEMS: AffiliateItem[] = [
   {
     id: '01_crayons',
     image: '/affiliate/affiliate_01_crayons.webp',
-    badge: {
-      ko: "✨ DOOLIA'S PICK",
-      en: "✨ DOOLIA'S PICK",
-      ja: "✨ DOOLIA'S PICK",
-      zh: '✨ DOOLIA 精選',
-      es: '✨ SELECCIÓN DOOLIA',
-      pt: '✨ ESCOLHA DOOLIA',
-      de: '✨ DOOLIA EMPFEHLUNG',
-      fr: '✨ SÉLECTION DOOLIA',
-      it: '✨ SCELTO DA DOOLIA',
-      vi: '✨ LỰA CHỌN DOOLIA',
-    },
+    badge: AFFILIATE_BADGE,
     headline: {
       ko: '손이나 벽에 묻어도 물로 쏙 지워지는 안심 크레용',
       en: 'Ultra-Clean Washable Crayons for Toddlers',
@@ -122,18 +124,7 @@ export const AFFILIATE_ITEMS: AffiliateItem[] = [
   {
     id: '02_colored_pencils',
     image: '/affiliate/affiliate_02_colored_pencils.webp',
-    badge: {
-      ko: "✨ DOOLIA'S PICK",
-      en: "✨ DOOLIA'S PICK",
-      ja: "✨ DOOLIA'S PICK",
-      zh: '✨ DOOLIA 精選',
-      es: '✨ SELECCIÓN DOOLIA',
-      pt: '✨ ESCOLHA DOOLIA',
-      de: '✨ DOOLIA EMPFEHLUNG',
-      fr: '✨ SÉLECTION DOOLIA',
-      it: '✨ SCELTO DA DOOLIA',
-      vi: '✨ LỰA CHỌN DOOLIA',
-    },
+    badge: AFFILIATE_BADGE,
     headline: {
       ko: '손 힘이 약한 아이를 위한 맞춤 삼각 점보 색연필',
       en: 'Jumbo Triangular Colored Pencils for Easy Grip',
@@ -201,18 +192,7 @@ export const AFFILIATE_ITEMS: AffiliateItem[] = [
   {
     id: '03_markers',
     image: '/affiliate/affiliate_03_markers.webp',
-    badge: {
-      ko: "✨ DOOLIA'S PICK",
-      en: "✨ DOOLIA'S PICK",
-      ja: "✨ DOOLIA'S PICK",
-      zh: '✨ DOOLIA 精選',
-      es: '✨ SELECCIÓN DOOLIA',
-      pt: '✨ ESCOLHA DOOLIA',
-      de: '✨ DOOLIA EMPFEHLUNG',
-      fr: '✨ SÉLECTION DOOLIA',
-      it: '✨ SCELTO DA DOOLIA',
-      vi: '✨ LỰA CHỌN DOOLIA',
-    },
+    badge: AFFILIATE_BADGE,
     headline: {
       ko: '뚜껑 열려도 오래 쓰는 안심 워셔블 수성 사인펜',
       en: 'Ultra-Washable Long-Lasting Kids Marker Pens',
@@ -280,18 +260,7 @@ export const AFFILIATE_ITEMS: AffiliateItem[] = [
   {
     id: '04_water_brush',
     image: '/affiliate/affiliate_04_water_brush.webp',
-    badge: {
-      ko: "✨ DOOLIA'S PICK",
-      en: "✨ DOOLIA'S PICK",
-      ja: "✨ DOOLIA'S PICK",
-      zh: '✨ DOOLIA 精選',
-      es: '✨ SELECCIÓN DOOLIA',
-      pt: '✨ ESCOLHA DOOLIA',
-      de: '✨ DOOLIA EMPFEHLUNG',
-      fr: '✨ SÉLECTION DOOLIA',
-      it: '✨ SCELTO DA DOOLIA',
-      vi: '✨ LỰA CHỌN DOOLIA',
-    },
+    badge: AFFILIATE_BADGE,
     headline: {
       ko: '물통 엎지를 걱정 없는 신개념 워터 브러쉬 펜',
       en: 'No-Spill Water Brush Pens for Mess-Free Watercolor',
@@ -359,18 +328,7 @@ export const AFFILIATE_ITEMS: AffiliateItem[] = [
   {
     id: '05_art_smock',
     image: '/affiliate/affiliate_05_art_smock.webp',
-    badge: {
-      ko: "✨ DOOLIA'S PICK",
-      en: "✨ DOOLIA'S PICK",
-      ja: "✨ DOOLIA'S PICK",
-      zh: '✨ DOOLIA 精選',
-      es: '✨ SELECCIÓN DOOLIA',
-      pt: '✨ ESCOLHA DOOLIA',
-      de: '✨ DOOLIA EMPFEHLUNG',
-      fr: '✨ SÉLECTION DOOLIA',
-      it: '✨ SCELTO DA DOOLIA',
-      vi: '✨ LỰA CHỌN DOOLIA',
-    },
+    badge: AFFILIATE_BADGE,
     headline: {
       ko: '옷 버림 없이 마음껏 그리는 유아 방수 미술가운',
       en: 'Waterproof Long Sleeve Art Smock for Mess-Free Play',
@@ -438,18 +396,7 @@ export const AFFILIATE_ITEMS: AffiliateItem[] = [
   {
     id: '06_craft_mat',
     image: '/affiliate/affiliate_06_craft_mat.webp',
-    badge: {
-      ko: "✨ DOOLIA'S PICK",
-      en: "✨ DOOLIA'S PICK",
-      ja: "✨ DOOLIA'S PICK",
-      zh: '✨ DOOLIA 精選',
-      es: '✨ SELECCIÓN DOOLIA',
-      pt: '✨ ESCOLHA DOOLIA',
-      de: '✨ DOOLIA EMPFEHLUNG',
-      fr: '✨ SÉLECTION DOOLIA',
-      it: '✨ SCELTO DA DOOLIA',
-      vi: '✨ LỰA CHỌN DOOLIA',
-    },
+    badge: AFFILIATE_BADGE,
     headline: {
       ko: '테이블 오염 완벽 차단! 대형 실리콘 미술 매트',
       en: 'Extra Large Silicone Craft Mat with Cleaning Cup',
@@ -517,18 +464,7 @@ export const AFFILIATE_ITEMS: AffiliateItem[] = [
   {
     id: '07_safety_scissors',
     image: '/affiliate/affiliate_07_safety_scissors.webp',
-    badge: {
-      ko: "✨ DOOLIA'S PICK",
-      en: "✨ DOOLIA'S PICK",
-      ja: "✨ DOOLIA'S PICK",
-      zh: '✨ DOOLIA 精選',
-      es: '✨ SELECCIÓN DOOLIA',
-      pt: '✨ ESCOLHA DOOLIA',
-      de: '✨ DOOLIA EMPFEHLUNG',
-      fr: '✨ SÉLECTION DOOLIA',
-      it: '✨ SCELTO DA DOOLIA',
-      vi: '✨ LỰA CHỌN DOOLIA',
-    },
+    badge: AFFILIATE_BADGE,
     headline: {
       ko: '손 베일 걱정 없는 둥근 안전 가위',
       en: 'Safe Blunt-Tip Preschool Training Scissors',
@@ -596,18 +532,7 @@ export const AFFILIATE_ITEMS: AffiliateItem[] = [
   {
     id: '08_kids_art_set',
     image: '/affiliate/affiliate_08_kids_art_set.webp',
-    badge: {
-      ko: "✨ DOOLIA'S PICK",
-      en: "✨ DOOLIA'S PICK",
-      ja: "✨ DOOLIA'S PICK",
-      zh: '✨ DOOLIA 精選',
-      es: '✨ SELECCIÓN DOOLIA',
-      pt: '✨ ESCOLHA DOOLIA',
-      de: '✨ DOOLIA EMPFEHLUNG',
-      fr: '✨ SÉLECTION DOOLIA',
-      it: '✨ SCELTO DA DOOLIA',
-      vi: '✨ LỰA CHỌN DOOLIA',
-    },
+    badge: AFFILIATE_BADGE,
     headline: {
       ko: '하나로 끝내는 올인원 어린이 종합 미술세트',
       en: 'All-In-One Deluxe Kids Art Supplies Gift Set',

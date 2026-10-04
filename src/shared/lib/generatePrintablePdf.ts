@@ -1,35 +1,28 @@
 import { jsPDF } from 'jspdf'
 import type { Printable } from '@/types/printable'
+import { drawPrintFooter } from '@/shared/lib/printFooter'
+import { printableViewUrl, type PrintableViewMode } from '@/shared/utils/printableAssets'
 
 const PAGE_WIDTH_MM = 210
 const PAGE_HEIGHT_MM = 297
 const MARGIN_MM = 10
-const WATERMARK_BAND_MM = 8
+const FOOTER_BAND_MM = 14
 const DPI = 300
 const MM_PER_INCH = 25.4
-const WATERMARK = 'DOOLIA Printables (doolia.com) | For Personal & Educational Use Only'
 
 function mmToPx(mm: number) {
   return Math.max(1, Math.round((mm / MM_PER_INCH) * DPI))
 }
 
-function sourceUrl(printable: Printable) {
-  return (
-    printable.image_bw_url ||
-    printable.line_art_url ||
-    printable.image_color_url ||
-    printable.color_image_url ||
-    ''
-  )
-}
-
-function safePdfFilename(title: string) {
+function safePdfFilename(slug: string, variant: PrintableViewMode) {
   const base =
-    title
-      .replace(/[\\/:*?"<>|]+/g, ' ')
-      .replace(/\s+/g, ' ')
+    slug
+      .replace(/[\\/:*?"<>|]+/g, '-')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '')
       .trim() || 'doolia-printable'
-  return `${base.slice(0, 80)}.pdf`
+  return `${base.slice(0, 80)}_${variant}.pdf`
 }
 
 function decodeImage(src: string, cors: boolean) {
@@ -58,17 +51,31 @@ async function loadLineArt(url: string) {
   }
 }
 
-function rasterizeForPrint(image: HTMLImageElement, drawWidthMm: number, drawHeightMm: number) {
+function rasterizeA4Page(image: HTMLImageElement) {
   const canvas = document.createElement('canvas')
-  canvas.width = mmToPx(drawWidthMm)
-  canvas.height = mmToPx(drawHeightMm)
+  canvas.width = mmToPx(PAGE_WIDTH_MM)
+  canvas.height = mmToPx(PAGE_HEIGHT_MM)
   const ctx = canvas.getContext('2d')
   if (!ctx) throw new Error('PDF 캔버스를 만들지 못했습니다.')
   ctx.fillStyle = '#ffffff'
   ctx.fillRect(0, 0, canvas.width, canvas.height)
   ctx.imageSmoothingEnabled = true
   ctx.imageSmoothingQuality = 'high'
-  ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
+
+  const margin = mmToPx(MARGIN_MM)
+  const footerHeight = mmToPx(FOOTER_BAND_MM)
+  const artWidth = canvas.width - margin * 2
+  const artHeight = canvas.height - margin - footerHeight
+  const pixelWidth = image.naturalWidth || image.width
+  const pixelHeight = image.naturalHeight || image.height
+  const fit = Math.min(artWidth / pixelWidth, artHeight / pixelHeight)
+  const drawWidth = pixelWidth * fit
+  const drawHeight = pixelHeight * fit
+  const x = (canvas.width - drawWidth) / 2
+  const y = margin + (artHeight - drawHeight) / 2
+  ctx.drawImage(image, x, y, drawWidth, drawHeight)
+  drawPrintFooter(ctx, canvas.width, canvas.height, footerHeight, margin)
+
   try {
     return canvas.toDataURL('image/png')
   } catch {
@@ -76,22 +83,18 @@ function rasterizeForPrint(image: HTMLImageElement, drawWidthMm: number, drawHei
   }
 }
 
-export async function generatePrintablePdf(printable: Printable) {
-  const url = sourceUrl(printable)
+export async function generatePrintablePdf(
+  printable: Printable,
+  options?: { variant?: PrintableViewMode },
+) {
+  const variant = options?.variant ?? 'bw'
+  const url = printableViewUrl(printable, variant)
   if (!url) throw new Error('다운로드할 선화 이미지가 없습니다.')
 
   const image = await loadLineArt(url)
   const pixelWidth = image.naturalWidth || image.width
   const pixelHeight = image.naturalHeight || image.height
   if (!pixelWidth || !pixelHeight) throw new Error('이미지 크기를 읽지 못했습니다.')
-
-  const maxWidth = PAGE_WIDTH_MM - MARGIN_MM * 2
-  const maxHeight = PAGE_HEIGHT_MM - MARGIN_MM * 2 - WATERMARK_BAND_MM
-  const fit = Math.min(maxWidth / pixelWidth, maxHeight / pixelHeight)
-  const drawWidth = pixelWidth * fit
-  const drawHeight = pixelHeight * fit
-  const x = (PAGE_WIDTH_MM - drawWidth) / 2
-  const y = MARGIN_MM + (maxHeight - drawHeight) / 2
 
   const pdf = new jsPDF({
     orientation: 'portrait',
@@ -100,13 +103,8 @@ export async function generatePrintablePdf(printable: Printable) {
     compress: true,
   })
 
-  const dataUrl = rasterizeForPrint(image, drawWidth, drawHeight)
-  pdf.addImage(dataUrl, 'PNG', x, y, drawWidth, drawHeight, undefined, 'FAST')
+  const dataUrl = rasterizeA4Page(image)
+  pdf.addImage(dataUrl, 'PNG', 0, 0, PAGE_WIDTH_MM, PAGE_HEIGHT_MM, undefined, 'FAST')
 
-  pdf.setFont('helvetica', 'normal')
-  pdf.setFontSize(7)
-  pdf.setTextColor(120, 120, 120)
-  pdf.text(WATERMARK, PAGE_WIDTH_MM / 2, PAGE_HEIGHT_MM - 4, { align: 'center' })
-
-  pdf.save(safePdfFilename(printable.title_ko || printable.title))
+  pdf.save(safePdfFilename(printable.slug || printable.id || printable.title_ko || printable.title, variant))
 }

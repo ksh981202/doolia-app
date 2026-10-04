@@ -74,7 +74,7 @@ export function PlayRecipeDetailPage() {
             <button
               type="button"
               onClick={() => {
-                if (printable) openModal(printable)
+                if (printable) openModal(printable, 'bw')
               }}
               className="flex w-full items-center justify-center rounded-2xl bg-emerald-700 py-3.5 text-sm font-bold text-white shadow-md hover:bg-emerald-800"
             >

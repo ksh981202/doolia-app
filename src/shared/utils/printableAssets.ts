@@ -78,12 +78,18 @@ export function getDisplayImageUrl(url: string, width = DEFAULT_DISPLAY_WIDTH): 
   return parsed.toString()
 }
 
+export type PrintableViewMode = 'bw' | 'color'
+
 export function printableLineArtUrl(printable: Printable) {
   return printable.image_bw_url || printable.line_art_url || printable.image_color_url || printable.color_image_url || ''
 }
 
 export function printableColorUrl(printable: Printable) {
   return printable.image_color_url || printable.color_image_url || printable.image_bw_url || printable.line_art_url || ''
+}
+
+export function printableViewUrl(printable: Printable, mode: PrintableViewMode) {
+  return mode === 'color' ? printableColorUrl(printable) : printableLineArtUrl(printable)
 }
 
 export function difficultyLabel(difficulty?: Printable['difficulty']) {
