@@ -1,19 +1,21 @@
 import { Download, ExternalLink, Printer, X } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { incrementPrintableDownloads } from '@/services/printableService'
 import type { Printable } from '@/types/printable'
 import { AD_COUNTDOWN_SECONDS } from '@/shared/config/categories'
+import {
+  AFFILIATE_GUIDE_TITLE,
+  type AffiliateItem,
+  getAffiliateLink,
+  getNextAffiliateItem,
+  pickAffiliateText,
+} from '@/shared/config/affiliates'
 import { cn } from '@/shared/lib/cn'
 import { detailTitle } from '@/shared/lib/detailCopy'
 import { generatePrintablePdf } from '@/shared/lib/generatePrintablePdf'
 import { printableLineArtUrl } from '@/shared/utils/printableAssets'
 import { useDownloadStore } from '@/shared/store/useDownloadStore'
-
-const AFFILIATE_IMAGE =
-  'https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=800&auto=format&fit=crop'
-const AFFILIATE_COUPANG = `https://www.coupang.com/np/search?q=${encodeURIComponent('무독성 유아 크레파스')}`
-const AFFILIATE_AMAZON = 'https://www.amazon.com/s?k=crayola+ultra+clean+washable+crayons'
 
 function escapeHtml(value: string) {
   return value
@@ -62,6 +64,14 @@ function writePrintHtml(target: Document, title: string, imgUrl: string) {
 
 export function DownloadModal() {
   const { isOpen, printable, closeModal } = useDownloadStore()
+  const wasOpen = useRef(false)
+  const affiliateRef = useRef<AffiliateItem | null>(null)
+
+  if (isOpen && !wasOpen.current) {
+    affiliateRef.current = getNextAffiliateItem()
+  }
+  wasOpen.current = isOpen
+  const affiliate = affiliateRef.current
 
   useEffect(() => {
     if (!isOpen) return
@@ -72,16 +82,25 @@ export function DownloadModal() {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [isOpen, closeModal])
 
-  if (!isOpen || !printable) return null
+  if (!isOpen || !printable || !affiliate) return null
 
-  return <DownloadModalBody key={printable.id} printable={printable} onClose={closeModal} />
+  return (
+    <DownloadModalBody
+      key={`${printable.id}-${affiliate.id}`}
+      printable={printable}
+      affiliate={affiliate}
+      onClose={closeModal}
+    />
+  )
 }
 
 function DownloadModalBody({
   printable,
+  affiliate,
   onClose,
 }: {
   printable: Printable
+  affiliate: AffiliateItem
   onClose: () => void
 }) {
   const { t, i18n } = useTranslation()
@@ -92,7 +111,14 @@ function DownloadModalBody({
   const lang = (i18n.language || i18n.resolvedLanguage || 'ko').split('-')[0]
   const title = detailTitle(printable, i18n.language || i18n.resolvedLanguage)
   const previewSrc = printableLineArtUrl(printable)
-  const affiliateLink = lang === 'ko' ? AFFILIATE_COUPANG : AFFILIATE_AMAZON
+  const affiliateLink = getAffiliateLink(affiliate, lang)
+  const affiliateBadge = pickAffiliateText(affiliate.badge, lang)
+  const affiliateHeadline = pickAffiliateText(affiliate.headline, lang)
+  const affiliatePain = pickAffiliateText(affiliate.painPoint, lang)
+  const affiliateGuide = pickAffiliateText(AFFILIATE_GUIDE_TITLE, lang)
+  const affiliateBenefit1 = pickAffiliateText(affiliate.benefit1, lang)
+  const affiliateBenefit2 = pickAffiliateText(affiliate.benefit2, lang)
+  const affiliateCta = pickAffiliateText(affiliate.ctaText, lang)
 
   useEffect(() => {
     if (AD_COUNTDOWN_SECONDS <= 0) return
@@ -234,45 +260,38 @@ function DownloadModalBody({
           <div className="flex min-h-0 flex-col justify-between space-y-3.5 p-6 sm:p-7">
             <div>
               <span className="rounded-full border border-emerald-200/50 bg-emerald-50 px-2.5 py-0.5 text-[11.5px] font-bold uppercase tracking-wider text-emerald-700">
-                {t('detail.affiliatePick', "✨ DOOLIA'S CHOICE")}
+                {affiliateBadge}
               </span>
               <h3 className="mt-1.5 text-lg font-extrabold text-slate-900 sm:text-[21px]">
-                {t('detail.affiliateHeadline', '아이와 함께하는 미술놀이 추천 준비물')}
+                {affiliateHeadline}
               </h3>
             </div>
 
             <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-slate-200/60 bg-slate-100 shadow-xs">
-              <img
-                src={AFFILIATE_IMAGE}
-                alt={t('detail.affiliateImgAlt', '미술 놀이 준비물')}
-                className="h-full w-full object-cover"
-              />
+              <img src={affiliate.image} alt={affiliateHeadline} className="h-full w-full object-cover" />
             </div>
 
             <div className="space-y-2.5">
               <div className="flex items-start gap-2.5 rounded-xl border border-amber-200/70 bg-amber-50/80 px-4 py-3">
                 <span className="shrink-0 text-lg">⚠️</span>
                 <p className="break-keep text-[14px] font-bold leading-snug text-amber-950 sm:text-[14.5px]">
-                  {t(
-                    'detail.affiliatePain',
-                    '아이와 색칠놀이를 하다 보면 손이나 옷에 크레용이 묻어 신경 쓰일 때가 있죠.',
-                  )}
+                  {affiliatePain}
                 </p>
               </div>
 
               <div className="space-y-2.5 rounded-xl border border-slate-200/60 bg-slate-50/90 p-4">
                 <p className="flex items-center gap-2 text-[14px] font-extrabold text-slate-900 sm:text-[14.5px]">
                   <span className="text-base text-emerald-600">💡</span>
-                  <span>{t('detail.affiliatePlayTip', '이런 크레용을 찾아보세요')}</span>
+                  <span>{affiliateGuide}</span>
                 </p>
                 <ul className="space-y-2 text-[13.5px] font-semibold text-slate-700 sm:text-[14px]">
                   <li className="flex items-center gap-2.5">
                     <span className="shrink-0 text-base font-extrabold text-emerald-600">✔</span>
-                    <span>{t('detail.affiliateB1Text', '물티슈나 물로 쉽게 닦이는 워셔블 제품')}</span>
+                    <span>{affiliateBenefit1}</span>
                   </li>
                   <li className="flex items-center gap-2.5">
                     <span className="shrink-0 text-base font-extrabold text-emerald-600">✔</span>
-                    <span>{t('detail.affiliateB2Text', '아이 손에 부담이 적은 부드러운 발색')}</span>
+                    <span>{affiliateBenefit2}</span>
                   </li>
                 </ul>
               </div>
@@ -283,10 +302,10 @@ function DownloadModalBody({
                 href={affiliateLink}
                 target="_blank"
                 rel="noopener noreferrer sponsored"
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-3.5 text-[15px] font-extrabold text-white shadow-sm transition-all hover:bg-slate-800 active:scale-[0.98] sm:text-[15.5px]"
+                className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3.5 text-[15px] font-extrabold text-white shadow-md shadow-indigo-600/20 transition-all hover:bg-indigo-700 active:scale-[0.98] sm:text-[15.5px]"
               >
-                <span>{t('detail.affiliateCta', '아이용 지워지는 크레용 둘러보기')}</span>
-                <ExternalLink className="h-4 w-4 shrink-0" />
+                <span>{affiliateCta}</span>
+                <ExternalLink className="h-4 w-4 shrink-0 text-white" />
               </a>
               <p className="mt-2 text-center text-[11px] text-slate-400">
                 {t('detail.affiliateDisclaimer', '제휴 활동의 일환으로 일정 수수료를 지급받을 수 있습니다.')}

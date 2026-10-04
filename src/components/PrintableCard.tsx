@@ -66,7 +66,7 @@ export function PrintableCard({ printable }: PrintableCardProps) {
     printable.theme_ko ||
     printable.theme_en ||
     t(`categories.${printable.category}`, '')
-  const { isLiked, likesCount, viewsCount } = usePrintableSocial(printable)
+  const { likesCount, viewsCount } = usePrintableSocial(printable)
 
   return (
     <Link
