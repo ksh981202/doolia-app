@@ -22,6 +22,7 @@ const AdminDashboardPage = lazy(() => import('@/pages/admin/AdminDashboardPage')
 const AdminPrintablesPage = lazy(() => import('@/pages/admin/AdminPrintablesPage'))
 const AdminUploadPage = lazy(() => import('@/pages/admin/AdminUploadPage'))
 const AdminTipsPage = lazy(() => import('@/pages/admin/AdminTipsPage'))
+const AdminCopyrightReportsPage = lazy(() => import('@/pages/admin/AdminCopyrightReportsPage'))
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -68,6 +69,7 @@ export function AppRouter() {
             <Route path="/admin/printables" element={<AdminPrintablesPage />} />
             <Route path="/admin/printables/upload" element={<AdminUploadPage />} />
             <Route path="/admin/tips" element={<AdminTipsPage />} />
+            <Route path="/admin/reports" element={<AdminCopyrightReportsPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

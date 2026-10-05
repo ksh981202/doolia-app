@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { BRAND } from '@/shared/config/categories'
+import { useCopyrightReportStore } from '@/shared/store/useCopyrightReportStore'
 
 const CATEGORY_LINKS = [
   { to: '/category/coloring-pages', key: 'footer.allColoring' as const },
@@ -18,6 +19,7 @@ const LEGAL_LINKS = [
 
 export function Footer() {
   const { t } = useTranslation()
+  const openReport = useCopyrightReportStore((state) => state.openReport)
 
   return (
     <footer className="border-t border-line bg-white">
@@ -49,13 +51,21 @@ export function Footer() {
                 {t(item.key)}
               </Link>
             ))}
+            <button
+              type="button"
+              onClick={() => openReport()}
+              className="text-left text-ink/80 hover:text-[#059669]"
+            >
+              {t('footer.dmca', '저작권/권리침해 신고')}
+            </button>
           </div>
         </div>
       </div>
       <div className="border-t border-line">
-        <p className="mx-auto w-full max-w-7xl px-4 py-5 text-[13px] text-muted sm:px-6 sm:text-[13.5px] lg:px-8">
-          {t('footer.copyright', { year: new Date().getFullYear(), brand: BRAND.name })}
-        </p>
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-1 px-4 py-5 text-[13px] text-muted sm:px-6 sm:text-[13.5px] lg:px-8">
+          <p>{t('footer.copyright', { year: new Date().getFullYear(), brand: BRAND.name })}</p>
+          <p>{t('footer.copyrightUse', '개인 및 교육용 무료 도안 · 상업적 이용 및 재배포를 금합니다.')}</p>
+        </div>
       </div>
     </footer>
   )

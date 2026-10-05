@@ -10,6 +10,7 @@ import {
 import { cn } from '@/shared/lib/cn'
 import { usePrintableSocial } from '@/shared/store/usePrintableEngagement'
 import { useDownloadStore } from '@/shared/store/useDownloadStore'
+import { useCopyrightReportStore } from '@/shared/store/useCopyrightReportStore'
 import type { Printable } from '@/types/printable'
 
 function pointEmoji(label: string) {
@@ -27,6 +28,7 @@ const TEXT_WRAP = 'min-w-0 break-words [overflow-wrap:anywhere]'
 export function InfoSection({ printable }: { printable: Printable }) {
   const { t, i18n } = useTranslation()
   const openModal = useDownloadStore((state) => state.openModal)
+  const openReport = useCopyrightReportStore((state) => state.openReport)
   const { isLiked, likesCount, viewsCount } = usePrintableSocial(printable)
   const locale = i18n.language || i18n.resolvedLanguage || 'ko'
   const title = detailTitle(printable, locale)
@@ -148,6 +150,43 @@ export function InfoSection({ printable }: { printable: Printable }) {
           <span className="truncate text-[13px] font-semibold tracking-tight sm:text-[13.5px]">
             {t('detail.specQuality', '선명한 고화질 인쇄')}
           </span>
+        </div>
+      </div>
+
+      <div className="mt-3.5 rounded-xl border border-slate-200/80 bg-slate-50 p-3 text-slate-500 shadow-2xs">
+        <div className="mb-2 flex items-center justify-between gap-2 border-b border-slate-200/60 pb-2">
+          <div className="flex min-w-0 items-center gap-2 text-[14px] font-bold text-slate-800">
+            <span className="text-[15px] leading-none" aria-hidden>
+              🛡️
+            </span>
+            <span className="truncate">{t('detail.copyrightTitle', '둘리아 안심 이용 안내')}</span>
+          </div>
+          <button
+            type="button"
+            title={t('detail.copyrightReportTitle', '저작권 침해 또는 콘텐츠 문의')}
+            onClick={() =>
+              openReport({
+                printableId: printable.id,
+                printableSlug: printable.slug || printable.id,
+                printableTitle: title,
+              })
+            }
+            className="inline-flex shrink-0 items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1 text-[12.5px] font-bold text-slate-500 shadow-2xs transition-all hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600"
+          >
+            <span>{t('detail.copyrightReport', '저작권 문의 · 신고')}</span>
+            <span className="text-[12px]" aria-hidden>
+              ✉️
+            </span>
+          </button>
+        </div>
+        <div className="space-y-1 text-[13px] leading-snug tracking-tight text-slate-500">
+          <p>{t('detail.copyrightScope', '• 아이와 함께하는 가정 및 교육 공간에서 자유롭게 인쇄해 보세요.')}</p>
+          <p>
+            {t(
+              'detail.copyrightNote',
+              '• 저작권 및 도안 관련 수정·삭제 문의는 접수 즉시 신속하게 처리됩니다.',
+            )}
+          </p>
         </div>
       </div>
     </aside>

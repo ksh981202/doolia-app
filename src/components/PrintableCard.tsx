@@ -99,24 +99,26 @@ export function PrintableCard({ printable }: PrintableCardProps) {
 
       <div className="flex flex-1 flex-col justify-between bg-white p-3.5 sm:p-4">
         <div>
-          <p className="mb-1 truncate text-[13px] font-bold tracking-tight text-emerald-600 sm:text-[13.5px]">
+          <p className="mb-1 line-clamp-1 text-[12.5px] font-bold leading-tight tracking-tight text-emerald-600 sm:text-[13px]">
             {theme ? `${age} · ${theme}` : age}
           </p>
-          <h3 className="line-clamp-2 break-words text-[14.5px] font-bold leading-snug text-slate-800 transition-colors group-hover:text-emerald-600 sm:text-[15px]">
+          <h3 className="line-clamp-2 break-words text-[16px] font-bold leading-snug tracking-tight text-slate-800 transition-colors group-hover:text-emerald-600 sm:text-[17px]">
             {title}
           </h3>
         </div>
-        <div className="mt-3 flex items-center justify-between border-t border-slate-100/80 pt-2 text-[12px] font-medium text-slate-400">
-          <div className="flex items-center gap-2.5">
-            <span className="flex items-center gap-1 transition-colors hover:text-rose-500">
-              <span className="text-xs text-rose-500">♥</span> {likesCount}
+        <div className="mt-2.5 flex items-center justify-between border-t border-slate-100/90 pt-2 text-slate-500">
+          <div className="flex items-center gap-3">
+            <span className="flex items-center gap-1 text-[13.5px] font-semibold leading-none transition-colors hover:text-rose-500">
+              <span className="text-[15px] leading-none text-rose-500">♥</span>
+              {likesCount}
             </span>
-            <span className="flex items-center gap-1">
-              <span className="text-xs">👁</span> {viewsCount.toLocaleString(locale)}
+            <span className="flex items-center gap-1 text-[13.5px] font-semibold leading-none">
+              <span className="text-[15px] leading-none">👁</span>
+              {viewsCount.toLocaleString(locale)}
             </span>
           </div>
-          <div className="flex h-7 w-7 items-center justify-center rounded-full border border-slate-200/60 bg-slate-50 text-slate-500 shadow-xs transition-all group-hover:border-emerald-500 group-hover:bg-emerald-500 group-hover:text-white">
-            <span className="text-[13px]">🖨️</span>
+          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-slate-200/60 bg-slate-50 text-slate-500 shadow-xs transition-all group-hover:border-emerald-500 group-hover:bg-emerald-500 group-hover:text-white">
+            <span className="text-[15px] leading-none">🖨️</span>
           </div>
         </div>
       </div>

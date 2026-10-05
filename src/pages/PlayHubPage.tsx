@@ -53,33 +53,25 @@ const HOT_THEMES = [
     key: 'dino',
     to: '/category/coloring-pages?theme=dinosaur',
     icon: '🦖',
-    cardBg: 'bg-amber-50/70 border-amber-100/90 hover:border-amber-300',
-    titleColor: 'text-amber-950',
-    descColor: 'text-amber-800/70',
+    cardBg: 'bg-amber-50/60 border-amber-100/90 hover:border-amber-300',
   },
   {
     key: 'princess',
     to: '/category/coloring-pages?theme=princess',
     icon: '👑',
-    cardBg: 'bg-pink-50/70 border-pink-100/90 hover:border-pink-300',
-    titleColor: 'text-pink-950',
-    descColor: 'text-pink-800/70',
+    cardBg: 'bg-pink-50/60 border-pink-100/90 hover:border-pink-300',
   },
   {
     key: 'imagination',
     to: '/category/coloring-pages?theme=imagination',
     icon: '✨',
-    cardBg: 'bg-emerald-50/70 border-emerald-100/90 hover:border-emerald-300',
-    titleColor: 'text-emerald-950',
-    descColor: 'text-emerald-800/70',
+    cardBg: 'bg-emerald-50/60 border-emerald-100/90 hover:border-emerald-300',
   },
   {
     key: 'animals',
     to: '/category/coloring-pages?theme=animals',
     icon: '🐶',
-    cardBg: 'bg-orange-50/70 border-orange-100/90 hover:border-orange-300',
-    titleColor: 'text-orange-950',
-    descColor: 'text-orange-800/70',
+    cardBg: 'bg-orange-50/60 border-orange-100/90 hover:border-orange-300',
   },
 ] as const
 
@@ -265,23 +257,21 @@ export function PlayHubPage() {
             </div>
           </div>
 
-          <div className="mt-6 grid grid-cols-2 gap-2.5 sm:mt-8 sm:gap-3.5 lg:grid-cols-4">
+          <div className="mt-6 grid grid-cols-2 gap-3.5 sm:mt-8 sm:gap-4 lg:grid-cols-4">
             {HOT_THEMES.map((item) => (
               <Link
                 key={item.key}
                 to={item.to}
-                className={`flex items-center gap-2.5 rounded-2xl border p-3 text-left transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xs sm:p-4 ${item.cardBg}`}
+                className={`group flex items-center gap-3.5 rounded-2xl border px-4 py-3.5 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md sm:px-4.5 sm:py-4 ${item.cardBg}`}
               >
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-xl shadow-xs sm:h-11 sm:w-11 sm:text-2xl">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/90 bg-white text-2xl shadow-xs transition-transform duration-300 group-hover:scale-110">
                   <span>{item.icon}</span>
                 </div>
-                <div className="min-w-0 flex-1">
-                  <h3
-                    className={`truncate text-[13.5px] font-bold leading-snug sm:text-[15px] ${item.titleColor}`}
-                  >
+                <div className="flex min-w-0 flex-1 flex-col items-start text-left">
+                  <h3 className="line-clamp-1 text-[17px] font-bold leading-snug tracking-tight text-slate-800">
                     {t(`home.hot.${item.key}.title`)}
                   </h3>
-                  <p className={`mt-0.5 hidden truncate text-[11px] sm:block sm:text-[12px] ${item.descColor}`}>
+                  <p className="mt-0.5 w-full truncate text-left text-[13.5px] font-medium leading-normal text-slate-500 sm:text-[14.5px]">
                     {t(`home.hot.${item.key}.desc`)}
                   </p>
                 </div>

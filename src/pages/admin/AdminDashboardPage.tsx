@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { isSupabaseConfigured } from '@/lib/supabase'
 import { listAdminPrintables } from '@/services/adminPrintableService'
 import { listAdminTips } from '@/services/adminTipService'
+import { countPendingCopyrightReports } from '@/services/copyrightReportService'
 
 export function AdminDashboardPage() {
   const [printables, setPrintables] = useState(0)
@@ -10,13 +11,18 @@ export function AdminDashboardPage() {
   const [tips, setTips] = useState(0)
   const [tipDrafts, setTipDrafts] = useState(0)
 
+  const [reports, setReports] = useState(0)
+
   useEffect(() => {
-    void Promise.all([listAdminPrintables(), listAdminTips()]).then(([items, columns]) => {
-      setPrintables(items.length)
-      setPublished(items.filter((item) => item.published).length)
-      setTips(columns.length)
-      setTipDrafts(columns.filter((item) => !item.published).length)
-    })
+    void Promise.all([listAdminPrintables(), listAdminTips(), countPendingCopyrightReports()]).then(
+      ([items, columns, pendingReports]) => {
+        setPrintables(items.length)
+        setPublished(items.filter((item) => item.published).length)
+        setTips(columns.length)
+        setTipDrafts(columns.filter((item) => !item.published).length)
+        setReports(pendingReports)
+      },
+    )
   }, [])
 
   const cards = [
@@ -24,6 +30,7 @@ export function AdminDashboardPage() {
     { label: '발행 중 도안', value: published, to: '/admin/printables' },
     { label: '육아 팁', value: tips, to: '/admin/tips' },
     { label: '미발행 팁', value: tipDrafts, to: '/admin/tips' },
+    { label: '저작권 문의(대기)', value: reports, to: '/admin/reports' },
   ]
 
   return (
@@ -36,7 +43,7 @@ export function AdminDashboardPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
         {cards.map((card) => (
           <Link
             key={card.label}
