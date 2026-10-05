@@ -1,6 +1,13 @@
 import { Buffer } from 'node:buffer'
 import type { IncomingMessage, ServerResponse } from 'node:http'
-import { DeleteObjectsCommand, ListObjectsV2Command, PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import {
+  CopyObjectCommand,
+  DeleteObjectsCommand,
+  HeadObjectCommand,
+  ListObjectsV2Command,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3'
 
 export type R2MediaItem = {
   key: string
@@ -23,6 +30,7 @@ const MAX_BYTES = 12 * 1024 * 1024
 const PRINTABLE_MAX_BYTES = 40 * 1024 * 1024
 const LIBRARY_PREFIX = 'tips/library/'
 const PRINTABLES_PREFIX = 'printables/'
+export const PRINTABLE_CACHE_CONTROL = 'public, max-age=31536000, s-maxage=31536000, immutable'
 
 function envString(env: NodeJS.Dict<string>, key: string) {
   return env[key]?.trim() || ''
@@ -216,11 +224,88 @@ export async function uploadR2Printable(
       Key: key,
       Body: bytes,
       ContentType: type,
-      CacheControl: 'public, max-age=0, must-revalidate',
+      CacheControl: PRINTABLE_CACHE_CONTROL,
     }),
   )
   const item = toItem(getR2PublicBase(env), key, new Date())
   return { ...item, url: cacheBustedUrl(item.url) }
+}
+
+function copySource(bucket: string, key: string) {
+  return `${bucket}/${key
+    .split('/')
+    .map((segment) => encodeURIComponent(segment))
+    .join('/')}`
+}
+
+export async function listPrintableObjectKeys(env: NodeJS.Dict<string>) {
+  if (!isR2Configured(env)) return []
+  const client = createR2Client(env)
+  const bucket = envString(env, 'R2_BUCKET_NAME')
+  const keys: string[] = []
+  let token: string | undefined
+  do {
+    const page = await client.send(
+      new ListObjectsV2Command({
+        Bucket: bucket,
+        Prefix: PRINTABLES_PREFIX,
+        ContinuationToken: token,
+        MaxKeys: 1000,
+      }),
+    )
+    for (const object of page.Contents ?? []) {
+      const key = object.Key
+      if (!key || key.endsWith('/') || !PRINTABLE_IMAGE_EXT.test(key)) continue
+      keys.push(key)
+    }
+    token = page.IsTruncated ? page.NextContinuationToken : undefined
+  } while (token)
+  return keys
+}
+
+export async function updatePrintableCacheControl(
+  env: NodeJS.Dict<string>,
+  keys: string[],
+  cacheControl = PRINTABLE_CACHE_CONTROL,
+) {
+  if (!isR2Configured(env)) {
+    throw new Error('R2 환경 변수가 없습니다.')
+  }
+  const client = createR2Client(env)
+  const bucket = envString(env, 'R2_BUCKET_NAME')
+  const updated: string[] = []
+  const skipped: string[] = []
+  const errors: string[] = []
+
+  for (const key of keys) {
+    if (!isSafePrintableObjectKey(key)) {
+      skipped.push(key)
+      continue
+    }
+    try {
+      const head = await client.send(new HeadObjectCommand({ Bucket: bucket, Key: key }))
+      if ((head.CacheControl || '').includes('max-age=31536000') && (head.CacheControl || '').includes('immutable')) {
+        skipped.push(key)
+        continue
+      }
+      await client.send(
+        new CopyObjectCommand({
+          Bucket: bucket,
+          Key: key,
+          CopySource: copySource(bucket, key),
+          MetadataDirective: 'REPLACE',
+          ContentType: head.ContentType || contentTypeForImage(key, ''),
+          CacheControl: cacheControl,
+          Metadata: head.Metadata,
+        }),
+      )
+      updated.push(key)
+    } catch (error) {
+      errors.push(`${key}: ${error instanceof Error ? error.message : '실패'}`)
+    }
+  }
+
+  return { updated, skipped, errors }
 }
 
 const DELETE_OBJECT_CHUNK = 1000

@@ -15,7 +15,7 @@ import { cn } from '@/shared/lib/cn'
 import { detailTitle } from '@/shared/lib/detailCopy'
 import { generatePrintablePdf } from '@/shared/lib/generatePrintablePdf'
 import { printFooterMarkup } from '@/shared/lib/printFooter'
-import { printableViewUrl } from '@/shared/utils/printableAssets'
+import { getDisplayImageUrl, printableViewUrl } from '@/shared/utils/printableAssets'
 import { useDownloadStore } from '@/shared/store/useDownloadStore'
 
 function escapeHtml(value: string) {
@@ -140,7 +140,8 @@ function DownloadModalBody({
   const ready = secondsLeft <= 0 && !generating
   const lang = (i18n.language || i18n.resolvedLanguage || 'ko').split('-')[0]
   const title = detailTitle(printable, i18n.language || i18n.resolvedLanguage)
-  const previewSrc = printableViewUrl(printable, viewMode)
+  const originalSrc = printableViewUrl(printable, viewMode)
+  const previewSrc = getDisplayImageUrl(originalSrc, 1000)
   const affiliateLink = getAffiliateLink(affiliate, lang)
   const affiliateBadge = pickAffiliateText(affiliate.badge, lang)
   const affiliateHeadline = pickAffiliateText(affiliate.headline, lang)
@@ -179,7 +180,7 @@ function DownloadModalBody({
   }
 
   const handleDirectPrint = () => {
-    const imgUrl = safePrintUrl(printableViewUrl(printable, viewMode))
+    const imgUrl = safePrintUrl(originalSrc)
     const printTitle = title || 'DOOLIA Printable'
     if (!imgUrl) {
       setError(t('detail.notFound', '도안을 찾을 수 없어요.'))
