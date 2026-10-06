@@ -59,7 +59,7 @@ function fileToBase64(file: File) {
 export async function fetchR2MediaLibrary(): Promise<R2MediaLibrary> {
   const local = readLocal()
   try {
-    const response = await fetch(API)
+    const response = await fetch(API, { credentials: 'include' })
     if (!response.ok) throw new Error('R2 미디어 API 응답 오류')
     const data = (await response.json()) as R2MediaLibrary
     return {
@@ -87,6 +87,7 @@ export async function uploadR2MediaFile(file: File): Promise<R2MediaItem> {
   try {
     const response = await fetch(API, {
       method: 'POST',
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         filename: file.name,
@@ -127,6 +128,7 @@ export async function uploadR2PrintableFile(file: File): Promise<R2MediaItem> {
   try {
     const response = await fetch(PRINTABLE_API, {
       method: 'POST',
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         filename: file.name,
@@ -180,6 +182,7 @@ export async function deleteR2PrintableFiles(keysOrUrls: string[]) {
 
   const response = await fetch(PRINTABLE_API, {
     method: 'DELETE',
+    credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ keys }),
   })

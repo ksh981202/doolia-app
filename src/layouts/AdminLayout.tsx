@@ -1,11 +1,15 @@
 import { FileImage, LayoutDashboard, Menu, ShieldAlert, Upload, X } from 'lucide-react'
 import { useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
-import { clearAdminSession } from '@/admin/AdminGuard'
+import { AdminGuard, logoutAdminSession } from '@/admin/AdminGuard'
 import { cn } from '@/shared/lib/cn'
 
 export function ProtectedAdminLayout() {
-  return <AdminLayout />
+  return (
+    <AdminGuard>
+      <AdminLayout />
+    </AdminGuard>
+  )
 }
 
 const NAV = [
@@ -20,8 +24,7 @@ export function AdminLayout() {
   const navigate = useNavigate()
 
   const logout = () => {
-    clearAdminSession()
-    navigate('/', { replace: true })
+    void logoutAdminSession().then(() => navigate('/', { replace: true }))
   }
 
   const nav = (

@@ -8,6 +8,7 @@ import {
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3'
+import { requireAdminAuth } from './adminAuth.ts'
 
 export type R2MediaItem = {
   key: string
@@ -407,6 +408,8 @@ export async function handleR2MediaRequest(
     return
   }
 
+  if (!requireAdminAuth(req, res, env)) return
+
   if (req.method === 'GET') {
     sendJson(res, 200, await listR2Media(env))
     return
@@ -444,6 +447,8 @@ export async function handleR2PrintableRequest(
     res.end()
     return
   }
+
+  if (!requireAdminAuth(req, res, env)) return
 
   if (req.method === 'DELETE') {
     try {

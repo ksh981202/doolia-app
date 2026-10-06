@@ -18,6 +18,7 @@ const PrivacyPage = lazy(() => import('@/pages/PrivacyPage'))
 const TermsPage = lazy(() => import('@/pages/TermsPage'))
 const ContactPage = lazy(() => import('@/pages/LegalPages').then((module) => ({ default: module.ContactPage })))
 const PremiumPage = lazy(() => import('@/pages/LegalPages').then((module) => ({ default: module.PremiumPage })))
+const AdminLoginPage = lazy(() => import('@/pages/admin/AdminLoginPage'))
 const AdminDashboardPage = lazy(() => import('@/pages/admin/AdminDashboardPage'))
 const AdminPrintablesPage = lazy(() => import('@/pages/admin/AdminPrintablesPage'))
 const AdminUploadPage = lazy(() => import('@/pages/admin/AdminUploadPage'))
@@ -63,7 +64,7 @@ export function AppRouter() {
               <Route path="/saved" element={<Navigate to="/bookmarks" replace />} />
             </Route>
           </Route>
-          <Route path="/admin/login" element={<Navigate to="/admin" replace />} />
+          <Route path="/admin/login" element={<AdminLoginPage />} />
           <Route element={<ProtectedAdminLayout />}>
             <Route path="/admin" element={<AdminDashboardPage />} />
             <Route path="/admin/printables" element={<AdminPrintablesPage />} />

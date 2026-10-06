@@ -1,5 +1,6 @@
 import { type ParentingTip, type ParentingTipBlock, type ParentingTipTopicId } from '@/data/parentingTipsData'
 import { supabase } from '@/lib/supabase'
+import { adminDb } from '@/services/adminDataClient'
 import { takeawaysFromValue } from '@/shared/lib/tipBody'
 
 export type AdminTip = ParentingTip & {
@@ -82,11 +83,12 @@ function fromRow(row: Record<string, unknown>): AdminTip {
 }
 
 export async function listAdminTips(): Promise<AdminTip[]> {
-  if (supabase) {
-    const { data, error } = await supabase.from('parenting_tips').select('*').order('created_at', { ascending: false })
-    if (!error && data) return data.map((row) => fromRow(row as Record<string, unknown>))
+  try {
+    const remote = await adminDb<Record<string, unknown>>({ action: 'list', table: 'parenting_tips' })
+    return (remote.rows ?? []).map((row) => fromRow(row))
+  } catch {
+    return readLocal()
   }
-  return readLocal()
 }
 
 export type TipDraft = {
@@ -119,8 +121,10 @@ export async function saveTip(draft: TipDraft) {
     bodyMarkdown: draft.bodyMarkdown,
   }
 
-  if (supabase) {
-    const { error } = await supabase.from('parenting_tips').upsert({
+  await adminDb({
+    action: 'upsert',
+    table: 'parenting_tips',
+    row: {
       id: record.id,
       slug: record.slug,
       title: record.title,
@@ -134,36 +138,44 @@ export async function saveTip(draft: TipDraft) {
       takeaways: record.takeaways,
       published_at: record.publishedAt,
       updated_at: new Date().toISOString(),
-    })
-    if (error) throw error
-  }
+    },
+  })
 
   writeLocal([record, ...readLocal().filter((item) => item.slug !== record.slug)])
   return record
 }
 
 export async function setTipPublished(id: string, published: boolean) {
-  if (supabase) {
-    const { error } = await supabase.from('parenting_tips').update({ published }).eq('id', id)
-    if (error) await supabase.from('parenting_tips').update({ published }).eq('slug', id)
+  try {
+    await adminDb({ action: 'update', table: 'parenting_tips', eq: { id }, patch: { published } })
+  } catch {
+    await adminDb({ action: 'update', table: 'parenting_tips', eq: { slug: id }, patch: { published } })
   }
   writeLocal(readLocal().map((item) => (item.id === id || item.slug === id ? { ...item, published } : item)))
 }
 
 export async function deleteTip(id: string) {
-  if (supabase) {
-    await supabase.from('parenting_tips').delete().eq('id', id)
-    await supabase.from('parenting_tips').delete().eq('slug', id)
+  try {
+    await adminDb({ action: 'delete', table: 'parenting_tips', eq: { id } })
+  } catch {
+    await adminDb({ action: 'delete', table: 'parenting_tips', eq: { slug: id } })
   }
   writeLocal(readLocal().filter((item) => item.id !== id && item.slug !== id))
 }
 
 export async function getPublishedTipBySlug(slug: string): Promise<AdminTip | undefined> {
-  const items = await listAdminTips()
-  return items.find((item) => item.slug === slug && item.published)
+  const items = await listPublishedTips()
+  return items.find((item) => item.slug === slug)
 }
 
 export async function listPublishedTips(): Promise<AdminTip[]> {
-  const items = await listAdminTips()
-  return items.filter((item) => item.published)
+  if (supabase) {
+    const { data, error } = await supabase
+      .from('parenting_tips')
+      .select('*')
+      .eq('published', true)
+      .order('created_at', { ascending: false })
+    if (!error && data) return data.map((row) => fromRow(row as Record<string, unknown>))
+  }
+  return readLocal().filter((item) => item.published)
 }

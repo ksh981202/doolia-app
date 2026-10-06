@@ -2,9 +2,9 @@ import { catalogToPrintableCategory, PRINTABLE_LOCALE_FIELDS, resolveCatalogSlug
 import type { ParsedPrintableRow } from '@/admin/parsePrintableSheet'
 import { convertToOptimizedWebP } from '@/features/admin/lib/imageOptimization'
 import { supabase } from '@/lib/supabase'
-import { fetchPrintables } from '@/services/printableService'
+import { adminDb } from '@/services/adminDataClient'
 import { deleteR2PrintableFiles, uploadR2PrintableFile } from '@/services/r2MediaService'
-import { normalizePrintable, type Printable } from '@/types/printable'
+import { normalizePrintable, type Printable, type PrintableInput } from '@/types/printable'
 
 export type AdminPrintable = Printable & {
   catalog_slug: string
@@ -230,32 +230,23 @@ function draftToRow(draft: PrintableDraft) {
 }
 
 async function upsertPrintableRow(row: Record<string, unknown>) {
-  if (!supabase) return
   const payload: Record<string, unknown> = { ...row }
   let lastError: { message?: string } | null = null
 
   for (let attempt = 0; attempt < 24; attempt += 1) {
-    const { error } = await supabase.from('printables').upsert(payload)
-    if (!error) return
-
-    const missing = missingColumnName(error)
-    if (missing && missing in payload) {
-      delete payload[missing]
-      lastError = error
-      continue
+    try {
+      await adminDb({ action: 'upsert', table: 'printables', row: payload })
+      return
+    } catch (error) {
+      const message = error instanceof Error ? error.message : ''
+      const missing = missingColumnName({ message })
+      if (missing && missing in payload) {
+        delete payload[missing]
+        lastError = { message }
+        continue
+      }
+      throw error
     }
-
-    const bySlug = await supabase.from('printables').upsert(payload, { onConflict: 'slug' })
-    if (!bySlug.error) return
-
-    const slugMissing = missingColumnName(bySlug.error)
-    if (slugMissing && slugMissing in payload) {
-      delete payload[slugMissing]
-      lastError = bySlug.error
-      continue
-    }
-
-    throw bySlug.error
   }
 
   throw lastError ?? new Error('도안 저장에 실패했습니다.')
@@ -264,8 +255,8 @@ async function upsertPrintableRow(row: Record<string, unknown>) {
 export async function listAdminPrintables(): Promise<AdminPrintable[]> {
   const local = readLocal()
   try {
-    const remote = await fetchPrintables('all', { includeUnpublished: true })
-    const mapped = remote.map((item) => toAdmin(item))
+    const remote = await adminDb<PrintableInput>({ action: 'list', table: 'printables' })
+    const mapped = (remote.rows ?? []).map((item) => toAdmin(normalizePrintable(item)))
     const byId = new Map(mapped.map((item) => [item.id, item]))
     for (const item of local) byId.set(item.id, item)
     return [...byId.values()].sort((a, b) => +new Date(b.created_at) - +new Date(a.created_at))
@@ -288,10 +279,8 @@ export async function savePrintable(draft: PrintableDraft) {
     description: row.description,
   }
 
-  if (supabase) {
-    await upsertPrintableRow(row)
-    await deleteLegacyVariantRows(slug)
-  }
+  await upsertPrintableRow(row)
+  await deleteLegacyVariantRows(slug)
 
   const next = readLocal().filter(
     (item) => item.id !== record.id && item.slug !== slug && item.slug !== `${slug}_b` && item.slug !== `${slug}_c`,
@@ -304,35 +293,49 @@ async function findPrintableIdBySlug(slug: string) {
   if (!slug) return ''
   const variants = [slug, `${slug}_b`, `${slug}_c`]
   const local = readLocal().find((item) => variants.includes(item.slug))
-  if (!supabase) return local?.id ?? ''
-
-  const { data } = await supabase.from('printables').select('id, slug').in('slug', variants)
-  const rows = data ?? []
-  return (
-    rows.find((item) => item.slug === slug)?.id ||
-    rows.find((item) => item.slug === `${slug}_b`)?.id ||
-    rows.find((item) => item.slug === `${slug}_c`)?.id ||
-    local?.id ||
-    ''
-  )
+  try {
+    const remote = await adminDb<{ id: string; slug: string }>({
+      action: 'select',
+      table: 'printables',
+      columns: ['id', 'slug'],
+      in: { column: 'slug', values: variants },
+    })
+    const rows = remote.rows ?? []
+    return (
+      rows.find((item) => item.slug === slug)?.id ||
+      rows.find((item) => item.slug === `${slug}_b`)?.id ||
+      rows.find((item) => item.slug === `${slug}_c`)?.id ||
+      local?.id ||
+      ''
+    )
+  } catch {
+    return local?.id ?? ''
+  }
 }
 
 async function deleteLegacyVariantRows(slug: string) {
-  if (!slug || !supabase) return
-  await supabase.from('printables').delete().in('slug', [`${slug}_b`, `${slug}_c`])
+  if (!slug) return
+  try {
+    await adminDb({
+      action: 'delete',
+      table: 'printables',
+      in: { column: 'slug', values: [`${slug}_b`, `${slug}_c`] },
+    })
+  } catch {
+    /* legacy rows may already be gone */
+  }
 }
 
 export async function setPrintablePublished(id: string, published: boolean) {
-  if (supabase) {
-    const { error } = await supabase.from('printables').update({ published }).eq('id', id)
-    if (error) {
-      const current = (await listAdminPrintables()).find((item) => item.id === id)
-      if (current) {
-        const tags = published
-          ? current.tags.filter((tag) => tag !== 'hidden')
-          : [...current.tags.filter((tag) => tag !== 'hidden'), 'hidden']
-        await supabase.from('printables').update({ tags }).eq('id', id)
-      }
+  try {
+    await adminDb({ action: 'update', table: 'printables', eq: { id }, patch: { published } })
+  } catch {
+    const current = (await listAdminPrintables()).find((item) => item.id === id)
+    if (current) {
+      const tags = published
+        ? current.tags.filter((tag) => tag !== 'hidden')
+        : [...current.tags.filter((tag) => tag !== 'hidden'), 'hidden']
+      await adminDb({ action: 'update', table: 'printables', eq: { id }, patch: { tags } })
     }
   }
   writeLocal(readLocal().map((item) => (item.id === id ? { ...item, published } : item)))
@@ -349,22 +352,27 @@ async function collectPrintableAssetUrls(id: string) {
   ]
   let remoteExists = false
 
-  if (supabase) {
-    const { data } = await supabase
-      .from('printables')
-      .select('id, image_bw_url, image_color_url, line_art_url, color_image_url, pdf_url')
-      .eq('id', id)
-      .maybeSingle()
+  try {
+    const remote = await adminDb<{
+      id: string
+      image_bw_url?: string
+      image_color_url?: string
+      line_art_url?: string
+      color_image_url?: string
+      pdf_url?: string
+    }>({
+      action: 'select',
+      table: 'printables',
+      columns: ['id', 'image_bw_url', 'image_color_url', 'line_art_url', 'color_image_url', 'pdf_url'],
+      eq: { id },
+    })
+    const data = remote.rows?.[0]
     if (data) {
       remoteExists = true
-      urls.push(
-        data.image_bw_url,
-        data.image_color_url,
-        data.line_art_url,
-        data.color_image_url,
-        data.pdf_url,
-      )
+      urls.push(data.image_bw_url, data.image_color_url, data.line_art_url, data.color_image_url, data.pdf_url)
     }
+  } catch {
+    /* local urls still used */
   }
 
   return { remoteExists, urls: [...new Set(urls.map((item) => str(item)).filter(Boolean))] }
@@ -376,12 +384,9 @@ export async function deletePrintable(id: string) {
     await deleteR2PrintableFiles(assetUrls)
   }
 
-  if (supabase) {
-    const { data, error } = await supabase.from('printables').delete().eq('id', id).select('id')
-    if (error) throw new Error(error.message || '도안 삭제에 실패했습니다.')
-    if (remoteExists && !data?.length) {
-      throw new Error('도안 삭제에 실패했습니다. (권한/RLS를 확인하세요)')
-    }
+  const deleted = await adminDb<{ id: string }>({ action: 'delete', table: 'printables', eq: { id } })
+  if (remoteExists && !deleted.rows?.length) {
+    throw new Error('도안 삭제에 실패했습니다. (권한/RLS를 확인하세요)')
   }
   writeLocal(readLocal().filter((item) => item.id !== id))
 }

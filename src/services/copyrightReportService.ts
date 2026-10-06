@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase'
+import { adminDb } from '@/services/adminDataClient'
 
 export const REPORT_TYPES = ['copyright', 'modification', 'other'] as const
 export const REPORT_STATUSES = ['pending', 'reviewed', 'resolved'] as const
@@ -130,15 +131,11 @@ export async function submitCopyrightReport(input: SubmitCopyrightReportInput) {
 }
 
 export async function listCopyrightReports() {
-  if (supabase) {
-    const { data, error } = await supabase
-      .from('copyright_reports')
-      .select('*')
-      .order('created_at', { ascending: false })
-    if (error) throw new Error(error.message || '신고 목록을 불러오지 못했습니다.')
-    return (data ?? []).map((row) => normalize(row as CopyrightReport))
-  }
-  return readLocal().sort((a, b) => +new Date(b.created_at) - +new Date(a.created_at))
+  const remote = await adminDb<CopyrightReport>({
+    action: 'list',
+    table: 'copyright_reports',
+  })
+  return (remote.rows ?? []).map((row) => normalize(row)).sort((a, b) => +new Date(b.created_at) - +new Date(a.created_at))
 }
 
 export async function updateCopyrightReport(
@@ -146,26 +143,12 @@ export async function updateCopyrightReport(
   patch: { status?: ReportStatus; admin_notes?: string | null },
 ) {
   const updatedAt = new Date().toISOString()
-  if (supabase) {
-    const { error } = await supabase
-      .from('copyright_reports')
-      .update({ ...patch, updated_at: updatedAt })
-      .eq('id', id)
-    if (error) throw new Error(error.message || '상태 변경에 실패했습니다.')
-    return
-  }
-  writeLocal(
-    readLocal().map((row) =>
-      row.id === id
-        ? {
-            ...row,
-            status: patch.status ?? row.status,
-            admin_notes: patch.admin_notes === undefined ? row.admin_notes : patch.admin_notes,
-            updated_at: updatedAt,
-          }
-        : row,
-    ),
-  )
+  await adminDb({
+    action: 'update',
+    table: 'copyright_reports',
+    eq: { id },
+    patch: { ...patch, updated_at: updatedAt },
+  })
 }
 
 export async function countPendingCopyrightReports() {
