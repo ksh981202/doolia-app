@@ -2,7 +2,6 @@ import { Outlet } from 'react-router-dom'
 import { Footer } from '@/components/layout/Footer'
 import { MainHeader } from '@/components/layout/MainHeader'
 import { DownloadModal } from '@/features/download/ui/DownloadModal'
-import { CopyrightReportModal } from '@/features/copyright/ui/CopyrightReportModal'
 import { PAGE_SHELL } from '@/shared/lib/cn'
 
 export function AppLayout() {
@@ -16,7 +15,6 @@ export function AppLayout() {
       </main>
       <Footer />
       <DownloadModal />
-      <CopyrightReportModal />
     </div>
   )
 }

@@ -1078,6 +1078,204 @@ const REPORT = {
   },
 } as const
 
+const FAQ = {
+  ko: {
+    badge: '둘리아 도움말 센터',
+    title: '자주 묻는 질문 (FAQ)',
+    subtitle: '둘리아 이용에 대해 부모님과 선생님들이 자주 물어보시는 질문들을 모았습니다.',
+    q1_title: 'Q1. 도안은 정말 100% 무료인가요?',
+    q1_desc:
+      '네, 둘리아의 모든 색칠도안은 회원가입이나 결제 없이 언제든 자유롭게 무료로 인쇄하고 다운로드하실 수 있습니다.',
+    q2_title: 'Q2. 유치원, 어린이집, 학교 등 교육 공간에서 사용해도 되나요?',
+    q2_desc:
+      '물론입니다! 가정뿐만 아니라 어린이집, 유치원, 초등학교, 돌봄교실 등 비상업적 교육 목적이라면 제한 없이 자유롭게 인쇄하여 수업에 활용하실 수 있습니다. (단, 도안 자체를 유료로 판매하거나 무단 재배포하는 행위는 금지됩니다.)',
+    q3_title: 'Q3. 프린터로 인쇄할 때 어떻게 해야 가장 예쁘게 나오나요?',
+    q3_desc:
+      "도안 상세페이지에서 [인쇄하기] 버튼을 누르시면 표준 프린터 용지(A4 / Letter) 규격에 맞춰 여백이 자동으로 최적화됩니다. 인쇄 설정 창에서 '배경 그래픽' 옵션을 켜주시면 선이 더욱 또렷하게 출력됩니다.",
+    q4_title: 'Q4. 원하는 새로운 도안을 신청하거나 제휴를 문의하고 싶어요.',
+    q4_desc_prefix: '사이트 하단의 ',
+    q4_desc_link: '문의하기',
+    q4_desc_suffix: " 페이지에서 '도안 제안' 또는 '제휴 문의'를 선택해 남겨주시면 정성껏 검토 후 반영해 드립니다.",
+    need_help: '찾으시는 답변이 없으신가요?',
+    btn_contact: '💌 1:1 문의 남기기',
+  },
+  en: {
+    badge: 'DOOLIA Help Center',
+    title: 'Frequently Asked Questions (FAQ)',
+    subtitle: 'Here are answers to common questions asked by parents and educators using DOOLIA.',
+    q1_title: 'Q1. Are all coloring pages really 100% free?',
+    q1_desc: 'Yes! All DOOLIA coloring pages can be freely printed and downloaded anytime without sign-up or payment.',
+    q2_title: 'Q2. Can I use these in classrooms, kindergartens, and schools?',
+    q2_desc:
+      'Absolutely! You can freely print and use them for any non-commercial educational purposes in homes, kindergartens, schools, and daycare centers. (Commercial resale and redistribution of the files are strictly prohibited.)',
+    q3_title: 'Q3. How do I get the best print quality on my printer?',
+    q3_desc:
+      "Simply click the [Print] button on the details page, and margins are automatically optimized for standard printer paper (US Letter / A4). Enabling 'Background graphics' in your print dialog ensures crisp, clear line art.",
+    q4_title: "Q4. I'd like to suggest a new coloring theme or propose a partnership.",
+    q4_desc_prefix: 'Please visit our ',
+    q4_desc_link: 'Contact',
+    q4_desc_suffix: " page and choose 'Suggestion' or 'Partnership'. We review every message with great care!",
+    need_help: "Couldn't find what you were looking for?",
+    btn_contact: '💌 Send a 1:1 Inquiry',
+  },
+  ja: {
+    badge: 'DOOLIA ヘルプセンター',
+    title: 'よくあるご質問 (FAQ)',
+    subtitle: 'DOOLIAをご利用の保護者様や先生方からよくいただくご質問をまとめました。',
+    q1_title: 'Q1. ぬりえは本当に完全無料ですか？',
+    q1_desc: 'はい！DOOLIAのすべてのぬりえは、会員登録や決済なしでいつでも自由に無料で印刷・ダウンロードしていただけます。',
+    q2_title: 'Q2. 幼稚園、保育園、学校などの教育施設で使用できますか？',
+    q2_desc:
+      'もちろん可能です！ご家庭だけでなく、保育園、幼稚園、小学校、学童保育などの非営利教育目的であれば、制限なく自由に印刷して授業にご活用いただけます。（ただし、イラストの有料販売や無断再配布は禁止されています。）',
+    q3_title: 'Q3. プリンターで最もきれいに印刷するにはどうすればよいですか？',
+    q3_desc:
+      '詳細ページの［印刷］ボタンをクリックするだけで、標準印刷用紙（A4 / レターサイズ）に合わせて余白が自動調整されます。印刷設定で「背景のグラフィック」を有効にすると、輪郭線がより鮮明に印刷されます。',
+    q4_title: 'Q4. 新しいぬりえのリクエストや提携の相談をしたいです。',
+    q4_desc_prefix: 'フッターの ',
+    q4_desc_link: 'お問い合わせ',
+    q4_desc_suffix:
+      ' ページから「ぬりえのリクエスト」または「提携のお問い合わせ」を選択してお送りください。心を込めて確認いたします。',
+    need_help: 'お探しの回答は見つかりましたか？',
+    btn_contact: '💌 お問い合わせはこちら',
+  },
+  zh: {
+    badge: 'DOOLIA 幫助中心',
+    title: '常見問題 (FAQ)',
+    subtitle: '這裡整理了家長與老師們在使用 DOOLIA 時最常提出的問題與解答。',
+    q1_title: 'Q1. 著色圖畫紙真的完全免費嗎？',
+    q1_desc: '是的！DOOLIA 所有的著色畫均無需註冊或付費，隨時都可以免費列印與下載。',
+    q2_title: 'Q2. 可以在幼兒園、托兒所或學校等教育場所使用嗎？',
+    q2_desc:
+      '當然可以！家庭、托兒所、幼兒園、小學及課後輔導班等非營利教育用途，均可無限制自由列印使用於教學。（但嚴禁將圖畫檔案進行轉售或未經授權的商業再分發。）',
+    q3_title: 'Q3. 如何使用印表機列印出最佳品質？',
+    q3_desc:
+      '只要在詳情頁面點擊 [列印] 按鈕，邊距就會自動適配標準列印紙張（A4 / Letter）。在列印設定中勾選「背景圖形」可獲得最清晰的線條效果。',
+    q4_title: 'Q4. 我想許願新的著色畫主題或洽詢合作事宜。',
+    q4_desc_prefix: '請前往頁尾的 ',
+    q4_desc_link: '聯絡我們',
+    q4_desc_suffix: ' 頁面選擇「圖畫建議」或「商務合作」填寫，我們會由專人用心評估回覆。',
+    need_help: '找不到您需要的解答嗎？',
+    btn_contact: '💌 填寫 1:1 線上諮詢',
+  },
+  es: {
+    badge: 'Centro de Ayuda DOOLIA',
+    title: 'Preguntas Frecuentes (FAQ)',
+    subtitle: 'Hemos recopilado las preguntas más frecuentes de padres y educadores al usar DOOLIA.',
+    q1_title: 'Q1. ¿Los dibujos para colorear son 100% gratuitos?',
+    q1_desc: '¡Sí! Todos los dibujos de DOOLIA se pueden imprimir y descargar gratis sin registro ni pagos.',
+    q2_title: 'Q2. ¿Puedo usarlos en guarderías, escuelas o aulas educativas?',
+    q2_desc:
+      '¡Por supuesto! Se pueden imprimir y usar libremente para fines educativos sin fines de lucro en hogares, escuelas y guarderías. (Queda prohibida la reventa comercial y redistribución.)',
+    q3_title: 'Q3. ¿Cómo consigo la mejor calidad de impresión?',
+    q3_desc:
+      "Haz clic en [Imprimir] en la página de detalles y los márgenes se adaptarán automáticamente al papel estándar de impresora (A4 / Carta). Activa 'Gráficos de fondo' para obtener líneas nítidas.",
+    q4_title: 'Q4. Me gustaría sugerir un nuevo tema de dibujo o una propuesta de colaboración.',
+    q4_desc_prefix: 'Visita nuestra página de ',
+    q4_desc_link: 'Contacto',
+    q4_desc_suffix: " y selecciona 'Sugerencia' o 'Colaboración'. ¡Revisaremos tu mensaje con mucho gusto!",
+    need_help: '¿No encuentras lo que buscas?',
+    btn_contact: '💌 Enviar consulta 1:1',
+  },
+  pt: {
+    badge: 'Central de Ajuda DOOLIA',
+    title: 'Perguntas Frequentes (FAQ)',
+    subtitle: 'Reunimos as respostas para as dúvidas mais comuns de pais e professores.',
+    q1_title: 'Q1. Os desenhos para colorir são realmente 100% gratuitos?',
+    q1_desc: 'Sim! Todos os desenhos do DOOLIA podem ser impressos e baixados gratuitamente, sem cadastro ou pagamento.',
+    q2_title: 'Q2. Posso usar em creches, escolas ou salas de aula?',
+    q2_desc:
+      'Com certeza! Podem ser impressos livremente para fins educacionais sem fins lucrativos em lares, escolas e creches. (A revenda comercial e redistribuição são proibidas.)',
+    q3_title: 'Q3. Como obter a melhor qualidade de impressão?',
+    q3_desc:
+      "Basta clicar em [Imprimir] na página do desenho para ajustar automaticamente ao tamanho padrão de papel (A4 / Carta). Ative 'Gráficos de fundo' para linhas mais nítidas.",
+    q4_title: 'Q4. Gostaria de sugerir novos temas de desenhos ou propor uma parceria.',
+    q4_desc_prefix: 'Acesse a página de ',
+    q4_desc_link: 'Contato',
+    q4_desc_suffix: " e escolha 'Sugestão' ou 'Parceria'. Analisaremos sua mensagem com carinho!",
+    need_help: 'Não encontrou o que procurava?',
+    btn_contact: '💌 Enviar uma mensagem',
+  },
+  de: {
+    badge: 'DOOLIA Hilfezentrum',
+    title: 'Häufig gestellte Fragen (FAQ)',
+    subtitle: 'Hier finden Sie Antworten auf häufige Fragen von Eltern und Lehrkräften.',
+    q1_title: 'Q1. Sind alle Ausmalbilder wirklich 100% kostenlos?',
+    q1_desc:
+      'Ja! Alle Ausmalbilder von DOOLIA können jederzeit ohne Registrierung oder Bezahlung kostenlos gedruckt und heruntergeladen werden.',
+    q2_title: 'Q2. Darf ich die Vorlagen in Kitas, Kindergärten oder Schulen verwenden?',
+    q2_desc:
+      'Selbstverständlich! Für nicht-kommerzielle Bildungszwecke in Kitas, Schulen und zu Hause dürfen alle Vorlagen frei gedruckt werden. (Der kommerzielle Weiterverkauf ist untersagt.)',
+    q3_title: 'Q3. Wie erziele ich die beste Druckqualität?',
+    q3_desc:
+      "Klicken Sie auf [Drucken], um die Ränder automatisch an Standard-Druckerpapier (DIN A4 / US Letter) anzupassen. Aktivieren Sie 'Hintergrundgrafiken' für gestochen scharfe Konturen.",
+    q4_title: 'Q4. Ich möchte ein neues Ausmal-Thema vorschlagen oder eine Kooperation anfragen.',
+    q4_desc_prefix: 'Besuchen Sie unsere ',
+    q4_desc_link: 'Kontakt',
+    q4_desc_suffix: "-Seite und wählen Sie 'Vorschlag' oder 'Kooperation'. Wir prüfen jede Anfrage sorgfältig!",
+    need_help: 'Haben Sie keine passende Antwort gefunden?',
+    btn_contact: '💌 1:1 Anfrage senden',
+  },
+  fr: {
+    badge: "Centre d'aide DOOLIA",
+    title: 'Foire Aux Questions (FAQ)',
+    subtitle: 'Retrouvez ici les réponses aux questions les plus posées par les parents et enseignants.',
+    q1_title: 'Q1. Les coloriages sont-ils vraiment 100% gratuits ?',
+    q1_desc:
+      'Oui ! Tous les coloriages de DOOLIA peuvent être imprimés et téléchargés gratuitement, sans inscription ni paiement.',
+    q2_title: 'Q2. Puis-je les utiliser dans les crèches, écoles ou ateliers éducatifs ?',
+    q2_desc:
+      "Absolument ! Vous pouvez les imprimer librement pour un usage éducatif et non commercial à la maison ou à l'école. (La revente commerciale est interdite.)",
+    q3_title: "Q3. Comment obtenir la meilleure qualité d'impression ?",
+    q3_desc:
+      "Cliquez sur [Imprimer] sur la page du coloriage pour adapter automatiquement les marges au format standard (A4 / Lettre). Activez 'Graphismes d'arrière-plan' pour des traits nets.",
+    q4_title: "Q4. J'aimerais proposer un nouveau thème ou un partenariat.",
+    q4_desc_prefix: 'Rendez-vous sur notre page ',
+    q4_desc_link: 'Contact',
+    q4_desc_suffix: " et sélectionnez 'Suggestion' ou 'Partenariat'. Nous examinerons votre demande avec attention !",
+    need_help: "Vous n'avez pas trouvé votre réponse ?",
+    btn_contact: '💌 Poser une question',
+  },
+  it: {
+    badge: 'Centro Assistenza DOOLIA',
+    title: 'Domande Frequenti (FAQ)',
+    subtitle: 'Ecco le risposte alle domande più frequenti di genitori ed educatori.',
+    q1_title: 'Q1. I disegni da colorare sono davvero gratuiti al 100%?',
+    q1_desc: 'Sì! Tutti i disegni di DOOLIA possono essere stampati e scaricati gratuitamente senza registrazione o pagamento.',
+    q2_title: 'Q2. Posso usarli in asili nido, scuole o aule didattiche?',
+    q2_desc:
+      'Certamente! È possibile stamparli liberamente per scopi educativi non commerciali a casa, a scuola e negli asili. (È vietata la rivendita commerciale.)',
+    q3_title: 'Q3. Come ottenere la migliore qualità di stampa?',
+    q3_desc:
+      "Clicca su [Stampa] nella pagina del disegno per ottimizzare automaticamente i margini per la carta standard (A4 / Letter). Attiva 'Grafica di sfondo' per linee nitide.",
+    q4_title: 'Q4. Vorrei proporre un nuovo tema di disegno o richiedere una partnership.',
+    q4_desc_prefix: 'Visita la pagina ',
+    q4_desc_link: 'Contatti',
+    q4_desc_suffix: " e seleziona 'Suggerimento' o 'Partnership'. Esamineremo ogni richiesta con cura!",
+    need_help: 'Non hai trovato quello che cercavi?',
+    btn_contact: '💌 Invia una richiesta 1:1',
+  },
+  vi: {
+    badge: 'Trung tâm Trợ giúp DOOLIA',
+    title: 'Câu hỏi thường gặp (FAQ)',
+    subtitle: 'Dưới đây là câu trả lời cho các thắc mắc phổ biến từ phụ huynh và giáo viên.',
+    q1_title: 'Q1. Tranh tô màu có thực sự miễn phí 100% không?',
+    q1_desc:
+      'Vâng! Tất cả tranh tô màu trên DOOLIA đều có thể in và tải xuống hoàn toàn miễn phí mà không cần đăng ký hay thanh toán.',
+    q2_title: 'Q2. Tôi có thể sử dụng tại trường mầm non, trường học hoặc lớp học không?',
+    q2_desc:
+      'Chắc chắn rồi! Bạn có thể tự do in và sử dụng cho mục đích giáo dục phi thương mại tại nhà, trường mầm non và trường học. (Nghiêm cấm bán lại hoặc phân phối lại vì mục đích thương mại.)',
+    q3_title: 'Q3. Làm thế nào để in đạt chất lượng đẹp nhất?',
+    q3_desc:
+      "Chỉ cần nhấn nút [In] tại trang chi tiết để căn lề tự động theo khổ giấy tiêu chuẩn (A4 / Letter). Hãy bật tuỳ chọn 'Đồ hoạ nền' để nét vẽ sắc nét nhất.",
+    q4_title: 'Q4. Tôi muốn đề xuất chủ đề tranh tô màu mới hoặc liên hệ hợp tác.',
+    q4_desc_prefix: 'Vui lòng truy cập trang ',
+    q4_desc_link: 'Liên hệ',
+    q4_desc_suffix: " và chọn 'Gợi ý tranh' hoặc 'Hợp tác'. Chúng tôi sẽ kiểm tra và phản hồi chu đáo!",
+    need_help: 'Bạn vẫn chưa tìm thấy câu trả lời?',
+    btn_contact: '💌 Gửi câu hỏi 1:1',
+  },
+} as const
+
 const FOOTER = {
   ko: {
     blurb: '아이들의 상상력을 키우는 100% 무료 색칠도안 플랫폼.',
@@ -1090,6 +1288,7 @@ const FOOTER = {
     byAge: '👶 연령별 맞춤도안',
     popular: '🔥 지금 인기 도안',
     about: '둘리아(DOOLIA) 소개',
+    faq: '자주 묻는 질문',
     privacy: '개인정보처리방침',
     terms: '이용약관',
     contact: '문의하기',
@@ -1110,6 +1309,7 @@ const FOOTER = {
     byAge: '👶 Browse by Age',
     popular: '🔥 Popular Now',
     about: 'About DOOLIA',
+    faq: 'FAQ',
     privacy: 'Privacy Policy',
     terms: 'Terms of Use',
     contact: 'Contact',
@@ -1130,6 +1330,7 @@ const FOOTER = {
     byAge: '👶 年齢別ぬりえ',
     popular: '🔥 人気のぬりえ',
     about: 'DOOLIAについて',
+    faq: 'よくある質問',
     privacy: 'プライバシーポリシー',
     terms: '利用規約',
     contact: 'お問い合わせ',
@@ -1150,6 +1351,7 @@ const FOOTER = {
     byAge: '👶 依年齡挑選',
     popular: '🔥 熱門著色圖',
     about: '關於 DOOLIA',
+    faq: '常見問題',
     privacy: '隱私權政策',
     terms: '使用條款',
     contact: '聯絡我們',
@@ -1170,6 +1372,7 @@ const FOOTER = {
     byAge: '👶 Por edad',
     popular: '🔥 Populares ahora',
     about: 'Sobre DOOLIA',
+    faq: 'Preguntas frecuentes',
     privacy: 'Política de privacidad',
     terms: 'Términos de uso',
     contact: 'Contacto',
@@ -1190,6 +1393,7 @@ const FOOTER = {
     byAge: '👶 Por idade',
     popular: '🔥 Populares agora',
     about: 'Sobre a DOOLIA',
+    faq: 'Perguntas frequentes',
     privacy: 'Política de privacidade',
     terms: 'Termos de uso',
     contact: 'Contato',
@@ -1210,6 +1414,7 @@ const FOOTER = {
     byAge: '👶 Nach Alter',
     popular: '🔥 Gerade beliebt',
     about: 'Über DOOLIA',
+    faq: 'Häufige Fragen',
     privacy: 'Datenschutz',
     terms: 'Nutzungsbedingungen',
     contact: 'Kontakt',
@@ -1230,6 +1435,7 @@ const FOOTER = {
     byAge: '👶 Par âge',
     popular: '🔥 Populaires maintenant',
     about: 'À propos de DOOLIA',
+    faq: 'Questions fréquentes',
     privacy: 'Politique de confidentialité',
     terms: "Conditions d'utilisation",
     contact: 'Contact',
@@ -1250,6 +1456,7 @@ const FOOTER = {
     byAge: '👶 Per età',
     popular: '🔥 Popolari ora',
     about: 'Chi è DOOLIA',
+    faq: 'Domande frequenti',
     privacy: 'Privacy',
     terms: 'Termini di utilizzo',
     contact: 'Contatti',
@@ -1270,6 +1477,7 @@ const FOOTER = {
     byAge: '👶 Theo độ tuổi',
     popular: '🔥 Đang phổ biến',
     about: 'Giới thiệu DOOLIA',
+    faq: 'Câu hỏi thường gặp',
     privacy: 'Chính sách bảo mật',
     terms: 'Điều khoản sử dụng',
     contact: 'Liên hệ',
@@ -1581,6 +1789,7 @@ const resources = {
       catalog: CATALOG.ko,
       footer: FOOTER.ko,
       report: REPORT.ko,
+      faq: FAQ.ko,
     },
   },
   en: {
@@ -1606,6 +1815,7 @@ const resources = {
       catalog: CATALOG.en,
       footer: FOOTER.en,
       report: REPORT.en,
+      faq: FAQ.en,
     },
   },
   ja: {
@@ -1631,6 +1841,7 @@ const resources = {
       catalog: CATALOG.ja,
       footer: FOOTER.ja,
       report: REPORT.ja,
+      faq: FAQ.ja,
     },
   },
   zh: {
@@ -1656,6 +1867,7 @@ const resources = {
       catalog: CATALOG.zh,
       footer: FOOTER.zh,
       report: REPORT.zh,
+      faq: FAQ.zh,
     },
   },
   es: {
@@ -1681,6 +1893,7 @@ const resources = {
       catalog: CATALOG.es,
       footer: FOOTER.es,
       report: REPORT.es,
+      faq: FAQ.es,
     },
   },
   pt: {
@@ -1706,6 +1919,7 @@ const resources = {
       catalog: CATALOG.pt,
       footer: FOOTER.pt,
       report: REPORT.pt,
+      faq: FAQ.pt,
     },
   },
   de: {
@@ -1731,6 +1945,7 @@ const resources = {
       catalog: CATALOG.de,
       footer: FOOTER.de,
       report: REPORT.de,
+      faq: FAQ.de,
     },
   },
   fr: {
@@ -1756,6 +1971,7 @@ const resources = {
       catalog: CATALOG.fr,
       footer: FOOTER.fr,
       report: REPORT.fr,
+      faq: FAQ.fr,
     },
   },
   it: {
@@ -1781,6 +1997,7 @@ const resources = {
       catalog: CATALOG.it,
       footer: FOOTER.it,
       report: REPORT.it,
+      faq: FAQ.it,
     },
   },
   vi: {
@@ -1806,6 +2023,7 @@ const resources = {
       catalog: CATALOG.vi,
       footer: FOOTER.vi,
       report: REPORT.vi,
+      faq: FAQ.vi,
     },
   },
 }

@@ -26,7 +26,7 @@ export function LightboxModal({ open, src, title, onClose, onPrint }: LightboxMo
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md"
+      className="modal-backdrop no-print fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -35,7 +35,7 @@ export function LightboxModal({ open, src, title, onClose, onPrint }: LightboxMo
       <button
         type="button"
         onClick={onClose}
-        className="absolute right-5 top-5 cursor-pointer text-2xl font-bold text-white hover:text-emerald-400"
+        className="absolute right-3 top-3 z-10 flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-full text-2xl font-bold text-white hover:bg-white/10 hover:text-emerald-400 sm:right-5 sm:top-5"
         aria-label="닫기"
       >
         ✕

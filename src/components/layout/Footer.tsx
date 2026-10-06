@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { BRAND } from '@/shared/config/categories'
-import { useCopyrightReportStore } from '@/shared/store/useCopyrightReportStore'
 
 const CATEGORY_LINKS = [
   { to: '/category/coloring-pages', key: 'footer.allColoring' as const },
@@ -12,17 +11,17 @@ const CATEGORY_LINKS = [
 
 const LEGAL_LINKS = [
   { to: '/about', key: 'footer.about' as const },
-  { to: '/privacy', key: 'footer.privacy' as const },
+  { to: '/faq', key: 'footer.faq' as const },
   { to: '/terms', key: 'footer.terms' as const },
+  { to: '/privacy', key: 'footer.privacy' as const },
   { to: '/contact', key: 'footer.contact' as const },
 ]
 
 export function Footer() {
   const { t } = useTranslation()
-  const openReport = useCopyrightReportStore((state) => state.openReport)
 
   return (
-    <footer className="border-t border-line bg-white">
+    <footer className="no-print border-t border-line bg-white">
       <div className="mx-auto grid w-full max-w-7xl gap-10 px-4 py-12 sm:px-6 lg:px-8 md:grid-cols-3">
         <div>
           <p className="font-display text-2xl font-semibold text-[#059669]">{BRAND.shortName}</p>
@@ -51,13 +50,9 @@ export function Footer() {
                 {t(item.key)}
               </Link>
             ))}
-            <button
-              type="button"
-              onClick={() => openReport()}
-              className="text-left text-ink/80 hover:text-[#059669]"
-            >
+            <Link to="/report" className="text-ink/80 hover:text-[#059669]">
               {t('footer.dmca', '저작권/권리침해 신고')}
-            </button>
+            </Link>
           </div>
         </div>
       </div>

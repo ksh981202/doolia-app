@@ -337,6 +337,33 @@ function scanRlsMigrations() {
       detail: '라이브 DB 정책 printables_anon_all / printables_anon_delete 가 anon·authenticated에 INSERT/UPDATE/DELETE/SELECT를 모두 허용합니다. 클라이언트 fetchPrintables는 published=true만 보여주지만, REST로 미발행 열람·행 삭제·카탈로그 변조가 가능합니다. parenting_tips_anon_all도 동일합니다.',
     })
   }
+  const inquiriesPath = join(ROOT, 'supabase/migrations/20261006140000_create_general_inquiries.sql')
+  const inquiries = existsSync(inquiriesPath) ? read(inquiriesPath) : ''
+  const inquiriesLocked =
+    /revoke all on table public\.general_inquiries/.test(inquiries) &&
+    /grant insert on table public\.general_inquiries/.test(inquiries) &&
+    inquiries.includes('Allow public insert general_inquiries') &&
+    inquiries.includes("status = 'pending'") &&
+    !/for select[\s\S]*to anon/.test(inquiries)
+
+  if (inquiriesLocked) {
+    add({
+      id: 'B5',
+      severity: 'PASS',
+      area: 'RLS',
+      title: 'general_inquiries 는 anon INSERT만 허용',
+      detail: '공개 역할은 pending 문의 INSERT만 가능하고, 조회·상태 변경은 service_role 관리 API만 사용합니다.',
+    })
+  } else {
+    add({
+      id: 'B5',
+      severity: 'CRITICAL',
+      area: 'RLS',
+      title: 'general_inquiries 공개 조회 또는 INSERT 정책이 느슨함',
+      detail: 'anon SELECT가 열리거나 INSERT with check가 없으면 문의 내용·이메일이 유출되거나 상태 위조가 가능합니다.',
+    })
+  }
+
   add({
     id: 'B3',
     severity: 'HIGH',

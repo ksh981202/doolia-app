@@ -1,9 +1,22 @@
 import { useEffect, useState, type ReactNode } from 'react'
-import { Navigate, useLocation } from 'react-router-dom'
+import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { PageFallback } from '@/components/layout/PageFallback'
 
 const SESSION_KEY = 'doolia-admin-ok'
 const SESSION_API = '/api/admin/session'
+
+export function isLocalAdminHost() {
+  if (import.meta.env.DEV) return true
+  if (typeof window === 'undefined') return false
+  const host = window.location.hostname
+  return host === 'localhost' || host === '127.0.0.1'
+}
+
+/** Blocks /admin and /admin/* on deployed hosts before login UI or APIs run. */
+export function LocalAdminGate() {
+  if (!isLocalAdminHost()) return <Navigate to="/" replace />
+  return <Outlet />
+}
 
 export function isAdminSession() {
   return sessionStorage.getItem(SESSION_KEY) === '1'
@@ -56,6 +69,7 @@ export function AdminGuard({ children }: { children: ReactNode }) {
   const [state, setState] = useState<'checking' | 'ok' | 'no'>('checking')
 
   useEffect(() => {
+    if (!isLocalAdminHost()) return
     let cancelled = false
     void verifyAdminSession()
       .then((ok) => {
@@ -69,6 +83,7 @@ export function AdminGuard({ children }: { children: ReactNode }) {
     }
   }, [location.pathname])
 
+  if (!isLocalAdminHost()) return <Navigate to="/" replace />
   if (state === 'checking') return <PageFallback />
   if (state === 'no') return <Navigate to="/admin/login" replace state={{ from: location.pathname }} />
   return children

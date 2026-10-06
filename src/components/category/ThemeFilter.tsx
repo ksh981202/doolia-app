@@ -12,7 +12,7 @@ type ThemeFilterProps = {
 
 function chipClass(active: boolean) {
   return cn(
-    'inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-4 py-1.5 text-[13.5px] transition-all',
+    'inline-flex min-h-[44px] shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-4 text-[13.5px] transition-all',
     active
       ? 'border border-emerald-600 bg-emerald-600 font-bold text-white shadow-sm shadow-emerald-600/20'
       : 'border border-slate-200/90 bg-white font-medium text-slate-600 shadow-[0_1px_2px_rgba(0,0,0,0.03)] hover:border-emerald-300 hover:bg-emerald-50/40 hover:text-emerald-700',
@@ -39,8 +39,9 @@ export function ThemeFilter({
   return (
     <div
       className={cn(
-        'flex flex-wrap content-start items-center gap-1.5',
-        variant === 'sub' ? 'max-h-32 overflow-y-auto sm:max-h-none' : '',
+        variant === 'sub'
+          ? 'flex flex-nowrap items-center gap-2 overflow-x-auto scrollbar-none py-1.5 px-1 -mx-1 [-webkit-overflow-scrolling:touch]'
+          : 'flex flex-wrap content-start items-center gap-1.5',
       )}
       role="tablist"
       aria-label={variant === 'sub' ? '세부 주제 필터' : '주제 필터'}

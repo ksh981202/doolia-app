@@ -349,6 +349,76 @@ export type ThemeOption = {
   query?: string
 }
 
+export type SubtabSearchable = {
+  title?: string | null
+  title_ko?: string | null
+  title_en?: string | null
+  title_ja?: string | null
+  title_zh?: string | null
+  title_es?: string | null
+  title_pt?: string | null
+  title_de?: string | null
+  title_fr?: string | null
+  title_it?: string | null
+  title_vi?: string | null
+  tags?: string[] | null
+  theme_ko?: string | null
+  theme_en?: string | null
+}
+
+const LATIN_SUBTAB_TOKEN = /^[a-z0-9][a-z0-9\s'-]*$/i
+
+function isClassificationTag(tag: string, item: SubtabSearchable) {
+  const value = tag.trim().toLowerCase()
+  if (!value || value === 'hidden') return true
+  if (value.startsWith('cat:')) return true
+  const themeKo = item.theme_ko?.trim().toLowerCase()
+  const themeEn = item.theme_en?.trim().toLowerCase()
+  if (themeKo && value === themeKo) return true
+  if (themeEn && value === themeEn) return true
+  if (value === 'coloring-pages' || value === '키즈 색칠도안') return true
+  return false
+}
+
+export function subtabHaystack(item: SubtabSearchable) {
+  const tags = Array.isArray(item.tags)
+    ? item.tags.filter((tag) => tag && !isClassificationTag(String(tag), item))
+    : []
+  return [
+    item.title,
+    item.title_ko,
+    item.title_en,
+    item.title_ja,
+    item.title_zh,
+    item.title_es,
+    item.title_pt,
+    item.title_de,
+    item.title_fr,
+    item.title_it,
+    item.title_vi,
+    ...tags,
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase()
+}
+
+function latinTokenMatches(haystack: string, token: string) {
+  const escaped = token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '[\\s-]+')
+  return new RegExp(`(?:^|[^a-z0-9])${escaped}(?:[^a-z0-9]|$)`, 'i').test(haystack)
+}
+
+export function matchesSubtabQuery(item: SubtabSearchable, query: string) {
+  const raw = query.replace(/^#/, '').trim()
+  if (!raw) return true
+  const haystack = subtabHaystack(item)
+  return raw
+    .split('|')
+    .map((part) => part.trim().toLowerCase())
+    .filter((token) => token.length >= 2)
+    .some((token) => (LATIN_SUBTAB_TOKEN.test(token) ? latinTokenMatches(haystack, token) : haystack.includes(token)))
+}
+
 function themes(items: ThemeOption[]): ThemeOption[] {
   return items
 }
@@ -513,17 +583,17 @@ const THEME_ID_ALIASES: Record<string, string> = {
 export const THEME_SUB_CATEGORIES: Record<string, ThemeOption[]> = {
   animals: [
     { id: 'all', name: '전체' },
-    { id: 'puppy', name: '강아지', query: '강아지|개|댕댕이|puppy|dog' },
-    { id: 'kitten', name: '아기 고양이', query: '고양이|아기고양이|야옹이|kitten|cat' },
+    { id: 'puppy', name: '강아지', query: '강아지|댕댕이|puppy|dog' },
+    { id: 'kitten', name: '고양이', query: '고양이|야옹이|kitten|kitty' },
     { id: 'bunny', name: '토끼', query: '토끼|아기토끼|bunny|rabbit' },
-    { id: 'bear', name: '곰돌이', query: '곰|곰돌이|아기곰|bear' },
+    { id: 'bear', name: '곰돌이', query: '곰돌이|아기곰|아기 곰|bear' },
     { id: 'hamster-squirrel', name: '햄스터 & 다람쥐', query: '햄스터|다람쥐|hamster|squirrel' },
     { id: 'fox-wolf', name: '아기 여우 & 늑대', query: '여우|늑대|fox|wolf' },
     { id: 'safari-predators', name: '사자 & 호랑이', query: '사자|호랑이|표범|치타|lion|tiger' },
     { id: 'panda-koala', name: '판다 & 코알라', query: '판다|코알라|팬더|panda|koala' },
     { id: 'elephant-giraffe', name: '코끼리 & 기린', query: '코끼리|기린|하마|코뿔소|elephant|giraffe' },
     { id: 'monkey-sloth', name: '원숭이 & 나무늘보', query: '원숭이|나무늘보|침팬지|monkey|sloth' },
-    { id: 'farm-animals', name: '농장 동물(소·돼지·양)', query: '농장|돼지|소|양|염소|말|farm|pig|cow|sheep' },
+    { id: 'farm-animals', name: '농장 동물(소·돼지·양)', query: '농장|돼지|염소|송아지|양떼|망아지|farm|pig|cow|sheep|horse' },
     { id: 'penguin-otter', name: '펭귄 & 수달', query: '펭귄|수달|물개|penguin|otter' },
     { id: 'alpaca-deer', name: '알파카 & 사슴', query: '알파카|사슴|라마|노루|alpaca|deer' },
   ],
@@ -539,54 +609,54 @@ export const THEME_SUB_CATEGORIES: Record<string, ThemeOption[]> = {
     { id: 'ankylosaurus', name: '안킬로사우루스', query: '안킬로|안킬로사우루스|ankylosaurus' },
     { id: 'velociraptor', name: '벨로키랍토르', query: '벨로시|벨로키|랍토르|velociraptor' },
     { id: 'marine-reptiles', name: '바다 파충류(모사사우루스)', query: '모사사우루스|플레시오|바다공룡|mosasaurus' },
-    { id: 'dino-safari', name: '공룡 화석 & 사파리', query: '화석|공룡탐험|화산|사파리|fossil|safari' },
+    { id: 'dino-safari', name: '공룡 화석 & 사파리', query: '화석|공룡탐험|사파리|fossil|safari' },
   ],
   vehicles: [
     { id: 'all', name: '전체' },
-    { id: 'police-car', name: '경찰차', query: '경찰차|순찰차|police' },
+    { id: 'police-car', name: '경찰차', query: '경찰차|순찰차|police car' },
     { id: 'fire-truck', name: '소방차', query: '소방차|fire truck' },
     { id: 'ambulance', name: '구급차', query: '구급차|ambulance' },
     { id: 'heavy-equipment', name: '중장비·포크레인', query: '중장비|포크레인|굴착기|덤프트럭|레미콘|excavator' },
     { id: 'train', name: '기차 & 지하철', query: '기차|지하철|열차|고속열차|ktx|train' },
     { id: 'airplane-heli', name: '비행기 & 헬리콥터', query: '비행기|헬리콥터|헬기|여객기|airplane|helicopter' },
-    { id: 'ship-submarine', name: '배 & 잠수함', query: '배|잠수함|유람선|보트|ship|submarine' },
+    { id: 'ship-submarine', name: '배 & 잠수함', query: '잠수함|유람선|보트|선박|ship|submarine' },
     { id: 'city-bus-taxi', name: '시내버스 & 택시', query: '버스|타요|택시|스쿨버스|bus|taxi' },
     { id: 'sports-car', name: '멋진 슈퍼카 & 레이싱카', query: '스포츠카|슈퍼카|레이싱|레이싱카|sports car' },
     { id: 'truck-tractor', name: '트럭 & 트랙터', query: '트럭|트랙터|농기계|화물차|truck|tractor' },
   ],
   princess: [
     { id: 'all', name: '전체' },
-    { id: 'dress-princess', name: '드레스 공주님', query: '드레스|공주|왕관|princess' },
-    { id: 'prince-knight', name: '왕자님 & 기사', query: '왕자|기사|검객|갑옷|prince|knight' },
-    { id: 'fairy', name: '숲속 꽃 요정', query: '요정|날개|꽃요정|fairy' },
+    { id: 'dress-princess', name: '드레스 공주님', query: '드레스|왕관|티아라|dress' },
+    { id: 'prince-knight', name: '왕자님 & 기사', query: '왕자|기사|검객|갑옷|knight|prince' },
+    { id: 'fairy', name: '숲속 꽃 요정', query: '꽃요정|꽃 요정|숲속 요정|fairy' },
     { id: 'unicorn-pegasus', name: '유니콘 & 페가수스', query: '유니콘|페가수스|날개달린말|unicorn|pegasus' },
-    { id: 'castle-palace', name: '마법의 성 & 궁전', query: '성|궁전|캐슬|castle' },
+    { id: 'castle-palace', name: '마법의 성 & 궁전', query: '궁전|캐슬|마법성|castle|palace' },
     { id: 'mermaid-princess', name: '바닷속 인어공주', query: '인어|인어공주|mermaid' },
-    { id: 'baby-dragon', name: '아기 드래곤', query: '드래곤|아기용|용|dragon' },
-    { id: 'magic-wand-jewel', name: '마법 지팡이 & 보석', query: '지팡이|보석|마법봉|티아라|wand|jewel' },
+    { id: 'baby-dragon', name: '아기 드래곤', query: '드래곤|아기용|dragon' },
+    { id: 'magic-wand-jewel', name: '마법 지팡이 & 보석', query: '지팡이|보석|마법봉|wand|jewel' },
   ],
   imagination: [
     { id: 'all', name: '전체' },
-    { id: 'sweets-planet', name: '과자·디저트 행성', query: '과자|디저트|사탕|사탕나무|과자집|아이스크림|달콤|sweet|candy' },
+    { id: 'sweets-planet', name: '과자·디저트 행성', query: '과자|사탕|사탕나무|과자집|아이스크림|달콤|sweet|candy' },
     { id: 'cloud-world', name: '구름 위 세상', query: '하늘섬|구름|무지개|하늘나라|별빛|sky|cloud|rainbow' },
-    { id: 'mythical-animals', name: '신비한 상상 동물', query: '환상동물|신비한동물|유니콘|페가수스|드래곤|용|불사조|unicorn|dragon' },
-    { id: 'fairy-forest', name: '소인국과 숲속 요정', query: '버섯마을|소인국|요정|숲속요정|버섯집|도토리|fairy|elf' },
+    { id: 'mythical-animals', name: '신비한 상상 동물', query: '환상동물|신비한동물|유니콘|페가수스|드래곤|불사조|unicorn|dragon' },
+    { id: 'fairy-forest', name: '소인국과 숲속 요정', query: '버섯마을|소인국|숲속요정|버섯집|도토리|fairy|elf' },
     { id: 'living-toys', name: '깨어나는 장난감', query: '장난감|장난감의밤|살아있는장난감|인형나라|toy|toys' },
     { id: 'magic-school', name: '마법 학교와 신비한 숲', query: '마법|마술|마법사|빗자루|마법학교|magic|wizard' },
     { id: 'mermaid-kingdom', name: '바닷속 인어도시', query: '바닷속도시|인어|인어공주|산호궁전|해저도시|mermaid|atlantis' },
     { id: 'time-travel', name: '비밀 타임머신 여행', query: '시간여행|타임머신|시간탐험|과거여행|미래도시|timetravel' },
     { id: 'star-galaxy', name: '달토끼와 별빛 은하', query: '별자리|은하수|달토끼|별나라|오로라|galaxy|constellation' },
-    { id: 'giant-world', name: '거인 나라의 신기한 하루', query: '거인|거인나라|빅사이즈|탐험|giant' },
+    { id: 'giant-world', name: '거인 나라의 신기한 하루', query: '거인|거인나라|빅사이즈|giant' },
     { id: 'living-paintings', name: '그림이 살아나는 방', query: '그림세상|마법붓|살아나는그림|artworld|drawing' },
     { id: 'flying-circus', name: '하늘 환상 서커스', query: '서커스|유랑단|공중곡예|circus' },
   ],
   'space-robot': [
     { id: 'all', name: '전체' },
-    { id: 'rocket-spaceship', name: '로켓 & 우주선', query: '로켓|우주선|우주왕복선|rocket|spaceship' },
+    { id: 'rocket-spaceship', name: '로켓 & 우주선', query: '우주선|우주왕복선|로켓선|rocket|spaceship' },
     { id: 'astronaut', name: '우주비행사', query: '우주비행사|우주복|astronaut' },
-    { id: 'planets-solar', name: '신비한 행성과 태양계', query: '행성|태양계|토성|지구|달|planet|solar' },
-    { id: 'alien-ufo', name: '외계인 & UFO', query: '외계인|ufo|외계행성|alien' },
-    { id: 'transform-robot', name: '변신 로봇 & 메카', query: '변신로봇|메카|합체로봇|robot|mecha' },
+    { id: 'planets-solar', name: '신비한 행성과 태양계', query: '행성|태양계|토성|지구|planet|solar|moon' },
+    { id: 'alien-ufo', name: '외계인 & UFO', query: '외계인|ufo|외계 행성|외계행성|alien' },
+    { id: 'transform-robot', name: '변신 로봇 & 메카', query: '변신 로봇|변신로봇|합체로봇|메카|mecha' },
     { id: 'cute-helper-bot', name: '귀여운 반려 로봇', query: '반려로봇|아기로봇|귀여운로봇|helper bot' },
     { id: 'future-city', name: '미래 우주 도시', query: '우주도시|미래도시|space station' },
   ],
@@ -601,11 +671,11 @@ export const THEME_SUB_CATEGORIES: Record<string, ThemeOption[]> = {
   ],
   'sea-nature': [
     { id: 'all', name: '전체' },
-    { id: 'whale-shark', name: '고래 & 상어', query: '고래|상어|범고래|whale|shark' },
+    { id: 'whale-shark', name: '고래 & 상어', query: '거대 고래|범고래|상어|whale|shark' },
     { id: 'sea-turtle-dolphin', name: '바다거북 & 돌고래', query: '바다거북|돌고래|거북이|dolphin|turtle' },
     { id: 'tropical-fish', name: '열대어 & 해파리', query: '열대어|해파리|니모|물고기|fish|jellyfish' },
     { id: 'octopus-crab', name: '문어·오징어 & 꽃게', query: '문어|오징어|꽃게|소라|octopus|crab' },
-    { id: 'coral-ocean', name: '산호초 & 바닷속 풍경', query: '산호초|바닷속|해저|coral|sea' },
+    { id: 'coral-ocean', name: '산호초 & 바닷속 풍경', query: '산호초|바닷속|해저|coral|reef' },
     { id: 'beetles-bugs', name: '장수풍뎅이 & 사슴벌레', query: '장수풍뎅이|사슴벌레|투구벌레|beetle' },
     { id: 'butterfly-ladybug', name: '나비 & 무당벌레', query: '나비|무당벌레|잠자리|butterfly|ladybug' },
   ],
@@ -619,8 +689,8 @@ export const THEME_SUB_CATEGORIES: Record<string, ThemeOption[]> = {
   ],
   jobs: [
     { id: 'all', name: '전체' },
-    { id: 'police-officer', name: '용감한 경찰관', query: '경찰|경찰관|포돌이|police' },
-    { id: 'firefighter', name: '출동 소방관', query: '소방관|소방|구조대|firefighter' },
+    { id: 'police-officer', name: '용감한 경찰관', query: '경찰관|포돌이|police officer' },
+    { id: 'firefighter', name: '출동 소방관', query: '소방관|구조대|firefighter' },
     { id: 'doctor-nurse', name: '의사 & 간호사 선생님', query: '의사|간호사|병원|치과의사|doctor|nurse' },
     { id: 'chef-baker', name: '요리사 & 파티시에', query: '요리사|셰프|제과사|파티시에|chef|baker' },
     { id: 'pilot-captain', name: '비행기 조종사 & 선장', query: '조종사|파일럿|선장|pilot|captain' },
@@ -641,10 +711,10 @@ export const THEME_SUB_CATEGORIES: Record<string, ThemeOption[]> = {
   ],
   seasons: [
     { id: 'all', name: '전체' },
-    { id: 'spring-picnic', name: '살랑살랑 봄 & 소풍', query: '봄|벚꽃|소풍|새싹|spring|picnic' },
-    { id: 'summer-vacation', name: '첨벙첨벙 여름 & 바캉스', query: '여름|물놀이|해변|수박|summer' },
-    { id: 'autumn-leaves', name: '알록달록 가을 & 단풍', query: '가을|단풍|낙엽|도토리|autumn|fall' },
-    { id: 'winter-snow', name: '하얀 겨울 & 눈사람', query: '겨울|눈사람|썰매|눈꽃|winter|snow' },
+    { id: 'spring-picnic', name: '살랑살랑 봄 & 소풍', query: '벚꽃|소풍|새싹|봄날|spring|picnic' },
+    { id: 'summer-vacation', name: '첨벙첨벙 여름 & 바캉스', query: '물놀이|해변|수박|바캉스|summer' },
+    { id: 'autumn-leaves', name: '알록달록 가을 & 단풍', query: '단풍|낙엽|도토리|autumn|fall' },
+    { id: 'winter-snow', name: '하얀 겨울 & 눈사람', query: '눈사람|썰매|눈꽃|winter|snow' },
     { id: 'christmas', name: '산타와 메리 크리스마스', query: '크리스마스|산타|루돌프|트리|christmas' },
     { id: 'halloween', name: '해피 할로윈 호박파티', query: '할로윈|호박|유령|마녀|halloween' },
     { id: 'birthday-party', name: '생일 축하 파티', query: '생일|생일파티|선물상자|풍선|birthday' },
@@ -659,25 +729,25 @@ export const THEME_SUB_CATEGORIES: Record<string, ThemeOption[]> = {
   ],
   'nature-landscapes': [
     { id: 'all', name: '전체' },
-    { id: 'forest-path', name: '푸른 숲 & 오솔길', query: '숲|오솔길|자작나무|나무|forest|path' },
+    { id: 'forest-path', name: '푸른 숲 & 오솔길', query: '숲속|오솔길|자작나무|forest|path' },
     { id: 'ocean-beach', name: '바다 & 해변 등대', query: '바다|등대|해변|파도|beach|ocean|lighthouse' },
-    { id: 'lake-mountain', name: '호수 & 산', query: '호수|산|계곡|오두막|mountain|lake' },
+    { id: 'lake-mountain', name: '호수 & 산', query: '호수|계곡|오두막|산맥|mountain|lake' },
     { id: 'sunset-field', name: '노을 & 들판', query: '노을|들판|석양|풍차|sunset|field' },
     { id: 'night-camping', name: '별밤 & 캠핑', query: '별밤|캠핑|텐트|모닥불|night|camping' },
   ],
   'healing-animals': [
     { id: 'all', name: '전체' },
     { id: 'cozy-cat', name: '창가의 고양이', query: '고양이|냥이|cat|kitten' },
-    { id: 'gentle-dog', name: '정원의 강아지', query: '강아지|개|dog|puppy' },
-    { id: 'pretty-birds', name: '예쁜 새와 나뭇가지', query: '새|파랑새|부엉이|참새|bird' },
+    { id: 'gentle-dog', name: '정원의 강아지', query: '강아지|dog|puppy' },
+    { id: 'pretty-birds', name: '예쁜 새와 나뭇가지', query: '파랑새|부엉이|참새|bird' },
     { id: 'forest-deer', name: '숲속 사슴 & 토끼', query: '사슴|토끼|다람쥐|deer|rabbit' },
     { id: 'butterfly-bee', name: '꽃과 나비 & 꿀벌', query: '나비|꿀벌|곤충|butterfly|bee' },
   ],
   'cozy-daily': [
     { id: 'all', name: '전체' },
     { id: 'living-window', name: '거실과 창가 햇살', query: '거실|창가|소파|쿠션|living-room|window' },
-    { id: 'tea-dessert', name: '티타임 & 디저트', query: '티타임|찻잔|커피|마카롱|빵|tea|coffee' },
-    { id: 'reading-room', name: '서재와 책 읽는 시간', query: '서재|책|촛대|책장|book|study' },
+    { id: 'tea-dessert', name: '티타임 & 디저트', query: '티타임|찻잔|커피|마카롱|디저트접시|tea|coffee' },
+    { id: 'reading-room', name: '서재와 책 읽는 시간', query: '서재|책장|촛대|독서|book|study' },
     { id: 'home-gardening', name: '베란다 홈가드닝', query: '베란다|가드닝|물뿌리개|gardening' },
     { id: 'fireplace-night', name: '벽난로와 아늑한 밤', query: '벽난로|담요|조명|fireplace' },
   ],
@@ -687,7 +757,7 @@ export const THEME_SUB_CATEGORIES: Record<string, ThemeOption[]> = {
     { id: 'bold-tableware', name: '큼직한 찻잔 & 도자기', query: '도자기|머그잔|찻잔|그릇|tableware|cup' },
     { id: 'bold-goods', name: '털실 바구니 & 소품', query: '털실|바구니|소품|단순소품|yarn|basket' },
     { id: 'bold-flowers', name: '굵은선 큰 꽃송이', query: '큰꽃|단순꽃|굵은꽃|bold-flower' },
-    { id: 'bold-bakery', name: '갓 구운 빵 & 먹거리', query: '식빵|바게트|치즈|빵|bakery|bread' },
+    { id: 'bold-bakery', name: '갓 구운 빵 & 먹거리', query: '식빵|바게트|치즈|bakery|bread' },
   ],
 }
 

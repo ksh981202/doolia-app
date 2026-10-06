@@ -157,9 +157,16 @@ export function AdminPrintablesPage() {
         </div>
       ) : null}
 
+      <div className="mb-3 flex items-center gap-2 px-1">
+        <span className="text-sm font-semibold text-slate-700">등록된 도안 목록</span>
+        <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-bold text-emerald-700">
+          총 {items.length}개
+        </span>
+      </div>
+
       <div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm">
         <div className="overflow-x-auto">
-          <table className="min-w-[920px] w-full text-left text-sm">
+          <table className="min-w-[980px] w-full text-left text-sm">
             <thead className="border-b border-slate-100 bg-slate-50/80 text-[11px] font-bold tracking-wide text-slate-500">
               <tr>
                 <th className="w-12 px-4 py-3">
@@ -172,6 +179,7 @@ export function AdminPrintablesPage() {
                     className="h-4 w-4 rounded border-slate-300 text-emerald-600"
                   />
                 </th>
+                <th className="w-14 px-2 py-3 text-center font-semibold">No.</th>
                 <th className="px-3 py-3 font-semibold">썸네일</th>
                 <th className="px-3 py-3 font-semibold">파일명</th>
                 <th className="px-3 py-3 font-semibold">썸네일 제목</th>
@@ -183,12 +191,12 @@ export function AdminPrintablesPage() {
             <tbody>
               {items.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-16 text-center text-sm font-medium text-slate-400">
+                  <td colSpan={8} className="px-4 py-16 text-center text-sm font-medium text-slate-400">
                     등록된 도안이 없습니다. 대량 업로드에서 TSV와 이미지를 올려 주세요.
                   </td>
                 </tr>
               ) : (
-                items.map((item) => {
+                items.map((item, index) => {
                   const detailHref = printablePath(item.slug || item.id)
                   return (
                   <tr key={item.id} className="border-b border-slate-50 last:border-b-0 hover:bg-slate-50/70">
@@ -200,6 +208,9 @@ export function AdminPrintablesPage() {
                         aria-label={`${item.slug || item.title_ko} 선택`}
                         className="h-4 w-4 rounded border-slate-300 text-emerald-600"
                       />
+                    </td>
+                    <td className="w-14 px-2 py-3 text-center font-mono text-xs font-medium text-slate-500">
+                      {items.length - index}
                     </td>
                     <td className="px-3 py-3">
                       <a href={detailHref} target="_blank" rel="noopener noreferrer" className="block w-fit">

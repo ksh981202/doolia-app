@@ -1,5 +1,6 @@
 import { Eye, Heart, Printer } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 import {
   brainDevelopmentPoints,
   detailAgeLabel,
@@ -10,7 +11,6 @@ import {
 import { cn } from '@/shared/lib/cn'
 import { usePrintableSocial } from '@/shared/store/usePrintableEngagement'
 import { useDownloadStore } from '@/shared/store/useDownloadStore'
-import { useCopyrightReportStore } from '@/shared/store/useCopyrightReportStore'
 import type { Printable } from '@/types/printable'
 
 function pointEmoji(label: string) {
@@ -28,7 +28,6 @@ const TEXT_WRAP = 'min-w-0 break-words [overflow-wrap:anywhere]'
 export function InfoSection({ printable }: { printable: Printable }) {
   const { t, i18n } = useTranslation()
   const openModal = useDownloadStore((state) => state.openModal)
-  const openReport = useCopyrightReportStore((state) => state.openReport)
   const { isLiked, likesCount, viewsCount } = usePrintableSocial(printable)
   const locale = i18n.language || i18n.resolvedLanguage || 'ko'
   const title = detailTitle(printable, locale)
@@ -161,23 +160,16 @@ export function InfoSection({ printable }: { printable: Printable }) {
             </span>
             <span className="truncate">{t('detail.copyrightTitle', '둘리아 안심 이용 안내')}</span>
           </div>
-          <button
-            type="button"
+          <Link
+            to={`/report?slug=${encodeURIComponent(printable.slug || printable.id)}`}
             title={t('detail.copyrightReportTitle', '저작권 침해 또는 콘텐츠 문의')}
-            onClick={() =>
-              openReport({
-                printableId: printable.id,
-                printableSlug: printable.slug || printable.id,
-                printableTitle: title,
-              })
-            }
             className="inline-flex shrink-0 items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1 text-[12.5px] font-bold text-slate-500 shadow-2xs transition-all hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600"
           >
             <span>{t('detail.copyrightReport', '저작권 문의 · 신고')}</span>
             <span className="text-[12px]" aria-hidden>
               ✉️
             </span>
-          </button>
+          </Link>
         </div>
         <div className="space-y-1 text-[13px] leading-snug tracking-tight text-slate-500">
           <p>{t('detail.copyrightScope', '• 아이와 함께하는 가정 및 교육 공간에서 자유롭게 인쇄해 보세요.')}</p>

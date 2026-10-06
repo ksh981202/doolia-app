@@ -4,6 +4,7 @@ import { isSupabaseConfigured } from '@/lib/supabase'
 import { listAdminPrintables } from '@/services/adminPrintableService'
 import { listAdminTips } from '@/services/adminTipService'
 import { countPendingCopyrightReports } from '@/services/copyrightReportService'
+import { countPendingGeneralInquiries } from '@/services/generalInquiryService'
 
 export function AdminDashboardPage() {
   const [printables, setPrintables] = useState(0)
@@ -12,17 +13,22 @@ export function AdminDashboardPage() {
   const [tipDrafts, setTipDrafts] = useState(0)
 
   const [reports, setReports] = useState(0)
+  const [inquiries, setInquiries] = useState(0)
 
   useEffect(() => {
-    void Promise.all([listAdminPrintables(), listAdminTips(), countPendingCopyrightReports()]).then(
-      ([items, columns, pendingReports]) => {
-        setPrintables(items.length)
-        setPublished(items.filter((item) => item.published).length)
-        setTips(columns.length)
-        setTipDrafts(columns.filter((item) => !item.published).length)
-        setReports(pendingReports)
-      },
-    )
+    void Promise.all([
+      listAdminPrintables(),
+      listAdminTips(),
+      countPendingCopyrightReports(),
+      countPendingGeneralInquiries(),
+    ]).then(([items, columns, pendingReports, pendingInquiries]) => {
+      setPrintables(items.length)
+      setPublished(items.filter((item) => item.published).length)
+      setTips(columns.length)
+      setTipDrafts(columns.filter((item) => !item.published).length)
+      setReports(pendingReports)
+      setInquiries(pendingInquiries)
+    })
   }, [])
 
   const cards = [
@@ -31,6 +37,7 @@ export function AdminDashboardPage() {
     { label: '육아 팁', value: tips, to: '/admin/tips' },
     { label: '미발행 팁', value: tipDrafts, to: '/admin/tips' },
     { label: '저작권 문의(대기)', value: reports, to: '/admin/reports' },
+    { label: '일반 문의(대기)', value: inquiries, to: '/admin/inquiries' },
   ]
 
   return (
@@ -43,7 +50,7 @@ export function AdminDashboardPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
         {cards.map((card) => (
           <Link
             key={card.label}

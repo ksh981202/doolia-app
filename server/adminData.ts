@@ -4,7 +4,7 @@ import { requireAdminAuth, sendAdminJson } from './adminAuth.ts'
 
 export const ADMIN_DATA_ROUTE = '/api/admin/data'
 
-const TABLES = ['printables', 'parenting_tips', 'copyright_reports'] as const
+const TABLES = ['printables', 'parenting_tips', 'copyright_reports', 'general_inquiries'] as const
 type AdminTable = (typeof TABLES)[number]
 type AdminAction = 'list' | 'select' | 'upsert' | 'update' | 'delete'
 
@@ -12,6 +12,7 @@ const TABLE_ACTIONS: Record<AdminTable, readonly AdminAction[]> = {
   printables: ['list', 'select', 'upsert', 'update', 'delete'],
   parenting_tips: ['list', 'select', 'upsert', 'update', 'delete'],
   copyright_reports: ['list', 'select', 'update'],
+  general_inquiries: ['list', 'select', 'update'],
 }
 
 function envString(env: NodeJS.Dict<string>, key: string) {
@@ -146,7 +147,7 @@ export async function handleAdminDataRequest(
     }
 
     if (action === 'upsert') {
-      if (table === 'copyright_reports' || !isPlainObject(body.row)) {
+      if (table === 'copyright_reports' || table === 'general_inquiries' || !isPlainObject(body.row)) {
         sendAdminJson(res, 400, { error: '허용되지 않은 관리자 DB 작업입니다.' })
         return
       }

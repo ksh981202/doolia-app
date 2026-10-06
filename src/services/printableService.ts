@@ -28,6 +28,65 @@ export function matchesQuery(item: Printable, query: string) {
     .some((needle) => hay.includes(needle))
 }
 
+const LATIN_SEARCH_TOKEN = /^[a-z0-9][a-z0-9'-]*$/i
+
+export function userSearchHaystack(item: Printable) {
+  return [
+    item.title,
+    item.title_ko,
+    item.title_en,
+    item.title_ja,
+    item.title_zh,
+    item.title_es,
+    item.title_pt,
+    item.title_de,
+    item.title_fr,
+    item.title_it,
+    item.title_vi,
+    item.description_ko,
+    item.description_en,
+    item.description_ja,
+    item.description_zh,
+    item.description_es,
+    item.description_pt,
+    item.description_de,
+    item.description_fr,
+    item.description_it,
+    item.description_vi,
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase()
+}
+
+function userSearchTokenMatches(haystack: string, token: string) {
+  if (LATIN_SEARCH_TOKEN.test(token)) {
+    const escaped = token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    return new RegExp(`(?:^|[^a-z0-9])${escaped}(?:[^a-z0-9]|$)`, 'i').test(haystack)
+  }
+  return haystack.includes(token)
+}
+
+/** User `?q=` matching: titles + descriptions only, spaces are AND, `|` stays OR. */
+export function matchesUserSearch(item: Printable, query: string) {
+  const raw = query.replace(/^#/, '').trim()
+  if (!raw) return true
+  const haystack = userSearchHaystack(item)
+  return raw
+    .split('|')
+    .map((part) => part.trim().toLowerCase())
+    .filter(Boolean)
+    .some((clause) => {
+      const tokens = clause.split(/\s+/).filter((token) => {
+        if (!token) return false
+        if (LATIN_SEARCH_TOKEN.test(token)) return token.length >= 2
+        return true
+      })
+      if (!tokens.length) return false
+      return tokens.every((token) => userSearchTokenMatches(haystack, token))
+    })
+}
+
 export function matchesPopularTab(item: Printable, tab: PopularTab) {
   const text = printableSearchText(item)
   if (tab === 'all') return true

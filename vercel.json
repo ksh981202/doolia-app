@@ -1,5 +1,7 @@
 {
+  "trailingSlash": false,
   "rewrites": [
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
+    { "source": "/printable/:slug", "destination": "/printable/:slug/index.html" },
+    { "source": "/((?!api/|printable/|robots\\.txt|sitemap\\.xml).*)", "destination": "/index.html" }
   ]
 }

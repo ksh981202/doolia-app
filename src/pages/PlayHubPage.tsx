@@ -211,12 +211,12 @@ export function PlayHubPage() {
             </div>
 
             <div className="relative my-2 flex items-center justify-center overflow-hidden py-2 sm:my-6 lg:col-span-5">
-              <div className="relative flex h-64 w-64 scale-90 items-center justify-center sm:h-72 sm:w-[19rem] sm:scale-100">
+              <div className="relative flex h-[300px] w-[19.5rem] scale-90 items-center justify-center sm:h-72 sm:w-[19rem] sm:scale-100">
                 {left ? (
                   <Link
                     to={printablePath(left.slug || left.id)}
                     state={{ printable: left }}
-                    className="absolute top-4 -left-2 h-48 w-36 -rotate-[8deg] rounded-2xl border border-slate-200/90 bg-white p-2 shadow-lg transition-transform duration-300 hover:-rotate-12 sm:h-52 sm:w-40"
+                    className="absolute top-4 -left-2 h-[260px] w-[185px] -translate-x-12 -rotate-12 rounded-2xl border border-slate-200/90 bg-white p-2 shadow-lg transition-transform duration-300 hover:-rotate-12 sm:h-52 sm:w-40 sm:translate-x-0 sm:-rotate-[8deg]"
                   >
                     <img
                       src={printableImage(left)}
@@ -225,13 +225,13 @@ export function PlayHubPage() {
                     />
                   </Link>
                 ) : (
-                  <div className="absolute top-4 -left-2 h-48 w-36 -rotate-[8deg] animate-pulse rounded-2xl border border-slate-200/90 bg-white p-2 shadow-lg sm:h-52 sm:w-40" />
+                  <div className="absolute top-4 -left-2 h-[260px] w-[185px] -translate-x-12 -rotate-12 animate-pulse rounded-2xl border border-slate-200/90 bg-white p-2 shadow-lg sm:h-52 sm:w-40 sm:translate-x-0 sm:-rotate-[8deg]" />
                 )}
                 {right ? (
                   <Link
                     to={printablePath(right.slug || right.id)}
                     state={{ printable: right }}
-                    className="absolute top-4 -right-2 h-48 w-36 rotate-[8deg] rounded-2xl border border-slate-200/90 bg-white p-2 shadow-lg transition-transform duration-300 hover:rotate-12 sm:h-52 sm:w-40"
+                    className="absolute top-4 -right-2 h-[260px] w-[185px] translate-x-12 rotate-12 rounded-2xl border border-slate-200/90 bg-white p-2 shadow-lg transition-transform duration-300 hover:rotate-12 sm:h-52 sm:w-40 sm:translate-x-0 sm:rotate-[8deg]"
                   >
                     <img
                       src={printableImage(right)}
@@ -240,18 +240,18 @@ export function PlayHubPage() {
                     />
                   </Link>
                 ) : (
-                  <div className="absolute top-4 -right-2 h-48 w-36 rotate-[8deg] animate-pulse rounded-2xl border border-slate-200/90 bg-white p-2 shadow-lg sm:h-52 sm:w-40" />
+                  <div className="absolute top-4 -right-2 h-[260px] w-[185px] translate-x-12 rotate-12 animate-pulse rounded-2xl border border-slate-200/90 bg-white p-2 shadow-lg sm:h-52 sm:w-40 sm:translate-x-0 sm:rotate-[8deg]" />
                 )}
                 {front ? (
                   <Link
                     to={printablePath(front.slug || front.id)}
                     state={{ printable: front }}
-                    className="relative z-10 block h-[15.75rem] w-[11.5rem] overflow-hidden rounded-2xl border-2 border-emerald-400/70 bg-white p-2 shadow-xl transition-transform duration-300 hover:scale-[1.02] sm:h-[17.5rem] sm:w-48"
+                    className="relative z-10 block h-[300px] w-[215px] overflow-hidden rounded-2xl border-2 border-emerald-400/70 bg-white p-2 shadow-xl transition-transform duration-300 hover:scale-[1.02] sm:h-[17.5rem] sm:w-48"
                   >
                     <HeroSplitPreview printable={front} />
                   </Link>
                 ) : (
-                  <div className="relative z-10 h-[15.75rem] w-[11.5rem] animate-pulse overflow-hidden rounded-2xl border-2 border-emerald-400/70 bg-white p-2 shadow-xl sm:h-[17.5rem] sm:w-48" />
+                  <div className="relative z-10 h-[300px] w-[215px] animate-pulse overflow-hidden rounded-2xl border-2 border-emerald-400/70 bg-white p-2 shadow-xl sm:h-[17.5rem] sm:w-48" />
                 )}
               </div>
             </div>

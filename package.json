@@ -6,7 +6,8 @@
   "description": "DOOLIA Printables — Print, Play & Discover. Free A4 coloring pages, mazes, and tracing sheets for kids.",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && npx tsx scripts/generate-seo-assets.ts",
+    "seo:assets": "npx tsx scripts/generate-seo-assets.ts",
     "lint": "oxlint",
     "preview": "vite preview"
   },

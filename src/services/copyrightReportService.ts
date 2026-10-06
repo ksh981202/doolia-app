@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase'
+import { notifyAdminPendingChanged } from '@/admin/pendingEvents'
 import { adminDb } from '@/services/adminDataClient'
 
 export const REPORT_TYPES = ['copyright', 'modification', 'other'] as const
@@ -114,6 +115,7 @@ export async function submitCopyrightReport(input: SubmitCopyrightReportInput) {
   if (supabase) {
     const { error: insertError } = await supabase.from('copyright_reports').insert(payload)
     if (insertError) throw new Error(insertError.message || '접수에 실패했습니다.')
+    notifyAdminPendingChanged()
     return
   }
 
@@ -149,6 +151,7 @@ export async function updateCopyrightReport(
     eq: { id },
     patch: { ...patch, updated_at: updatedAt },
   })
+  notifyAdminPendingChanged()
 }
 
 export async function countPendingCopyrightReports() {

@@ -2,25 +2,19 @@ import { ChevronLeft, Menu, Search, Settings, X } from 'lucide-react'
 import { type FormEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { isLocalAdminHost } from '@/admin/AdminGuard'
 import { HEADER_NAV_ITEMS, isHeaderNavActive } from '@/components/header/nav'
 import { LanguageSwitcher } from '@/components/header/LanguageSwitcher'
 import { Logo } from '@/components/header/Logo'
 import { NavMenu } from '@/components/header/NavMenu'
-import { cn } from '@/shared/lib/cn'
-
-function isLocalAdminHost() {
-  if (import.meta.env.DEV) return true
-  if (typeof window === 'undefined') return false
-  const host = window.location.hostname
-  return host === 'localhost' || host === '127.0.0.1'
-}
+import { TOUCH_ICON, cn } from '@/shared/lib/cn'
 
 function isHomePath(pathname: string) {
   return pathname === '/' || pathname === '/v2'
 }
 
 const iconButtonClass =
-  'inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-50 hover:text-emerald-700'
+  `${TOUCH_ICON} rounded-full border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-50 hover:text-emerald-700`
 
 
 export function Header() {
@@ -79,7 +73,7 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-gray-100 bg-white/90 backdrop-blur-md">
+    <header className="no-print sticky top-0 z-40 border-b border-gray-100 bg-white/90 backdrop-blur-md">
       <div className="mx-auto grid h-16 w-full max-w-7xl grid-cols-[1fr_minmax(0,42rem)_1fr] items-center gap-2 px-4 sm:h-20 sm:gap-4 sm:px-6 lg:px-8">
         <div className="justify-self-start">
           <Logo />

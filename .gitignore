@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+public/printable/
 *.local
 
 # Env
@@ -41,3 +42,4 @@ python/work/
 
 # OS
 Thumbs.db
+.tmp-verify/

@@ -5,8 +5,14 @@ import { ThemeFilter } from '@/components/category/ThemeFilter'
 import { PrintableCard } from '@/components/PrintableCard'
 import { SubpageHeader } from '@/components/layout/SubpageHeader'
 import { usePrintablesQuery } from '@/features/gallery/model/usePrintablesQuery'
-import { matchesQuery } from '@/services/printableService'
-import { getCategoryThemes, getThemeSubCategories, resolveCategoryThemeId, resolveThemeSubId } from '@/shared/config/categories'
+import { matchesQuery, matchesUserSearch } from '@/services/printableService'
+import {
+  getCategoryThemes,
+  getThemeSubCategories,
+  matchesSubtabQuery,
+  resolveCategoryThemeId,
+  resolveThemeSubId,
+} from '@/shared/config/categories'
 import {
   CATALOG_SLUG_ALIASES,
   DEFAULT_CATEGORY_SLUG,
@@ -98,7 +104,7 @@ export function CategoryPage() {
           ? source.filter((item) => matchesTopicCategory(item.category, match.topic))
           : source.filter((item) => matchesQuery(item, match.topic.query))
     return scoped
-      .filter((item) => matchesQuery(item, query))
+      .filter((item) => matchesUserSearch(item, query))
       .filter((item) => (isSenior ? true : matchesAgeFilter(item, age)))
       .filter((item) => {
         const parentMatch = (() => {
@@ -110,7 +116,7 @@ export function CategoryPage() {
         if (!subOptions || sub === 'all') return true
         const subOption = subOptions.find((entry) => entry.id === sub)
         if (!subOption || subOption.id === 'all') return true
-        return matchesQuery(item, subOption.query ?? '')
+        return matchesSubtabQuery(item, subOption.query ?? '')
       })
       .sort((a, b) =>
         sort === 'latest'

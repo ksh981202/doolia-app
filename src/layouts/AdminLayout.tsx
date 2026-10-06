@@ -1,7 +1,8 @@
-import { FileImage, LayoutDashboard, Menu, ShieldAlert, Upload, X } from 'lucide-react'
+import { FileImage, LayoutDashboard, Mail, Menu, ShieldAlert, Upload, X } from 'lucide-react'
 import { useState } from 'react'
-import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { NavLink, Outlet, Link, useNavigate } from 'react-router-dom'
 import { AdminGuard, logoutAdminSession } from '@/admin/AdminGuard'
+import { useAdminPendingCounts } from '@/admin/useAdminPendingCounts'
 import { cn } from '@/shared/lib/cn'
 
 export function ProtectedAdminLayout() {
@@ -13,41 +14,86 @@ export function ProtectedAdminLayout() {
 }
 
 const NAV = [
-  { to: '/admin', label: '📊 대시보드', icon: LayoutDashboard, end: true },
-  { to: '/admin/printables', label: '🎨 도안 관리', icon: FileImage, end: true },
-  { to: '/admin/printables/upload', label: '⬆️ 대량 업로드', icon: Upload, end: true },
-  { to: '/admin/reports', label: '🛡️ 저작권 문의', icon: ShieldAlert, end: true },
+  { to: '/admin', label: '📊 대시보드', icon: LayoutDashboard, end: true, badge: null },
+  { to: '/admin/printables', label: '🎨 도안 관리', icon: FileImage, end: true, badge: null },
+  { to: '/admin/printables/upload', label: '⬆️ 대량 업로드', icon: Upload, end: true, badge: null },
+  { to: '/admin/reports', label: '🛡️ 저작권 문의', icon: ShieldAlert, end: true, badge: 'reports' as const },
+  { to: '/admin/inquiries', label: '📬 일반 문의', icon: Mail, end: true, badge: 'inquiries' as const },
 ]
+
+function SiteHomeLink() {
+  return (
+    <div className="mb-4 px-3 pt-3">
+      <Link
+        to="/"
+        className="group flex w-full items-center justify-between rounded-xl border border-slate-200/80 bg-slate-100/80 px-3.5 py-2.5 text-slate-700 transition-all hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
+      >
+        <div className="flex items-center gap-2">
+          <span className="text-base transition-transform group-hover:scale-110">🏠</span>
+          <span className="text-xs font-bold">사이트 홈으로</span>
+        </div>
+        <span className="text-xs text-slate-400 group-hover:text-emerald-600">↗</span>
+      </Link>
+    </div>
+  )
+}
+
+function PendingBadge() {
+  return (
+    <span className="ml-auto inline-flex items-center justify-center rounded-full bg-rose-500 px-1.5 py-0.5 text-[10px] font-extrabold leading-none text-white shadow-xs">
+      N
+    </span>
+  )
+}
+
+function AdminNav({
+  pendingReportsCount,
+  pendingInquiriesCount,
+  onNavigate,
+}: {
+  pendingReportsCount: number
+  pendingInquiriesCount: number
+  onNavigate: () => void
+}) {
+  return (
+    <nav className="flex flex-col gap-1 p-3">
+      {NAV.map((item) => {
+        const showBadge =
+          (item.badge === 'reports' && pendingReportsCount > 0) ||
+          (item.badge === 'inquiries' && pendingInquiriesCount > 0)
+        return (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            end={item.end}
+            onClick={onNavigate}
+            className={({ isActive }) =>
+              cn(
+                'flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-bold',
+                isActive ? 'bg-emerald-50 text-emerald-700' : 'text-slate-600 hover:bg-slate-50',
+              )
+            }
+          >
+            <item.icon size={16} />
+            <span className="flex min-w-0 flex-1 items-center justify-between gap-2">
+              <span>{item.label}</span>
+              {showBadge ? <PendingBadge /> : null}
+            </span>
+          </NavLink>
+        )
+      })}
+    </nav>
+  )
+}
 
 export function AdminLayout() {
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
+  const { pendingReportsCount, pendingInquiriesCount } = useAdminPendingCounts()
 
   const logout = () => {
     void logoutAdminSession().then(() => navigate('/', { replace: true }))
   }
-
-  const nav = (
-    <nav className="flex flex-col gap-1 p-3">
-      {NAV.map((item) => (
-        <NavLink
-          key={item.to}
-          to={item.to}
-          end={item.end}
-          onClick={() => setOpen(false)}
-          className={({ isActive }) =>
-            cn(
-              'flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-bold',
-              isActive ? 'bg-emerald-50 text-emerald-700' : 'text-slate-600 hover:bg-slate-50',
-            )
-          }
-        >
-          <item.icon size={16} />
-          {item.label}
-        </NavLink>
-      ))}
-    </nav>
-  )
 
   return (
     <div className="flex min-h-screen bg-slate-50">
@@ -56,7 +102,12 @@ export function AdminLayout() {
           <p className="text-xs font-extrabold tracking-[0.16em] text-emerald-600">DOOLIA ADMIN</p>
           <p className="mt-1 text-sm font-bold text-slate-800">콘텐츠 관리</p>
         </div>
-        {nav}
+        <SiteHomeLink />
+        <AdminNav
+          pendingReportsCount={pendingReportsCount}
+          pendingInquiriesCount={pendingInquiriesCount}
+          onNavigate={() => setOpen(false)}
+        />
         <button type="button" onClick={logout} className="mx-3 mb-4 mt-auto rounded-xl px-3 py-2 text-left text-sm font-bold text-slate-500 hover:bg-slate-50">
           로그아웃
         </button>
@@ -69,7 +120,12 @@ export function AdminLayout() {
             <div className="border-b border-emerald-50 px-4 py-4">
               <p className="text-xs font-extrabold tracking-[0.16em] text-emerald-600">DOOLIA ADMIN</p>
             </div>
-            {nav}
+            <SiteHomeLink />
+            <AdminNav
+              pendingReportsCount={pendingReportsCount}
+              pendingInquiriesCount={pendingInquiriesCount}
+              onNavigate={() => setOpen(false)}
+            />
             <button type="button" onClick={logout} className="mx-3 mb-4 mt-auto rounded-xl px-3 py-2 text-left text-sm font-bold text-slate-500 hover:bg-slate-50">
               로그아웃
             </button>

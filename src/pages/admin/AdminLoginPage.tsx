@@ -1,6 +1,6 @@
 import { type FormEvent, useEffect, useState } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
-import { loginAdminSession, verifyAdminSession } from '@/admin/AdminGuard'
+import { isLocalAdminHost, loginAdminSession, verifyAdminSession } from '@/admin/AdminGuard'
 import { PageFallback } from '@/components/layout/PageFallback'
 
 export function AdminLoginPage() {
@@ -14,6 +14,7 @@ export function AdminLoginPage() {
   const next = from.startsWith('/admin') && from !== '/admin/login' ? from : '/admin'
 
   useEffect(() => {
+    if (!isLocalAdminHost()) return
     let cancelled = false
     void verifyAdminSession()
       .then((ok) => {
@@ -30,6 +31,7 @@ export function AdminLoginPage() {
     }
   }, [])
 
+  if (!isLocalAdminHost()) return <Navigate to="/" replace />
   if (!ready) return <PageFallback />
   if (authed) return <Navigate to={next} replace />
 

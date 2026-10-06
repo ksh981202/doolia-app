@@ -4,6 +4,7 @@ import { AppLayout } from '@/components/layout/AppLayout'
 import { CatalogLayout } from '@/components/layout/CatalogLayout'
 import { PageFallback } from '@/components/layout/PageFallback'
 import { ProtectedAdminLayout } from '@/layouts/AdminLayout'
+import { LocalAdminGate } from '@/admin/AdminGuard'
 import PrintableDetailPage from '@/pages/PrintableDetailPage'
 
 const PlayHubPage = lazy(() => import('@/pages/PlayHubPage'))
@@ -16,7 +17,9 @@ const BookmarksPage = lazy(() => import('@/pages/BookmarksPage').then((module) =
 const AboutPage = lazy(() => import('@/pages/AboutPage'))
 const PrivacyPage = lazy(() => import('@/pages/PrivacyPage'))
 const TermsPage = lazy(() => import('@/pages/TermsPage'))
-const ContactPage = lazy(() => import('@/pages/LegalPages').then((module) => ({ default: module.ContactPage })))
+const ContactPage = lazy(() => import('@/pages/ContactPage'))
+const FaqPage = lazy(() => import('@/pages/FaqPage'))
+const CopyrightReportPage = lazy(() => import('@/pages/CopyrightReportPage'))
 const PremiumPage = lazy(() => import('@/pages/LegalPages').then((module) => ({ default: module.PremiumPage })))
 const AdminLoginPage = lazy(() => import('@/pages/admin/AdminLoginPage'))
 const AdminDashboardPage = lazy(() => import('@/pages/admin/AdminDashboardPage'))
@@ -24,6 +27,7 @@ const AdminPrintablesPage = lazy(() => import('@/pages/admin/AdminPrintablesPage
 const AdminUploadPage = lazy(() => import('@/pages/admin/AdminUploadPage'))
 const AdminTipsPage = lazy(() => import('@/pages/admin/AdminTipsPage'))
 const AdminCopyrightReportsPage = lazy(() => import('@/pages/admin/AdminCopyrightReportsPage'))
+const AdminGeneralInquiriesPage = lazy(() => import('@/pages/admin/AdminGeneralInquiriesPage'))
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -50,6 +54,8 @@ export function AppRouter() {
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/terms" element={<TermsPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/faq" element={<FaqPage />} />
+            <Route path="/report" element={<CopyrightReportPage />} />
             <Route path="/premium" element={<PremiumPage />} />
             <Route element={<CatalogLayout />}>
               <Route path="/category" element={<CategoryPage />} />
@@ -64,13 +70,16 @@ export function AppRouter() {
               <Route path="/saved" element={<Navigate to="/bookmarks" replace />} />
             </Route>
           </Route>
-          <Route path="/admin/login" element={<AdminLoginPage />} />
-          <Route element={<ProtectedAdminLayout />}>
-            <Route path="/admin" element={<AdminDashboardPage />} />
-            <Route path="/admin/printables" element={<AdminPrintablesPage />} />
-            <Route path="/admin/printables/upload" element={<AdminUploadPage />} />
-            <Route path="/admin/tips" element={<AdminTipsPage />} />
-            <Route path="/admin/reports" element={<AdminCopyrightReportsPage />} />
+          <Route element={<LocalAdminGate />}>
+            <Route path="/admin/login" element={<AdminLoginPage />} />
+            <Route element={<ProtectedAdminLayout />}>
+              <Route path="/admin" element={<AdminDashboardPage />} />
+              <Route path="/admin/printables" element={<AdminPrintablesPage />} />
+              <Route path="/admin/printables/upload" element={<AdminUploadPage />} />
+              <Route path="/admin/tips" element={<AdminTipsPage />} />
+              <Route path="/admin/reports" element={<AdminCopyrightReportsPage />} />
+              <Route path="/admin/inquiries" element={<AdminGeneralInquiriesPage />} />
+            </Route>
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

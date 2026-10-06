@@ -9,7 +9,9 @@ import { RelatedPrintables } from '@/components/detail/RelatedPrintables'
 import { usePrintableQuery, usePrintablesQuery } from '@/features/gallery/model/usePrintablesQuery'
 import { DEMO_PRINTABLES } from '@/services/printableService'
 import { categoryPath, getAllCatalogTopics, matchesTopicCategory } from '@/shared/config/catalog'
+import { seoPrintableAlt, seoPrintablePath, seoPrintableTitle } from '@/shared/config/seo'
 import { detailTitle } from '@/shared/lib/detailCopy'
+import { applyPageMeta } from '@/shared/lib/pageMeta'
 import { usePrintableEngagement } from '@/shared/store/usePrintableEngagement'
 import type { Printable } from '@/types/printable'
 
@@ -54,6 +56,42 @@ export function PrintableDetailPage() {
     if (!printable) return
     recordView(printable)
   }, [printable, recordView])
+
+  useEffect(() => {
+    if (!printable) return
+    const name = printable.title_ko || printable.title
+    const url = seoPrintablePath(printable.slug || printable.id)
+    const description = printable.description_ko || `${name} 무료 색칠도안을 A4 PDF로 프린트하세요.`
+    applyPageMeta({
+      title: seoPrintableTitle(name),
+      description,
+      image: printable.image_color_url,
+      url,
+      jsonLd: {
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'CreativeWork',
+            name: seoPrintableTitle(name),
+            description,
+            url,
+            inLanguage: 'ko',
+            image: {
+              '@type': 'ImageObject',
+              url: printable.image_color_url,
+              contentUrl: printable.image_color_url,
+            },
+          },
+          {
+            '@type': 'ImageObject',
+            name: seoPrintableAlt(name),
+            url: printable.image_color_url,
+            contentUrl: printable.image_color_url,
+          },
+        ],
+      },
+    })
+  }, [printable])
 
   if (!printable) {
     if (isPending || !isFetched) return <DetailSkeleton />

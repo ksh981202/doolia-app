@@ -11,84 +11,12 @@ import {
   getNextAffiliateItem,
   pickAffiliateText,
 } from '@/shared/config/affiliates'
-import { cn } from '@/shared/lib/cn'
+import { TOUCH_ICON, cn } from '@/shared/lib/cn'
 import { detailTitle } from '@/shared/lib/detailCopy'
 import { generatePrintablePdf } from '@/shared/lib/generatePrintablePdf'
-import { printFooterMarkup } from '@/shared/lib/printFooter'
-import { getDisplayImageUrl, printableViewUrl } from '@/shared/utils/printableAssets'
+import { prefetchPrintImage, printPrintable } from '@/shared/lib/printPage'
+import { getDisplayImageUrl, printableLineArtUrl, printableViewUrl } from '@/shared/utils/printableAssets'
 import { useDownloadStore } from '@/shared/store/useDownloadStore'
-
-function escapeHtml(value: string) {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-}
-
-function safePrintUrl(url: string) {
-  try {
-    const parsed = new URL(url, window.location.origin)
-    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return ''
-    return parsed.href
-  } catch {
-    return ''
-  }
-}
-
-function printDocumentHtml(title: string, imgUrl: string) {
-  const safeTitle = escapeHtml(title || 'DOOLIA Printable')
-  const safeUrl = escapeHtml(imgUrl)
-  return `<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>${safeTitle}</title>
-    <style>
-      @page { size: A4 portrait; margin: 0; }
-      html, body { margin: 0; width: 210mm; height: 297mm; background: #fff; }
-      .print-page {
-        box-sizing: border-box;
-        display: flex;
-        flex-direction: column;
-        width: 210mm;
-        height: 297mm;
-        padding: 8mm 8mm 6mm;
-      }
-      .print-page img { flex: 1; width: 100%; min-height: 0; object-fit: contain; }
-      .print-footer {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 8px;
-        margin-top: 3mm;
-        padding: 1.5mm 2mm 0;
-        border-top: 0.4pt solid #cbd5e1;
-        color: #64748b;
-        font-family: "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-        font-size: 10px;
-        font-weight: 500;
-      }
-      .print-footer-brand { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
-      .print-footer-name { color: #334155; font-weight: 700; }
-      .print-footer-sep { color: #94a3b8; }
-      .print-footer-legal { color: #94a3b8; font-size: 9.5px; text-align: right; }
-    </style>
-  </head>
-  <body>
-    <div class="print-page">
-      <img src="${safeUrl}" alt="${safeTitle}" onload="window.focus(); window.print();" />
-      ${printFooterMarkup()}
-    </div>
-  </body>
-</html>`
-}
-
-function writePrintHtml(target: Document, title: string, imgUrl: string) {
-  target.open()
-  target.write(printDocumentHtml(title, imgUrl))
-  target.close()
-}
 
 export function DownloadModal() {
   const { isOpen, printable, closeModal } = useDownloadStore()
@@ -165,6 +93,10 @@ function DownloadModalBody({
     return () => window.clearInterval(timer)
   }, [])
 
+  useEffect(() => {
+    prefetchPrintImage(printableLineArtUrl(printable) || originalSrc)
+  }, [printable, originalSrc])
+
   const handleDownload = async () => {
     if (!ready || generating) return
     setError('')
@@ -180,40 +112,18 @@ function DownloadModalBody({
   }
 
   const handleDirectPrint = () => {
-    const imgUrl = safePrintUrl(originalSrc)
     const printTitle = title || 'DOOLIA Printable'
-    if (!imgUrl) {
+    const ok = printPrintable(printTitle, printableLineArtUrl(printable) || originalSrc)
+    if (!ok) {
       setError(t('detail.notFound', '도안을 찾을 수 없어요.'))
       return
     }
-
-    const printWindow = window.open('', '_blank')
-    if (printWindow) {
-      writePrintHtml(printWindow.document, printTitle, imgUrl)
-      void incrementPrintableDownloads(printable.id)
-      return
-    }
-
-    const iframe = document.createElement('iframe')
-    iframe.setAttribute('aria-hidden', 'true')
-    iframe.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden;'
-    document.body.appendChild(iframe)
-    const doc = iframe.contentDocument
-    if (!doc) {
-      iframe.remove()
-      window.print()
-      return
-    }
-    writePrintHtml(doc, printTitle, imgUrl)
-    const cleanup = () => iframe.remove()
-    iframe.contentWindow?.addEventListener('afterprint', cleanup)
-    window.setTimeout(cleanup, 60_000)
     void incrementPrintableDownloads(printable.id)
   }
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-xs"
+      className="modal-backdrop no-print fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-3 backdrop-blur-xs sm:p-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby="download-modal-title"
@@ -226,14 +136,14 @@ function DownloadModalBody({
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 z-20 rounded-full bg-slate-100/80 p-2 text-slate-500 transition-colors hover:bg-slate-200 hover:text-slate-800"
+          className={`${TOUCH_ICON} absolute top-3 right-3 z-20 rounded-full bg-slate-100/80 text-slate-500 transition-colors hover:bg-slate-200 hover:text-slate-800 sm:top-4 sm:right-4`}
           aria-label={t('detail.back', '닫기')}
         >
           <X className="h-5 w-5" />
         </button>
 
-        <div className="grid max-h-[92vh] grid-cols-1 divide-y divide-slate-100 overflow-y-auto md:grid-cols-2 md:divide-x md:divide-y-0">
-          <div className="flex min-h-0 flex-col space-y-4 p-6 sm:p-7">
+        <div className="grid max-h-[92dvh] grid-cols-1 divide-y divide-slate-100 overflow-y-auto md:max-h-[92vh] md:grid-cols-2 md:divide-x md:divide-y-0">
+          <div className="flex min-h-0 flex-col space-y-3 p-4 sm:space-y-4 sm:p-7">
             <div>
               <div className="mb-2 flex items-center justify-between gap-2 pr-10 md:pr-0">
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-emerald-50 px-3 py-1 text-[12.5px] font-bold text-emerald-800">
@@ -276,15 +186,19 @@ function DownloadModalBody({
               </div>
               <h2
                 id="download-modal-title"
-                className="mb-3 truncate text-[19px] font-bold leading-snug tracking-tight text-slate-900 sm:text-[20px]"
+                className="mb-2 truncate text-[18px] font-bold leading-snug tracking-tight text-slate-900 sm:mb-3 sm:text-[20px]"
               >
                 {title}
               </h2>
             </div>
 
-            <div className="relative mx-auto flex min-h-[420px] w-full flex-1 items-center justify-center rounded-2xl border border-slate-200/60 bg-slate-50/50 p-1 sm:min-h-[480px]">
+            <div className="relative mx-auto flex w-full max-h-[42vh] items-center justify-center rounded-2xl border border-slate-200/60 bg-slate-50/50 p-1 sm:max-h-[500px]">
               {previewSrc ? (
-                <img src={previewSrc} alt={title} className="h-full w-full select-none object-contain" />
+                <img
+                  src={previewSrc}
+                  alt={title}
+                  className="max-h-[42vh] w-full select-none object-contain sm:max-h-[500px]"
+                />
               ) : (
                 <p className="text-xs font-semibold text-slate-400">{t('detail.notFound', '미리보기 없음')}</p>
               )}
@@ -324,7 +238,7 @@ function DownloadModalBody({
             </div>
           </div>
 
-          <div className="flex min-h-0 flex-col justify-between space-y-3.5 p-6 sm:p-7">
+          <div className="flex min-h-0 flex-col justify-between space-y-3 p-4 sm:space-y-3.5 sm:p-7">
             <div>
               <span className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-emerald-50 px-3.5 py-1 text-[13px] font-bold tracking-tight text-emerald-900 sm:text-[13.5px]">
                 {affiliateBadge}

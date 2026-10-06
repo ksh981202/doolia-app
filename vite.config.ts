@@ -4,13 +4,14 @@ import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig, loadEnv } from 'vite'
 import { r2MediaPlugin } from './vite-plugin-r2-media.ts'
+import { seoPrerenderPlugin } from './vite-plugin-seo-prerender.ts'
 
 const rootDir = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, rootDir, '')
   return {
-    plugins: [react(), tailwindcss(), r2MediaPlugin(env)],
+    plugins: [react(), tailwindcss(), r2MediaPlugin(env), seoPrerenderPlugin(rootDir)],
     resolve: {
       alias: {
         '@': path.resolve(rootDir, 'src'),
@@ -22,6 +23,9 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 9999,
       strictPort: true,
+      watch: {
+        ignored: ['**/.tmp-verify/**', '**/public/printable/**'],
+      },
     },
   }
 })

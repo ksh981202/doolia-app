@@ -1,5 +1,7 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { ADMIN_PENDING_COUNTS_KEY, ADMIN_REPORTS_COUNT_KEY, notifyAdminPendingChanged } from '@/admin/pendingEvents'
 import { listAdminPrintables, setPrintablePublished, type AdminPrintable } from '@/services/adminPrintableService'
 import {
   listCopyrightReports,
@@ -68,7 +70,12 @@ function buildPrintableMeta(printables: AdminPrintable[]) {
   }
 }
 
+function pendingReportsAfter(items: CopyrightReport[], id: string, status?: ReportStatus) {
+  return items.filter((row) => (row.id === id ? (status ?? row.status) : row.status) === 'pending').length
+}
+
 export function AdminCopyrightReportsPage() {
+  const queryClient = useQueryClient()
   const [items, setItems] = useState<CopyrightReport[]>([])
   const [printables, setPrintables] = useState<AdminPrintable[]>([])
   const [filter, setFilter] = useState<'all' | ReportStatus>('all')
@@ -103,6 +110,17 @@ export function AdminCopyrightReportsPage() {
   )
   const pendingCount = items.filter((item) => item.status === 'pending').length
 
+  const syncPendingBadges = (reports: number) => {
+    queryClient.setQueryData(ADMIN_REPORTS_COUNT_KEY, reports)
+    queryClient.setQueryData(ADMIN_PENDING_COUNTS_KEY, (current: { reports: number; inquiries: number } | undefined) => ({
+      reports,
+      inquiries: current?.inquiries ?? 0,
+    }))
+    notifyAdminPendingChanged({ reports })
+    void queryClient.invalidateQueries({ queryKey: ADMIN_REPORTS_COUNT_KEY })
+    void queryClient.invalidateQueries({ queryKey: ADMIN_PENDING_COUNTS_KEY })
+  }
+
   const patchRow = async (id: string, patch: { status?: ReportStatus; admin_notes?: string | null }) => {
     setBusyId(id)
     try {
@@ -118,6 +136,7 @@ export function AdminCopyrightReportsPage() {
             : row,
         ),
       )
+      if (patch.status) syncPendingBadges(pendingReportsAfter(items, id, patch.status))
       setMessageOk(true)
       setMessage('반영했습니다.')
     } catch (error) {
@@ -149,7 +168,9 @@ export function AdminCopyrightReportsPage() {
       if (!nextPublished && item.status === 'pending') {
         await updateCopyrightReport(item.id, { status: 'reviewed' })
         setItems((current) => current.map((row) => (row.id === item.id ? { ...row, status: 'reviewed' } : row)))
+        syncPendingBadges(pendingReportsAfter(items, item.id, 'reviewed'))
       }
+      void queryClient.invalidateQueries({ queryKey: ['printables'] })
       setMessageOk(true)
       setMessage(`도안이 성공적으로 ${actionName} 처리되었습니다.`)
     } catch (error) {
@@ -248,7 +269,7 @@ export function AdminCopyrightReportsPage() {
                               published ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
                             }`}
                           >
-                            {published ? '공개 중' : '비공개 숨김'}
+                            {published ? '공개중' : '비공개'}
                           </span>
                         ) : null}
                         {report.good_faith_agreed ? (
@@ -374,12 +395,19 @@ export function AdminCopyrightReportsPage() {
                         className={`w-full rounded-xl px-3 py-2 text-[12.5px] font-bold shadow-xs transition-all disabled:opacity-50 ${
                           published
                             ? 'border border-rose-200 bg-rose-50 text-rose-700 hover:border-rose-300 hover:bg-rose-100'
-                            : 'bg-emerald-600 text-white hover:bg-emerald-700'
+                            : 'border border-emerald-200 bg-emerald-50 text-emerald-800 hover:border-emerald-300 hover:bg-emerald-100'
                         }`}
                       >
-                        {published ? '🚫 도안 즉시 비공개' : '✓ 도안 공개 전환'}
+                        {published ? '🔴 도안 즉시 비공개' : '🟢 도안 다시 공개하기'}
                       </button>
-                    ) : null}
+                    ) : (
+                      <p
+                        className="w-full rounded-xl border border-dashed border-slate-200 bg-slate-50 px-3 py-2 text-center text-[12px] font-bold text-slate-400"
+                        title="연결된 도안이 없어 공개 상태를 변경할 수 없습니다."
+                      >
+                        대상 도안 없음
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>

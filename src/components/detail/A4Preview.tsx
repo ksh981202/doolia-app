@@ -1,9 +1,11 @@
 import { Heart, Share2 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { LightboxModal } from '@/components/LightboxModal'
 import { cn } from '@/shared/lib/cn'
-import { PRINT_FOOTER_BRAND, PRINT_FOOTER_LEGAL, PRINT_FOOTER_SITE } from '@/shared/lib/printFooter'
+import { seoPrintableAlt } from '@/shared/config/seo'
+import { prefetchPrintImage, isMobilePrintHost, printPrintable } from '@/shared/lib/printPage'
 import { getDisplayImageUrl, printableColorUrl, printableLineArtUrl } from '@/shared/utils/printableAssets'
 import { useDownloadStore } from '@/shared/store/useDownloadStore'
 import { usePrintableSocial } from '@/shared/store/usePrintableEngagement'
@@ -41,7 +43,6 @@ export function A4Preview({ printable }: { printable: Printable }) {
   const [mode, setMode] = useState<PreviewMode>('color')
   const [isZoomed, setIsZoomed] = useState(false)
   const [shareMsg, setShareMsg] = useState('')
-  const [printSrc, setPrintSrc] = useState('')
   const printingRef = useRef(false)
   const { isLiked, likesCount, toggleLike } = usePrintableSocial(printable)
   const setViewMode = useDownloadStore((state) => state.setViewMode)
@@ -56,6 +57,7 @@ export function A4Preview({ printable }: { printable: Printable }) {
   const previewSrc = mode === 'color' ? colorPreview : linePreview
   const previewFallback = mode === 'color' ? colorSrc : lineSrc
   const title = printable.title || printable.title_ko
+  const printAlt = seoPrintableAlt(printable.title_ko || title)
   const likesLabel = t('detail.likes', '좋아요')
 
   useEffect(() => {
@@ -89,16 +91,22 @@ export function A4Preview({ printable }: { printable: Printable }) {
     }
   }
 
-  const requestPrint = async () => {
+  useEffect(() => {
+    prefetchPrintImage(lineSrc)
+  }, [lineSrc])
+
+  const requestPrint = () => {
     if (printingRef.current) return
     printingRef.current = true
-    setPrintSrc(lineSrc)
-    try {
-      await waitForImage(lineSrc)
-      window.print()
-    } finally {
+    if (isMobilePrintHost()) {
+      printPrintable(printAlt, lineSrc)
       printingRef.current = false
+      return
     }
+    void waitForImage(lineSrc).finally(() => {
+      window.print()
+      printingRef.current = false
+    })
   }
 
   return (
@@ -109,6 +117,7 @@ export function A4Preview({ printable }: { printable: Printable }) {
             src={getDisplayImageUrl(lineSrc, THUMB_WIDTH)}
             fallbackSrc={lineSrc}
             label={t('detail.thumbnailBw', '흑백 도안')}
+            alt={printAlt}
             active={mode === 'line'}
             onClick={() => setMode('line')}
           />
@@ -116,6 +125,7 @@ export function A4Preview({ printable }: { printable: Printable }) {
             src={getDisplayImageUrl(colorSrc, THUMB_WIDTH)}
             fallbackSrc={colorSrc}
             label={t('detail.thumbnailColor', '컬러 예시')}
+            alt={printAlt}
             active={mode === 'color'}
             onClick={() => setMode('color')}
           />
@@ -125,7 +135,7 @@ export function A4Preview({ printable }: { printable: Printable }) {
           <A4Paper
             src={previewSrc}
             fallbackSrc={previewFallback}
-            title={title}
+            title={printAlt}
             zoomLabel={t('detail.zoomIn', '크게 보기')}
             onZoom={() => setIsZoomed(true)}
           />
@@ -166,26 +176,17 @@ export function A4Preview({ printable }: { printable: Printable }) {
         </div>
       </div>
 
-      <div id="doolia-print-sheet" className="hidden">
-        {printSrc ? (
-          <>
-            <img src={printSrc} alt={title} />
-            <div className="print-footer">
-              <div className="print-footer-brand">
-                <span className="print-footer-name">{PRINT_FOOTER_BRAND}</span>
-                <span className="print-footer-sep">|</span>
-                <span>{PRINT_FOOTER_SITE}</span>
-              </div>
-              <div className="print-footer-legal">{PRINT_FOOTER_LEGAL}</div>
-            </div>
-          </>
-        ) : null}
-      </div>
+      {createPortal(
+        <div id="doolia-print-sheet" className="printable-area hidden">
+          {lineSrc ? <img className="printable-image" src={lineSrc} alt={printAlt} /> : null}
+        </div>,
+        document.body,
+      )}
 
       <LightboxModal
         open={isZoomed}
         src={getDisplayImageUrl(previewFallback, LIGHTBOX_WIDTH) || previewSrc}
-        title={title}
+        title={printAlt}
         onClose={() => setIsZoomed(false)}
         onPrint={() => {
           setIsZoomed(false)
@@ -200,12 +201,14 @@ function ThumbnailButton({
   src,
   fallbackSrc,
   label,
+  alt,
   active,
   onClick,
 }: {
   src: string
   fallbackSrc: string
   label: string
+  alt: string
   active: boolean
   onClick: () => void
 }) {
@@ -234,7 +237,7 @@ function ThumbnailButton({
           <img
             key={current}
             src={current}
-            alt=""
+            alt={alt}
             loading="eager"
             decoding="async"
             {...{ fetchpriority: 'high' }}
