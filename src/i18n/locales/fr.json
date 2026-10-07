@@ -1,0 +1,225 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "playToolbox": "Boîte à jeux",
+    "coloring": "Colorier et créer",
+    "brain": "Cerveau et apprentissage",
+    "tips": "Conseils parents",
+    "premium": "Premium",
+    "cta": "Voir les imprimés gratuits",
+    "allPrintables": "Tous les coloriages",
+    "imagination": "Imagination",
+    "byAge": "Par âge",
+    "popular": "Populaires"
+  },
+  "language": "Langue",
+  "header": {
+    "searchPlaceholder": "Rechercher des coloriages ou des idées..."
+  },
+  "home": {
+    "badge": "100% Gratuit à Imprimer · Sans Inscription · Téléchargement Immédiat",
+    "titleLead": "Libérez l'imagination infinie de votre enfant avec",
+    "titleAccent": "Nos Coloriages Gratuits",
+    "searchBtn": "Chercher",
+    "popularLabel": "Recherches populaires :",
+    "tags": {
+      "dino": "Dinosaures",
+      "unicorn": "Licornes",
+      "car": "Véhicules",
+      "imagination": "Imaginaire",
+      "animals": "Animaux"
+    },
+    "previewBadge": "Coloriage A4 Gratuit",
+    "previewCaption": "Modèle en couleur & dessin à colorier",
+    "hot": {
+      "dino": {
+        "title": "Dinos & Véhicules",
+        "desc": "T-Rex et belles voitures"
+      },
+      "princess": {
+        "title": "Princesses & Magie",
+        "desc": "Robes et châteaux"
+      },
+      "imagination": {
+        "title": "Monde Imaginaire",
+        "desc": "Planètes de biscuits"
+      },
+      "animals": {
+        "title": "Animaux Trop Mignons",
+        "desc": "Chiots et pandas"
+      }
+    },
+    "popularHeading": "Coloriages les plus populaires",
+    "viewAll": "Tout voir",
+    "whyTitle": "La plateforme idéale de coloriage gratuit pour les familles",
+    "whySubtitle": "Inspirer la créativité et l'éveil au quotidien",
+    "why": {
+      "hd": {
+        "title": "Impression en 1 clic",
+        "desc": "Imprimez direct à la maison"
+      },
+      "ink": {
+        "title": "Économie d'encre",
+        "desc": "Contours faciles & économiques"
+      },
+      "variety": {
+        "title": "Thèmes créatifs",
+        "desc": "De nouveaux modèles chaque jour"
+      },
+      "free": {
+        "title": "100% Gratuit",
+        "desc": "Sans inscription"
+      }
+    }
+  },
+  "detail": {
+    "printCta": "Imprimer gratuitement (PDF)",
+    "askChild": "Posez cette question à votre enfant !",
+    "benefitsHeader": "Bénéfices d'apprentissage",
+    "recommended": "Recommandé",
+    "likes": "J'aime",
+    "views": "Vues",
+    "specFit": "Format papier standard",
+    "specQuality": "Impression nette HD",
+    "copyrightFree": "Gratuit pour usage personnel et éducatif",
+    "copyrightTitle": "Guide d’usage serein DOOLIA",
+    "copyrightReport": "Demande droits d’auteur",
+    "copyrightReportTitle": "Atteinte aux droits ou demande de contenu",
+    "copyrightScope": "• Imprimez et profitez librement à la maison ou dans un cadre éducatif, avec vos enfants.",
+    "copyrightNote": "• Les demandes de droits d’auteur, de modification ou de suppression sont traitées rapidement.",
+    "copyrightMailSubject": "[Demande droits d’auteur] ID : {{slug}} ({{title}})",
+    "copyrightMailBody": "Bonjour, je soumets une demande relative aux droits d’auteur pour ce visuel.\n\n- ID : {{slug}}\n- Titre : {{title}}\n- URL de la page : {{url}}\n- Demande :\n",
+    "modalSubTitle": "FREE PRINTABLE",
+    "printPreview": "PRINT PREVIEW",
+    "downloadBtn": "Enregistrer le PDF",
+    "printNowBtn": "Imprimer maintenant",
+    "dpiBadge": "300 DPI HD",
+    "affiliatePick": "✨ DOOLIA'S CHOICE",
+    "affiliateHeadline": "Matériel conseillé pour colorier ensemble",
+    "affiliateWhyTitle": "Pourquoi recommander des crayons non toxiques ?",
+    "affiliateRating": "Certifié rassurant",
+    "affiliateTagSafe": "Choix de la rédaction",
+    "affiliateTagWash": "Kid-safe",
+    "affiliateReviews": "Guide conseillé",
+    "affiliatePain": "En coloriant avec les enfants, le crayon finit parfois sur les mains ou les vêtements — et ça agace un peu.",
+    "affiliatePlayTip": "Cherchez des crayons comme ceux-ci",
+    "affiliateTitle": "Une collection de crayons non toxiques de confiance",
+    "affiliateBody": "Cire végétale sûre même en bouche. Idéal pour les premiers dessins.",
+    "affiliateB1Title": "Serein en phase orale :",
+    "affiliateB1Text": "Lavables, qui partent à l’eau ou avec une lingette",
+    "affiliateB2Title": "Motricité fine :",
+    "affiliateB2Text": "Trait doux, plus léger pour les petites mains",
+    "affiliateB3Title": "Facile à nettoyer :",
+    "affiliateB3Text": "Produits dont l’âge conseillé et les infos sécurité se vérifient",
+    "affiliateCta": "Voir des crayons lavables pour enfants",
+    "affiliateDisclaimer": "Nous pouvons percevoir une commission dans le cadre d’une affiliation.",
+    "affiliateImgAlt": "Matériel pour un jeu de dessin",
+    "relatedTitle": "Coloriages recommandés",
+    "share": "Partager",
+    "thumbnailBw": "Lignes N&B",
+    "thumbnailColor": "Exemple en couleur",
+    "viewColorHint": "Voir l'exemple en couleur à gauche",
+    "viewMore": "Voir plus",
+    "zoomIn": "Agrandir",
+    "linkCopied": "Lien copié",
+    "copyFailed": "Échec de la copie",
+    "freePrint": "Imprimer gratuit",
+    "previewBw": "Aperçu N&B",
+    "allAges": "Tous âges",
+    "notFound": "Coloriage introuvable.",
+    "back": "Retour"
+  },
+  "categories": {
+    "coloring-pages": "Coloriages",
+    "senior-art": "Art-thérapie",
+    "imagination": "Pays de l'imagination",
+    "animals": "Animaux mignons",
+    "dinosaur": "Monde des dinosaures",
+    "vehicles": "Voitures et véhicules",
+    "princess": "Princesses et fantaisie",
+    "space-robot": "Espace et robots",
+    "food": "Fruits et desserts",
+    "sea-nature": "Mer et insectes",
+    "daily": "Maison et quotidien",
+    "jobs": "Métiers et rêves",
+    "sports": "Sports et loisirs",
+    "seasons": "Saisons et fêtes"
+  },
+  "catalog": {
+    "allCategory": "Tous les coloriages (ALL)"
+  },
+  "footer": {
+    "blurb": "Une plateforme 100% gratuite de coloriages qui éveille l'imagination.",
+    "tagline": "Print, Color & Imagine.",
+    "affiliate": "Avis d'affiliation : certains liens peuvent inclure du marketing d'affiliation.",
+    "categories": "CATEGORIES",
+    "legal": "LEGAL",
+    "allColoring": "🎨 Tous les coloriages",
+    "imagination": "✨ Pays de l'imagination",
+    "byAge": "👶 Par âge",
+    "popular": "🔥 Populaires maintenant",
+    "about": "À propos de DOOLIA",
+    "faq": "Questions fréquentes",
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation",
+    "contact": "Contact",
+    "dmca": "Signaler une atteinte aux droits",
+    "dmcaSubject": "[Demande droits d’auteur]",
+    "dmcaBody": "Bonjour, je soumets une demande relative aux droits d’auteur.\n\n- URL :\n- Détails :\n",
+    "copyright": "Copyright © {{year}} {{brand}}. Tous droits réservés.",
+    "copyrightUse": "Gratuit pour usage personnel et éducatif. Usage commercial et redistribution interdits."
+  },
+  "report": {
+    "title": "Droits d’auteur et signalement",
+    "subtitle": "Un administrateur examinera votre demande en personne et vous aidera au plus vite.",
+    "target": "Visuel",
+    "email": "E-mail de réponse",
+    "name": "Nom / organisation",
+    "namePlaceholder": "Indiquez votre nom ou celui du titulaire des droits",
+    "goodFaith": "Je suis titulaire des droits ou mandataire, et je confirme que les informations sont exactes.",
+    "type": "Type de demande",
+    "content": "Message",
+    "contentPlaceholder": "Précisez l’œuvre d’origine, le motif et la mesure souhaitée.",
+    "submit": "Envoyer la demande",
+    "sending": "Traitement en cours...",
+    "btn_submit": "🛡️ Envoyer la demande et le signalement",
+    "btn_submitting": "Envoi en cours...",
+    "thanks": "Votre demande a bien été reçue",
+    "thanksHint": "Nous vérifierons le contenu et répondrons à {{email}} avec le résultat dès que possible.",
+    "close": "Fermer",
+    "fail": "Échec de l’envoi. Merci de réessayer.",
+    "ethicsKicker": "DOOLIA ETHICS & RESPECT",
+    "ethicsTitle": "Nous encourageons l’imagination des enfants\net respectons profondément les droits des créateurs.",
+    "ethicsBanner": "The Art of Pure Imagination",
+    "ethicsBannerAlt": "DOOLIA Children Creative Art",
+    "ethicsOriginTitle": "Visuels originaux par IA",
+    "ethicsOriginBody": "Nous concevons des visuels 100 % originaux pour que les enfants pensent librement.",
+    "ethicsRespectTitle": "Respect et excuses d’avance",
+    "ethicsRespectBody": "Nous vérifions avec soin. S’il reste une ressemblance ou un risque pour vos droits, nous nous en excusons sincèrement.",
+    "ethicsActionTitle": "Promesse d’un retrait rapide",
+    "ethicsActionBody": "Dès réception, un responsable vérifie et masque ou retire le visuel au plus vite.",
+    "ethicsFooter": "DOOLIA promet un environnement créatif sain et propre.",
+    "types": {
+      "copyright": "Atteinte aux droits et demande de retrait",
+      "modification": "Correction ou amélioration",
+      "other": "Autre demande d’usage"
+    }
+  },
+  "faq": {
+    "badge": "Centre d'aide DOOLIA",
+    "title": "Foire Aux Questions (FAQ)",
+    "subtitle": "Retrouvez ici les réponses aux questions les plus posées par les parents et enseignants.",
+    "q1_title": "Q1. Les coloriages sont-ils vraiment 100% gratuits ?",
+    "q1_desc": "Oui ! Tous les coloriages de DOOLIA peuvent être imprimés et téléchargés gratuitement, sans inscription ni paiement.",
+    "q2_title": "Q2. Puis-je les utiliser dans les crèches, écoles ou ateliers éducatifs ?",
+    "q2_desc": "Absolument ! Vous pouvez les imprimer librement pour un usage éducatif et non commercial à la maison ou à l'école. (La revente commerciale est interdite.)",
+    "q3_title": "Q3. Comment obtenir la meilleure qualité d'impression ?",
+    "q3_desc": "Cliquez sur [Imprimer] sur la page du coloriage pour adapter automatiquement les marges au format standard (A4 / Lettre). Activez 'Graphismes d'arrière-plan' pour des traits nets.",
+    "q4_title": "Q4. J'aimerais proposer un nouveau thème ou un partenariat.",
+    "q4_desc_prefix": "Rendez-vous sur notre page ",
+    "q4_desc_link": "Contact",
+    "q4_desc_suffix": " et sélectionnez 'Suggestion' ou 'Partenariat'. Nous examinerons votre demande avec attention !",
+    "need_help": "Vous n'avez pas trouvé votre réponse ?",
+    "btn_contact": "💌 Poser une question"
+  }
+}

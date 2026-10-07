@@ -1,8 +1,23 @@
+import { lazy, Suspense } from 'react'
 import { Outlet } from 'react-router-dom'
 import { Footer } from '@/components/layout/Footer'
 import { MainHeader } from '@/components/layout/MainHeader'
-import { DownloadModal } from '@/features/download/ui/DownloadModal'
 import { PAGE_SHELL } from '@/shared/lib/cn'
+import { useDownloadStore } from '@/shared/store/useDownloadStore'
+
+const DownloadModal = lazy(() =>
+  import('@/features/download/ui/DownloadModal').then((module) => ({ default: module.DownloadModal })),
+)
+
+function DeferredDownloadModal() {
+  const isOpen = useDownloadStore((state) => state.isOpen)
+  if (!isOpen) return null
+  return (
+    <Suspense fallback={null}>
+      <DownloadModal />
+    </Suspense>
+  )
+}
 
 export function AppLayout() {
   return (
@@ -14,7 +29,7 @@ export function AppLayout() {
         </div>
       </main>
       <Footer />
-      <DownloadModal />
+      <DeferredDownloadModal />
     </div>
   )
 }

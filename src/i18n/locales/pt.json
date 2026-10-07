@@ -1,0 +1,225 @@
+{
+  "nav": {
+    "home": "Início",
+    "playToolbox": "Caixa de jogos",
+    "coloring": "Colorir e criar",
+    "brain": "Cérebro e aprendizado",
+    "tips": "Dicas para pais",
+    "premium": "Premium",
+    "cta": "Ver impressos grátis",
+    "allPrintables": "Todos os desenhos",
+    "imagination": "Imaginação",
+    "byAge": "Por idade",
+    "popular": "Populares"
+  },
+  "language": "Idioma",
+  "header": {
+    "searchPlaceholder": "Buscar desenhos ou ideias de brincadeiras..."
+  },
+  "home": {
+    "badge": "100% Grátis para Imprimir · Sem Cadastro · Download Imediato",
+    "titleLead": "Desperte a imaginação infinita das crianças com",
+    "titleAccent": "Desenhos para Colorir Grátis",
+    "searchBtn": "Buscar",
+    "popularLabel": "Mais buscados:",
+    "tags": {
+      "dino": "Dinossauros",
+      "unicorn": "Unicórnios",
+      "car": "Veículos",
+      "imagination": "Fantasia",
+      "animals": "Animais"
+    },
+    "previewBadge": "Folha A4 Grátis",
+    "previewCaption": "Exemplo colorido e desenho para pintar",
+    "hot": {
+      "dino": {
+        "title": "Dinos e Veículos",
+        "desc": "T-Rex e carros legais"
+      },
+      "princess": {
+        "title": "Princesas e Magia",
+        "desc": "Vestidos e castelos"
+      },
+      "imagination": {
+        "title": "Mundo da Fantasia",
+        "desc": "Planetas de doces"
+      },
+      "animals": {
+        "title": "Animais Fofinhos",
+        "desc": "Cachorrinhos e pandas"
+      }
+    },
+    "popularHeading": "Desenhos mais populares",
+    "viewAll": "Ver todos",
+    "whyTitle": "A plataforma perfeita de desenhos para colorir grátis",
+    "whySubtitle": "Inspirando imaginação e criatividade todos os dias",
+    "why": {
+      "hd": {
+        "title": "Impressão em 1 Clique",
+        "desc": "Imprima direto em casa"
+      },
+      "ink": {
+        "title": "Linhas Econômicas",
+        "desc": "Pintura fácil e menos tinta"
+      },
+      "variety": {
+        "title": "Temas Criativos",
+        "desc": "Novos desenhos todo dia"
+      },
+      "free": {
+        "title": "100% Grátis",
+        "desc": "Sem necessidade de cadastro"
+      }
+    }
+  },
+  "detail": {
+    "printCta": "Imprimir grátis agora (PDF)",
+    "askChild": "Pergunte isso ao seu pequeno!",
+    "benefitsHeader": "Benefícios de desenvolvimento",
+    "recommended": "Recomendado",
+    "likes": "Curtidas",
+    "views": "Visualizações",
+    "specFit": "Ajuste a papel padrão",
+    "specQuality": "Impressão nítida HD",
+    "copyrightFree": "Grátis para uso pessoal e educacional",
+    "copyrightTitle": "Guia de uso seguro DOOLIA",
+    "copyrightReport": "Consulta de direitos",
+    "copyrightReportTitle": "Consulta de infração de direitos ou conteúdo",
+    "copyrightScope": "• Imprima e aproveite em casa ou em espaços educativos com as crianças.",
+    "copyrightNote": "• Consultas de direitos autorais ou pedidos de correção e remoção são tratados com rapidez.",
+    "copyrightMailSubject": "[Consulta de direitos autorais] ID: {{slug}} ({{title}})",
+    "copyrightMailBody": "Olá, envio uma consulta de direitos autorais sobre este material.\n\n- ID: {{slug}}\n- Título: {{title}}\n- URL da página: {{url}}\n- Pedido:\n",
+    "modalSubTitle": "FREE PRINTABLE",
+    "printPreview": "PRINT PREVIEW",
+    "downloadBtn": "Salvar PDF grátis",
+    "printNowBtn": "Imprimir agora",
+    "dpiBadge": "300 DPI HD",
+    "affiliatePick": "✨ DOOLIA'S CHOICE",
+    "affiliateHeadline": "Materiais recomendados para pintar juntos",
+    "affiliateWhyTitle": "Por que recomendamos giz de cera atóxico?",
+    "affiliateRating": "Certificado seguro",
+    "affiliateTagSafe": "Seleção editorial",
+    "affiliateTagWash": "Kid-safe",
+    "affiliateReviews": "Guia recomendado",
+    "affiliatePain": "Ao colorir com as crianças, o giz de cera na mão ou na roupa às vezes incomoda.",
+    "affiliatePlayTip": "Procure giz de cera assim",
+    "affiliateTitle": "Coleção de giz de cera atóxico de confiança",
+    "affiliateBody": "Feito com cera vegetal segura se for à boca. Ideal para a primeira arte da criança.",
+    "affiliateB1Title": "Seguro na fase oral:",
+    "affiliateB1Text": "Lavável, que sai com água ou um lencinho",
+    "affiliateB2Title": "Motricidade fina:",
+    "affiliateB2Text": "Traço macio, mais leve para as mãozinhas",
+    "affiliateB3Title": "Fácil de limpar:",
+    "affiliateB3Text": "Produtos que mostram idade de uso e informações de segurança",
+    "affiliateCta": "Ver giz de cera lavável para crianças",
+    "affiliateDisclaimer": "Podemos receber comissão por atividade de afiliados.",
+    "affiliateImgAlt": "Materiais para brincar de pintar",
+    "relatedTitle": "Desenhos recomendados",
+    "share": "Compartilhar",
+    "thumbnailBw": "Traços P/B",
+    "thumbnailColor": "Exemplo colorido",
+    "viewColorHint": "Ver exemplo colorido à esquerda",
+    "viewMore": "Ver mais",
+    "zoomIn": "Ver maior",
+    "linkCopied": "Link copiado",
+    "copyFailed": "Falha ao copiar",
+    "freePrint": "Imprimir grátis",
+    "previewBw": "Prévia em P/B",
+    "allAges": "Todas as idades",
+    "notFound": "Não encontramos este desenho.",
+    "back": "Voltar"
+  },
+  "categories": {
+    "coloring-pages": "Desenhos para colorir",
+    "senior-art": "Arte relaxante",
+    "imagination": "Terra da imaginação",
+    "animals": "Animais fofos",
+    "dinosaur": "Mundo dos dinossauros",
+    "vehicles": "Carros e veículos",
+    "princess": "Princesas e fantasia",
+    "space-robot": "Espaço e robôs",
+    "food": "Frutas e sobremesas",
+    "sea-nature": "Mar e insetos",
+    "daily": "Casa e cotidiano",
+    "jobs": "Profissões e sonhos",
+    "sports": "Esportes e hobbies",
+    "seasons": "Estações e festas"
+  },
+  "catalog": {
+    "allCategory": "Todos os desenhos (ALL)"
+  },
+  "footer": {
+    "blurb": "Uma plataforma 100% gratuita de desenhos que desperta a imaginação.",
+    "tagline": "Print, Color & Imagine.",
+    "affiliate": "Aviso de afiliados: alguns links podem incluir marketing de afiliados.",
+    "categories": "CATEGORIES",
+    "legal": "LEGAL",
+    "allColoring": "🎨 Todos os desenhos",
+    "imagination": "✨ Terra da imaginação",
+    "byAge": "👶 Por idade",
+    "popular": "🔥 Populares agora",
+    "about": "Sobre a DOOLIA",
+    "faq": "Perguntas frequentes",
+    "privacy": "Política de privacidade",
+    "terms": "Termos de uso",
+    "contact": "Contato",
+    "dmca": "Relatar infração de direitos",
+    "dmcaSubject": "[Consulta de direitos autorais]",
+    "dmcaBody": "Olá, envio uma consulta de direitos autorais.\n\n- URL:\n- Detalhes:\n",
+    "copyright": "Copyright © {{year}} {{brand}}. Todos os direitos reservados.",
+    "copyrightUse": "Grátis para uso pessoal e educacional. Uso comercial e redistribuição não são permitidos."
+  },
+  "report": {
+    "title": "Consulta e aviso de direitos",
+    "subtitle": "Um administrador vai analisar o pedido em pessoa e ajudar o mais rápido possível.",
+    "target": "Desenho",
+    "email": "E-mail de resposta",
+    "name": "Nome / organização",
+    "namePlaceholder": "Digite seu nome ou o do titular dos direitos",
+    "goodFaith": "Sou o titular dos direitos ou um agente autorizado e confirmo que as informações são verdadeiras.",
+    "type": "Tipo de consulta",
+    "content": "Mensagem",
+    "contentPlaceholder": "Descreva a obra original, o motivo e a ação de que precisa.",
+    "submit": "Enviar consulta",
+    "sending": "Enviando...",
+    "btn_submit": "🛡️ Enviar consulta e denúncia",
+    "btn_submitting": "Enviando...",
+    "thanks": "Recebemos a sua consulta",
+    "thanksHint": "Vamos analisar e responder em {{email}} com o resultado o mais rápido possível.",
+    "close": "Fechar",
+    "fail": "Não foi possível enviar. Tente novamente.",
+    "ethicsKicker": "DOOLIA ETHICS & RESPECT",
+    "ethicsTitle": "Apoiamos a imaginação das crianças\ne respeitamos de verdade os direitos de quem cria.",
+    "ethicsBanner": "The Art of Pure Imagination",
+    "ethicsBannerAlt": "DOOLIA Children Creative Art",
+    "ethicsOriginTitle": "Desenhos originais com IA",
+    "ethicsOriginBody": "Criamos desenhos 100% originais para que as crianças pensem com liberdade.",
+    "ethicsRespectTitle": "Respeito e desculpas antecipadas",
+    "ethicsRespectBody": "Revisamos com cuidado. Se ainda houver semelhança ou risco aos seus direitos, pedimos desculpas com respeito.",
+    "ethicsActionTitle": "Promessa de ocultar rápido",
+    "ethicsActionBody": "Assim que o aviso chega, conferimos e ocultamos ou removemos o desenho o mais rápido possível.",
+    "ethicsFooter": "A DOOLIA promete um ambiente criativo saudável e limpo.",
+    "types": {
+      "copyright": "Alegação de direitos e pedido para ocultar",
+      "modification": "Correção ou melhoria do desenho",
+      "other": "Outra consulta de uso"
+    }
+  },
+  "faq": {
+    "badge": "Central de Ajuda DOOLIA",
+    "title": "Perguntas Frequentes (FAQ)",
+    "subtitle": "Reunimos as respostas para as dúvidas mais comuns de pais e professores.",
+    "q1_title": "Q1. Os desenhos para colorir são realmente 100% gratuitos?",
+    "q1_desc": "Sim! Todos os desenhos do DOOLIA podem ser impressos e baixados gratuitamente, sem cadastro ou pagamento.",
+    "q2_title": "Q2. Posso usar em creches, escolas ou salas de aula?",
+    "q2_desc": "Com certeza! Podem ser impressos livremente para fins educacionais sem fins lucrativos em lares, escolas e creches. (A revenda comercial e redistribuição são proibidas.)",
+    "q3_title": "Q3. Como obter a melhor qualidade de impressão?",
+    "q3_desc": "Basta clicar em [Imprimir] na página do desenho para ajustar automaticamente ao tamanho padrão de papel (A4 / Carta). Ative 'Gráficos de fundo' para linhas mais nítidas.",
+    "q4_title": "Q4. Gostaria de sugerir novos temas de desenhos ou propor uma parceria.",
+    "q4_desc_prefix": "Acesse a página de ",
+    "q4_desc_link": "Contato",
+    "q4_desc_suffix": " e escolha 'Sugestão' ou 'Parceria'. Analisaremos sua mensagem com carinho!",
+    "need_help": "Não encontrou o que procurava?",
+    "btn_contact": "💌 Enviar uma mensagem"
+  }
+}

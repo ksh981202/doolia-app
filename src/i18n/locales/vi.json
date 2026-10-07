@@ -1,0 +1,225 @@
+{
+  "nav": {
+    "home": "Trang chủ",
+    "playToolbox": "Hộp trò chơi",
+    "coloring": "Tô màu & sáng tạo",
+    "brain": "Não bộ & học tập",
+    "tips": "Mẹo cho bố mẹ",
+    "premium": "Cao cấp",
+    "cta": "Xem bản in miễn phí",
+    "allPrintables": "Tất cả tranh",
+    "imagination": "Tưởng tượng",
+    "byAge": "Theo tuổi",
+    "popular": "Phổ biến"
+  },
+  "language": "Ngôn ngữ",
+  "header": {
+    "searchPlaceholder": "Tìm kiếm tranh tô màu, ý tưởng chơi..."
+  },
+  "home": {
+    "badge": "In Miễn Phí 100% · Không Cần Đăng Ký · Tải Xuống Ngay",
+    "titleLead": "Kích hoạt trí tưởng tượng vô hạn của bé với",
+    "titleAccent": "Tranh Tô Màu Miễn Phí Cho Bé",
+    "searchBtn": "Tìm kiếm",
+    "popularLabel": "Tìm kiếm phổ biến:",
+    "tags": {
+      "dino": "Khủng long",
+      "unicorn": "Kỳ lân",
+      "car": "Xe cộ",
+      "imagination": "Tưởng tượng",
+      "animals": "Động vật"
+    },
+    "previewBadge": "Tranh In A4 Miễn Phí",
+    "previewCaption": "Hình mẫu màu & tranh nét đen trắng",
+    "hot": {
+      "dino": {
+        "title": "Khủng long & Xe cộ",
+        "desc": "T-Rex và xe ngầu"
+      },
+      "princess": {
+        "title": "Công chúa & Kỳ lân",
+        "desc": "Váy đẹp và lâu đài"
+      },
+      "imagination": {
+        "title": "Xứ sở diệu kỳ",
+        "desc": "Hành tinh bánh kẹo"
+      },
+      "animals": {
+        "title": "Bạn động vật",
+        "desc": "Cún con và gấu trúc"
+      }
+    },
+    "popularHeading": "Tranh tô màu được yêu thích nhất",
+    "viewAll": "Xem tất cả",
+    "whyTitle": "Nền tảng tranh tô màu miễn phí hoàn hảo cho bé và gia đình",
+    "whySubtitle": "Nuôi dưỡng trí tưởng tượng và sáng tạo mỗi ngày",
+    "why": {
+      "hd": {
+        "title": "In Nhanh 1 Chạm",
+        "desc": "In ngay tại nhà dễ dàng"
+      },
+      "ink": {
+        "title": "Tiết Kiệm Mực",
+        "desc": "Nét dày dễ tô, ít tốn mực"
+      },
+      "variety": {
+        "title": "Chủ Đề Sáng Tạo",
+        "desc": "Tranh mới mỗi ngày"
+      },
+      "free": {
+        "title": "100% Miễn phí",
+        "desc": "Không cần đăng ký"
+      }
+    }
+  },
+  "detail": {
+    "printCta": "In miễn phí ngay (PDF)",
+    "askChild": "Hãy hỏi bé câu này nhé!",
+    "benefitsHeader": "Lợi ích phát triển & học tập",
+    "recommended": "Khuyên dùng",
+    "likes": "Lượt thích",
+    "views": "Lượt xem",
+    "specFit": "Vừa vặn trang in chuẩn",
+    "specQuality": "In sắc nét chuẩn HD",
+    "copyrightFree": "Miễn phí cho mục đích cá nhân và giáo dục",
+    "copyrightTitle": "Hướng dẫn sử dụng an tâm DOOLIA",
+    "copyrightReport": "Hỏi · báo cáo bản quyền",
+    "copyrightReportTitle": "Liên hệ bản quyền hoặc nội dung",
+    "copyrightScope": "• In và sử dụng thoải mái tại nhà hoặc không gian giáo dục cùng bé.",
+    "copyrightNote": "• Yêu cầu về bản quyền, chỉnh sửa hoặc gỡ nội dung sẽ được xử lý nhanh chóng.",
+    "copyrightMailSubject": "[Liên hệ bản quyền] ID: {{slug}} ({{title}})",
+    "copyrightMailBody": "Xin chào, tôi gửi yêu cầu về bản quyền đối với bản in sau.\n\n- ID: {{slug}}\n- Tiêu đề: {{title}}\n- URL trang: {{url}}\n- Yêu cầu:\n",
+    "modalSubTitle": "FREE PRINTABLE",
+    "printPreview": "PRINT PREVIEW",
+    "downloadBtn": "Lưu PDF miễn phí",
+    "printNowBtn": "In ngay",
+    "dpiBadge": "300 DPI HD",
+    "affiliatePick": "✨ DOOLIA'S CHOICE",
+    "affiliateHeadline": "Đồ dùng gợi ý khi chơi vẽ cùng bé",
+    "affiliateWhyTitle": "Vì sao gợi ý sáp màu không độc?",
+    "affiliateRating": "Chứng nhận an tâm",
+    "affiliateTagSafe": "Biên tập chọn",
+    "affiliateTagWash": "An toàn cho bé",
+    "affiliateReviews": "Hướng dẫn gợi ý",
+    "affiliatePain": "Tô màu cùng bé, sáp dính tay hay áo đôi khi cũng hơi lo.",
+    "affiliatePlayTip": "Hãy tìm sáp màu kiểu này",
+    "affiliateTitle": "Bộ sáp màu không độc được phụ huynh tin dùng",
+    "affiliateBody": "Làm từ sáp thực vật an toàn cả khi vào miệng — phù hợp cho lần vẽ đầu tiên.",
+    "affiliateB1Title": "An tâm giai đoạn ngậm:",
+    "affiliateB1Text": "Rửa được bằng nước hoặc khăn ướt",
+    "affiliateB2Title": "Bảo vệ cơ nhỏ:",
+    "affiliateB2Text": "Lên màu mềm, đỡ mỏi tay bé",
+    "affiliateB3Title": "Dễ lau:",
+    "affiliateB3Text": "Có thể xem độ tuổi dùng và thông tin an toàn",
+    "affiliateCta": "Xem sáp màu rửa được cho bé",
+    "affiliateDisclaimer": "Chúng tôi có thể nhận hoa hồng từ hoạt động liên kết.",
+    "affiliateImgAlt": "Đồ dùng chơi vẽ",
+    "relatedTitle": "Tranh gợi ý cho bé",
+    "share": "Chia sẻ",
+    "thumbnailBw": "Tranh nét đen trắng",
+    "thumbnailColor": "Ví dụ tô màu",
+    "viewColorHint": "Xem ví dụ tô màu ở bên trái",
+    "viewMore": "Xem thêm",
+    "zoomIn": "Xem lớn hơn",
+    "linkCopied": "Đã sao chép liên kết",
+    "copyFailed": "Không sao chép được",
+    "freePrint": "In miễn phí",
+    "previewBw": "Xem trước nét đen trắng",
+    "allAges": "Mọi độ tuổi",
+    "notFound": "Không tìm thấy tranh này.",
+    "back": "Quay lại"
+  },
+  "categories": {
+    "coloring-pages": "Tranh tô màu",
+    "senior-art": "Nghệ thuật thư giãn",
+    "imagination": "Xứ sở tưởng tượng",
+    "animals": "Động vật dễ thương",
+    "dinosaur": "Thế giới khủng long",
+    "vehicles": "Xe cộ & phương tiện",
+    "princess": "Công chúa & kỳ ảo",
+    "space-robot": "Vũ trụ & robot",
+    "food": "Trái cây & tráng miệng",
+    "sea-nature": "Biển & côn trùng",
+    "daily": "Nhà & đời thường",
+    "jobs": "Nghề nghiệp & ước mơ",
+    "sports": "Thể thao & sở thích",
+    "seasons": "Mùa & ngày lễ"
+  },
+  "catalog": {
+    "allCategory": "Tất cả tranh tô màu (ALL)"
+  },
+  "footer": {
+    "blurb": "Nền tảng tranh tô màu miễn phí 100% khơi gợi trí tưởng tượng của bé.",
+    "tagline": "Print, Color & Imagine.",
+    "affiliate": "Thông báo liên kết: một số liên kết có thể chứa tiếp thị liên kết.",
+    "categories": "CATEGORIES",
+    "legal": "LEGAL",
+    "allColoring": "🎨 Tất cả tranh tô màu",
+    "imagination": "✨ Xứ sở tưởng tượng",
+    "byAge": "👶 Theo độ tuổi",
+    "popular": "🔥 Đang phổ biến",
+    "about": "Giới thiệu DOOLIA",
+    "faq": "Câu hỏi thường gặp",
+    "privacy": "Chính sách bảo mật",
+    "terms": "Điều khoản sử dụng",
+    "contact": "Liên hệ",
+    "dmca": "Báo cáo xâm phạm bản quyền",
+    "dmcaSubject": "[Liên hệ bản quyền]",
+    "dmcaBody": "Xin chào, tôi gửi yêu cầu về bản quyền.\n\n- URL:\n- Chi tiết:\n",
+    "copyright": "Copyright © {{year}} {{brand}}. Mọi quyền được bảo lưu.",
+    "copyrightUse": "Miễn phí cho mục đích cá nhân và giáo dục. Cấm sử dụng thương mại và tái phân phối."
+  },
+  "report": {
+    "title": "Bản quyền & báo cáo nội dung",
+    "subtitle": "Quản trị viên sẽ xem trực tiếp và hỗ trợ bạn sớm nhất có thể.",
+    "target": "Bản in",
+    "email": "Email phản hồi",
+    "name": "Họ tên / tổ chức",
+    "namePlaceholder": "Nhập họ tên hoặc tên chủ sở hữu quyền",
+    "goodFaith": "Tôi là chủ sở hữu quyền hoặc người được ủy quyền, và xác nhận thông tin khai báo là đúng.",
+    "type": "Loại yêu cầu",
+    "content": "Nội dung",
+    "contentPlaceholder": "Vui lòng mô tả tác phẩm gốc, lý do và biện pháp bạn cần.",
+    "submit": "Gửi yêu cầu",
+    "sending": "Đang xử lý...",
+    "btn_submit": "🛡️ Gửi yêu cầu & Báo cáo",
+    "btn_submitting": "Đang gửi...",
+    "thanks": "Đã nhận yêu cầu của bạn",
+    "thanksHint": "Chúng tôi sẽ xem nội dung và phản hồi kết quả tới {{email}} sớm nhất có thể.",
+    "close": "Đóng",
+    "fail": "Gửi không thành công. Vui lòng thử lại.",
+    "ethicsKicker": "DOOLIA ETHICS & RESPECT",
+    "ethicsTitle": "Chúng tôi cổ vũ trí tưởng tượng của trẻ\nvà tôn trọng sâu sắc quyền của người sáng tạo.",
+    "ethicsBanner": "The Art of Pure Imagination",
+    "ethicsBannerAlt": "DOOLIA Children Creative Art",
+    "ethicsOriginTitle": "Bản in AI thuần sáng tạo",
+    "ethicsOriginBody": "Chúng tôi thiết kế bản in 100% gốc để trẻ suy nghĩ cởi mở và an toàn.",
+    "ethicsRespectTitle": "Tôn trọng bản quyền và xin lỗi trước",
+    "ethicsRespectBody": "Chúng tôi kiểm tra kỹ. Nếu vẫn có điểm giống hoặc có thể ảnh hưởng đến quyền của bạn, chúng tôi xin lỗi chân thành.",
+    "ethicsActionTitle": "Cam kết ẩn nhanh",
+    "ethicsActionBody": "Ngay khi nhận báo cáo, người phụ trách sẽ xác nhận và ẩn/gỡ bản in nhanh nhất có thể.",
+    "ethicsFooter": "DOOLIA cam kết một môi trường sáng tạo lành mạnh và trong sạch.",
+    "types": {
+      "copyright": "Khiếu nại bản quyền và yêu cầu ẩn",
+      "modification": "Sửa hoặc cải thiện bản in",
+      "other": "Yêu cầu sử dụng khác"
+    }
+  },
+  "faq": {
+    "badge": "Trung tâm Trợ giúp DOOLIA",
+    "title": "Câu hỏi thường gặp (FAQ)",
+    "subtitle": "Dưới đây là câu trả lời cho các thắc mắc phổ biến từ phụ huynh và giáo viên.",
+    "q1_title": "Q1. Tranh tô màu có thực sự miễn phí 100% không?",
+    "q1_desc": "Vâng! Tất cả tranh tô màu trên DOOLIA đều có thể in và tải xuống hoàn toàn miễn phí mà không cần đăng ký hay thanh toán.",
+    "q2_title": "Q2. Tôi có thể sử dụng tại trường mầm non, trường học hoặc lớp học không?",
+    "q2_desc": "Chắc chắn rồi! Bạn có thể tự do in và sử dụng cho mục đích giáo dục phi thương mại tại nhà, trường mầm non và trường học. (Nghiêm cấm bán lại hoặc phân phối lại vì mục đích thương mại.)",
+    "q3_title": "Q3. Làm thế nào để in đạt chất lượng đẹp nhất?",
+    "q3_desc": "Chỉ cần nhấn nút [In] tại trang chi tiết để căn lề tự động theo khổ giấy tiêu chuẩn (A4 / Letter). Hãy bật tuỳ chọn 'Đồ hoạ nền' để nét vẽ sắc nét nhất.",
+    "q4_title": "Q4. Tôi muốn đề xuất chủ đề tranh tô màu mới hoặc liên hệ hợp tác.",
+    "q4_desc_prefix": "Vui lòng truy cập trang ",
+    "q4_desc_link": "Liên hệ",
+    "q4_desc_suffix": " và chọn 'Gợi ý tranh' hoặc 'Hợp tác'. Chúng tôi sẽ kiểm tra và phản hồi chu đáo!",
+    "need_help": "Bạn vẫn chưa tìm thấy câu trả lời?",
+    "btn_contact": "💌 Gửi câu hỏi 1:1"
+  }
+}

@@ -1,0 +1,225 @@
+{
+  "nav": {
+    "home": "ホーム",
+    "playToolbox": "カスタム遊びツール",
+    "coloring": "ぬりえ・創作",
+    "brain": "脳育・学習",
+    "tips": "育児・遊びのヒント",
+    "premium": "プレミアム",
+    "cta": "無料プリントを見る",
+    "allPrintables": "すべてのぬりえ",
+    "imagination": "想像の国",
+    "byAge": "年齢別",
+    "popular": "人気"
+  },
+  "language": "言語",
+  "header": {
+    "searchPlaceholder": "ぬりえの名前や遊びのアイデアを検索"
+  },
+  "home": {
+    "badge": "100%無料印刷・登録不要・今すぐダウンロード",
+    "titleLead": "子どもの想像力を無限に広げる",
+    "titleAccent": "プレミアム無料ぬりえ",
+    "searchBtn": "検索",
+    "popularLabel": "人気の検索ワード:",
+    "tags": {
+      "dino": "恐竜",
+      "unicorn": "ユニコーン",
+      "car": "乗り物",
+      "imagination": "空想の世界",
+      "animals": "可愛い動物"
+    },
+    "previewBadge": "A4 無料印刷ぬりえ",
+    "previewCaption": "カラー見本＆白黒ぬりえ",
+    "hot": {
+      "dino": {
+        "title": "恐竜と乗り物",
+        "desc": "ティラノとカッコいい車"
+      },
+      "princess": {
+        "title": "お姫様と魔法",
+        "desc": "ドレスと魔法のお城"
+      },
+      "imagination": {
+        "title": "わくわく空想",
+        "desc": "お菓子の星と不思議な魔法"
+      },
+      "animals": {
+        "title": "可愛い動物",
+        "desc": "子犬や大人気のパンダ"
+      }
+    },
+    "popularHeading": "今一番人気のぬりえ",
+    "viewAll": "すべて見る",
+    "whyTitle": "親子で楽しむ最高の無料ぬりえプラットフォーム",
+    "whySubtitle": "毎日の遊びに新しい想像力と創造力を届けます",
+    "why": {
+      "hd": {
+        "title": "ワンクリック印刷",
+        "desc": "ご家庭ですぐ印刷可能"
+      },
+      "ink": {
+        "title": "インク節約太線",
+        "desc": "塗りやすくインクも節約"
+      },
+      "variety": {
+        "title": "多彩な創作テーマ",
+        "desc": "毎日出会う新しい図案"
+      },
+      "free": {
+        "title": "完全無料",
+        "desc": "登録不要で使い放題"
+      }
+    }
+  },
+  "detail": {
+    "printCta": "今すぐ無料で印刷する (PDF)",
+    "askChild": "お子さまにこう聞いてみてください！",
+    "benefitsHeader": "この絵の成長・学習効果",
+    "recommended": "推奨",
+    "likes": "いいね",
+    "views": "閲覧",
+    "specFit": "標準用紙サイズ対応",
+    "specQuality": "高画質・鮮明プリント",
+    "copyrightFree": "個人・教育用途の無料プリント",
+    "copyrightTitle": "DOOLIA安心ご利用案内",
+    "copyrightReport": "著作権の問い合わせ",
+    "copyrightReportTitle": "著作権侵害またはコンテンツに関するお問い合わせ",
+    "copyrightScope": "• ご家庭や教育の場で、お子さまと一緒に自由に印刷してお楽しみください。",
+    "copyrightNote": "• 著作権やプリントの修正・削除に関するご相談は、受付後すみやかに対応します。",
+    "copyrightMailSubject": "[著作権のお問い合わせ] ID: {{slug}} ({{title}})",
+    "copyrightMailBody": "下記プリントについて、権利侵害・著作権に関するお問い合わせを送ります。\n\n- ID: {{slug}}\n- タイトル: {{title}}\n- ページURL: {{url}}\n- ご依頼内容:\n",
+    "modalSubTitle": "FREE PRINTABLE",
+    "printPreview": "PRINT PREVIEW",
+    "downloadBtn": "無料PDFを保存",
+    "printNowBtn": "すぐに印刷",
+    "dpiBadge": "300 DPI HD",
+    "affiliatePick": "✨ DOOLIA'S CHOICE",
+    "affiliateHeadline": "一緒に楽しむお絵描きのおすすめ準備",
+    "affiliateWhyTitle": "なぜ無毒クレヨンをおすすめするの？",
+    "affiliateRating": "安心認証",
+    "affiliateTagSafe": "編集部セレクト",
+    "affiliateTagWash": "キッズセーフ",
+    "affiliateReviews": "おすすめガイド",
+    "affiliatePain": "子どもとぬりえをしていると、手や服にクレヨンがついて気になることがありますよね。",
+    "affiliatePlayTip": "こんなクレヨンを探してみてください",
+    "affiliateTitle": "保護者に選ばれる無毒クレヨンコレクション",
+    "affiliateBody": "口に入っても安心な植物性ワックスで、はじめてのお絵描きにぴったりです。",
+    "affiliateB1Title": "口に入れても安心:",
+    "affiliateB1Text": "水やウェットティッシュで落ちやすいウォッシャブル",
+    "affiliateB2Title": "手先の発達:",
+    "affiliateB2Text": "手先に負担が少ない、やさしい発色",
+    "affiliateB3Title": "お掃除かんたん:",
+    "affiliateB3Text": "対象年齢と安全情報を確認できるもの",
+    "affiliateCta": "子ども用の落ちやすいクレヨンを見る",
+    "affiliateDisclaimer": "アフィリエイトの一環として手数料を受け取ることがあります。",
+    "affiliateImgAlt": "お絵描き遊びの準備",
+    "relatedTitle": "おすすめの関連ぬりえ",
+    "share": "共有",
+    "thumbnailBw": "白黒ぬりえ",
+    "thumbnailColor": "カラー見本",
+    "viewColorHint": "左のサムネイルで完成例を確認",
+    "viewMore": "もっと見る",
+    "zoomIn": "拡大表示",
+    "linkCopied": "リンクをコピーしました",
+    "copyFailed": "コピーに失敗しました",
+    "freePrint": "無料印刷",
+    "previewBw": "白黒ぬりえプレビュー",
+    "allAges": "全年齢",
+    "notFound": "ぬりえが見つかりません。",
+    "back": "戻る"
+  },
+  "categories": {
+    "coloring-pages": "キッズぬりえ",
+    "senior-art": "ヒーリングアート",
+    "imagination": "ふしぎな想像の国",
+    "animals": "かわいい動物",
+    "dinosaur": "恐竜の世界",
+    "vehicles": "くるまと乗り物",
+    "princess": "お姫さまとファンタジー",
+    "space-robot": "宇宙とロボット",
+    "food": "フルーツとデザート",
+    "sea-nature": "海と虫",
+    "daily": "おうちと日常",
+    "jobs": "おしごとと夢",
+    "sports": "スポーツと趣味",
+    "seasons": "季節と記念日"
+  },
+  "catalog": {
+    "allCategory": "すべてのぬりえ (ALL)"
+  },
+  "footer": {
+    "blurb": "子どもの想像力を育む100%無料のぬりえプラットフォーム。",
+    "tagline": "Print, Color & Imagine.",
+    "affiliate": "アフィリエイト表示: 一部のリンクにはアフィリエイトが含まれる場合があります。",
+    "categories": "CATEGORIES",
+    "legal": "LEGAL",
+    "allColoring": "🎨 すべてのぬりえ",
+    "imagination": "✨ ふしぎな想像の国",
+    "byAge": "👶 年齢別ぬりえ",
+    "popular": "🔥 人気のぬりえ",
+    "about": "DOOLIAについて",
+    "faq": "よくある質問",
+    "privacy": "プライバシーポリシー",
+    "terms": "利用規約",
+    "contact": "お問い合わせ",
+    "dmca": "著作権・権利侵害の申告",
+    "dmcaSubject": "[著作権/権利侵害のお問い合わせ]",
+    "dmcaBody": "権利侵害・著作権に関するお問い合わせを送ります。\n\n- URL:\n- 詳細:\n",
+    "copyright": "Copyright © {{year}} {{brand}}. 無断転載を禁じます。",
+    "copyrightUse": "個人・教育用途の無料プリントです。商用利用および再配布は禁止です。"
+  },
+  "report": {
+    "title": "著作権・プリントに関するお問い合わせ",
+    "subtitle": "担当が内容を確認し、できるだけ早く対応します。",
+    "target": "対象プリント",
+    "email": "返信先メール",
+    "name": "お名前 / 団体名",
+    "namePlaceholder": "氏名または著作権者（団体）名を入力してください",
+    "goodFaith": "私は正当な権利者またはその代理人であり、記入内容が事実であることを確認します。",
+    "type": "お問い合わせ種類",
+    "content": "内容",
+    "contentPlaceholder": "原作の情報、理由、ご希望の対応を詳しくご記入ください。",
+    "submit": "お問い合わせを送信する",
+    "sending": "送信処理中...",
+    "btn_submit": "🛡️ お問い合わせ・報告を送信",
+    "btn_submitting": "送信中...",
+    "thanks": "お問い合わせを受け付けました",
+    "thanksHint": "担当が内容を確認のうえ、{{email}} へ回答と対応結果をご案内します。",
+    "close": "閉じる",
+    "fail": "送信に失敗しました。しばらくして再度お試しください。",
+    "ethicsKicker": "DOOLIA ETHICS & RESPECT",
+    "ethicsTitle": "子どもの想像力を応援し、\n創作者の権利を深く大切にします。",
+    "ethicsBanner": "The Art of Pure Imagination",
+    "ethicsBannerAlt": "DOOLIA Children Creative Art",
+    "ethicsOriginTitle": "純粋なAI創作プリント",
+    "ethicsOriginBody": "子どもの開かれた発想のために、100%独創的なプリントを安全に設計しています。",
+    "ethicsRespectTitle": "著作権の尊重と事前のお詫び",
+    "ethicsRespectBody": "丁寧に確認していますが、類似や権利への影響があれば、謹んでお詫びします。",
+    "ethicsActionTitle": "迅速な非公開対応の約束",
+    "ethicsActionBody": "ご申告を受け次第、担当が確認し、プリントの非公開・削除を最速で進めます。",
+    "ethicsFooter": "DOOLIAは、健やかでクリーンな創作環境をお約束します。",
+    "types": {
+      "copyright": "著作権侵害の主張と非公開のお願い",
+      "modification": "内容の修正・改善のご提案",
+      "other": "その他のご利用に関するお問い合わせ"
+    }
+  },
+  "faq": {
+    "badge": "DOOLIA ヘルプセンター",
+    "title": "よくあるご質問 (FAQ)",
+    "subtitle": "DOOLIAをご利用の保護者様や先生方からよくいただくご質問をまとめました。",
+    "q1_title": "Q1. ぬりえは本当に完全無料ですか？",
+    "q1_desc": "はい！DOOLIAのすべてのぬりえは、会員登録や決済なしでいつでも自由に無料で印刷・ダウンロードしていただけます。",
+    "q2_title": "Q2. 幼稚園、保育園、学校などの教育施設で使用できますか？",
+    "q2_desc": "もちろん可能です！ご家庭だけでなく、保育園、幼稚園、小学校、学童保育などの非営利教育目的であれば、制限なく自由に印刷して授業にご活用いただけます。（ただし、イラストの有料販売や無断再配布は禁止されています。）",
+    "q3_title": "Q3. プリンターで最もきれいに印刷するにはどうすればよいですか？",
+    "q3_desc": "詳細ページの［印刷］ボタンをクリックするだけで、標準印刷用紙（A4 / レターサイズ）に合わせて余白が自動調整されます。印刷設定で「背景のグラフィック」を有効にすると、輪郭線がより鮮明に印刷されます。",
+    "q4_title": "Q4. 新しいぬりえのリクエストや提携の相談をしたいです。",
+    "q4_desc_prefix": "フッターの ",
+    "q4_desc_link": "お問い合わせ",
+    "q4_desc_suffix": " ページから「ぬりえのリクエスト」または「提携のお問い合わせ」を選択してお送りください。心を込めて確認いたします。",
+    "need_help": "お探しの回答は見つかりましたか？",
+    "btn_contact": "💌 お問い合わせはこちら"
+  }
+}

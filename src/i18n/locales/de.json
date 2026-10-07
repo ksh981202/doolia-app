@@ -1,0 +1,225 @@
+{
+  "nav": {
+    "home": "Start",
+    "playToolbox": "Spiel-Toolbox",
+    "coloring": "Malen & Kreativ",
+    "brain": "Gehirn & Lernen",
+    "tips": "Tipps für Eltern",
+    "premium": "Premium",
+    "cta": "Kostenlose Vorlagen",
+    "allPrintables": "Alle Vorlagen",
+    "imagination": "Fantasie",
+    "byAge": "Nach Alter",
+    "popular": "Beliebt"
+  },
+  "language": "Sprache",
+  "header": {
+    "searchPlaceholder": "Malvorlagen oder Spielideen suchen..."
+  },
+  "home": {
+    "badge": "100% Kostenlos Drucken · Ohne Anmeldung · Sofortiger Download",
+    "titleLead": "Entfalte die grenzenlose Fantasie deines Kindes mit",
+    "titleAccent": "Kostenlosen Premium-Ausmalbildern",
+    "searchBtn": "Suchen",
+    "popularLabel": "Beliebt:",
+    "tags": {
+      "dino": "Dinosaurier",
+      "unicorn": "Einhörner",
+      "car": "Fahrzeuge",
+      "imagination": "Fantasie",
+      "animals": "Tiere"
+    },
+    "previewBadge": "Kostenlose A4-Vorlage",
+    "previewCaption": "Farbiges Beispiel & Malvorlage",
+    "hot": {
+      "dino": {
+        "title": "Dinos & Fahrzeuge",
+        "desc": "T-Rex und coole Autos"
+      },
+      "princess": {
+        "title": "Prinzessin & Zauber",
+        "desc": "Kleider und Schlösser"
+      },
+      "imagination": {
+        "title": "Bunte Fantasiewelt",
+        "desc": "Süße Keksplaneten"
+      },
+      "animals": {
+        "title": "Süße Tierfreunde",
+        "desc": "Welpen und Pandas"
+      }
+    },
+    "popularHeading": "Beliebteste Malvorlagen",
+    "viewAll": "Alle ansehen",
+    "whyTitle": "Die perfekte kostenlose Malplattform für Kinder & Eltern",
+    "whySubtitle": "Jeden Tag neue Fantasie und Kreativität verschenken",
+    "why": {
+      "hd": {
+        "title": "1-Klick-Druck",
+        "desc": "Sofort zu Hause drucken"
+      },
+      "ink": {
+        "title": "Tinte sparen",
+        "desc": "Leichtes Ausmalen & sparsam"
+      },
+      "variety": {
+        "title": "Kreative Themen",
+        "desc": "Täglich neue Vorlagen"
+      },
+      "free": {
+        "title": "100% Gratis",
+        "desc": "Ohne Anmeldung nutzen"
+      }
+    }
+  },
+  "detail": {
+    "printCta": "Jetzt kostenlos drucken (PDF)",
+    "askChild": "Fragen Sie Ihr Kind!",
+    "benefitsHeader": "Lern- und Fördereffekte",
+    "recommended": "Empfohlen",
+    "likes": "Gefällt mir",
+    "views": "Aufrufe",
+    "specFit": "Standard-Papierformat",
+    "specQuality": "Gestochen scharfer Druck",
+    "copyrightFree": "Kostenlos für privat und Bildung",
+    "copyrightTitle": "DOOLIA-Hinweis zur sicheren Nutzung",
+    "copyrightReport": "Urheberrecht-Anfrage",
+    "copyrightReportTitle": "Urheberrecht oder Inhalteanfrage",
+    "copyrightScope": "• Zum freien Ausdruck zu Hause oder in Bildungseinrichtungen – gemeinsam mit Kindern.",
+    "copyrightNote": "• Anfragen zu Urheberrecht sowie zu Korrektur oder Entfernung bearbeiten wir zügig.",
+    "copyrightMailSubject": "[Urheberrecht-Anfrage] ID: {{slug}} ({{title}})",
+    "copyrightMailBody": "Hallo, ich sende eine Anfrage zu Urheberrecht / Rechteverletzung zu diesem Motiv.\n\n- ID: {{slug}}\n- Titel: {{title}}\n- Seiten-URL: {{url}}\n- Anliegen:\n",
+    "modalSubTitle": "FREE PRINTABLE",
+    "printPreview": "PRINT PREVIEW",
+    "downloadBtn": "PDF kostenlos speichern",
+    "printNowBtn": "Jetzt drucken",
+    "dpiBadge": "300 DPI HD",
+    "affiliatePick": "✨ DOOLIA'S CHOICE",
+    "affiliateHeadline": "Empfohlenes Malmaterial zum gemeinsamen Ausmalen",
+    "affiliateWhyTitle": "Warum empfehlen wir ungiftige Stifte?",
+    "affiliateRating": "Geprüft & sicher",
+    "affiliateTagSafe": "Redaktionstipp",
+    "affiliateTagWash": "Kid-safe",
+    "affiliateReviews": "Empfehlungsguide",
+    "affiliatePain": "Beim Malen mit Kindern landet Wachsmalstift manchmal an Händen oder Kleidung — das nervt ein bisschen.",
+    "affiliatePlayTip": "Achten Sie auf Stifte wie diese",
+    "affiliateTitle": "Ungiftige Stifte, denen Eltern vertrauen",
+    "affiliateBody": "Aus pflanzlichem Wachs – auch am Mund unbedenklich. Ideal fürs erste Malen.",
+    "affiliateB1Title": "Sicher in der Oralphase:",
+    "affiliateB1Text": "Abwaschbar — mit Wasser oder einem Tuch",
+    "affiliateB2Title": "Feinmotorik:",
+    "affiliateB2Text": "Weiche Farbe, die kleine Hände weniger belastet",
+    "affiliateB3Title": "Leicht zu reinigen:",
+    "affiliateB3Text": "Mit Altersangabe und Sicherheitsinfos zum Nachlesen",
+    "affiliateCta": "Abwaschbare Stifte für Kinder ansehen",
+    "affiliateDisclaimer": "Im Rahmen der Affiliate-Tätigkeit kann eine Provision anfallen.",
+    "affiliateImgAlt": "Materialien zum Malspiel",
+    "relatedTitle": "Empfohlene Vorlagen",
+    "share": "Teilen",
+    "thumbnailBw": "Schwarz-Weiß",
+    "thumbnailColor": "Farbbeispiel",
+    "viewColorHint": "Farbbeispiel links ansehen",
+    "viewMore": "Mehr ansehen",
+    "zoomIn": "Größer ansehen",
+    "linkCopied": "Link kopiert",
+    "copyFailed": "Kopieren fehlgeschlagen",
+    "freePrint": "Kostenlos drucken",
+    "previewBw": "Vorschau Schwarz-Weiß",
+    "allAges": "Jedes Alter",
+    "notFound": "Diese Vorlage wurde nicht gefunden.",
+    "back": "Zurück"
+  },
+  "categories": {
+    "coloring-pages": "Ausmalbilder",
+    "senior-art": "Entspannungsmalen",
+    "imagination": "Fantasieland",
+    "animals": "Liebe Tiere",
+    "dinosaur": "Dino-Welt",
+    "vehicles": "Autos & Fahrzeuge",
+    "princess": "Prinzessin & Fantasy",
+    "space-robot": "Weltraum & Roboter",
+    "food": "Obst & Desserts",
+    "sea-nature": "Meer & Insekten",
+    "daily": "Zuhause & Alltag",
+    "jobs": "Berufe & Träume",
+    "sports": "Sport & Hobbys",
+    "seasons": "Jahreszeiten & Feste"
+  },
+  "catalog": {
+    "allCategory": "Alle Ausmalbilder (ALL)"
+  },
+  "footer": {
+    "blurb": "Eine 100% kostenlose Malvorlagen-Plattform, die die Fantasie weckt.",
+    "tagline": "Print, Color & Imagine.",
+    "affiliate": "Hinweis: Einige Links können Affiliate-Marketing enthalten.",
+    "categories": "CATEGORIES",
+    "legal": "LEGAL",
+    "allColoring": "🎨 Alle Ausmalbilder",
+    "imagination": "✨ Fantasieland",
+    "byAge": "👶 Nach Alter",
+    "popular": "🔥 Gerade beliebt",
+    "about": "Über DOOLIA",
+    "faq": "Häufige Fragen",
+    "privacy": "Datenschutz",
+    "terms": "Nutzungsbedingungen",
+    "contact": "Kontakt",
+    "dmca": "Urheberrecht / Rechteverletzung melden",
+    "dmcaSubject": "[Urheberrecht / Rechteanfrage]",
+    "dmcaBody": "Hallo, ich sende eine Anfrage zu Urheberrecht / Rechteverletzung.\n\n- URL:\n- Angaben:\n",
+    "copyright": "Copyright © {{year}} {{brand}}. Alle Rechte vorbehalten.",
+    "copyrightUse": "Kostenlos für private und Bildungszwecke. Kommerzielle Nutzung und Weiterverbreitung sind untersagt."
+  },
+  "report": {
+    "title": "Urheberrecht & Motiv-Anfrage",
+    "subtitle": "Ein Admin prüft Ihre Anfrage persönlich und hilft so schnell wie möglich.",
+    "target": "Motiv",
+    "email": "Antwort-E-Mail",
+    "name": "Name / Organisation",
+    "namePlaceholder": "Name oder Name des Rechteinhabers eingeben",
+    "goodFaith": "Ich bin Rechteinhaber oder bevollmächtigt und bestätige, dass die Angaben zutreffen.",
+    "type": "Anliegen",
+    "content": "Nachricht",
+    "contentPlaceholder": "Bitte Originalwerk, Grund und gewünschte Maßnahme genau beschreiben.",
+    "submit": "Anfrage senden",
+    "sending": "Wird verarbeitet...",
+    "btn_submit": "🛡️ Anfrage & Meldung einreichen",
+    "btn_submitting": "Wird gesendet...",
+    "thanks": "Ihre Anfrage ist eingegangen",
+    "thanksHint": "Wir prüfen den Inhalt und antworten an {{email}} so schnell wie möglich mit dem Ergebnis.",
+    "close": "Schließen",
+    "fail": "Senden fehlgeschlagen. Bitte später erneut versuchen.",
+    "ethicsKicker": "DOOLIA ETHICS & RESPECT",
+    "ethicsTitle": "Wir stärken die Fantasie von Kindern\nund achten die Rechte von Schaffenden zutiefst.",
+    "ethicsBanner": "The Art of Pure Imagination",
+    "ethicsBannerAlt": "DOOLIA Children Creative Art",
+    "ethicsOriginTitle": "Originelle KI-Motive",
+    "ethicsOriginBody": "Wir gestalten 100 % originelle Motive, damit Kinder frei und offen denken können.",
+    "ethicsRespectTitle": "Respekt und Entschuldigung im Voraus",
+    "ethicsRespectBody": "Wir prüfen gründlich. Bleibt Ähnlichkeit oder eine Rechtefrage, entschuldigen wir uns aufrichtig.",
+    "ethicsActionTitle": "Zusage: schnelle Offline-Nahme",
+    "ethicsActionBody": "Sobald eine Meldung eintrifft, prüfen wir sie und nehmen Motive so schnell wie möglich offline oder entfernen sie.",
+    "ethicsFooter": "DOOLIA verspricht ein gesundes, sauberes Kreativumfeld.",
+    "types": {
+      "copyright": "Urheberrechtsanspruch und Offline-Bitte",
+      "modification": "Korrektur oder Verbesserung",
+      "other": "Sonstige Nutzungsanfrage"
+    }
+  },
+  "faq": {
+    "badge": "DOOLIA Hilfezentrum",
+    "title": "Häufig gestellte Fragen (FAQ)",
+    "subtitle": "Hier finden Sie Antworten auf häufige Fragen von Eltern und Lehrkräften.",
+    "q1_title": "Q1. Sind alle Ausmalbilder wirklich 100% kostenlos?",
+    "q1_desc": "Ja! Alle Ausmalbilder von DOOLIA können jederzeit ohne Registrierung oder Bezahlung kostenlos gedruckt und heruntergeladen werden.",
+    "q2_title": "Q2. Darf ich die Vorlagen in Kitas, Kindergärten oder Schulen verwenden?",
+    "q2_desc": "Selbstverständlich! Für nicht-kommerzielle Bildungszwecke in Kitas, Schulen und zu Hause dürfen alle Vorlagen frei gedruckt werden. (Der kommerzielle Weiterverkauf ist untersagt.)",
+    "q3_title": "Q3. Wie erziele ich die beste Druckqualität?",
+    "q3_desc": "Klicken Sie auf [Drucken], um die Ränder automatisch an Standard-Druckerpapier (DIN A4 / US Letter) anzupassen. Aktivieren Sie 'Hintergrundgrafiken' für gestochen scharfe Konturen.",
+    "q4_title": "Q4. Ich möchte ein neues Ausmal-Thema vorschlagen oder eine Kooperation anfragen.",
+    "q4_desc_prefix": "Besuchen Sie unsere ",
+    "q4_desc_link": "Kontakt",
+    "q4_desc_suffix": "-Seite und wählen Sie 'Vorschlag' oder 'Kooperation'. Wir prüfen jede Anfrage sorgfältig!",
+    "need_help": "Haben Sie keine passende Antwort gefunden?",
+    "btn_contact": "💌 1:1 Anfrage senden"
+  }
+}

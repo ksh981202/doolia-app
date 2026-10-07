@@ -1,0 +1,225 @@
+{
+  "nav": {
+    "home": "홈",
+    "playToolbox": "맞춤 놀이 도구함",
+    "coloring": "색칠·창의",
+    "brain": "두뇌·학습",
+    "tips": "육아·놀이 팁",
+    "premium": "프리미엄",
+    "cta": "무료 도안 보기",
+    "allPrintables": "전체 도안",
+    "imagination": "상상나라",
+    "byAge": "연령별",
+    "popular": "인기 도안"
+  },
+  "language": "언어",
+  "header": {
+    "searchPlaceholder": "도안 이름, 놀이 아이디어를 검색하세요"
+  },
+  "home": {
+    "badge": "100% 무료 인쇄 · 회원가입 없음 · 즉시 다운로드",
+    "titleLead": "아이의 상상력을 무한히 펼치는",
+    "titleAccent": "프리미엄 무료 색칠도안",
+    "searchBtn": "검색",
+    "popularLabel": "인기 검색어:",
+    "tags": {
+      "dino": "공룡",
+      "unicorn": "유니콘",
+      "car": "자동차",
+      "imagination": "상상나라",
+      "animals": "귀여운 동물"
+    },
+    "previewBadge": "A4 무료 인쇄 도안",
+    "previewCaption": "컬러 완성 예시 & 흑백 라인 도안",
+    "hot": {
+      "dino": {
+        "title": "공룡 & 탈것",
+        "desc": "티라노와 멋진 자동차"
+      },
+      "princess": {
+        "title": "공주 & 유니콘",
+        "desc": "예쁜 드레스와 마법성"
+      },
+      "imagination": {
+        "title": "엉뚱발랄 상상나라",
+        "desc": "과자행성과 신비한 마법"
+      },
+      "animals": {
+        "title": "귀여운 동물 친구들",
+        "desc": "귀여운 강아지와 판다"
+      }
+    },
+    "popularHeading": "지금 가장 인기 있는 도안",
+    "viewAll": "전체보기",
+    "whyTitle": "아이와 부모를 위한 완벽한 무료 색칠 플랫폼",
+    "whySubtitle": "매일 새로운 상상력과 창의력을 선물합니다",
+    "why": {
+      "hd": {
+        "title": "원클릭 바로 인쇄",
+        "desc": "가정용 프린터 즉시 출력"
+      },
+      "ink": {
+        "title": "잉크 절약 굵은선",
+        "desc": "쉬운 채색과 잉크 절약"
+      },
+      "variety": {
+        "title": "매일 새 창의 테마",
+        "desc": "다채로운 상상 도안"
+      },
+      "free": {
+        "title": "완전 무료 이용",
+        "desc": "회원가입 없이 무제한"
+      }
+    }
+  },
+  "detail": {
+    "printCta": "지금 무료로 바로 인쇄하기 (PDF)",
+    "askChild": "아이에게 이렇게 물어보세요!",
+    "benefitsHeader": "이 도안의 발달 & 학습 효과",
+    "recommended": "권장",
+    "likes": "좋아요",
+    "views": "조회",
+    "specFit": "표준 용지 맞춤",
+    "specQuality": "선명한 고화질 인쇄",
+    "copyrightFree": "개인 · 교육용 무료 도안",
+    "copyrightTitle": "둘리아 안심 이용 안내",
+    "copyrightReport": "저작권 문의 · 신고",
+    "copyrightReportTitle": "저작권 침해 또는 콘텐츠 문의",
+    "copyrightScope": "• 아이와 함께하는 가정 및 교육 공간에서 자유롭게 인쇄해 보세요.",
+    "copyrightNote": "• 저작권 및 도안 관련 수정·삭제 문의는 접수 즉시 신속하게 처리됩니다.",
+    "copyrightMailSubject": "[저작권 문의] 도안 ID: {{slug}} ({{title}})",
+    "copyrightMailBody": "안녕하세요, 아래 도안에 대한 권리 침해/저작권 문의를 접수합니다.\n\n- 도안 ID: {{slug}}\n- 도안명: {{title}}\n- 페이지 URL: {{url}}\n- 문의 및 요청 사항:\n",
+    "modalSubTitle": "FREE PRINTABLE",
+    "printPreview": "PRINT PREVIEW",
+    "downloadBtn": "무료 PDF 저장",
+    "printNowBtn": "즉시 바로 인쇄",
+    "dpiBadge": "300 DPI HD",
+    "affiliatePick": "✨ DOOLIA'S CHOICE",
+    "affiliateHeadline": "아이와 함께하는 미술놀이 추천 준비물",
+    "affiliateWhyTitle": "왜 '무독성 크레용'을 추천할까요?",
+    "affiliateRating": "안심 인증",
+    "affiliateTagSafe": "에디터 엄선",
+    "affiliateTagWash": "키즈 세이프",
+    "affiliateReviews": "추천 가이드",
+    "affiliatePain": "아이와 색칠놀이를 하다 보면 손이나 옷에 크레용이 묻어 신경 쓰일 때가 있죠.",
+    "affiliatePlayTip": "이런 크레용을 찾아보세요",
+    "affiliateTitle": "부모들이 신뢰하는 무독성 크레용 컬렉션",
+    "affiliateBody": "입에 닿아도 안전한 식물성 왁스로 제작되어 우리 아이 첫 미술 놀이에 가장 적합합니다.",
+    "affiliateB1Title": "구강기 안심:",
+    "affiliateB1Text": "물티슈나 물로 쉽게 닦이는 워셔블 제품",
+    "affiliateB2Title": "소근육 보호:",
+    "affiliateB2Text": "아이 손에 부담이 적은 부드러운 발색",
+    "affiliateB3Title": "이지 클린:",
+    "affiliateB3Text": "제품의 사용 연령과 안전정보를 확인할 수 있는 제품",
+    "affiliateCta": "아이용 지워지는 크레용 둘러보기",
+    "affiliateDisclaimer": "제휴 활동의 일환으로 일정 수수료를 지급받을 수 있습니다.",
+    "affiliateImgAlt": "미술 놀이 준비물",
+    "relatedTitle": "🎨 함께 추천하는 도안",
+    "share": "공유하기",
+    "thumbnailBw": "흑백 도안",
+    "thumbnailColor": "컬러 예시",
+    "viewColorHint": "좌측 썸네일로 색칠 예시 확인",
+    "viewMore": "더보기",
+    "zoomIn": "크게 보기",
+    "linkCopied": "링크를 복사했어요",
+    "copyFailed": "복사에 실패했어요",
+    "freePrint": "무료 인쇄",
+    "previewBw": "흑백 도안 미리보기",
+    "allAges": "전연령",
+    "notFound": "도안을 찾을 수 없어요.",
+    "back": "뒤로 가기"
+  },
+  "categories": {
+    "coloring-pages": "키즈 색칠도안",
+    "senior-art": "온가족 힐링 컬러링",
+    "imagination": "엉뚱발랄 상상나라",
+    "animals": "귀여운 동물",
+    "dinosaur": "공룡 세상",
+    "vehicles": "자동차 & 탈것",
+    "princess": "공주 & 판타지",
+    "space-robot": "우주 & 로봇",
+    "food": "과일 & 디저트",
+    "sea-nature": "바다 & 곤충",
+    "daily": "우리 집 & 일상",
+    "jobs": "멋진 직업과 꿈",
+    "sports": "신나는 스포츠 & 취미",
+    "seasons": "계절 & 기념일"
+  },
+  "catalog": {
+    "allCategory": "전체 색칠도안 (ALL)"
+  },
+  "footer": {
+    "blurb": "아이들의 상상력을 키우는 100% 무료 색칠도안 플랫폼.",
+    "tagline": "Print, Color & Imagine.",
+    "affiliate": "제휴 마케팅 안내: 일부 링크는 제휴 마케팅이 포함될 수 있습니다.",
+    "categories": "CATEGORIES",
+    "legal": "LEGAL",
+    "allColoring": "🎨 전체 색칠도안",
+    "imagination": "✨ 엉뚱발랄 상상나라",
+    "byAge": "👶 연령별 맞춤도안",
+    "popular": "🔥 지금 인기 도안",
+    "about": "둘리아(DOOLIA) 소개",
+    "faq": "자주 묻는 질문",
+    "privacy": "개인정보처리방침",
+    "terms": "이용약관",
+    "contact": "문의하기",
+    "dmca": "저작권/권리침해 신고",
+    "dmcaSubject": "[저작권/권리침해 문의]",
+    "dmcaBody": "안녕하세요, 권리 침해/저작권 문의를 접수합니다.\n\n- URL:\n- 상세 내용:\n",
+    "copyright": "Copyright © {{year}} {{brand}}. All rights reserved.",
+    "copyrightUse": "개인 및 교육용 무료 도안 · 상업적 이용 및 재배포를 금합니다."
+  },
+  "report": {
+    "title": "저작권 · 도안 문의 및 신고",
+    "subtitle": "접수하신 내용은 관리자가 직접 확인 후 가장 빠르게 도와드립니다.",
+    "target": "대상 도안",
+    "email": "회신 이메일",
+    "name": "신고자 / 기업명",
+    "namePlaceholder": "성함 또는 저작권자(단체)명을 입력하세요",
+    "goodFaith": "본인은 정당한 권리자이거나 권리자를 대리하며, 작성한 내용이 사실임을 확인합니다.",
+    "type": "문의 유형",
+    "content": "문의 내용",
+    "contentPlaceholder": "소명 사유나 원본 저작물 정보, 필요하신 조치 내용을 자세히 적어주세요.",
+    "submit": "문의 및 신고 접수하기",
+    "sending": "접수 처리 중...",
+    "btn_submit": "🛡️ 문의 및 신고 접수하기",
+    "btn_submitting": "접수 처리 중...",
+    "thanks": "문의 및 신고가 정상 접수되었습니다",
+    "thanksHint": "작성해 주신 내용을 담당자가 확인 후, 남겨주신 이메일({{email}})로 신속히 답변 및 조치 결과를 안내해 드리겠습니다.",
+    "close": "닫기",
+    "fail": "접수에 실패했습니다. 잠시 후 다시 시도해 주세요.",
+    "ethicsKicker": "DOOLIA ETHICS & RESPECT",
+    "ethicsTitle": "아이들의 상상력을 응원하며,\n창작자의 권리를 깊이 존중합니다.",
+    "ethicsBanner": "The Art of Pure Imagination",
+    "ethicsBannerAlt": "DOOLIA Children Creative Art",
+    "ethicsOriginTitle": "순수한 AI 창작 도안",
+    "ethicsOriginBody": "아이들의 열린 사고를 위해 100% 독창적인 순수 창작 도안을 안전하게 설계합니다.",
+    "ethicsRespectTitle": "저작권 존중 및 사전 사과",
+    "ethicsRespectBody": "철저히 검수하나 유사성이나 권리 침해 소지가 있다면 정중히 사과드립니다.",
+    "ethicsActionTitle": "신속한 비공개 조치 약속",
+    "ethicsActionBody": "신고 접수 즉시 담당자가 확인하여 도안 비공개/삭제를 가장 빠르게 처리합니다.",
+    "ethicsFooter": "DOOLIA는 건강하고 깨끗한 창작 환경을 약속합니다.",
+    "types": {
+      "copyright": "저작권 침해 주장 및 도안 비공개 요청",
+      "modification": "도안 내용 수정 및 개선 제안",
+      "other": "기타 이용 문의"
+    }
+  },
+  "faq": {
+    "badge": "둘리아 도움말 센터",
+    "title": "자주 묻는 질문 (FAQ)",
+    "subtitle": "둘리아 이용에 대해 부모님과 선생님들이 자주 물어보시는 질문들을 모았습니다.",
+    "q1_title": "Q1. 도안은 정말 100% 무료인가요?",
+    "q1_desc": "네, 둘리아의 모든 색칠도안은 회원가입이나 결제 없이 언제든 자유롭게 무료로 인쇄하고 다운로드하실 수 있습니다.",
+    "q2_title": "Q2. 유치원, 어린이집, 학교 등 교육 공간에서 사용해도 되나요?",
+    "q2_desc": "물론입니다! 가정뿐만 아니라 어린이집, 유치원, 초등학교, 돌봄교실 등 비상업적 교육 목적이라면 제한 없이 자유롭게 인쇄하여 수업에 활용하실 수 있습니다. (단, 도안 자체를 유료로 판매하거나 무단 재배포하는 행위는 금지됩니다.)",
+    "q3_title": "Q3. 프린터로 인쇄할 때 어떻게 해야 가장 예쁘게 나오나요?",
+    "q3_desc": "도안 상세페이지에서 [인쇄하기] 버튼을 누르시면 표준 프린터 용지(A4 / Letter) 규격에 맞춰 여백이 자동으로 최적화됩니다. 인쇄 설정 창에서 '배경 그래픽' 옵션을 켜주시면 선이 더욱 또렷하게 출력됩니다.",
+    "q4_title": "Q4. 원하는 새로운 도안을 신청하거나 제휴를 문의하고 싶어요.",
+    "q4_desc_prefix": "사이트 하단의 ",
+    "q4_desc_link": "문의하기",
+    "q4_desc_suffix": " 페이지에서 '도안 제안' 또는 '제휴 문의'를 선택해 남겨주시면 정성껏 검토 후 반영해 드립니다.",
+    "need_help": "찾으시는 답변이 없으신가요?",
+    "btn_contact": "💌 1:1 문의 남기기"
+  }
+}

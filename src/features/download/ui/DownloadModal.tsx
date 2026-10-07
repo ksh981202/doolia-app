@@ -8,26 +8,74 @@ import {
   AFFILIATE_GUIDE_TITLE,
   type AffiliateItem,
   getAffiliateLink,
-  getNextAffiliateItem,
   pickAffiliateText,
+  prefetchAffiliateMedia,
+  resolveAffiliateVideoUrl,
 } from '@/shared/config/affiliates'
 import { TOUCH_ICON, cn } from '@/shared/lib/cn'
 import { detailTitle } from '@/shared/lib/detailCopy'
-import { generatePrintablePdf } from '@/shared/lib/generatePrintablePdf'
 import { prefetchPrintImage, printPrintable } from '@/shared/lib/printPage'
 import { getDisplayImageUrl, printableLineArtUrl, printableViewUrl } from '@/shared/utils/printableAssets'
 import { useDownloadStore } from '@/shared/store/useDownloadStore'
 
-export function DownloadModal() {
-  const { isOpen, printable, closeModal } = useDownloadStore()
-  const wasOpen = useRef(false)
-  const affiliateRef = useRef<AffiliateItem | null>(null)
+function AffiliateMedia({ affiliate, alt }: { affiliate: AffiliateItem; alt: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const videoSrc = resolveAffiliateVideoUrl(affiliate)
+  const [showVideo, setShowVideo] = useState(Boolean(videoSrc))
 
-  if (isOpen && !wasOpen.current) {
-    affiliateRef.current = getNextAffiliateItem()
-  }
-  wasOpen.current = isOpen
-  const affiliate = affiliateRef.current
+  useEffect(() => {
+    setShowVideo(Boolean(videoSrc))
+  }, [videoSrc])
+
+  useEffect(() => {
+    const node = videoRef.current
+    if (!node || !showVideo) return
+    node.muted = true
+    node.defaultMuted = true
+    node.playsInline = true
+    const play = () => {
+      void node.play().catch(() => undefined)
+    }
+    play()
+    node.addEventListener('canplay', play)
+    node.addEventListener('loadeddata', play)
+    return () => {
+      node.removeEventListener('canplay', play)
+      node.removeEventListener('loadeddata', play)
+      node.pause()
+    }
+  }, [videoSrc, showVideo])
+
+  return (
+    <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-slate-100 bg-slate-100 shadow-sm">
+      {showVideo && videoSrc ? (
+        <video
+          key={videoSrc}
+          ref={videoRef}
+          src={videoSrc}
+          poster={affiliate.image}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          disablePictureInPicture
+          className="h-full w-full object-cover"
+          onError={() => setShowVideo(false)}
+        />
+      ) : (
+        <img src={affiliate.image} alt={alt} className="h-full w-full object-cover" />
+      )}
+    </div>
+  )
+}
+
+export function DownloadModal() {
+  const { isOpen, printable, affiliate, closeModal } = useDownloadStore()
+
+  useEffect(() => {
+    prefetchAffiliateMedia()
+  }, [])
 
   useEffect(() => {
     if (!isOpen) return
@@ -102,6 +150,7 @@ function DownloadModalBody({
     setError('')
     setGenerating(true)
     try {
+      const { generatePrintablePdf } = await import('@/shared/lib/generatePrintablePdf')
       await generatePrintablePdf(printable, { variant: viewMode })
       await incrementPrintableDownloads(printable.id)
     } catch (caught) {
@@ -248,9 +297,7 @@ function DownloadModalBody({
               </h3>
             </div>
 
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-slate-100 bg-slate-100 shadow-sm">
-              <img src={affiliate.image} alt={affiliateHeadline} className="h-full w-full object-cover" />
-            </div>
+            <AffiliateMedia affiliate={affiliate} alt={affiliateHeadline} />
 
             <div>
               <div className="my-2 flex items-center justify-center gap-2.5 rounded-xl border border-amber-200/80 bg-amber-50/90 px-4 py-2.5">

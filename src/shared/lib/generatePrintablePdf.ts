@@ -1,4 +1,3 @@
-import { jsPDF } from 'jspdf'
 import type { Printable } from '@/types/printable'
 import { drawPrintFooter } from '@/shared/lib/printFooter'
 import { printableViewUrl, type PrintableViewMode } from '@/shared/utils/printableAssets'
@@ -96,6 +95,7 @@ export async function generatePrintablePdf(
   const pixelHeight = image.naturalHeight || image.height
   if (!pixelWidth || !pixelHeight) throw new Error('이미지 크기를 읽지 못했습니다.')
 
+  const { jsPDF } = await import('jspdf')
   const pdf = new jsPDF({
     orientation: 'portrait',
     unit: 'mm',

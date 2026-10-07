@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { LANGUAGES } from '@/i18n'
+import { LANGUAGES, loadLocaleResource } from '@/i18n'
 import { cn } from '@/shared/lib/cn'
 
 export function LanguageSwitcher() {
@@ -47,7 +47,7 @@ export function LanguageSwitcher() {
                   role="option"
                   aria-selected={active}
                   onClick={() => {
-                    void i18n.changeLanguage(item.code)
+                    void loadLocaleResource(item.code)
                     setOpen(false)
                   }}
                   className={cn(

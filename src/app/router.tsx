@@ -5,9 +5,9 @@ import { CatalogLayout } from '@/components/layout/CatalogLayout'
 import { PageFallback } from '@/components/layout/PageFallback'
 import { ProtectedAdminLayout } from '@/layouts/AdminLayout'
 import { LocalAdminGate } from '@/admin/AdminGuard'
-import PrintableDetailPage from '@/pages/PrintableDetailPage'
 
 const PlayHubPage = lazy(() => import('@/pages/PlayHubPage'))
+const PrintableDetailPage = lazy(() => import('@/pages/PrintableDetailPage'))
 const CategoryPage = lazy(() => import('@/pages/CategoryPage'))
 const SituationPage = lazy(() => import('@/pages/SituationPage'))
 const PlayRecipeDetailPage = lazy(() => import('@/pages/PlayRecipeDetailPage'))

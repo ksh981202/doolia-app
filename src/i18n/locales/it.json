@@ -1,0 +1,225 @@
+{
+  "nav": {
+    "home": "Home",
+    "playToolbox": "Kit di gioco",
+    "coloring": "Colora e crea",
+    "brain": "Cervello e apprendimento",
+    "tips": "Consigli per i genitori",
+    "premium": "Premium",
+    "cta": "Vedi i disegni gratis",
+    "allPrintables": "Tutti i disegni",
+    "imagination": "Immaginazione",
+    "byAge": "Per età",
+    "popular": "Popolari"
+  },
+  "language": "Lingua",
+  "header": {
+    "searchPlaceholder": "Cerca disegni o idee di gioco..."
+  },
+  "home": {
+    "badge": "100% Gratis da Stampare · Senza Registrazione · Download Immediato",
+    "titleLead": "Accendi l'infinita immaginazione del tuo bambino con",
+    "titleAccent": "Disegni da Colorare Gratis",
+    "searchBtn": "Cerca",
+    "popularLabel": "Più cercati:",
+    "tags": {
+      "dino": "Dinosauri",
+      "unicorn": "Unicorni",
+      "car": "Veicoli",
+      "imagination": "Fantasia",
+      "animals": "Animali"
+    },
+    "previewBadge": "Disegno A4 Gratis",
+    "previewCaption": "Esempio a colori & linea da colorare",
+    "hot": {
+      "dino": {
+        "title": "Dinosauri e Veicoli",
+        "desc": "T-Rex e auto cool"
+      },
+      "princess": {
+        "title": "Principesse e Magia",
+        "desc": "Abiti e castelli"
+      },
+      "imagination": {
+        "title": "Mondo della Fantasia",
+        "desc": "Pianeti di biscotti"
+      },
+      "animals": {
+        "title": "Amici Animali",
+        "desc": "Cuccioli e panda"
+      }
+    },
+    "popularHeading": "I più popolari",
+    "viewAll": "Mostra tutti",
+    "whyTitle": "La piattaforma ideale di disegni da colorare per i bambini",
+    "whySubtitle": "Ogni giorno nuova creatività e fantasia",
+    "why": {
+      "hd": {
+        "title": "Stampa in 1 clic",
+        "desc": "Stampa subito a casa"
+      },
+      "ink": {
+        "title": "Linee anti-spreco",
+        "desc": "Facile da colorare e risparmia"
+      },
+      "variety": {
+        "title": "Temi creativi",
+        "desc": "Nuovi disegni ogni giorno"
+      },
+      "free": {
+        "title": "100% Gratis",
+        "desc": "Senza registrazione"
+      }
+    }
+  },
+  "detail": {
+    "printCta": "Stampa gratis ora (PDF)",
+    "askChild": "Chiedi questo al tuo bambino!",
+    "benefitsHeader": "Benefici educativi",
+    "recommended": "Consigliato",
+    "likes": "Mi piace",
+    "views": "Visualizzazioni",
+    "specFit": "Formato carta standard",
+    "specQuality": "Stampa nitida HD",
+    "copyrightFree": "Gratuito per uso personale e didattico",
+    "copyrightTitle": "Guida all’uso sereno DOOLIA",
+    "copyrightReport": "Richiesta copyright",
+    "copyrightReportTitle": "Segnalazione copyright o contenuti",
+    "copyrightScope": "• Stampate e usate liberamente a casa o negli spazi educativi, insieme ai bambini.",
+    "copyrightNote": "• Le richieste su copyright, modifiche o rimozione vengono gestite con prontezza.",
+    "copyrightMailSubject": "[Richiesta copyright] ID: {{slug}} ({{title}})",
+    "copyrightMailBody": "Salve, invio una segnalazione di copyright / diritti su questo materiale.\n\n- ID: {{slug}}\n- Titolo: {{title}}\n- URL della pagina: {{url}}\n- Richiesta:\n",
+    "modalSubTitle": "FREE PRINTABLE",
+    "printPreview": "PRINT PREVIEW",
+    "downloadBtn": "Salva PDF gratis",
+    "printNowBtn": "Stampa ora",
+    "dpiBadge": "300 DPI HD",
+    "affiliatePick": "✨ DOOLIA'S CHOICE",
+    "affiliateHeadline": "Materiali consigliati per colorare insieme",
+    "affiliateWhyTitle": "Perché consigliamo i pastelli atossici?",
+    "affiliateRating": "Certificato sicuro",
+    "affiliateTagSafe": "Scelta della redazione",
+    "affiliateTagWash": "Kid-safe",
+    "affiliateReviews": "Guida consigliata",
+    "affiliatePain": "Quando colori con i bambini, il pastello sulle mani o sui vestiti a volte dà un po’ fastidio.",
+    "affiliatePlayTip": "Cerca pastelli così",
+    "affiliateTitle": "Collezione di pastelli atossici di fiducia",
+    "affiliateBody": "Cera vegetale sicura anche in bocca. Perfetti per il primo set di disegno.",
+    "affiliateB1Title": "Sicuro in fase orale:",
+    "affiliateB1Text": "Lavabili, che si tolgono con acqua o una salvietta",
+    "affiliateB2Title": "Motricità fine:",
+    "affiliateB2Text": "Tratto morbido, più leggero per le manine",
+    "affiliateB3Title": "Facile da pulire:",
+    "affiliateB3Text": "Prodotti con età d’uso e informazioni di sicurezza visibili",
+    "affiliateCta": "Scopri pastelli lavabili per bambini",
+    "affiliateDisclaimer": "Possiamo ricevere una commissione da attività di affiliazione.",
+    "affiliateImgAlt": "Materiali per il gioco del disegno",
+    "relatedTitle": "Disegni consigliati",
+    "share": "Condividi",
+    "thumbnailBw": "Linee B/N",
+    "thumbnailColor": "Esempio a colori",
+    "viewColorHint": "Vedi esempio a colori a sinistra",
+    "viewMore": "Vedi altro",
+    "zoomIn": "Ingrandisci",
+    "linkCopied": "Link copiato",
+    "copyFailed": "Copia non riuscita",
+    "freePrint": "Stampa gratis",
+    "previewBw": "Anteprima B/N",
+    "allAges": "Tutte le età",
+    "notFound": "Disegno non trovato.",
+    "back": "Indietro"
+  },
+  "categories": {
+    "coloring-pages": "Disegni da colorare",
+    "senior-art": "Arte relax",
+    "imagination": "Terra dell'immaginazione",
+    "animals": "Animali carini",
+    "dinosaur": "Mondo dei dinosauri",
+    "vehicles": "Auto e veicoli",
+    "princess": "Principesse e fantasia",
+    "space-robot": "Spazio e robot",
+    "food": "Frutta e dessert",
+    "sea-nature": "Mare e insetti",
+    "daily": "Casa e quotidiano",
+    "jobs": "Mestieri e sogni",
+    "sports": "Sport e hobby",
+    "seasons": "Stagioni e feste"
+  },
+  "catalog": {
+    "allCategory": "Tutti i disegni (ALL)"
+  },
+  "footer": {
+    "blurb": "Una piattaforma 100% gratuita di disegni che stimola l'immaginazione.",
+    "tagline": "Print, Color & Imagine.",
+    "affiliate": "Avviso affiliati: alcuni link possono includere marketing di affiliazione.",
+    "categories": "CATEGORIES",
+    "legal": "LEGAL",
+    "allColoring": "🎨 Tutti i disegni",
+    "imagination": "✨ Terra dell'immaginazione",
+    "byAge": "👶 Per età",
+    "popular": "🔥 Popolari ora",
+    "about": "Chi è DOOLIA",
+    "faq": "Domande frequenti",
+    "privacy": "Privacy",
+    "terms": "Termini di utilizzo",
+    "contact": "Contatti",
+    "dmca": "Segnala violazione del copyright",
+    "dmcaSubject": "[Richiesta copyright / diritti]",
+    "dmcaBody": "Salve, invio una segnalazione di copyright / diritti.\n\n- URL:\n- Dettagli:\n",
+    "copyright": "Copyright © {{year}} {{brand}}. Tutti i diritti riservati.",
+    "copyrightUse": "Gratuito per uso personale e didattico. Uso commerciale e redistribuzione non sono consentiti."
+  },
+  "report": {
+    "title": "Copyright e segnalazione",
+    "subtitle": "Un amministratore esaminerà la richiesta di persona e ti aiuterà il prima possibile.",
+    "target": "Disegno",
+    "email": "Email di risposta",
+    "name": "Nome / organizzazione",
+    "namePlaceholder": "Inserisci il tuo nome o quello del titolare dei diritti",
+    "goodFaith": "Sono il titolare dei diritti o un agente autorizzato e confermo che le informazioni sono veritiere.",
+    "type": "Tipo di richiesta",
+    "content": "Messaggio",
+    "contentPlaceholder": "Descrivi l’opera originale, il motivo e l’azione di cui hai bisogno.",
+    "submit": "Invia la richiesta",
+    "sending": "Invio in corso...",
+    "btn_submit": "🛡️ Invia richiesta e segnalazione",
+    "btn_submitting": "Invio in corso...",
+    "thanks": "Abbiamo ricevuto la tua richiesta",
+    "thanksHint": "Esamineremo il contenuto e risponderemo a {{email}} con l’esito il prima possibile.",
+    "close": "Chiudi",
+    "fail": "Invio non riuscito. Riprova più tardi.",
+    "ethicsKicker": "DOOLIA ETHICS & RESPECT",
+    "ethicsTitle": "Sosteniamo l’immaginazione dei bambini\ne rispettiamo a fondo i diritti di chi crea.",
+    "ethicsBanner": "The Art of Pure Imagination",
+    "ethicsBannerAlt": "DOOLIA Children Creative Art",
+    "ethicsOriginTitle": "Disegni originali con IA",
+    "ethicsOriginBody": "Progettiamo disegni 100% originali perché i bambini pensino con libertà.",
+    "ethicsRespectTitle": "Rispetto e scuse in anticipo",
+    "ethicsRespectBody": "Controlliamo con cura. Se resta una somiglianza o un impatto sui tuoi diritti, ci scusiamo con rispetto.",
+    "ethicsActionTitle": "Promessa di nascondere in fretta",
+    "ethicsActionBody": "Appena arriva la segnalazione, la verifichiamo e nascondiamo o rimuoviamo il disegno il più in fretta possibile.",
+    "ethicsFooter": "DOOLIA promette un ambiente creativo sano e pulito.",
+    "types": {
+      "copyright": "Tutela del copyright e richiesta di nascondere",
+      "modification": "Correzione o miglioramento",
+      "other": "Altra richiesta d’uso"
+    }
+  },
+  "faq": {
+    "badge": "Centro Assistenza DOOLIA",
+    "title": "Domande Frequenti (FAQ)",
+    "subtitle": "Ecco le risposte alle domande più frequenti di genitori ed educatori.",
+    "q1_title": "Q1. I disegni da colorare sono davvero gratuiti al 100%?",
+    "q1_desc": "Sì! Tutti i disegni di DOOLIA possono essere stampati e scaricati gratuitamente senza registrazione o pagamento.",
+    "q2_title": "Q2. Posso usarli in asili nido, scuole o aule didattiche?",
+    "q2_desc": "Certamente! È possibile stamparli liberamente per scopi educativi non commerciali a casa, a scuola e negli asili. (È vietata la rivendita commerciale.)",
+    "q3_title": "Q3. Come ottenere la migliore qualità di stampa?",
+    "q3_desc": "Clicca su [Stampa] nella pagina del disegno per ottimizzare automaticamente i margini per la carta standard (A4 / Letter). Attiva 'Grafica di sfondo' per linee nitide.",
+    "q4_title": "Q4. Vorrei proporre un nuovo tema di disegno o richiedere una partnership.",
+    "q4_desc_prefix": "Visita la pagina ",
+    "q4_desc_link": "Contatti",
+    "q4_desc_suffix": " e seleziona 'Suggerimento' o 'Partnership'. Esamineremo ogni richiesta con cura!",
+    "need_help": "Non hai trovato quello che cercavi?",
+    "btn_contact": "💌 Invia una richiesta 1:1"
+  }
+}

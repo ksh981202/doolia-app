@@ -1,0 +1,225 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "playToolbox": "Caja de juegos",
+    "coloring": "Color y creatividad",
+    "brain": "Cerebro y aprendizaje",
+    "tips": "Consejos para padres",
+    "premium": "Premium",
+    "cta": "Ver plantillas gratis",
+    "allPrintables": "Todos los dibujos",
+    "imagination": "Imaginación",
+    "byAge": "Por edad",
+    "popular": "Populares"
+  },
+  "language": "Idioma",
+  "header": {
+    "searchPlaceholder": "Busca dibujos o ideas para jugar..."
+  },
+  "home": {
+    "badge": "100% Gratis para Imprimir · Sin Registro · Descarga Inmediata",
+    "titleLead": "Despierta la imaginación infinita de tu peque con",
+    "titleAccent": "Dibujos para Colorear Gratis",
+    "searchBtn": "Buscar",
+    "popularLabel": "Búsquedas populares:",
+    "tags": {
+      "dino": "Dinosaurios",
+      "unicorn": "Unicornios",
+      "car": "Vehículos",
+      "imagination": "Fantasía",
+      "animals": "Animales"
+    },
+    "previewBadge": "Lámina A4 Gratis",
+    "previewCaption": "Guía a color y dibujo para colorear",
+    "hot": {
+      "dino": {
+        "title": "Dinos y Vehículos",
+        "desc": "T-Rex y autos geniales"
+      },
+      "princess": {
+        "title": "Princesas y Magia",
+        "desc": "Vestidos y castillos"
+      },
+      "imagination": {
+        "title": "Mundo de Fantasía",
+        "desc": "Planetas de galletas"
+      },
+      "animals": {
+        "title": "Animales Adorables",
+        "desc": "Perritos y pandas"
+      }
+    },
+    "popularHeading": "Dibujos más populares",
+    "viewAll": "Ver todos",
+    "whyTitle": "La mejor plataforma de colorear gratis para niños y familias",
+    "whySubtitle": "Inspirando creatividad e imaginación cada día",
+    "why": {
+      "hd": {
+        "title": "Impresión en 1 clic",
+        "desc": "Imprime directo en casa"
+      },
+      "ink": {
+        "title": "Ahorro de tinta",
+        "desc": "Trazos fáciles y económicos"
+      },
+      "variety": {
+        "title": "Temas creativos",
+        "desc": "Nuevos diseños cada día"
+      },
+      "free": {
+        "title": "100% Gratis",
+        "desc": "Sin registro previo"
+      }
+    }
+  },
+  "detail": {
+    "printCta": "Imprimir gratis ahora (PDF)",
+    "askChild": "¡Pregúntale esto a tu peque!",
+    "benefitsHeader": "Beneficios de aprendizaje",
+    "recommended": "Recomendado",
+    "likes": "Me gusta",
+    "views": "Vistas",
+    "specFit": "Ajuste a papel estándar",
+    "specQuality": "Impresión nítida HD",
+    "copyrightFree": "Gratis para uso personal y educativo",
+    "copyrightTitle": "Guía de uso seguro DOOLIA",
+    "copyrightReport": "Consulta de derechos",
+    "copyrightReportTitle": "Consulta por infracción de derechos o contenido",
+    "copyrightScope": "• Imprime y disfruta en casa o en espacios educativos junto a tus hijos.",
+    "copyrightNote": "• Las consultas de derechos de autor o solicitudes de modificación y eliminación se atienden con rapidez.",
+    "copyrightMailSubject": "[Consulta de derechos de autor] ID: {{slug}} ({{title}})",
+    "copyrightMailBody": "Hola, envío una consulta de derechos de autor sobre este material.\n\n- ID: {{slug}}\n- Título: {{title}}\n- URL de la página: {{url}}\n- Solicitud:\n",
+    "modalSubTitle": "FREE PRINTABLE",
+    "printPreview": "PRINT PREVIEW",
+    "downloadBtn": "Guardar PDF gratis",
+    "printNowBtn": "Imprimir ahora",
+    "dpiBadge": "300 DPI HD",
+    "affiliatePick": "✨ DOOLIA'S CHOICE",
+    "affiliateHeadline": "Materiales recomendados para pintar juntos",
+    "affiliateWhyTitle": "¿Por qué recomendamos ceras atóxicas?",
+    "affiliateRating": "Certificado seguro",
+    "affiliateTagSafe": "Selección editorial",
+    "affiliateTagWash": "Kid-safe",
+    "affiliateReviews": "Guía recomendada",
+    "affiliatePain": "Al colorear con los peques, a veces el crayón se queda en las manos o la ropa y preocupa un poco.",
+    "affiliatePlayTip": "Busca ceras así",
+    "affiliateTitle": "Colección de ceras atóxicas de confianza",
+    "affiliateBody": "Hechas con cera vegetal segura si llega a la boca. Ideales para el primer set de arte.",
+    "affiliateB1Title": "Seguro en etapa oral:",
+    "affiliateB1Text": "Lavables, que se quitan con agua o una toallita",
+    "affiliateB2Title": "Motricidad fina:",
+    "affiliateB2Text": "Trazo suave, más cómodo para las manitas",
+    "affiliateB3Title": "Fácil de limpiar:",
+    "affiliateB3Text": "Productos que indican edad de uso e información de seguridad",
+    "affiliateCta": "Ver ceras lavables para niños",
+    "affiliateDisclaimer": "Podemos recibir una comisión por actividad de afiliados.",
+    "affiliateImgAlt": "Materiales para jugar a pintar",
+    "relatedTitle": "Dibujos recomendados",
+    "share": "Compartir",
+    "thumbnailBw": "Líneas B/N",
+    "thumbnailColor": "Ejemplo a color",
+    "viewColorHint": "Ver ejemplo en color a la izquierda",
+    "viewMore": "Ver más",
+    "zoomIn": "Ver más grande",
+    "linkCopied": "Enlace copiado",
+    "copyFailed": "No se pudo copiar",
+    "freePrint": "Imprimir gratis",
+    "previewBw": "Vista previa en B/N",
+    "allAges": "Todas las edades",
+    "notFound": "No encontramos este dibujo.",
+    "back": "Volver"
+  },
+  "categories": {
+    "coloring-pages": "Dibujos para colorear",
+    "senior-art": "Arte para toda la familia",
+    "imagination": "País de la imaginación",
+    "animals": "Animales adorables",
+    "dinosaur": "Mundo de dinosaurios",
+    "vehicles": "Coches y vehículos",
+    "princess": "Princesas y fantasía",
+    "space-robot": "Espacio y robots",
+    "food": "Frutas y postres",
+    "sea-nature": "Mar e insectos",
+    "daily": "Casa y día a día",
+    "jobs": "Oficios y sueños",
+    "sports": "Deportes y hobbies",
+    "seasons": "Estaciones y fiestas"
+  },
+  "catalog": {
+    "allCategory": "Todos los dibujos (ALL)"
+  },
+  "footer": {
+    "blurb": "Una plataforma 100% gratuita de dibujos que despierta la imaginación.",
+    "tagline": "Print, Color & Imagine.",
+    "affiliate": "Aviso de afiliados: algunos enlaces pueden incluir marketing de afiliados.",
+    "categories": "CATEGORIES",
+    "legal": "LEGAL",
+    "allColoring": "🎨 Todos los dibujos",
+    "imagination": "✨ País de la imaginación",
+    "byAge": "👶 Por edad",
+    "popular": "🔥 Populares ahora",
+    "about": "Sobre DOOLIA",
+    "faq": "Preguntas frecuentes",
+    "privacy": "Política de privacidad",
+    "terms": "Términos de uso",
+    "contact": "Contacto",
+    "dmca": "Denunciar infracción de derechos",
+    "dmcaSubject": "[Consulta de derechos de autor]",
+    "dmcaBody": "Hola, envío una consulta de derechos de autor.\n\n- URL:\n- Detalles:\n",
+    "copyright": "Copyright © {{year}} {{brand}}. Todos los derechos reservados.",
+    "copyrightUse": "Gratis para uso personal y educativo. Quedan prohibidos el uso comercial y la redistribución."
+  },
+  "report": {
+    "title": "Consulta y aviso de derechos",
+    "subtitle": "Un administrador revisará tu solicitud en persona y te ayudará lo antes posible.",
+    "target": "Dibujo",
+    "email": "Email de respuesta",
+    "name": "Nombre / organización",
+    "namePlaceholder": "Escribe tu nombre o el del titular de derechos",
+    "goodFaith": "Soy el titular de los derechos o un agente autorizado, y confirmo que la información es veraz.",
+    "type": "Tipo de consulta",
+    "content": "Mensaje",
+    "contentPlaceholder": "Describe la obra original, el motivo y la acción que necesitas.",
+    "submit": "Enviar consulta",
+    "sending": "Enviando...",
+    "btn_submit": "🛡️ Enviar consulta y aviso",
+    "btn_submitting": "Enviando...",
+    "thanks": "Hemos recibido tu consulta",
+    "thanksHint": "Revisaremos el contenido y te responderemos a {{email}} con el resultado lo antes posible.",
+    "close": "Cerrar",
+    "fail": "No se pudo enviar. Inténtalo de nuevo.",
+    "ethicsKicker": "DOOLIA ETHICS & RESPECT",
+    "ethicsTitle": "Animamos la imaginación de los niños\ny respetamos de verdad los derechos de quienes crean.",
+    "ethicsBanner": "The Art of Pure Imagination",
+    "ethicsBannerAlt": "DOOLIA Children Creative Art",
+    "ethicsOriginTitle": "Dibujos originales con IA",
+    "ethicsOriginBody": "Diseñamos dibujos 100% originales para que los niños piensen con libertad.",
+    "ethicsRespectTitle": "Respeto y disculpa previa",
+    "ethicsRespectBody": "Revisamos con esmero. Si aún hay similitud o riesgo para tus derechos, nos disculpamos con respeto.",
+    "ethicsActionTitle": "Promesa de ocultar con rapidez",
+    "ethicsActionBody": "En cuanto llega el aviso, lo revisamos y ocultamos o eliminamos el dibujo lo antes posible.",
+    "ethicsFooter": "DOOLIA promete un entorno creativo sano y limpio.",
+    "types": {
+      "copyright": "Reclamación de derechos y solicitud de ocultar",
+      "modification": "Corrección o mejora del dibujo",
+      "other": "Otra consulta de uso"
+    }
+  },
+  "faq": {
+    "badge": "Centro de Ayuda DOOLIA",
+    "title": "Preguntas Frecuentes (FAQ)",
+    "subtitle": "Hemos recopilado las preguntas más frecuentes de padres y educadores al usar DOOLIA.",
+    "q1_title": "Q1. ¿Los dibujos para colorear son 100% gratuitos?",
+    "q1_desc": "¡Sí! Todos los dibujos de DOOLIA se pueden imprimir y descargar gratis sin registro ni pagos.",
+    "q2_title": "Q2. ¿Puedo usarlos en guarderías, escuelas o aulas educativas?",
+    "q2_desc": "¡Por supuesto! Se pueden imprimir y usar libremente para fines educativos sin fines de lucro en hogares, escuelas y guarderías. (Queda prohibida la reventa comercial y redistribución.)",
+    "q3_title": "Q3. ¿Cómo consigo la mejor calidad de impresión?",
+    "q3_desc": "Haz clic en [Imprimir] en la página de detalles y los márgenes se adaptarán automáticamente al papel estándar de impresora (A4 / Carta). Activa 'Gráficos de fondo' para obtener líneas nítidas.",
+    "q4_title": "Q4. Me gustaría sugerir un nuevo tema de dibujo o una propuesta de colaboración.",
+    "q4_desc_prefix": "Visita nuestra página de ",
+    "q4_desc_link": "Contacto",
+    "q4_desc_suffix": " y selecciona 'Sugerencia' o 'Colaboración'. ¡Revisaremos tu mensaje con mucho gusto!",
+    "need_help": "¿No encuentras lo que buscas?",
+    "btn_contact": "💌 Enviar consulta 1:1"
+  }
+}

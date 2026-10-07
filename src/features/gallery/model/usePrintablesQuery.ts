@@ -6,8 +6,10 @@ export function usePrintablesQuery() {
   return useQuery({
     queryKey: ['printables', 'all'],
     queryFn: () => fetchPrintables('all'),
-    staleTime: 0,
-    refetchOnMount: 'always',
+    staleTime: 1000 * 60 * 10,
+    gcTime: 1000 * 60 * 30,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   })
 }
 

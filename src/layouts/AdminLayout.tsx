@@ -99,8 +99,17 @@ export function AdminLayout() {
     <div className="flex min-h-screen bg-slate-50">
       <aside className="hidden w-60 shrink-0 border-r border-emerald-100 bg-white lg:flex lg:flex-col">
         <div className="border-b border-emerald-50 px-4 py-5">
-          <p className="text-xs font-extrabold tracking-[0.16em] text-emerald-600">DOOLIA ADMIN</p>
-          <p className="mt-1 text-sm font-bold text-slate-800">콘텐츠 관리</p>
+          <Link to="/" className="inline-block">
+            <img
+              src="/doolia-logo.png"
+              alt="DOOLIA"
+              className="h-8 w-auto max-w-full object-contain"
+              onError={(e) => {
+                console.error('Logo load failed:', e)
+              }}
+            />
+          </Link>
+          <p className="mt-2 text-sm font-bold text-slate-800">콘텐츠 관리</p>
         </div>
         <SiteHomeLink />
         <AdminNav
@@ -118,7 +127,16 @@ export function AdminLayout() {
           <button type="button" className="absolute inset-0 bg-slate-900/40" aria-label="닫기" onClick={() => setOpen(false)} />
           <div className="relative flex h-full w-[min(85vw,16rem)] flex-col bg-white shadow-2xl">
             <div className="border-b border-emerald-50 px-4 py-4">
-              <p className="text-xs font-extrabold tracking-[0.16em] text-emerald-600">DOOLIA ADMIN</p>
+              <Link to="/" className="inline-block">
+                <img
+                  src="/doolia-logo.png"
+                  alt="DOOLIA"
+                  className="h-8 w-auto max-w-full object-contain"
+                  onError={(e) => {
+                    console.error('Logo load failed:', e)
+                  }}
+                />
+              </Link>
             </div>
             <SiteHomeLink />
             <AdminNav

@@ -16,6 +16,7 @@ export interface LocalizedText {
 export interface AffiliateItem {
   id: string
   image: string
+  videoUrl: string
   badge: LocalizedText
   headline: LocalizedText
   painPoint: LocalizedText
@@ -56,6 +57,7 @@ export const AFFILIATE_ITEMS: AffiliateItem[] = [
   {
     id: '01_crayons',
     image: '/affiliate/affiliate_01_crayons.webp',
+    videoUrl: '/affiliate/affiliate_01_crayons.mp4',
     badge: AFFILIATE_BADGE,
     headline: {
       ko: '손이나 벽에 묻어도 물로 쏙 지워지는 안심 크레용',
@@ -124,6 +126,7 @@ export const AFFILIATE_ITEMS: AffiliateItem[] = [
   {
     id: '02_colored_pencils',
     image: '/affiliate/affiliate_02_colored_pencils.webp',
+    videoUrl: '/affiliate/affiliate_02_colored_pencils.mp4',
     badge: AFFILIATE_BADGE,
     headline: {
       ko: '손 힘이 약한 아이를 위한 맞춤 삼각 점보 색연필',
@@ -192,6 +195,7 @@ export const AFFILIATE_ITEMS: AffiliateItem[] = [
   {
     id: '03_markers',
     image: '/affiliate/affiliate_03_markers.webp',
+    videoUrl: '/affiliate/affiliate_03_markers.mp4',
     badge: AFFILIATE_BADGE,
     headline: {
       ko: '뚜껑 열려도 오래 쓰는 안심 워셔블 수성 사인펜',
@@ -260,6 +264,7 @@ export const AFFILIATE_ITEMS: AffiliateItem[] = [
   {
     id: '04_water_brush',
     image: '/affiliate/affiliate_04_water_brush.webp',
+    videoUrl: '/affiliate/affiliate_04_water_brush-silent.mp4',
     badge: AFFILIATE_BADGE,
     headline: {
       ko: '물통 엎지를 걱정 없는 신개념 워터 브러쉬 펜',
@@ -328,6 +333,7 @@ export const AFFILIATE_ITEMS: AffiliateItem[] = [
   {
     id: '05_art_smock',
     image: '/affiliate/affiliate_05_art_smock.webp',
+    videoUrl: '/affiliate/affiliate_05_art_smock-silent.mp4',
     badge: AFFILIATE_BADGE,
     headline: {
       ko: '옷 버림 없이 마음껏 그리는 유아 방수 미술가운',
@@ -396,6 +402,7 @@ export const AFFILIATE_ITEMS: AffiliateItem[] = [
   {
     id: '06_craft_mat',
     image: '/affiliate/affiliate_06_craft_mat.webp',
+    videoUrl: '/affiliate/affiliate_06_craft_mat-silent.mp4',
     badge: AFFILIATE_BADGE,
     headline: {
       ko: '테이블 오염 완벽 차단! 대형 실리콘 미술 매트',
@@ -464,6 +471,7 @@ export const AFFILIATE_ITEMS: AffiliateItem[] = [
   {
     id: '07_safety_scissors',
     image: '/affiliate/affiliate_07_safety_scissors.webp',
+    videoUrl: '/affiliate/affiliate_07_safety_scissors-silent.mp4',
     badge: AFFILIATE_BADGE,
     headline: {
       ko: '손 베일 걱정 없는 둥근 안전 가위',
@@ -532,6 +540,7 @@ export const AFFILIATE_ITEMS: AffiliateItem[] = [
   {
     id: '08_kids_art_set',
     image: '/affiliate/affiliate_08_kids_art_set.webp',
+    videoUrl: '/affiliate/affiliate_08_kids_art_set-silent.mp4',
     badge: AFFILIATE_BADGE,
     headline: {
       ko: '하나로 끝내는 올인원 어린이 종합 미술세트',
@@ -617,4 +626,23 @@ export function pickAffiliateText(text: LocalizedText, lang: string): string {
 
 export function getAffiliateLink(item: AffiliateItem, lang: string): string {
   return (lang.split('-')[0] || 'en') === 'ko' ? item.coupangUrl : item.amazonUrl
+}
+
+export function resolveAffiliateVideoUrl(item: AffiliateItem): string {
+  return item.videoUrl
+}
+
+export function prefetchAffiliateMedia() {
+  if (typeof document === 'undefined') return
+  for (const item of AFFILIATE_ITEMS) {
+    const poster = new Image()
+    poster.decoding = 'async'
+    poster.src = item.image
+    const video = document.createElement('video')
+    video.muted = true
+    video.preload = 'auto'
+    video.playsInline = true
+    video.src = item.videoUrl
+    video.load()
+  }
 }

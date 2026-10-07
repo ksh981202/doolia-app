@@ -20,6 +20,33 @@ export default defineConfig(({ mode }) => {
     optimizeDeps: {
       include: ['tinymce', '@tinymce/tinymce-react'],
     },
+    build: {
+      rolldownOptions: {
+        output: {
+          // Vite 8 / Rolldown: object-form manualChunks is removed.
+          // Equivalent of vendor-react / vendor-query / vendor-supabase.
+          codeSplitting: {
+            groups: [
+              {
+                name: 'vendor-react',
+                test: /[\\/]node_modules[\\/](?:react-dom|react-router-dom|scheduler|react)(?:[\\/]|$)/,
+                priority: 30,
+              },
+              {
+                name: 'vendor-query',
+                test: /[\\/]node_modules[\\/]@tanstack[\\/]react-query(?:[\\/]|$)/,
+                priority: 20,
+              },
+              {
+                name: 'vendor-supabase',
+                test: /[\\/]node_modules[\\/]@supabase[\\/]supabase-js(?:[\\/]|$)/,
+                priority: 20,
+              },
+            ],
+          },
+        },
+      },
+    },
     server: {
       port: 9999,
       strictPort: true,

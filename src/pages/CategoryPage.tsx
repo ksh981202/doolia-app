@@ -1,10 +1,11 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, useParams, useSearchParams } from 'react-router-dom'
 import { ThemeFilter } from '@/components/category/ThemeFilter'
 import { PrintableCard } from '@/components/PrintableCard'
 import { SubpageHeader } from '@/components/layout/SubpageHeader'
 import { usePrintablesQuery } from '@/features/gallery/model/usePrintablesQuery'
+import { logSearchKeyword } from '@/features/search/lib/logSearchKeyword'
 import { matchesQuery, matchesUserSearch } from '@/services/printableService'
 import {
   getCategoryThemes,
@@ -124,6 +125,16 @@ export function CategoryPage() {
           : b.downloads - a.downloads || +new Date(b.created_at) - +new Date(a.created_at),
       )
   }, [age, browseAll, data, isSenior, match, query, sort, sub, subOptions, theme, themeOptions])
+
+  useEffect(() => {
+    if (isLoading) return
+    const keyword = query.trim()
+    if (keyword.length < 2) return
+    const timer = window.setTimeout(() => {
+      logSearchKeyword(keyword, items.length)
+    }, 500)
+    return () => window.clearTimeout(timer)
+  }, [isLoading, items.length, query])
 
   const destSlug = typeSlug ?? categoryQuerySlug
   if (browseAll && destSlug) {

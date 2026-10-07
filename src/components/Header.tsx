@@ -74,7 +74,7 @@ export function Header() {
 
   return (
     <header className="no-print sticky top-0 z-40 border-b border-gray-100 bg-white/90 backdrop-blur-md">
-      <div className="mx-auto grid h-16 w-full max-w-7xl grid-cols-[1fr_minmax(0,42rem)_1fr] items-center gap-2 px-4 sm:h-20 sm:gap-4 sm:px-6 lg:px-8">
+      <div className="mx-auto grid h-16 w-full max-w-7xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-4 sm:h-20 sm:gap-4 sm:px-6 lg:px-8">
         <div className="justify-self-start">
           <Logo />
         </div>

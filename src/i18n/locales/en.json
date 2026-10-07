@@ -1,0 +1,225 @@
+{
+  "nav": {
+    "home": "Home",
+    "playToolbox": "Play Toolbox",
+    "coloring": "Color & Create",
+    "brain": "Brain & Learn",
+    "tips": "Parenting Tips",
+    "premium": "Premium",
+    "cta": "Browse free printables",
+    "allPrintables": "All printables",
+    "imagination": "Imagination",
+    "byAge": "By age",
+    "popular": "Popular"
+  },
+  "language": "Language",
+  "header": {
+    "searchPlaceholder": "Search printables, play ideas..."
+  },
+  "home": {
+    "badge": "100% Free Print · No Sign-Up · Instant Download",
+    "titleLead": "Unleash Your Child's Infinite Imagination with",
+    "titleAccent": "Premium Free Coloring Pages",
+    "searchBtn": "Search",
+    "popularLabel": "Popular:",
+    "tags": {
+      "dino": "Dinosaurs",
+      "unicorn": "Unicorns",
+      "car": "Vehicles",
+      "imagination": "Fantasy",
+      "animals": "Cute Animals"
+    },
+    "previewBadge": "A4 Free Printable",
+    "previewCaption": "Color Guide & Black-and-White Line Art",
+    "hot": {
+      "dino": {
+        "title": "Dinos & Vehicles",
+        "desc": "T-Rex and cool cars"
+      },
+      "princess": {
+        "title": "Princess & Magic",
+        "desc": "Gowns and fairy castles"
+      },
+      "imagination": {
+        "title": "Playful Fantasy",
+        "desc": "Sweet cookie planets"
+      },
+      "animals": {
+        "title": "Cute Animals",
+        "desc": "Puppies and cute pandas"
+      }
+    },
+    "popularHeading": "Most Popular Printables",
+    "viewAll": "View All",
+    "whyTitle": "The Perfect Free Coloring Platform for Kids & Parents",
+    "whySubtitle": "Inspiring new imagination and creativity every day",
+    "why": {
+      "hd": {
+        "title": "One-Click Print",
+        "desc": "Instant home printing"
+      },
+      "ink": {
+        "title": "Ink-Saving Lines",
+        "desc": "Easy coloring & less ink"
+      },
+      "variety": {
+        "title": "Creative Themes",
+        "desc": "Fresh pages every day"
+      },
+      "free": {
+        "title": "100% Free",
+        "desc": "No sign-up needed"
+      }
+    }
+  },
+  "detail": {
+    "printCta": "Print for Free Now (PDF)",
+    "askChild": "Ask your child this!",
+    "benefitsHeader": "Learning & Development Benefits",
+    "recommended": "Recommended",
+    "likes": "Likes",
+    "views": "Views",
+    "specFit": "Standard Paper Fit",
+    "specQuality": "Crystal-Clear Print",
+    "copyrightFree": "Free for personal & educational use",
+    "copyrightTitle": "DOOLIA Safe-Use Guide",
+    "copyrightReport": "Copyright inquiry",
+    "copyrightReportTitle": "Copyright or content inquiry",
+    "copyrightScope": "• Free to print and enjoy at home or in educational spaces.",
+    "copyrightNote": "• Copyright inquiries or removal requests are handled promptly.",
+    "copyrightMailSubject": "[Copyright inquiry] Printable ID: {{slug}} ({{title}})",
+    "copyrightMailBody": "Hello, I am submitting a copyright / rights inquiry about the following printable.\n\n- Printable ID: {{slug}}\n- Title: {{title}}\n- Page URL: {{url}}\n- Request:\n",
+    "modalSubTitle": "FREE PRINTABLE",
+    "printPreview": "PRINT PREVIEW",
+    "downloadBtn": "Save Free PDF",
+    "printNowBtn": "Print Now",
+    "dpiBadge": "300 DPI HD",
+    "affiliatePick": "✨ DOOLIA'S CHOICE",
+    "affiliateHeadline": "Recommended art supplies for coloring together",
+    "affiliateWhyTitle": "Why recommend non-toxic crayons?",
+    "affiliateRating": "Safety certified",
+    "affiliateTagSafe": "Editor’s pick",
+    "affiliateTagWash": "Kid-safe",
+    "affiliateReviews": "A recommended guide",
+    "affiliatePain": "When you color with kids, crayon on hands or clothes can be a bit of a hassle.",
+    "affiliatePlayTip": "Look for crayons like these",
+    "affiliateTitle": "A non-toxic crayon collection parents trust",
+    "affiliateBody": "Made with plant-based wax that is safe if it reaches the mouth — ideal for a first art set.",
+    "affiliateB1Title": "Oral-stage safe:",
+    "affiliateB1Text": "Washable ones that wipe off with water or a tissue",
+    "affiliateB2Title": "Fine-motor care:",
+    "affiliateB2Text": "Soft color that is easier on little hands",
+    "affiliateB3Title": "Easy clean:",
+    "affiliateB3Text": "Products that show age guidance and safety info",
+    "affiliateCta": "Browse washable crayons for kids",
+    "affiliateDisclaimer": "We may earn a commission from affiliate activity.",
+    "affiliateImgAlt": "Art play supplies",
+    "relatedTitle": "Recommended for You",
+    "share": "Share",
+    "thumbnailBw": "B&W Line Art",
+    "thumbnailColor": "Color Example",
+    "viewColorHint": "Check color example on left",
+    "viewMore": "View More",
+    "zoomIn": "View larger",
+    "linkCopied": "Link copied",
+    "copyFailed": "Could not copy",
+    "freePrint": "Free Print",
+    "previewBw": "B&W preview",
+    "allAges": "All ages",
+    "notFound": "We could not find this printable.",
+    "back": "Go back"
+  },
+  "categories": {
+    "coloring-pages": "Coloring Pages",
+    "senior-art": "Family Healing Art",
+    "imagination": "Imagination Land",
+    "animals": "Cute Animals",
+    "dinosaur": "Dinosaur World",
+    "vehicles": "Cars & Vehicles",
+    "princess": "Princess & Fantasy",
+    "space-robot": "Space & Robots",
+    "food": "Fruit & Desserts",
+    "sea-nature": "Ocean & Bugs",
+    "daily": "Home & Everyday",
+    "jobs": "Jobs & Dreams",
+    "sports": "Sports & Hobbies",
+    "seasons": "Seasons & Holidays"
+  },
+  "catalog": {
+    "allCategory": "All coloring pages (ALL)"
+  },
+  "footer": {
+    "blurb": "A 100% free coloring platform that grows kids' imagination.",
+    "tagline": "Print, Color & Imagine.",
+    "affiliate": "Affiliate notice: some links may include affiliate marketing.",
+    "categories": "CATEGORIES",
+    "legal": "LEGAL",
+    "allColoring": "🎨 All Coloring Pages",
+    "imagination": "✨ Imagination Land",
+    "byAge": "👶 Browse by Age",
+    "popular": "🔥 Popular Now",
+    "about": "About DOOLIA",
+    "faq": "FAQ",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Use",
+    "contact": "Contact",
+    "dmca": "Report copyright issue",
+    "dmcaSubject": "[Copyright / Rights Inquiry]",
+    "dmcaBody": "Hello, I am submitting a copyright / rights inquiry.\n\n- URL:\n- Details:\n",
+    "copyright": "Copyright © {{year}} {{brand}}. All rights reserved.",
+    "copyrightUse": "Free for personal and educational use. Commercial use and redistribution are not allowed."
+  },
+  "report": {
+    "title": "Copyright & printable inquiry",
+    "subtitle": "Our team reviews every request in person and helps as quickly as we can.",
+    "target": "Printable",
+    "email": "Reply email",
+    "name": "Your name / organization",
+    "namePlaceholder": "Enter your name or the copyright owner’s name",
+    "goodFaith": "I am the rights holder or an authorized agent, and I confirm that the information I provided is true.",
+    "type": "Inquiry type",
+    "content": "Message",
+    "contentPlaceholder": "Please describe the original work, your reason, and the action you need.",
+    "submit": "Submit inquiry",
+    "sending": "Submitting...",
+    "btn_submit": "🛡️ Submit Inquiry & Report",
+    "btn_submitting": "Submitting...",
+    "thanks": "Your inquiry has been received",
+    "thanksHint": "Our team will review it and reply to {{email}} with the outcome as soon as possible.",
+    "close": "Close",
+    "fail": "We could not submit your request. Please try again.",
+    "ethicsKicker": "DOOLIA ETHICS & RESPECT",
+    "ethicsTitle": "We cheer on children’s imagination\nand deeply respect creators’ rights.",
+    "ethicsBanner": "The Art of Pure Imagination",
+    "ethicsBannerAlt": "DOOLIA Children Creative Art",
+    "ethicsOriginTitle": "Original AI printables",
+    "ethicsOriginBody": "We design 100% original printables so children can think freely, without a rigid mold.",
+    "ethicsRespectTitle": "Respect, and an apology in advance",
+    "ethicsRespectBody": "We review carefully. If something still feels similar or may affect your rights, we sincerely apologize.",
+    "ethicsActionTitle": "A promise of fast unpublishing",
+    "ethicsActionBody": "As soon as a report arrives, our team reviews it and unpublishes or removes the printable as quickly as possible.",
+    "ethicsFooter": "DOOLIA promises a healthy, clean creative space.",
+    "types": {
+      "copyright": "Copyright claim and unpublish request",
+      "modification": "Correction or improvement",
+      "other": "Other usage inquiry"
+    }
+  },
+  "faq": {
+    "badge": "DOOLIA Help Center",
+    "title": "Frequently Asked Questions (FAQ)",
+    "subtitle": "Here are answers to common questions asked by parents and educators using DOOLIA.",
+    "q1_title": "Q1. Are all coloring pages really 100% free?",
+    "q1_desc": "Yes! All DOOLIA coloring pages can be freely printed and downloaded anytime without sign-up or payment.",
+    "q2_title": "Q2. Can I use these in classrooms, kindergartens, and schools?",
+    "q2_desc": "Absolutely! You can freely print and use them for any non-commercial educational purposes in homes, kindergartens, schools, and daycare centers. (Commercial resale and redistribution of the files are strictly prohibited.)",
+    "q3_title": "Q3. How do I get the best print quality on my printer?",
+    "q3_desc": "Simply click the [Print] button on the details page, and margins are automatically optimized for standard printer paper (US Letter / A4). Enabling 'Background graphics' in your print dialog ensures crisp, clear line art.",
+    "q4_title": "Q4. I'd like to suggest a new coloring theme or propose a partnership.",
+    "q4_desc_prefix": "Please visit our ",
+    "q4_desc_link": "Contact",
+    "q4_desc_suffix": " page and choose 'Suggestion' or 'Partnership'. We review every message with great care!",
+    "need_help": "Couldn't find what you were looking for?",
+    "btn_contact": "💌 Send a 1:1 Inquiry"
+  }
+}

@@ -7,6 +7,7 @@ import { usePrintablesQuery } from '@/features/gallery/model/usePrintablesQuery'
 import { selectHomePrintables } from '@/services/printableService'
 import { printablePath } from '@/shared/config/catalog'
 import { pickLocalized } from '@/shared/lib/detailCopy'
+import { getDisplayImageUrl } from '@/shared/utils/printableAssets'
 import type { Printable } from '@/types/printable'
 
 const POPULAR_TAGS = [
@@ -102,11 +103,19 @@ function HeroSplitPreview({ printable }: { printable: Printable }) {
 
   return (
     <div className="relative h-full w-full overflow-hidden rounded-xl bg-slate-50">
-      <img src={colorSrc} alt={alt} className="h-full w-full object-contain" />
       <img
-        src={lineSrc}
+        src={getDisplayImageUrl(colorSrc, 640)}
+        alt={alt}
+        className="h-full w-full object-contain"
+        decoding="async"
+        {...{ fetchPriority: 'high', fetchpriority: 'high' }}
+      />
+      <img
+        src={getDisplayImageUrl(lineSrc, 640)}
         alt=""
         className="absolute inset-0 h-full w-full object-contain"
+        decoding="async"
+        {...{ fetchPriority: 'high', fetchpriority: 'high' }}
         style={{
           clipPath: 'polygon(58% 0%, 100% 0%, 100% 100%, 42% 100%)',
           filter: grayscaleFallback ? 'grayscale(100%) contrast(150%)' : undefined,
@@ -219,9 +228,11 @@ export function PlayHubPage() {
                     className="absolute top-4 -left-2 h-[260px] w-[185px] -translate-x-12 -rotate-12 rounded-2xl border border-slate-200/90 bg-white p-2 shadow-lg transition-transform duration-300 hover:-rotate-12 sm:h-52 sm:w-40 sm:translate-x-0 sm:-rotate-[8deg]"
                   >
                     <img
-                      src={printableImage(left)}
+                      src={getDisplayImageUrl(printableImage(left), 400)}
                       alt={pickLocalized(left, 'title', i18n.language) || left.title}
                       className="h-full w-full rounded-xl bg-slate-50 object-contain"
+                      loading="lazy"
+                      decoding="async"
                     />
                   </Link>
                 ) : (
@@ -234,9 +245,11 @@ export function PlayHubPage() {
                     className="absolute top-4 -right-2 h-[260px] w-[185px] translate-x-12 rotate-12 rounded-2xl border border-slate-200/90 bg-white p-2 shadow-lg transition-transform duration-300 hover:rotate-12 sm:h-52 sm:w-40 sm:translate-x-0 sm:rotate-[8deg]"
                   >
                     <img
-                      src={printableImage(right)}
+                      src={getDisplayImageUrl(printableImage(right), 400)}
                       alt={pickLocalized(right, 'title', i18n.language) || right.title}
                       className="h-full w-full rounded-xl bg-slate-50 object-contain"
+                      loading="lazy"
+                      decoding="async"
                     />
                   </Link>
                 ) : (

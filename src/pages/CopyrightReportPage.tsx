@@ -304,7 +304,7 @@ export function CopyrightReportPage() {
                 disabled={busy}
                 className="flex min-h-[48px] w-full items-center justify-center rounded-2xl bg-emerald-600 py-3.5 text-base font-bold text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700 disabled:opacity-60"
               >
-                {busy ? t('report.sending', '접수 처리 중...') : '🛡️ 문의 및 신고 접수하기'}
+                {busy ? t('report.btn_submitting') : t('report.btn_submit')}
               </button>
             </form>
           )}

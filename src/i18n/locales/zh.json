@@ -1,0 +1,225 @@
+{
+  "nav": {
+    "home": "首頁",
+    "playToolbox": "玩樂工具箱",
+    "coloring": "著色・創作",
+    "brain": "腦力・學習",
+    "tips": "育兒・遊戲提示",
+    "premium": "進階版",
+    "cta": "瀏覽免費圖稿",
+    "allPrintables": "全部圖稿",
+    "imagination": "奇想國度",
+    "byAge": "依年齡",
+    "popular": "熱門"
+  },
+  "language": "語言",
+  "header": {
+    "searchPlaceholder": "搜尋著色圖名稱或遊戲靈感..."
+  },
+  "home": {
+    "badge": "100%免費列印・免註冊・即點即下載",
+    "titleLead": "無限啟發孩子想像力的",
+    "titleAccent": "優質免費著色圖",
+    "searchBtn": "搜尋",
+    "popularLabel": "熱門搜尋:",
+    "tags": {
+      "dino": "恐龍",
+      "unicorn": "獨角獸",
+      "car": "交通工具",
+      "imagination": "幻想世界",
+      "animals": "可愛動物"
+    },
+    "previewBadge": "A4 免費列印圖案",
+    "previewCaption": "彩色參考範例與黑白線條稿",
+    "hot": {
+      "dino": {
+        "title": "恐龍與交通工具",
+        "desc": "暴龍與酷炫汽車"
+      },
+      "princess": {
+        "title": "公主與獨角獸",
+        "desc": "禮服與魔法城堡"
+      },
+      "imagination": {
+        "title": "奇思妙想世界",
+        "desc": "餅乾星球與魔法"
+      },
+      "animals": {
+        "title": "可愛動物朋友",
+        "desc": "小狗與可愛熊貓"
+      }
+    },
+    "popularHeading": "目前最熱門的著色圖",
+    "viewAll": "查看全部",
+    "whyTitle": "適合孩子與家長的完美免費著色平台",
+    "whySubtitle": "每天為孩子帶來全新想像力與創造力",
+    "why": {
+      "hd": {
+        "title": "一鍵即時列印",
+        "desc": "家用印表機即點即印"
+      },
+      "ink": {
+        "title": "省墨清晰粗線",
+        "desc": "容易塗色且節省墨水"
+      },
+      "variety": {
+        "title": "豐富創意主題",
+        "desc": "每天全新著色圖"
+      },
+      "free": {
+        "title": "完全免費",
+        "desc": "免註冊無限暢玩"
+      }
+    }
+  },
+  "detail": {
+    "printCta": "立即免費列印 (PDF)",
+    "askChild": "可以這樣問問孩子喔！",
+    "benefitsHeader": "這張圖的成長與學習效果",
+    "recommended": "推薦",
+    "likes": "喜歡",
+    "views": "瀏覽",
+    "specFit": "標準紙張尺寸適配",
+    "specQuality": "高畫質清晰列印",
+    "copyrightFree": "個人與教育用途免費圖稿",
+    "copyrightTitle": "DOOLIA 安心使用說明",
+    "copyrightReport": "著作權詢問 · 檢舉",
+    "copyrightReportTitle": "著作權侵害或內容詢問",
+    "copyrightScope": "• 歡迎在家中或教育空間與孩子一起自由列印使用。",
+    "copyrightNote": "• 著作權與圖稿的修正、刪除詢問，我們會在受理後盡快協助處理。",
+    "copyrightMailSubject": "[著作權詢問] 圖稿 ID: {{slug}} ({{title}})",
+    "copyrightMailBody": "您好，我想就以下圖稿提出權利侵害／著作權詢問。\n\n- 圖稿 ID: {{slug}}\n- 名稱: {{title}}\n- 頁面 URL: {{url}}\n- 詢問與請求:\n",
+    "modalSubTitle": "FREE PRINTABLE",
+    "printPreview": "PRINT PREVIEW",
+    "downloadBtn": "儲存免費 PDF",
+    "printNowBtn": "立即列印",
+    "dpiBadge": "300 DPI HD",
+    "affiliatePick": "✨ DOOLIA'S CHOICE",
+    "affiliateHeadline": "和孩子一起畫畫的推薦用品",
+    "affiliateWhyTitle": "為什麼推薦無毒蠟筆？",
+    "affiliateRating": "安心認證",
+    "affiliateTagSafe": "編輯嚴選",
+    "affiliateTagWash": "兒童安心",
+    "affiliateReviews": "推薦指南",
+    "affiliatePain": "和孩子著色時，蠟筆沾到手上或衣服上，有時會有點在意。",
+    "affiliatePlayTip": "可以找找這類蠟筆",
+    "affiliateTitle": "家長信賴的無毒蠟筆精選",
+    "affiliateBody": "以入口也安心的植物蠟製成，最適合孩子的第一次畫畫。",
+    "affiliateB1Title": "口腔期安心：",
+    "affiliateB1Text": "容易用水或濕紙巾擦掉的可水洗產品",
+    "affiliateB2Title": "保護小肌肉：",
+    "affiliateB2Text": "對小手負擔較小的柔和發色",
+    "affiliateB3Title": "好清理：",
+    "affiliateB3Text": "能確認適用年齡與安全資訊的產品",
+    "affiliateCta": "逛逛兒童用可擦拭蠟筆",
+    "affiliateDisclaimer": "本推薦含聯盟行銷，我們可能收取部分佣金。",
+    "affiliateImgAlt": "美術遊戲準備用品",
+    "relatedTitle": "為你推薦的著色圖",
+    "share": "分享",
+    "thumbnailBw": "黑白線條",
+    "thumbnailColor": "彩色範例",
+    "viewColorHint": "點選左側縮圖查看著色範例",
+    "viewMore": "查看更多",
+    "zoomIn": "放大查看",
+    "linkCopied": "已複製連結",
+    "copyFailed": "複製失敗",
+    "freePrint": "免費列印",
+    "previewBw": "黑白線稿預覽",
+    "allAges": "全年齡",
+    "notFound": "找不到這張圖。",
+    "back": "返回"
+  },
+  "categories": {
+    "coloring-pages": "兒童著色圖",
+    "senior-art": "療癒著色",
+    "imagination": "奇想國度",
+    "animals": "可愛動物",
+    "dinosaur": "恐龍世界",
+    "vehicles": "汽車與交通工具",
+    "princess": "公主與奇幻",
+    "space-robot": "宇宙與機器人",
+    "food": "水果與甜點",
+    "sea-nature": "海洋與昆蟲",
+    "daily": "居家日常",
+    "jobs": "職業與夢想",
+    "sports": "運動與嗜好",
+    "seasons": "季節與節日"
+  },
+  "catalog": {
+    "allCategory": "全部著色圖 (ALL)"
+  },
+  "footer": {
+    "blurb": "培育孩子想像力的 100% 免費著色平台。",
+    "tagline": "Print, Color & Imagine.",
+    "affiliate": "聯盟行銷聲明：部分連結可能包含聯盟行銷。",
+    "categories": "CATEGORIES",
+    "legal": "LEGAL",
+    "allColoring": "🎨 全部著色圖",
+    "imagination": "✨ 奇想國度",
+    "byAge": "👶 依年齡挑選",
+    "popular": "🔥 熱門著色圖",
+    "about": "關於 DOOLIA",
+    "faq": "常見問題",
+    "privacy": "隱私權政策",
+    "terms": "使用條款",
+    "contact": "聯絡我們",
+    "dmca": "著作權／權利侵害檢舉",
+    "dmcaSubject": "[著作權／權利侵害詢問]",
+    "dmcaBody": "您好，我想提出權利侵害／著作權詢問。\n\n- URL:\n- 詳細內容:\n",
+    "copyright": "Copyright © {{year}} {{brand}}. 保留所有權利。",
+    "copyrightUse": "個人與教育用途免費圖稿。禁止商業使用與再散布。"
+  },
+  "report": {
+    "title": "著作權與圖稿詢問及申報",
+    "subtitle": "我們會由管理員親自確認，並盡快協助處理。",
+    "target": "圖稿",
+    "email": "回覆信箱",
+    "name": "申報人 / 機構名稱",
+    "namePlaceholder": "請輸入姓名或著作權人（團體）名稱",
+    "goodFaith": "本人為正當權利人或其代理人，並確認所填內容屬實。",
+    "type": "詢問類型",
+    "content": "內容",
+    "contentPlaceholder": "請詳述原作資訊、申報理由，以及您希望採取的措施。",
+    "submit": "送出詢問及申報",
+    "sending": "正在處理...",
+    "btn_submit": "🛡️ 提交諮詢與侵權申訴",
+    "btn_submitting": "處理中...",
+    "thanks": "已成功收到您的詢問及申報",
+    "thanksHint": "負責人員確認後，將盡快以 {{email}} 回覆處理結果。",
+    "close": "關閉",
+    "fail": "送出失敗，請稍後再試。",
+    "ethicsKicker": "DOOLIA ETHICS & RESPECT",
+    "ethicsTitle": "我們為孩子的想像力加油，\n也深深尊重創作者的權利。",
+    "ethicsBanner": "The Art of Pure Imagination",
+    "ethicsBannerAlt": "DOOLIA Children Creative Art",
+    "ethicsOriginTitle": "純粹的 AI 原創圖稿",
+    "ethicsOriginBody": "為了孩子開闊的思考，我們安全地設計 100% 原創圖稿。",
+    "ethicsRespectTitle": "尊重著作權並事先致歉",
+    "ethicsRespectBody": "我們會徹底檢查；若仍有相似或可能涉及權利之處，謹此致歉。",
+    "ethicsActionTitle": "承諾迅速下架處理",
+    "ethicsActionBody": "收到回報後，負責人員會立即確認，並以最快速度下架或刪除圖稿。",
+    "ethicsFooter": "DOOLIA 承諾守護健康、乾淨的創作環境。",
+    "types": {
+      "copyright": "主張著作權侵害並請求下架",
+      "modification": "圖稿內容修正或改善建議",
+      "other": "其他使用詢問"
+    }
+  },
+  "faq": {
+    "badge": "DOOLIA 幫助中心",
+    "title": "常見問題 (FAQ)",
+    "subtitle": "這裡整理了家長與老師們在使用 DOOLIA 時最常提出的問題與解答。",
+    "q1_title": "Q1. 著色圖畫紙真的完全免費嗎？",
+    "q1_desc": "是的！DOOLIA 所有的著色畫均無需註冊或付費，隨時都可以免費列印與下載。",
+    "q2_title": "Q2. 可以在幼兒園、托兒所或學校等教育場所使用嗎？",
+    "q2_desc": "當然可以！家庭、托兒所、幼兒園、小學及課後輔導班等非營利教育用途，均可無限制自由列印使用於教學。（但嚴禁將圖畫檔案進行轉售或未經授權的商業再分發。）",
+    "q3_title": "Q3. 如何使用印表機列印出最佳品質？",
+    "q3_desc": "只要在詳情頁面點擊 [列印] 按鈕，邊距就會自動適配標準列印紙張（A4 / Letter）。在列印設定中勾選「背景圖形」可獲得最清晰的線條效果。",
+    "q4_title": "Q4. 我想許願新的著色畫主題或洽詢合作事宜。",
+    "q4_desc_prefix": "請前往頁尾的 ",
+    "q4_desc_link": "聯絡我們",
+    "q4_desc_suffix": " 頁面選擇「圖畫建議」或「商務合作」填寫，我們會由專人用心評估回覆。",
+    "need_help": "找不到您需要的解答嗎？",
+    "btn_contact": "💌 填寫 1:1 線上諮詢"
+  }
+}
