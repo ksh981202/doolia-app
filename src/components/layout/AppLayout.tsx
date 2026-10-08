@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import { Footer } from '@/components/layout/Footer'
 import { MainHeader } from '@/components/layout/MainHeader'
@@ -20,6 +20,10 @@ function DeferredDownloadModal() {
 }
 
 export function AppLayout() {
+  useEffect(() => {
+    void import('@/services/affiliateService').then((mod) => mod.fetchPublicAffiliateItems())
+  }, [])
+
   return (
     <div className="flex min-h-screen flex-col bg-white text-slate-800 antialiased">
       <MainHeader />

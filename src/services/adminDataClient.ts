@@ -1,4 +1,9 @@
-export type AdminTable = 'printables' | 'parenting_tips' | 'copyright_reports' | 'general_inquiries'
+export type AdminTable =
+  | 'printables'
+  | 'parenting_tips'
+  | 'copyright_reports'
+  | 'general_inquiries'
+  | 'affiliate_items'
 
 export type AdminDbRequest = {
   action: 'list' | 'select' | 'upsert' | 'update' | 'delete'

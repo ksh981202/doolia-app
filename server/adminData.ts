@@ -4,7 +4,7 @@ import { requireAdminAuth, sendAdminJson } from './adminAuth.ts'
 
 export const ADMIN_DATA_ROUTE = '/api/admin/data'
 
-const TABLES = ['printables', 'parenting_tips', 'copyright_reports', 'general_inquiries'] as const
+const TABLES = ['printables', 'parenting_tips', 'copyright_reports', 'general_inquiries', 'affiliate_items'] as const
 type AdminTable = (typeof TABLES)[number]
 type AdminAction = 'list' | 'select' | 'upsert' | 'update' | 'delete'
 
@@ -13,6 +13,7 @@ const TABLE_ACTIONS: Record<AdminTable, readonly AdminAction[]> = {
   parenting_tips: ['list', 'select', 'upsert', 'update', 'delete'],
   copyright_reports: ['list', 'select', 'update'],
   general_inquiries: ['list', 'select', 'update'],
+  affiliate_items: ['list', 'select', 'upsert', 'update', 'delete'],
 }
 
 function envString(env: NodeJS.Dict<string>, key: string) {

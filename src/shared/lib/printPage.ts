@@ -6,10 +6,37 @@ function escapeHtml(value: string) {
     .replace(/"/g, '&quot;')
 }
 
-/** Isolated print-window CSS. Avoid 100vh + @page 10mm — that overflows onto page 2. */
+export const PRINT_BRAND_FOOTER_KO =
+  '🎨 DOOLIA (둘리아) | 아이들의 상상력을 키우는 무료 색칠도안'
+export const PRINT_BRAND_FOOTER_EN =
+  '🎨 DOOLIA | Free Printable Coloring Pages for Kids & Family'
+export const PRINT_BRAND_FOOTER_SITE = 'https://doolia.com'
+
+export function detectPrintLanguage() {
+  if (typeof document === 'undefined') return 'ko'
+  let stored = ''
+  try {
+    stored = localStorage.getItem('doolia_lang') || localStorage.getItem('doolia-lang') || ''
+  } catch {
+    stored = ''
+  }
+  const currentLang = document.documentElement.lang || stored || 'ko'
+  return currentLang
+}
+
+export function isKoreanPrintLang(lang?: string | null) {
+  const currentLang = (lang || detectPrintLanguage()).toLowerCase()
+  return currentLang.startsWith('ko')
+}
+
+export function printBrandFooterLeft(lang?: string | null) {
+  return isKoreanPrintLang(lang) ? PRINT_BRAND_FOOTER_KO : PRINT_BRAND_FOOTER_EN
+}
+
+/** Isolated print-window CSS. Height 100% only — 100vh + large @page margin overflows onto page 2. */
 export const PRINT_DOCUMENT_STYLES = `@page {
   size: A4 portrait;
-  margin: 10mm;
+  margin: 8mm 10mm 8mm 10mm;
 }
 html, body {
   margin: 0;
@@ -24,33 +51,67 @@ html, body {
 header, footer, nav, .no-print, button, .modal-backdrop, .print-footer {
   display: none !important;
 }
-.printable-area {
+.print-sheet {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
+  flex-direction: column;
+  justify-content: space-between;
   height: 100%;
+  box-sizing: border-box;
   overflow: hidden;
   page-break-inside: avoid;
   page-break-after: avoid;
   break-inside: avoid;
   break-after: avoid;
 }
+.printable-art {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
 .printable-image {
   max-width: 100%;
-  max-height: 100%;
+  max-height: 94%;
   width: auto;
   height: auto;
   object-fit: contain;
   margin: 0 auto;
   display: block;
   image-rendering: -webkit-optimize-contrast;
+}
+.print-brand-footer {
+  height: 22px;
+  margin-top: 6px;
+  padding-top: 4px;
+  border-top: 1px dashed #cbd5e1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 10.5px;
+  color: #64748b;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+.print-brand-footer .brand-left {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.print-brand-footer .brand-right {
+  flex-shrink: 0;
+  margin-left: 12px;
 }`
 
 export function printDocumentHtml(title: string, imgUrl: string, autoPrint = true) {
   const safeTitle = escapeHtml(title || 'DOOLIA Printable')
   const safeUrl = escapeHtml(imgUrl)
   const onload = autoPrint ? ' onload="window.focus(); window.print();"' : ''
+  const currentLang = document.documentElement.lang || localStorage.getItem('doolia_lang') || localStorage.getItem('doolia-lang') || 'ko'
+  const isKorean = currentLang.startsWith('ko')
   return `<!DOCTYPE html>
 <html>
   <head>
@@ -59,8 +120,14 @@ export function printDocumentHtml(title: string, imgUrl: string, autoPrint = tru
     <style>${PRINT_DOCUMENT_STYLES}</style>
   </head>
   <body>
-    <div class="printable-area">
-      <img class="printable-image" src="${safeUrl}" alt="${safeTitle}"${onload} />
+    <div class="print-sheet">
+      <div class="printable-art">
+        <img class="printable-image" src="${safeUrl}" alt="${safeTitle}"${onload} />
+      </div>
+      <div class="print-brand-footer">
+        <span class="brand-left">${isKorean ? PRINT_BRAND_FOOTER_KO : PRINT_BRAND_FOOTER_EN}</span>
+        <span class="brand-right">${PRINT_BRAND_FOOTER_SITE}</span>
+      </div>
     </div>
   </body>
 </html>`

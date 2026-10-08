@@ -610,11 +610,23 @@ export const AFFILIATE_ITEMS: AffiliateItem[] = [
 
 const SUPPORTED_LANGS: SupportedLang[] = ['ko', 'en', 'ja', 'zh', 'es', 'pt', 'de', 'fr', 'it', 'vi']
 
+let activeAffiliatePool: AffiliateItem[] | null = null
 let currentAffiliateIndex = Math.floor(Math.random() * AFFILIATE_ITEMS.length)
 
+export function setActiveAffiliatePool(items: AffiliateItem[]) {
+  activeAffiliatePool = items.length ? items : null
+  const pool = getActiveAffiliatePool()
+  currentAffiliateIndex = currentAffiliateIndex % pool.length
+}
+
+export function getActiveAffiliatePool(): AffiliateItem[] {
+  return activeAffiliatePool && activeAffiliatePool.length ? activeAffiliatePool : AFFILIATE_ITEMS
+}
+
 export function getNextAffiliateItem(): AffiliateItem {
-  const item = AFFILIATE_ITEMS[currentAffiliateIndex]
-  currentAffiliateIndex = (currentAffiliateIndex + 1) % AFFILIATE_ITEMS.length
+  const pool = getActiveAffiliatePool()
+  const item = pool[currentAffiliateIndex % pool.length]
+  currentAffiliateIndex = (currentAffiliateIndex + 1) % pool.length
   return item
 }
 
@@ -632,9 +644,9 @@ export function resolveAffiliateVideoUrl(item: AffiliateItem): string {
   return item.videoUrl
 }
 
-export function prefetchAffiliateMedia() {
+export function prefetchAffiliateMedia(items?: AffiliateItem[]) {
   if (typeof document === 'undefined') return
-  for (const item of AFFILIATE_ITEMS) {
+  for (const item of items ?? getActiveAffiliatePool()) {
     const poster = new Image()
     poster.decoding = 'async'
     poster.src = item.image

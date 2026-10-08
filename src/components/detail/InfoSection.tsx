@@ -127,7 +127,7 @@ export function InfoSection({ printable }: { printable: Printable }) {
       <button
         type="button"
         onPointerEnter={() => {
-          void import('@/shared/config/affiliates').then((mod) => mod.prefetchAffiliateMedia())
+          void import('@/services/affiliateService').then((mod) => mod.fetchPublicAffiliateItems())
         }}
         onClick={() => openModal(printable)}
         className="mt-5 flex min-h-16 w-full min-w-0 cursor-pointer items-center justify-center rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-3 text-[16px] font-extrabold leading-snug tracking-wide text-white shadow-md transition-all hover:from-emerald-700 hover:to-teal-700 hover:shadow-lg active:scale-[0.99] sm:px-6 sm:text-[17px]"

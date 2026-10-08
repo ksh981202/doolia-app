@@ -1,9 +1,10 @@
 import { Download, ExternalLink, Printer, X } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type MouseEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { incrementPrintableDownloads } from '@/services/printableService'
 import type { Printable } from '@/types/printable'
 import { AD_COUNTDOWN_SECONDS } from '@/shared/config/categories'
+import { incrementAffiliateClick, incrementAffiliateImpression } from '@/services/affiliateService'
 import {
   AFFILIATE_GUIDE_TITLE,
   type AffiliateItem,
@@ -145,6 +146,10 @@ function DownloadModalBody({
     prefetchPrintImage(printableLineArtUrl(printable) || originalSrc)
   }, [printable, originalSrc])
 
+  useEffect(() => {
+    void incrementAffiliateImpression(affiliate.id)
+  }, [affiliate.id])
+
   const handleDownload = async () => {
     if (!ready || generating) return
     setError('')
@@ -158,6 +163,12 @@ function DownloadModalBody({
     } finally {
       setGenerating(false)
     }
+  }
+
+  const handleAffiliateNavigate = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault()
+    void incrementAffiliateClick(affiliate.id)
+    window.open(affiliateLink, '_blank', 'noopener,noreferrer')
   }
 
   const handleDirectPrint = () => {
@@ -297,7 +308,15 @@ function DownloadModalBody({
               </h3>
             </div>
 
-            <AffiliateMedia affiliate={affiliate} alt={affiliateHeadline} />
+            <a
+              href={affiliateLink}
+              target="_blank"
+              rel="noopener noreferrer sponsored"
+              onClick={handleAffiliateNavigate}
+              className="block"
+            >
+              <AffiliateMedia affiliate={affiliate} alt={affiliateHeadline} />
+            </a>
 
             <div>
               <div className="my-2 flex items-center justify-center gap-2.5 rounded-xl border border-amber-200/80 bg-amber-50/90 px-4 py-2.5">
@@ -330,6 +349,7 @@ function DownloadModalBody({
                 href={affiliateLink}
                 target="_blank"
                 rel="noopener noreferrer sponsored"
+                onClick={handleAffiliateNavigate}
                 className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 py-3.5 text-[15px] font-bold text-white shadow-md transition-all hover:bg-indigo-700 active:scale-[0.99] sm:text-[16px]"
               >
                 <span>{affiliateCta}</span>

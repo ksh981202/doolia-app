@@ -1,4 +1,4 @@
-import { FileImage, LayoutDashboard, Mail, Menu, ShieldAlert, Upload, X } from 'lucide-react'
+import { FileImage, LayoutDashboard, Mail, Menu, ShieldAlert, ShoppingBag, Upload, X } from 'lucide-react'
 import { useState } from 'react'
 import { NavLink, Outlet, Link, useNavigate } from 'react-router-dom'
 import { AdminGuard, logoutAdminSession } from '@/admin/AdminGuard'
@@ -16,6 +16,7 @@ export function ProtectedAdminLayout() {
 const NAV = [
   { to: '/admin', label: '📊 대시보드', icon: LayoutDashboard, end: true, badge: null },
   { to: '/admin/printables', label: '🎨 도안 관리', icon: FileImage, end: true, badge: null },
+  { to: '/admin/affiliates', label: '🛍️ 제휴마케팅 관리', icon: ShoppingBag, end: true, badge: null },
   { to: '/admin/printables/upload', label: '⬆️ 대량 업로드', icon: Upload, end: true, badge: null },
   { to: '/admin/reports', label: '🛡️ 저작권 문의', icon: ShieldAlert, end: true, badge: 'reports' as const },
   { to: '/admin/inquiries', label: '📬 일반 문의', icon: Mail, end: true, badge: 'inquiries' as const },
