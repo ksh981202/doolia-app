@@ -17,6 +17,10 @@ const LEGAL_LINKS = [
   { to: '/contact', key: 'footer.contact' as const },
 ]
 
+const MENU_HEADING = 'text-[13px] font-extrabold uppercase tracking-wider text-slate-900'
+const MENU_LINK =
+  'text-[13.5px] font-medium text-slate-600 transition-colors hover:text-emerald-600 sm:text-[14px]'
+
 export function Footer() {
   const { t } = useTranslation()
 
@@ -25,24 +29,24 @@ export function Footer() {
       <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-10 px-4 py-10 sm:px-6 sm:py-12 md:grid-cols-12 lg:px-8">
         <div className="space-y-3 md:col-span-5">
           <Link to="/" className="inline-block">
-            <img src="/doolia-logo.png" alt="DOOLIA" className="h-8 w-auto object-contain sm:h-9" />
+            <img src="/doolia-logo.png" alt="DOOLIA" className="h-9 w-auto object-contain sm:h-10" />
           </Link>
-          <p className="max-w-sm text-xs leading-relaxed text-slate-500">
+          <p className="max-w-sm text-[13.5px] font-medium leading-relaxed text-slate-600 sm:text-[14px]">
             {t('footer.blurb')}
             <br />
-            <span className="font-semibold text-slate-600">{t('footer.tagline')}</span>
+            <span className="text-[14px] font-bold text-slate-700">{t('footer.tagline')}</span>
           </p>
-          <p className="max-w-sm text-[11px] leading-normal text-slate-400">{t('footer.affiliate')}</p>
-          <p className="pt-1 text-[11px] font-medium text-slate-400">
+          <p className="max-w-sm text-[12.5px] leading-normal text-slate-500">{t('footer.affiliate')}</p>
+          <p className="pt-1 text-[12.5px] font-semibold text-slate-500">
             {t('footer.copyright', { year: new Date().getFullYear(), brand: BRAND.name })}
           </p>
         </div>
 
         <div className="md:col-span-3">
-          <p className="text-[12.5px] font-bold tracking-[0.16em] text-muted sm:text-[13px]">{t('footer.categories')}</p>
-          <div className="mt-3 flex flex-col gap-2 text-[14px] font-semibold sm:text-[14.5px]">
+          <p className={MENU_HEADING}>{t('footer.categories')}</p>
+          <div className="mt-3 flex flex-col space-y-2.5">
             {CATEGORY_LINKS.map((item) => (
-              <Link key={item.to} to={item.to} className="text-ink/80 hover:text-[#059669]">
+              <Link key={item.to} to={item.to} className={MENU_LINK}>
                 {t(item.key)}
               </Link>
             ))}
@@ -50,14 +54,14 @@ export function Footer() {
         </div>
 
         <div className="md:col-span-4">
-          <p className="text-[12.5px] font-bold tracking-[0.16em] text-muted sm:text-[13px]">{t('footer.legal')}</p>
-          <div className="mt-3 flex flex-col gap-2 text-[14px] font-semibold sm:text-[14.5px]">
+          <p className={MENU_HEADING}>{t('footer.legal')}</p>
+          <div className="mt-3 flex flex-col space-y-2.5">
             {LEGAL_LINKS.map((item) => (
-              <Link key={item.to} to={item.to} className="text-ink/80 hover:text-[#059669]">
+              <Link key={item.to} to={item.to} className={MENU_LINK}>
                 {t(item.key)}
               </Link>
             ))}
-            <Link to="/report" className="text-ink/80 hover:text-[#059669]">
+            <Link to="/report" className={MENU_LINK}>
               {t('footer.dmca', '저작권/권리침해 신고')}
             </Link>
           </div>
