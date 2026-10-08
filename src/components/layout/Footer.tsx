@@ -64,10 +64,10 @@ export function Footer() {
           </div>
         </div>
       </div>
-      <div className="border-t border-line">
-        <div className="mx-auto flex w-full max-w-7xl flex-col gap-1 px-4 py-5 text-[13px] text-muted sm:px-6 sm:text-[13.5px] lg:px-8">
+      <div className="border-t border-slate-100">
+        <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-3 px-4 py-8 text-xs text-slate-400 sm:flex-row sm:px-6 lg:px-8">
           <p>{t('footer.copyright', { year: new Date().getFullYear(), brand: BRAND.name })}</p>
-          <p>{t('footer.copyrightUse', '개인 및 교육용 무료 도안 · 상업적 이용 및 재배포를 금합니다.')}</p>
+          <p className="text-[11.5px] text-slate-400">{t('footer.blurb')}</p>
         </div>
       </div>
     </footer>
