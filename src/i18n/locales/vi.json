@@ -167,7 +167,9 @@
     "dmcaSubject": "[Liên hệ bản quyền]",
     "dmcaBody": "Xin chào, tôi gửi yêu cầu về bản quyền.\n\n- URL:\n- Chi tiết:\n",
     "copyright": "Copyright © {{year}} {{brand}}. Mọi quyền được bảo lưu.",
-    "copyrightUse": "Miễn phí cho mục đích cá nhân và giáo dục. Cấm sử dụng thương mại và tái phân phối."
+    "copyrightUse": "Miễn phí cho mục đích cá nhân và giáo dục. Cấm sử dụng thương mại và tái phân phối.",
+    "freeBadge": "🌱 100% miễn phí, không cần đăng ký",
+    "designedFor": "Designed for Kids' Imagination & Creativity"
   },
   "report": {
     "title": "Bản quyền & báo cáo nội dung",

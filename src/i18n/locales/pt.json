@@ -167,7 +167,9 @@
     "dmcaSubject": "[Consulta de direitos autorais]",
     "dmcaBody": "Olá, envio uma consulta de direitos autorais.\n\n- URL:\n- Detalhes:\n",
     "copyright": "Copyright © {{year}} {{brand}}. Todos os direitos reservados.",
-    "copyrightUse": "Grátis para uso pessoal e educacional. Uso comercial e redistribuição não são permitidos."
+    "copyrightUse": "Grátis para uso pessoal e educacional. Uso comercial e redistribuição não são permitidos.",
+    "freeBadge": "🌱 100% grátis, sem cadastro",
+    "designedFor": "Designed for Kids' Imagination & Creativity"
   },
   "report": {
     "title": "Consulta e aviso de direitos",

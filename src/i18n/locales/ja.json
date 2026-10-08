@@ -167,7 +167,9 @@
     "dmcaSubject": "[著作権/権利侵害のお問い合わせ]",
     "dmcaBody": "権利侵害・著作権に関するお問い合わせを送ります。\n\n- URL:\n- 詳細:\n",
     "copyright": "Copyright © {{year}} {{brand}}. 無断転載を禁じます。",
-    "copyrightUse": "個人・教育用途の無料プリントです。商用利用および再配布は禁止です。"
+    "copyrightUse": "個人・教育用途の無料プリントです。商用利用および再配布は禁止です。",
+    "freeBadge": "🌱 会員登録不要の100%無料ぬりえ",
+    "designedFor": "Designed for Kids' Imagination & Creativity"
   },
   "report": {
     "title": "著作権・プリントに関するお問い合わせ",

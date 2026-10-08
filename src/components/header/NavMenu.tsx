@@ -32,7 +32,7 @@ export function NavMenu({
           className={cn(
             'flex items-center gap-2 font-bold transition-all',
             mobile
-              ? 'w-full justify-start rounded-xl px-3 py-3 text-left text-[16px] text-slate-800'
+              ? 'w-full justify-start gap-3 rounded-xl px-3.5 py-3 text-left text-[14.5px] text-slate-800 hover:bg-emerald-50 hover:text-emerald-700'
               : 'shrink-0 rounded-xl px-3.5 py-2 text-[16px] text-slate-800 hover:bg-slate-50 hover:text-emerald-600',
             isHeaderNavActive(item, pathname, search)
               ? mobile
@@ -42,7 +42,9 @@ export function NavMenu({
           )}
         >
           <span className="text-[18px] leading-none">{item.icon}</span>
-          <span className="text-[16px] font-bold leading-none">{t(item.labelKey)}</span>
+          <span className={cn('font-bold leading-none', mobile ? 'text-[14.5px]' : 'text-[16px]')}>
+            {t(item.labelKey)}
+          </span>
         </Link>
       ))}
     </nav>

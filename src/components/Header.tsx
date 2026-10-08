@@ -1,5 +1,6 @@
 import { ChevronLeft, Menu, Search, Settings, X } from 'lucide-react'
 import { type FormEvent, useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { isLocalAdminHost } from '@/admin/AdminGuard'
@@ -41,8 +42,13 @@ export function Header() {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setIsMobileMenuOpen(false)
     }
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
     window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', onKeyDown)
+    }
   }, [isMobileMenuOpen])
 
   useEffect(() => {
@@ -136,7 +142,7 @@ export function Header() {
             aria-label={isMobileMenuOpen ? t('detail.back', '메뉴 닫기') : '메뉴 열기'}
             onClick={() => setIsMobileMenuOpen((open) => !open)}
           >
-            {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+            <Menu size={18} />
           </button>
           <LanguageSwitcher />
           {isLocalAdminHost() ? (
@@ -153,28 +159,65 @@ export function Header() {
         </div>
       </div>
 
-      {isMobileMenuOpen ? (
-        <div className="fixed inset-0 z-50 md:hidden">
-          <button
-            type="button"
-            className="absolute inset-0 bg-slate-900/40"
-            aria-label={t('detail.back', '메뉴 닫기')}
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
-          <div
-            id="mobile-nav-drawer"
-            className="absolute inset-y-0 right-0 flex w-[min(20rem,86vw)] flex-col bg-white p-4 shadow-2xl"
-          >
-            <p className="mb-3 px-1 text-xs font-bold tracking-widest text-slate-400">MENU</p>
-            <NavMenu
-              pathname={location.pathname}
-              search={params}
-              mobile
-              onSelect={() => setIsMobileMenuOpen(false)}
-            />
-          </div>
-        </div>
-      ) : null}
+      {isMobileMenuOpen
+        ? createPortal(
+            <div className="md:hidden" role="dialog" aria-modal="true" aria-labelledby="mobile-nav-drawer">
+              <button
+                type="button"
+                className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs transition-opacity"
+                aria-label={t('detail.back', '메뉴 닫기')}
+                onClick={() => setIsMobileMenuOpen(false)}
+              />
+              <div
+                id="mobile-nav-drawer"
+                className="fixed top-0 right-0 bottom-0 z-50 flex w-[280px] flex-col justify-between overflow-y-auto bg-white p-6 shadow-2xl sm:w-[320px]"
+              >
+                <div>
+                  <div className="mb-6 flex items-center justify-between">
+                    <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="inline-block">
+                      <img src="/doolia-logo.png" alt="DOOLIA" className="h-7.5 w-auto object-contain" />
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      aria-label={t('detail.back', '메뉴 닫기')}
+                      className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-lg text-slate-500 hover:bg-slate-200"
+                    >
+                      <X size={18} />
+                    </button>
+                  </div>
+                  <p className="mb-3 text-[11px] font-bold tracking-wider text-slate-400 uppercase">MENU</p>
+                  <NavMenu
+                    pathname={location.pathname}
+                    search={params}
+                    mobile
+                    onSelect={() => setIsMobileMenuOpen(false)}
+                  />
+                </div>
+                <div className="mt-8 border-t border-slate-100 pt-5">
+                  <LanguageSwitcher listPlacement="top" />
+                  <div className="mt-4 flex flex-col gap-1">
+                    <Link
+                      to="/contact"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="rounded-lg px-1 py-2 text-[13px] font-semibold text-slate-500 hover:text-emerald-700"
+                    >
+                      {t('footer.contact')}
+                    </Link>
+                    <Link
+                      to="/report"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="rounded-lg px-1 py-2 text-[13px] font-semibold text-slate-500 hover:text-emerald-700"
+                    >
+                      {t('footer.dmca', '저작권/권리침해 신고')}
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
     </header>
   )
 }

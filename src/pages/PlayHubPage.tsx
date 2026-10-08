@@ -270,21 +270,21 @@ export function PlayHubPage() {
             </div>
           </div>
 
-          <div className="mt-6 grid grid-cols-2 gap-3.5 sm:mt-8 sm:gap-4 lg:grid-cols-4">
+          <div className="mt-6 grid w-full grid-cols-2 gap-2.5 sm:mt-8 sm:gap-4 lg:grid-cols-4">
             {HOT_THEMES.map((item) => (
               <Link
                 key={item.key}
                 to={item.to}
-                className={`group flex items-center gap-3.5 rounded-2xl border px-4 py-3.5 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md sm:px-4.5 sm:py-4 ${item.cardBg}`}
+                className={`group flex items-center gap-2.5 rounded-2xl border p-2.5 shadow-xs transition-all duration-200 hover:scale-[1.02] sm:p-3.5 ${item.cardBg}`}
               >
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/90 bg-white text-2xl shadow-xs transition-transform duration-300 group-hover:scale-110">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-slate-100 bg-white text-[18px] shadow-xs sm:h-11 sm:w-11 sm:text-[22px]">
                   <span>{item.icon}</span>
                 </div>
-                <div className="flex min-w-0 flex-1 flex-col items-start text-left">
-                  <h3 className="line-clamp-1 text-[17px] font-bold leading-snug tracking-tight text-slate-800">
+                <div className="flex min-w-0 flex-1 flex-col justify-center">
+                  <h3 className="truncate text-[13px] font-bold leading-tight tracking-tight text-slate-800 sm:text-[14.5px]">
                     {t(`home.hot.${item.key}.title`)}
                   </h3>
-                  <p className="mt-0.5 w-full truncate text-left text-[13.5px] font-medium leading-normal text-slate-500 sm:text-[14.5px]">
+                  <p className="mt-0.5 truncate text-[11px] font-medium leading-tight tracking-tight text-slate-500 sm:text-[12px]">
                     {t(`home.hot.${item.key}.desc`)}
                   </p>
                 </div>
@@ -322,7 +322,7 @@ export function PlayHubPage() {
         )}
       </section>
 
-      <section className="my-12 mb-16 rounded-3xl border border-slate-100 bg-white p-8 shadow-sm sm:p-12">
+      <section className="mt-12 mb-0 rounded-3xl border border-slate-100 bg-white p-8 shadow-sm sm:p-12">
         <div className="mx-auto max-w-3xl space-y-2 text-center">
           <span className="block text-xs font-bold uppercase tracking-widest text-emerald-600">
             WHY DOOLIA

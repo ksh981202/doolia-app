@@ -167,7 +167,9 @@
     "dmcaSubject": "[Copyright / Rights Inquiry]",
     "dmcaBody": "Hello, I am submitting a copyright / rights inquiry.\n\n- URL:\n- Details:\n",
     "copyright": "Copyright © {{year}} {{brand}}. All rights reserved.",
-    "copyrightUse": "Free for personal and educational use. Commercial use and redistribution are not allowed."
+    "copyrightUse": "Free for personal and educational use. Commercial use and redistribution are not allowed.",
+    "freeBadge": "🌱 100% free printables, no sign-up",
+    "designedFor": "Designed for Kids' Imagination & Creativity"
   },
   "report": {
     "title": "Copyright & printable inquiry",

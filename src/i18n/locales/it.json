@@ -167,7 +167,9 @@
     "dmcaSubject": "[Richiesta copyright / diritti]",
     "dmcaBody": "Salve, invio una segnalazione di copyright / diritti.\n\n- URL:\n- Dettagli:\n",
     "copyright": "Copyright © {{year}} {{brand}}. Tutti i diritti riservati.",
-    "copyrightUse": "Gratuito per uso personale e didattico. Uso commerciale e redistribuzione non sono consentiti."
+    "copyrightUse": "Gratuito per uso personale e didattico. Uso commerciale e redistribuzione non sono consentiti.",
+    "freeBadge": "🌱 100% gratis, senza registrazione",
+    "designedFor": "Designed for Kids' Imagination & Creativity"
   },
   "report": {
     "title": "Copyright e segnalazione",

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { LANGUAGES, loadLocaleResource } from '@/i18n'
 import { cn } from '@/shared/lib/cn'
 
-export function LanguageSwitcher() {
+export function LanguageSwitcher({ listPlacement = 'bottom' }: { listPlacement?: 'bottom' | 'top' }) {
   const { i18n, t } = useTranslation()
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
@@ -36,7 +36,10 @@ export function LanguageSwitcher() {
       {open ? (
         <ul
           role="listbox"
-          className="absolute right-0 z-50 mt-2 max-h-[min(70vh,420px)] min-w-[200px] overflow-y-auto rounded-2xl border border-gray-100 bg-white py-1 shadow-xl"
+          className={cn(
+            'absolute z-50 max-h-[min(70vh,420px)] min-w-[200px] overflow-y-auto rounded-2xl border border-gray-100 bg-white py-1 shadow-xl',
+            listPlacement === 'top' ? 'bottom-full left-0 mb-2' : 'right-0 mt-2',
+          )}
         >
           {LANGUAGES.map((item) => {
             const active = item.code === current.code

@@ -167,7 +167,9 @@
     "dmcaSubject": "[Demande droits d’auteur]",
     "dmcaBody": "Bonjour, je soumets une demande relative aux droits d’auteur.\n\n- URL :\n- Détails :\n",
     "copyright": "Copyright © {{year}} {{brand}}. Tous droits réservés.",
-    "copyrightUse": "Gratuit pour usage personnel et éducatif. Usage commercial et redistribution interdits."
+    "copyrightUse": "Gratuit pour usage personnel et éducatif. Usage commercial et redistribution interdits.",
+    "freeBadge": "🌱 100 % gratuit, sans inscription",
+    "designedFor": "Designed for Kids' Imagination & Creativity"
   },
   "report": {
     "title": "Droits d’auteur et signalement",

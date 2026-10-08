@@ -33,20 +33,20 @@
     "previewCaption": "컬러 완성 예시 & 흑백 라인 도안",
     "hot": {
       "dino": {
-        "title": "공룡 & 탈것",
-        "desc": "티라노와 멋진 자동차"
+        "title": "공룡 세상",
+        "desc": "티라노와 친구들"
       },
       "princess": {
-        "title": "공주 & 유니콘",
-        "desc": "예쁜 드레스와 마법성"
+        "title": "공주 & 요정",
+        "desc": "예쁜 드레스"
       },
       "imagination": {
-        "title": "엉뚱발랄 상상나라",
-        "desc": "과자행성과 신비한 마법"
+        "title": "엉뚱 상상",
+        "desc": "과자집과 마법"
       },
       "animals": {
-        "title": "귀여운 동물 친구들",
-        "desc": "귀여운 강아지와 판다"
+        "title": "귀여운 동물",
+        "desc": "귀여운 댕댕이"
       }
     },
     "popularHeading": "지금 가장 인기 있는 도안",
@@ -167,7 +167,9 @@
     "dmcaSubject": "[저작권/권리침해 문의]",
     "dmcaBody": "안녕하세요, 권리 침해/저작권 문의를 접수합니다.\n\n- URL:\n- 상세 내용:\n",
     "copyright": "Copyright © {{year}} {{brand}}. All rights reserved.",
-    "copyrightUse": "개인 및 교육용 무료 도안 · 상업적 이용 및 재배포를 금합니다."
+    "copyrightUse": "개인 및 교육용 무료 도안 · 상업적 이용 및 재배포를 금합니다.",
+    "freeBadge": "🌱 100% 회원가입 없는 무료 도안",
+    "designedFor": "Designed for Kids' Imagination & Creativity"
   },
   "report": {
     "title": "저작권 · 도안 문의 및 신고",

@@ -167,7 +167,9 @@
     "dmcaSubject": "[著作權／權利侵害詢問]",
     "dmcaBody": "您好，我想提出權利侵害／著作權詢問。\n\n- URL:\n- 詳細內容:\n",
     "copyright": "Copyright © {{year}} {{brand}}. 保留所有權利。",
-    "copyrightUse": "個人與教育用途免費圖稿。禁止商業使用與再散布。"
+    "copyrightUse": "個人與教育用途免費圖稿。禁止商業使用與再散布。",
+    "freeBadge": "🌱 100% 免費圖稿，無需註冊",
+    "designedFor": "Designed for Kids' Imagination & Creativity"
   },
   "report": {
     "title": "著作權與圖稿詢問及申報",

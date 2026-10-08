@@ -167,7 +167,9 @@
     "dmcaSubject": "[Urheberrecht / Rechteanfrage]",
     "dmcaBody": "Hallo, ich sende eine Anfrage zu Urheberrecht / Rechteverletzung.\n\n- URL:\n- Angaben:\n",
     "copyright": "Copyright © {{year}} {{brand}}. Alle Rechte vorbehalten.",
-    "copyrightUse": "Kostenlos für private und Bildungszwecke. Kommerzielle Nutzung und Weiterverbreitung sind untersagt."
+    "copyrightUse": "Kostenlos für private und Bildungszwecke. Kommerzielle Nutzung und Weiterverbreitung sind untersagt.",
+    "freeBadge": "🌱 100 % kostenlos, keine Anmeldung",
+    "designedFor": "Designed for Kids' Imagination & Creativity"
   },
   "report": {
     "title": "Urheberrecht & Motiv-Anfrage",
