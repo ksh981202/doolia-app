@@ -270,21 +270,21 @@ export function PlayHubPage() {
             </div>
           </div>
 
-          <div className="mt-6 grid w-full grid-cols-2 gap-2.5 sm:mt-8 sm:gap-4 lg:grid-cols-4">
+          <div className="mt-6 grid w-full grid-cols-2 gap-2.5 sm:mt-8 sm:gap-3.5 lg:grid-cols-4 lg:gap-4">
             {HOT_THEMES.map((item) => (
               <Link
                 key={item.key}
                 to={item.to}
-                className={`group flex items-center gap-2.5 rounded-2xl border p-2.5 shadow-xs transition-all duration-200 hover:scale-[1.02] sm:p-3.5 ${item.cardBg}`}
+                className={`group flex items-center gap-2.5 rounded-2xl border p-2.5 shadow-xs transition-all duration-200 hover:scale-[1.02] sm:gap-3.5 sm:p-3.5 lg:p-4 ${item.cardBg}`}
               >
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-slate-100 bg-white text-[18px] shadow-xs sm:h-11 sm:w-11 sm:text-[22px]">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-slate-100 bg-white text-[18px] shadow-xs sm:h-11 sm:w-11 sm:text-[22px] lg:h-12 lg:w-12 lg:text-[24px]">
                   <span>{item.icon}</span>
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col justify-center">
-                  <h3 className="truncate text-[13px] font-bold leading-tight tracking-tight text-slate-800 sm:text-[14.5px]">
+                  <h3 className="truncate text-[13px] font-bold leading-snug tracking-tight text-slate-800 sm:text-[15px] lg:text-[16.5px]">
                     {t(`home.hot.${item.key}.title`)}
                   </h3>
-                  <p className="mt-0.5 truncate text-[11px] font-medium leading-tight tracking-tight text-slate-500 sm:text-[12px]">
+                  <p className="mt-0.5 truncate text-[11px] font-medium leading-normal tracking-tight text-slate-500 sm:text-[12.5px] lg:text-[13.5px]">
                     {t(`home.hot.${item.key}.desc`)}
                   </p>
                 </div>
