@@ -22,25 +22,23 @@ export function Footer() {
 
   return (
     <footer className="no-print border-t border-line bg-white">
-      <div className="mx-auto grid w-full max-w-7xl gap-10 px-4 py-12 sm:px-6 lg:px-8 md:grid-cols-3">
-        <div>
+      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-10 px-4 py-10 sm:px-6 sm:py-12 md:grid-cols-12 lg:px-8">
+        <div className="space-y-3 md:col-span-5">
           <Link to="/" className="inline-block">
-            <img
-              src="/doolia-logo.png"
-              alt="DOOLIA"
-              className="h-9 w-auto object-contain sm:h-10"
-              onError={(e) => {
-                console.error('Logo load failed:', e)
-              }}
-            />
+            <img src="/doolia-logo.png" alt="DOOLIA" className="h-8 w-auto object-contain sm:h-9" />
           </Link>
-          <div className="mt-3 max-w-sm space-y-1 text-[13.5px] font-normal leading-relaxed text-slate-500 sm:text-[14px]">
-            <p>{t('footer.blurb')}</p>
-            <p className="font-medium text-slate-600">{t('footer.tagline')}</p>
-          </div>
-          <p className="mt-4 text-[13px] leading-5 text-muted">{t('footer.affiliate')}</p>
+          <p className="max-w-sm text-xs leading-relaxed text-slate-500">
+            {t('footer.blurb')}
+            <br />
+            <span className="font-semibold text-slate-600">{t('footer.tagline')}</span>
+          </p>
+          <p className="max-w-sm text-[11px] leading-normal text-slate-400">{t('footer.affiliate')}</p>
+          <p className="pt-1 text-[11px] font-medium text-slate-400">
+            {t('footer.copyright', { year: new Date().getFullYear(), brand: BRAND.name })}
+          </p>
         </div>
-        <div>
+
+        <div className="md:col-span-3">
           <p className="text-[12.5px] font-bold tracking-[0.16em] text-muted sm:text-[13px]">{t('footer.categories')}</p>
           <div className="mt-3 flex flex-col gap-2 text-[14px] font-semibold sm:text-[14.5px]">
             {CATEGORY_LINKS.map((item) => (
@@ -50,7 +48,8 @@ export function Footer() {
             ))}
           </div>
         </div>
-        <div>
+
+        <div className="md:col-span-4">
           <p className="text-[12.5px] font-bold tracking-[0.16em] text-muted sm:text-[13px]">{t('footer.legal')}</p>
           <div className="mt-3 flex flex-col gap-2 text-[14px] font-semibold sm:text-[14.5px]">
             {LEGAL_LINKS.map((item) => (
@@ -62,12 +61,6 @@ export function Footer() {
               {t('footer.dmca', '저작권/권리침해 신고')}
             </Link>
           </div>
-        </div>
-      </div>
-      <div className="border-t border-slate-100">
-        <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-3 px-4 py-8 text-xs text-slate-400 sm:flex-row sm:px-6 lg:px-8">
-          <p>{t('footer.copyright', { year: new Date().getFullYear(), brand: BRAND.name })}</p>
-          <p className="text-[11.5px] text-slate-400">{t('footer.blurb')}</p>
         </div>
       </div>
     </footer>
