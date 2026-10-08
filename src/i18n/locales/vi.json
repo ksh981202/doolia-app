@@ -221,5 +221,31 @@
     "q4_desc_suffix": " và chọn 'Gợi ý tranh' hoặc 'Hợp tác'. Chúng tôi sẽ kiểm tra và phản hồi chu đáo!",
     "need_help": "Bạn vẫn chưa tìm thấy câu trả lời?",
     "btn_contact": "💌 Gửi câu hỏi 1:1"
+  },
+  "contact": {
+    "badge": "Kênh liên hệ DOOLIA",
+    "title": "Bạn có điều gì muốn chia sẻ với DOOLIA không?",
+    "subtitle": "Chúng tôi luôn lắng nghe gợi ý tranh tô màu, hợp tác và phản hồi của bạn.",
+    "type_suggestion": "🎨 Gợi ý tranh vẽ",
+    "type_partnership": "🤝 Liên hệ hợp tác",
+    "type_bug": "🛠️ Báo lỗi",
+    "label_name": "Họ và tên",
+    "placeholder_name": "VD: Nguyễn Văn A",
+    "label_email": "Email",
+    "placeholder_email": "you@example.com",
+    "label_type": "Loại yêu cầu",
+    "label_content": "Nội dung",
+    "placeholder_suggestion": "Hãy thoải mái chia sẻ ý tưởng về các bức tranh tô màu mà các bé yêu thích!",
+    "placeholder_partnership": "Vui lòng để lại nội dung hợp tác và thông tin liên hệ.",
+    "placeholder_bug": "Vui lòng mô tả lỗi và thiết bị bạn đang dùng để chúng tôi hỗ trợ nhanh nhất.",
+    "btn_submit": "💌 Gửi tin nhắn",
+    "btn_submitting": "Đang gửi...",
+    "success_title": "Tin nhắn của bạn đã được tiếp nhận!",
+    "success_desc": "Đội ngũ DOOLIA sẽ xem xét kỹ lưỡng và phản hồi sớm nhất.",
+    "btn_back_home": "🏠 Trở về Trang chủ",
+    "error_name": "Vui lòng nhập họ tên.",
+    "error_email": "Vui lòng nhập email hợp lệ.",
+    "error_content": "Vui lòng nhập nội dung.",
+    "error_submit": "Gửi không thành công. Vui lòng thử lại."
   }
 }

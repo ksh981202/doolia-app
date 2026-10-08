@@ -221,5 +221,31 @@
     "q4_desc_suffix": " page and choose 'Suggestion' or 'Partnership'. We review every message with great care!",
     "need_help": "Couldn't find what you were looking for?",
     "btn_contact": "💌 Send a 1:1 Inquiry"
+  },
+  "contact": {
+    "badge": "DOOLIA Help & Contact",
+    "title": "Do you have a story to share with DOOLIA?",
+    "subtitle": "We warmly listen to your printable suggestions, partnership inquiries, and feedback.",
+    "type_suggestion": "🎨 Suggest a Design",
+    "type_partnership": "🤝 Partnership",
+    "type_bug": "🛠️ Report a Bug",
+    "label_name": "Name",
+    "placeholder_name": "e.g. Alex",
+    "label_email": "Email",
+    "placeholder_email": "you@example.com",
+    "label_type": "Inquiry Type",
+    "label_content": "Message",
+    "placeholder_suggestion": "Feel free to suggest coloring page ideas like favorite animals, vehicles, or characters!",
+    "placeholder_partnership": "Please leave your partnership details and contact info. We will get back to you soon.",
+    "placeholder_bug": "Please describe the issue and your device/browser so we can resolve it quickly.",
+    "btn_submit": "💌 Send Message",
+    "btn_submitting": "Sending...",
+    "success_title": "Your message has been safely received!",
+    "success_desc": "The DOOLIA team will carefully review it and respond promptly.",
+    "btn_back_home": "🏠 Return to Home",
+    "error_name": "Please enter your name.",
+    "error_email": "Please enter a valid email address.",
+    "error_content": "Please enter your message.",
+    "error_submit": "We could not submit your message. Please try again."
   }
 }

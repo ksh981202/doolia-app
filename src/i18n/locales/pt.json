@@ -221,5 +221,31 @@
     "q4_desc_suffix": " e escolha 'Sugestão' ou 'Parceria'. Analisaremos sua mensagem com carinho!",
     "need_help": "Não encontrou o que procurava?",
     "btn_contact": "💌 Enviar uma mensagem"
+  },
+  "contact": {
+    "badge": "Canal de Contato DOOLIA",
+    "title": "Tem alguma ideia para compartilhar com a DOOLIA?",
+    "subtitle": "Ouvimos com carinho suas sugestões de desenhos, parcerias e qualquer feedback.",
+    "type_suggestion": "🎨 Sugerir Desenho",
+    "type_partnership": "🤝 Parceria",
+    "type_bug": "🛠️ Relatar Erro",
+    "label_name": "Nome",
+    "placeholder_name": "Ex: Lucas",
+    "label_email": "E-mail",
+    "placeholder_email": "you@example.com",
+    "label_type": "Tipo de Mensagem",
+    "label_content": "Mensagem",
+    "placeholder_suggestion": "Compartilhe ideias de desenhos que as crianças adoram, como animais ou carros!",
+    "placeholder_partnership": "Deixe sua proposta de parceria e contato. Responderemos em breve.",
+    "placeholder_bug": "Descreva o problema e o aparelho utilizado para resolvermos rapidamente.",
+    "btn_submit": "💌 Enviar Mensagem",
+    "btn_submitting": "Enviando...",
+    "success_title": "Sua mensagem foi recebida com sucesso!",
+    "success_desc": "A equipe DOOLIA irá analisar com carinho e responder em breve.",
+    "btn_back_home": "🏠 Voltar para o Início",
+    "error_name": "Por favor, informe seu nome.",
+    "error_email": "Informe um e-mail válido.",
+    "error_content": "Escreva sua mensagem.",
+    "error_submit": "Não foi possível enviar. Tente novamente."
   }
 }

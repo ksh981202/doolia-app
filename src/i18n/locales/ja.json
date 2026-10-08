@@ -221,5 +221,31 @@
     "q4_desc_suffix": " ページから「ぬりえのリクエスト」または「提携のお問い合わせ」を選択してお送りください。心を込めて確認いたします。",
     "need_help": "お探しの回答は見つかりましたか？",
     "btn_contact": "💌 お問い合わせはこちら"
+  },
+  "contact": {
+    "badge": "DOOLIA お問い合わせ窓口",
+    "title": "DOOLIAにお話ししたいことはありますか？",
+    "subtitle": "ぬりえのご提案、提携・コラボ、不具合報告など、どんな声にも温かく耳を傾けます。",
+    "type_suggestion": "🎨 ぬりえの提案",
+    "type_partnership": "🤝 提携・協業のお問い合わせ",
+    "type_bug": "🛠️ 不具合の報告",
+    "label_name": "お名前",
+    "placeholder_name": "例：山田花子",
+    "label_email": "メールアドレス",
+    "placeholder_email": "you@example.com",
+    "label_type": "お問い合わせの種類",
+    "label_content": "お問い合わせ内容",
+    "placeholder_suggestion": "お子様が好きなキャラクターや動物、乗り物など、作ってほしいぬりえのアイデアをご自由にお書きください！",
+    "placeholder_partnership": "提携のご提案やご連絡先をお知らせください。確認後、迅速にご返信いたします。",
+    "placeholder_bug": "発生した不具合とお使いの端末（スマートフォン/PCなど）をお知らせください。",
+    "btn_submit": "💌 メッセージを送信",
+    "btn_submitting": "送信中...",
+    "success_title": "メッセージを受け付けました！",
+    "success_desc": "DOOLIAチームが確認の上、迅速に対応いたします。",
+    "btn_back_home": "🏠 ホームに戻る",
+    "error_name": "お名前を入力してください。",
+    "error_email": "正しいメールアドレスを入力してください。",
+    "error_content": "お問い合わせ内容を入力してください。",
+    "error_submit": "送信に失敗しました。しばらくしてからもう一度お試しください。"
   }
 }

@@ -221,5 +221,31 @@
     "q4_desc_suffix": " et sélectionnez 'Suggestion' ou 'Partenariat'. Nous examinerons votre demande avec attention !",
     "need_help": "Vous n'avez pas trouvé votre réponse ?",
     "btn_contact": "💌 Poser une question"
+  },
+  "contact": {
+    "badge": "Contact & Support DOOLIA",
+    "title": "Avez-vous un message pour DOOLIA ?",
+    "subtitle": "Nous sommes à l'écoute de vos suggestions de coloriages, partenariats et retours.",
+    "type_suggestion": "🎨 Suggérer un dessin",
+    "type_partnership": "🤝 Partenariat",
+    "type_bug": "🛠️ Signaler un bug",
+    "label_name": "Nom",
+    "placeholder_name": "Ex : Marie",
+    "label_email": "E-mail",
+    "placeholder_email": "you@example.com",
+    "label_type": "Type de demande",
+    "label_content": "Message",
+    "placeholder_suggestion": "N'hésitez pas à nous proposer des idées de coloriages appréciés des enfants !",
+    "placeholder_partnership": "Laissez-nous vos coordonnées et votre proposition de partenariat.",
+    "placeholder_bug": "Décrivez le problème et l'appareil utilisé pour un traitement rapide.",
+    "btn_submit": "💌 Envoyer le message",
+    "btn_submitting": "Envoi en cours...",
+    "success_title": "Votre message a été bien reçu !",
+    "success_desc": "L'équipe DOOLIA l'examinera et vous répondra rapidement.",
+    "btn_back_home": "🏠 Retour à l'accueil",
+    "error_name": "Veuillez indiquer votre nom.",
+    "error_email": "Veuillez indiquer une adresse e-mail valide.",
+    "error_content": "Veuillez écrire votre message.",
+    "error_submit": "L'envoi a échoué. Veuillez réessayer."
   }
 }

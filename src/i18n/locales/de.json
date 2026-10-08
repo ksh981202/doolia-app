@@ -221,5 +221,31 @@
     "q4_desc_suffix": "-Seite und wählen Sie 'Vorschlag' oder 'Kooperation'. Wir prüfen jede Anfrage sorgfältig!",
     "need_help": "Haben Sie keine passende Antwort gefunden?",
     "btn_contact": "💌 1:1 Anfrage senden"
+  },
+  "contact": {
+    "badge": "DOOLIA Kontakt & Hilfe",
+    "title": "Möchten Sie etwas mit DOOLIA teilen?",
+    "subtitle": "Wir freuen uns über Vorschläge für Ausmalbilder, Kooperationen und Feedback.",
+    "type_suggestion": "🎨 Motiv vorschlagen",
+    "type_partnership": "🤝 Kooperation",
+    "type_bug": "🛠️ Fehler melden",
+    "label_name": "Name",
+    "placeholder_name": "z.B. Max",
+    "label_email": "E-Mail",
+    "placeholder_email": "you@example.com",
+    "label_type": "Art der Anfrage",
+    "label_content": "Nachricht",
+    "placeholder_suggestion": "Teilen Sie uns gerne Ideen für Ausmalbilder mit, die Kinder lieben!",
+    "placeholder_partnership": "Hinterlassen Sie Ihre Kontaktdaten. Wir melden uns zeitnah bei Ihnen.",
+    "placeholder_bug": "Beschreiben Sie das Problem und Ihr Gerät für eine schnelle Lösung.",
+    "btn_submit": "💌 Nachricht senden",
+    "btn_submitting": "Wird gesendet...",
+    "success_title": "Ihre Nachricht wurde erfolgreich empfangen!",
+    "success_desc": "Das DOOLIA-Team wird Ihr Anliegen zeitnah prüfen und antworten.",
+    "btn_back_home": "🏠 Zur Startseite",
+    "error_name": "Bitte geben Sie Ihren Namen ein.",
+    "error_email": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+    "error_content": "Bitte geben Sie Ihre Nachricht ein.",
+    "error_submit": "Senden fehlgeschlagen. Bitte versuchen Sie es erneut."
   }
 }

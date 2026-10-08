@@ -51,19 +51,17 @@ export function validateGeneralInquiry(input: SubmitGeneralInquiryInput) {
   const name = input.name.trim()
   const email = input.email.trim()
   const content = input.content.trim()
-  if (name.length < 2) return '이름을 입력해 주세요.'
-  if (name.length > 120) return '이름이 너무 깁니다.'
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return '올바른 이메일 주소를 입력해 주세요.'
-  if (!isInquiryType(input.type)) return '문의 유형을 선택해 주세요.'
-  if (content.length < 2) return '문의 내용을 입력해 주세요.'
-  if (content.length > 4000) return '문의 내용이 너무 깁니다.'
+  if (name.length < 2 || name.length > 120) return 'contact.error_name'
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'contact.error_email'
+  if (!isInquiryType(input.type)) return 'contact.label_type'
+  if (content.length < 2 || content.length > 4000) return 'contact.error_content'
   return ''
 }
 
 export async function submitGeneralInquiry(input: SubmitGeneralInquiryInput) {
   const error = validateGeneralInquiry(input)
   if (error) throw new Error(error)
-  if (!supabase) throw new Error('지금은 접수를 받을 수 없어요. 잠시 후 다시 시도해 주세요.')
+  if (!supabase) throw new Error('contact.error_submit')
 
   const payload = {
     name: input.name.trim(),
@@ -73,7 +71,7 @@ export async function submitGeneralInquiry(input: SubmitGeneralInquiryInput) {
   }
 
   const { error: insertError } = await supabase.from('general_inquiries').insert(payload)
-  if (insertError) throw new Error(insertError.message || '접수에 실패했습니다.')
+  if (insertError) throw new Error('contact.error_submit')
 }
 
 export async function listGeneralInquiries() {

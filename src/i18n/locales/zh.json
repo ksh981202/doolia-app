@@ -221,5 +221,31 @@
     "q4_desc_suffix": " 頁面選擇「圖畫建議」或「商務合作」填寫，我們會由專人用心評估回覆。",
     "need_help": "找不到您需要的解答嗎？",
     "btn_contact": "💌 填寫 1:1 線上諮詢"
+  },
+  "contact": {
+    "badge": "DOOLIA 意見回饋中心",
+    "title": "有什麼想法想與 DOOLIA 分享嗎？",
+    "subtitle": "著色圖建議、商務合作、使用問題等，我們都真誠傾聽。",
+    "type_suggestion": "🎨 著色圖建議",
+    "type_partnership": "🤝 商務合作",
+    "type_bug": "🛠️ 問題回報",
+    "label_name": "姓名",
+    "placeholder_name": "例如：陳小明",
+    "label_email": "電子郵件",
+    "placeholder_email": "you@example.com",
+    "label_type": "諮詢類型",
+    "label_content": "諮詢內容",
+    "placeholder_suggestion": "歡迎分享孩子們喜愛的角色、動物或交通工具等塗色圖創意！",
+    "placeholder_partnership": "請留下合作提議與聯絡方式，我們將儘速與您聯繫。",
+    "placeholder_bug": "請描述遇到的問題及您使用的設備，我們將儘快處理。",
+    "btn_submit": "💌 送出訊息",
+    "btn_submitting": "傳送中...",
+    "success_title": "您的訊息已成功送出！",
+    "success_desc": "DOOLIA 團隊將仔細審閱並儘快回覆您。",
+    "btn_back_home": "🏠 返回首頁",
+    "error_name": "請輸入姓名。",
+    "error_email": "請輸入有效的電子郵件地址。",
+    "error_content": "請輸入諮詢內容。",
+    "error_submit": "送出失敗，請稍後再試。"
   }
 }
