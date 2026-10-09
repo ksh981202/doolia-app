@@ -117,7 +117,7 @@ export function PrintableCard({ printable, index = Number.POSITIVE_INFINITY }: P
           )}
           loading={priority ? 'eager' : 'lazy'}
           decoding="async"
-          fetchpriority={priority ? 'high' : 'low'}
+          {...({ fetchpriority: priority ? 'high' : 'low' } as any)}
           onLoad={() => setLoadedSrc(src)}
           onError={(event) => {
             if (originalSrc && event.currentTarget.src !== originalSrc) {

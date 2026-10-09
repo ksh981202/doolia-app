@@ -106,7 +106,11 @@ export function Header() {
               )}
             >
               <span className="text-[17px] leading-none">{menu.icon}</span>
-              <span>{t(menu.labelKey, menu.id === 'animals' ? '🐶 귀여운 동물' : undefined)}</span>
+              <span>
+                {t(menu.labelKey, {
+                  defaultValue: menu.id === 'animals' ? '🐶 귀여운 동물' : '🎨 전체 도안',
+                })}
+              </span>
             </Link>
           ))}
         </nav>

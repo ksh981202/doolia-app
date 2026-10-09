@@ -43,7 +43,9 @@ export function NavMenu({
         >
           <span className="text-[18px] leading-none">{item.icon}</span>
           <span className={cn('font-bold leading-none', mobile ? 'text-[14.5px]' : 'text-[16px]')}>
-            {t(item.labelKey, item.id === 'animals' ? '🐶 귀여운 동물' : undefined)}
+            {t(item.labelKey, {
+              defaultValue: item.id === 'animals' ? '🐶 귀여운 동물' : '🎨 전체 도안',
+            })}
           </span>
         </Link>
       ))}

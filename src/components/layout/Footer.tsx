@@ -56,7 +56,9 @@ export function Footer() {
                 {CATEGORY_LINKS.map((item) => (
                   <li key={item.to}>
                     <Link to={item.to} className={MENU_LINK}>
-                      {t(item.key, item.key === 'footer.animals' ? '🐶 귀여운 동물' : undefined)}
+                      {t(item.key, {
+                        defaultValue: item.key === 'footer.animals' ? '🐶 귀여운 동물' : '',
+                      })}
                     </Link>
                   </li>
                 ))}
