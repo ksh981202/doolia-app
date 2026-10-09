@@ -250,5 +250,8 @@
     "error_email": "Veuillez indiquer une adresse e-mail valide.",
     "error_content": "Veuillez écrire votre message.",
     "error_submit": "L'envoi a échoué. Veuillez réessayer."
+  },
+  "printable": {
+    "btn_print_pdf_floating": "🖨️ Imprimer PDF (A4)"
   }
 }

@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
 const CONTACT_EMAIL = 'k981202@naver.com'
 
@@ -103,20 +104,32 @@ export function AboutPage() {
         </div>
       </section>
 
-      <section className="w-full max-w-full overflow-hidden border-t border-slate-100 bg-slate-50 px-4 py-20 text-center">
-        <h3 className="text-lg font-light tracking-wide text-slate-900 sm:text-xl">Contact DOOLIA</h3>
-        <p className="mt-2 text-sm font-light text-slate-500">
-          {isKo
-            ? '둘리아와 함께하는 창의적인 여정에 대한 문의는 언제든 편하게 남겨주세요.'
-            : 'We would love to hear from parents, educators, and creators worldwide.'}
-        </p>
-        <div className="mt-4">
-          <a
-            href={`mailto:${CONTACT_EMAIL}`}
-            className="text-sm font-medium text-emerald-600 underline underline-offset-4 transition-colors hover:text-emerald-700"
+      <section className="w-full max-w-full overflow-hidden border-t border-slate-100 bg-slate-50 px-4 py-16 sm:py-20">
+        <div className="mx-auto max-w-lg rounded-3xl border border-emerald-100/80 bg-gradient-to-b from-emerald-50/70 to-white p-7 text-center shadow-sm sm:p-10">
+          <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-[26px] shadow-sm ring-1 ring-slate-100 sm:h-16 sm:w-16 sm:text-[28px]">
+            💌
+          </div>
+          <h3 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">Contact DOOLIA</h3>
+          <p className="mx-auto mt-3 max-w-md break-keep text-[14.5px] leading-relaxed text-slate-500 sm:mt-4 sm:text-[15.5px]">
+            {isKo
+              ? '도안 제안, 제휴 마케팅, 서비스 문의 등 둘리아와 함께하는 창의적인 여정에 대한 의견을 언제든 남겨주세요.'
+              : 'Share printable ideas, partnership inquiries, or service questions anytime — we would love to hear about your creative journey with DOOLIA.'}
+          </p>
+          <Link
+            to="/contact"
+            className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 py-3.5 text-[15px] font-bold text-white shadow-sm transition hover:bg-emerald-700 active:scale-[0.99] sm:mt-7 sm:w-auto sm:px-8 sm:text-[16px]"
           >
-            {CONTACT_EMAIL}
-          </a>
+            {isKo ? '✉️ 1:1 온라인 문의 남기기 →' : '✉️ Send a 1:1 online inquiry →'}
+          </Link>
+          <p className="mt-4 text-xs text-slate-400 sm:text-[13px]">
+            {isKo ? '직접 이메일 발송: ' : 'Or email us directly: '}
+            <a
+              href={`mailto:${CONTACT_EMAIL}`}
+              className="font-medium text-slate-500 underline-offset-2 transition-colors hover:text-emerald-700 hover:underline"
+            >
+              {CONTACT_EMAIL}
+            </a>
+          </p>
         </div>
       </section>
     </div>

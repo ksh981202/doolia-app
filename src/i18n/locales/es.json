@@ -250,5 +250,8 @@
     "error_email": "Introduce un correo electrónico válido.",
     "error_content": "Escribe tu mensaje.",
     "error_submit": "No se pudo enviar. Inténtalo de nuevo."
+  },
+  "printable": {
+    "btn_print_pdf_floating": "🖨️ Imprimir PDF (Carta / A4)"
   }
 }

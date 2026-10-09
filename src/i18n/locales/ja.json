@@ -250,5 +250,8 @@
     "error_email": "正しいメールアドレスを入力してください。",
     "error_content": "お問い合わせ内容を入力してください。",
     "error_submit": "送信に失敗しました。しばらくしてからもう一度お試しください。"
+  },
+  "printable": {
+    "btn_print_pdf_floating": "🖨️ A4 PDFを印刷する"
   }
 }

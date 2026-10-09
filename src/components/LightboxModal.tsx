@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 type LightboxModalProps = {
   open: boolean
@@ -9,6 +10,7 @@ type LightboxModalProps = {
 }
 
 export function LightboxModal({ open, src, title, onClose, onPrint }: LightboxModalProps) {
+  const { t } = useTranslation()
   useEffect(() => {
     if (!open) return
     const onKeyDown = (event: KeyboardEvent) => {
@@ -55,7 +57,7 @@ export function LightboxModal({ open, src, title, onClose, onPrint }: LightboxMo
           }}
           className="absolute bottom-6 left-1/2 flex -translate-x-1/2 cursor-pointer items-center gap-2 rounded-full bg-emerald-600 px-5 py-3 text-sm font-extrabold text-white shadow-xl shadow-emerald-600/30 transition hover:bg-emerald-500"
         >
-          🖨️ A4 PDF 인쇄하기
+          {t('printable.btn_print_pdf_floating', '🖨️ Print PDF (US Letter / A4)')}
         </button>
       ) : null}
     </div>

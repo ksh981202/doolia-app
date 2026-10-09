@@ -250,5 +250,8 @@
     "error_email": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
     "error_content": "Bitte geben Sie Ihre Nachricht ein.",
     "error_submit": "Senden fehlgeschlagen. Bitte versuchen Sie es erneut."
+  },
+  "printable": {
+    "btn_print_pdf_floating": "🖨️ A4 PDF drucken"
   }
 }

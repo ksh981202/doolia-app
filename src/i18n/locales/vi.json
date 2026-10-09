@@ -250,5 +250,8 @@
     "error_email": "Vui lòng nhập email hợp lệ.",
     "error_content": "Vui lòng nhập nội dung.",
     "error_submit": "Gửi không thành công. Vui lòng thử lại."
+  },
+  "printable": {
+    "btn_print_pdf_floating": "🖨️ In PDF A4"
   }
 }

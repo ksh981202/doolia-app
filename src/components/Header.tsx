@@ -1,26 +1,18 @@
-import { ChevronLeft, Menu, Search, Settings, X } from 'lucide-react'
+import { Menu, Search, Settings, X } from 'lucide-react'
 import { type FormEvent, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { isLocalAdminHost } from '@/admin/AdminGuard'
+import { HEADER_NAV_ITEMS, isHeaderNavActive } from '@/components/header/nav'
 import { LanguageSwitcher } from '@/components/header/LanguageSwitcher'
 import { Logo } from '@/components/header/Logo'
 import { NavMenu } from '@/components/header/NavMenu'
 import { DEFAULT_CATEGORY_SLUG, categoryPath } from '@/shared/config/catalog'
-import { cn } from '@/shared/lib/cn'
-
-function isDetailPath(pathname: string) {
-  return (
-    pathname.startsWith('/printable/') ||
-    pathname.startsWith('/printables/') ||
-    /^\/situation\/[^/]+\/[^/]+/.test(pathname) ||
-    /^\/parenting-tips\/[^/]+/.test(pathname)
-  )
-}
+import { TOUCH_ICON, cn } from '@/shared/lib/cn'
 
 const iconButtonClass =
-  'flex h-8.5 w-8.5 items-center justify-center rounded-full bg-slate-100 text-slate-600 transition-colors hover:bg-slate-200 sm:h-9 sm:w-9'
+  `${TOUCH_ICON} rounded-full border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-50 hover:text-emerald-700`
 
 export function Header() {
   const { t } = useTranslation()
@@ -33,7 +25,6 @@ export function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const searchInputRef = useRef<HTMLInputElement>(null)
   const isCategory = location.pathname.startsWith('/category')
-  const isDetailPage = isDetailPath(location.pathname)
 
   useEffect(() => {
     setQuery(urlQuery)
@@ -95,73 +86,43 @@ export function Header() {
     applyQuery(query)
   }
 
-  const openSearch = () => {
-    setIsMobileMenuOpen(false)
-    setIsSearchOpen(true)
-  }
-
   return (
-    <header className="no-print sticky top-0 z-40 w-full border-b border-slate-100 bg-white/95 shadow-2xs backdrop-blur-md">
-      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:h-18 sm:px-6 lg:px-8">
-        <div className="flex items-center">
+    <header className="no-print sticky top-0 z-40 w-full border-b border-gray-100 bg-white/90 backdrop-blur-md">
+      <div className="mx-auto grid h-16 w-full max-w-7xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-4 sm:h-20 sm:gap-4 sm:px-6 lg:px-8">
+        <div className="justify-self-start">
           <Logo />
         </div>
 
-        <nav className="hidden items-center gap-6 md:flex" aria-label="주요 메뉴">
-          <Link
-            to="/category"
-            className="text-[14.5px] font-bold text-slate-700 transition-colors hover:text-emerald-600"
-          >
-            {t('nav.coloringAll', '색칠도안 전체')}
-          </Link>
-          <Link
-            to="/contact"
-            className="text-[14.5px] font-bold text-slate-700 transition-colors hover:text-emerald-600"
-          >
-            {t('footer.contact')}
-          </Link>
+        <nav className="hidden items-center justify-center gap-5 md:flex lg:gap-8" aria-label="주요 메뉴">
+          {HEADER_NAV_ITEMS.map((menu) => (
+            <Link
+              key={menu.id}
+              to={menu.path}
+              className={cn(
+                'flex shrink-0 items-center gap-1.5 whitespace-nowrap text-[14.5px] font-bold text-slate-800 transition-colors hover:text-emerald-600',
+                isHeaderNavActive(menu, location.pathname, params) ? 'text-emerald-600' : '',
+              )}
+            >
+              <span className="text-[16px] leading-none">{menu.icon}</span>
+              <span>{t(menu.labelKey)}</span>
+            </Link>
+          ))}
         </nav>
 
-        <div className="flex items-center gap-1.5 sm:gap-2.5">
-          {isDetailPage ? (
-            <button
-              type="button"
-              onClick={() => navigate(-1)}
-              aria-label="뒤로가기"
-              className={iconButtonClass}
-            >
-              <ChevronLeft size={16} strokeWidth={2.5} />
-            </button>
-          ) : null}
-
+        <div className="flex items-center justify-self-end gap-2">
           <button
             type="button"
-            onClick={openSearch}
+            onClick={() => {
+              setIsMobileMenuOpen(false)
+              setIsSearchOpen(true)
+            }}
             aria-label={t('home.searchBtn', '검색')}
             aria-expanded={isSearchOpen}
-            className={iconButtonClass}
+            className={cn(iconButtonClass, 'max-sm:hidden')}
           >
-            <Search size={16} strokeWidth={2.2} />
+            <Search size={18} />
           </button>
-
-          <div className="shrink-0">
-            <LanguageSwitcher />
-          </div>
-
-          <button
-            type="button"
-            className={cn(iconButtonClass, 'text-slate-700 md:hidden')}
-            aria-expanded={isMobileMenuOpen}
-            aria-controls="mobile-nav-drawer"
-            aria-label={isMobileMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
-            onClick={() => {
-              setIsSearchOpen(false)
-              setIsMobileMenuOpen((open) => !open)
-            }}
-          >
-            <Menu size={18} strokeWidth={2.2} />
-          </button>
-
+          <LanguageSwitcher />
           {isLocalAdminHost() ? (
             <button
               type="button"
@@ -170,9 +131,22 @@ export function Header() {
               onClick={() => navigate('/admin')}
               className={iconButtonClass}
             >
-              <Settings size={16} strokeWidth={2.2} />
+              <Settings size={18} />
             </button>
           ) : null}
+          <button
+            type="button"
+            className={cn(iconButtonClass, 'md:hidden')}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-nav-drawer"
+            aria-label={isMobileMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
+            onClick={() => {
+              setIsSearchOpen(false)
+              setIsMobileMenuOpen((open) => !open)
+            }}
+          >
+            <Menu size={18} />
+          </button>
         </div>
       </div>
 
@@ -190,7 +164,7 @@ export function Header() {
                   onSubmit={submitSearch}
                   className="flex items-center gap-2 rounded-2xl border border-slate-100 bg-white p-2.5 shadow-2xl"
                 >
-                  <Search size={18} className="ml-2 shrink-0 text-slate-400" strokeWidth={2.2} />
+                  <Search size={18} className="ml-2 shrink-0 text-slate-400" />
                   <input
                     ref={searchInputRef}
                     type="search"
@@ -235,9 +209,7 @@ export function Header() {
               >
                 <div>
                   <div className="mb-6 flex items-center justify-between">
-                    <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="inline-block">
-                      <img src="/doolia-logo.png" alt="DOOLIA" className="h-7.5 w-auto object-contain" />
-                    </Link>
+                    <Logo onNavigate={() => setIsMobileMenuOpen(false)} />
                     <button
                       type="button"
                       onClick={() => setIsMobileMenuOpen(false)}

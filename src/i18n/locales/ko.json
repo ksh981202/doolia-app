@@ -250,5 +250,8 @@
     "error_email": "올바른 이메일 주소를 입력해 주세요.",
     "error_content": "문의 내용을 입력해 주세요.",
     "error_submit": "접수에 실패했습니다. 잠시 후 다시 시도해 주세요."
+  },
+  "printable": {
+    "btn_print_pdf_floating": "🖨️ A4 PDF 인쇄하기"
   }
 }

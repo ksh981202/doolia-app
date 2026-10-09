@@ -250,5 +250,8 @@
     "error_email": "請輸入有效的電子郵件地址。",
     "error_content": "請輸入諮詢內容。",
     "error_submit": "送出失敗，請稍後再試。"
+  },
+  "printable": {
+    "btn_print_pdf_floating": "🖨️ 列印 A4 PDF"
   }
 }

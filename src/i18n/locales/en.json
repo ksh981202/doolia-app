@@ -250,5 +250,8 @@
     "error_email": "Please enter a valid email address.",
     "error_content": "Please enter your message.",
     "error_submit": "We could not submit your message. Please try again."
+  },
+  "printable": {
+    "btn_print_pdf_floating": "🖨️ Print PDF (US Letter / A4)"
   }
 }

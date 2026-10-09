@@ -137,6 +137,21 @@ export function CategoryPage() {
   }, [isLoading, items.length, query])
 
   const destSlug = typeSlug ?? categoryQuerySlug
+  const categoryAlias = params.get('category') ? CATALOG_SLUG_ALIASES[params.get('category') ?? ''] : undefined
+  if (browseAll && categoryAlias) {
+    const next = new URLSearchParams(params)
+    next.delete('category')
+    if (categoryAlias.tag) next.set('theme', categoryAlias.tag)
+    const search = next.toString()
+    return <Navigate to={`${categoryPath(categoryAlias.slug)}${search ? `?${search}` : ''}`} replace />
+  }
+  if (browseAll && params.get('tab') === 'age') {
+    const next = new URLSearchParams(params)
+    next.delete('tab')
+    if (!next.get('age')) next.set('age', '2-3')
+    const search = next.toString()
+    return <Navigate to={`${categoryPath(DEFAULT_CATEGORY_SLUG)}${search ? `?${search}` : ''}`} replace />
+  }
   if (browseAll && destSlug) {
     const next = new URLSearchParams(params)
     next.delete('category')
