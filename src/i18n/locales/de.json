@@ -11,7 +11,8 @@
     "coloringAll": "Alle Ausmalbilder",
     "imagination": "Fantasie",
     "byAge": "Nach Alter",
-    "popular": "Beliebt"
+    "popular": "Beliebt",
+    "animals": "Süße Tiere"
   },
   "language": "Sprache",
   "header": {
@@ -159,6 +160,7 @@
     "imagination": "✨ Fantasieland",
     "byAge": "👶 Nach Alter",
     "popular": "🔥 Gerade beliebt",
+    "animals": "🐶 Süße Tiere",
     "about": "Über DOOLIA",
     "faq": "Häufige Fragen",
     "privacy": "Datenschutz",

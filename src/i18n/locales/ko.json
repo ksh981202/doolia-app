@@ -11,7 +11,8 @@
     "coloringAll": "색칠도안 전체",
     "imagination": "상상나라",
     "byAge": "연령별",
-    "popular": "인기 도안"
+    "popular": "인기 도안",
+    "animals": "귀여운 동물"
   },
   "language": "언어",
   "header": {
@@ -159,6 +160,7 @@
     "imagination": "✨ 엉뚱발랄 상상나라",
     "byAge": "👶 연령별 맞춤도안",
     "popular": "🔥 지금 인기 도안",
+    "animals": "🐶 귀여운 동물",
     "about": "둘리아(DOOLIA) 소개",
     "faq": "자주 묻는 질문",
     "privacy": "개인정보처리방침",

@@ -93,18 +93,20 @@ export function Header() {
           <Logo />
         </div>
 
-        <nav className="hidden items-center justify-center gap-5 md:flex lg:gap-8" aria-label="주요 메뉴">
+        <nav className="hidden items-center justify-center gap-3 md:flex lg:gap-4" aria-label="주요 메뉴">
           {HEADER_NAV_ITEMS.map((menu) => (
             <Link
               key={menu.id}
               to={menu.path}
               className={cn(
-                'flex shrink-0 items-center gap-1.5 whitespace-nowrap text-[14.5px] font-bold text-slate-800 transition-colors hover:text-emerald-600',
-                isHeaderNavActive(menu, location.pathname, params) ? 'text-emerald-600' : '',
+                'inline-flex items-center gap-2 rounded-2xl border border-slate-200/70 bg-slate-50/90 px-3.5 py-2 text-[15px] font-bold text-slate-700 shadow-2xs transition-all duration-200 hover:scale-[1.02] hover:border-emerald-300 hover:bg-emerald-50/80 hover:text-emerald-700 hover:shadow-xs lg:text-[15.5px]',
+                isHeaderNavActive(menu, location.pathname, params)
+                  ? 'border-emerald-300 bg-emerald-50/80 text-emerald-700 shadow-xs'
+                  : '',
               )}
             >
-              <span className="text-[16px] leading-none">{menu.icon}</span>
-              <span>{t(menu.labelKey)}</span>
+              <span className="text-[17px] leading-none">{menu.icon}</span>
+              <span>{t(menu.labelKey, menu.id === 'animals' ? '🐶 귀여운 동물' : undefined)}</span>
             </Link>
           ))}
         </nav>

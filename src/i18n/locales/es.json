@@ -11,7 +11,8 @@
     "coloringAll": "Todos los dibujos para colorear",
     "imagination": "Imaginación",
     "byAge": "Por edad",
-    "popular": "Populares"
+    "popular": "Populares",
+    "animals": "Animales lindos"
   },
   "language": "Idioma",
   "header": {
@@ -159,6 +160,7 @@
     "imagination": "✨ País de la imaginación",
     "byAge": "👶 Por edad",
     "popular": "🔥 Populares ahora",
+    "animals": "🐶 Animales lindos",
     "about": "Sobre DOOLIA",
     "faq": "Preguntas frecuentes",
     "privacy": "Política de privacidad",

@@ -83,8 +83,8 @@ export function TopDownloads() {
 
         {items.length > 0 ? (
           <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-            {items.map((printable) => (
-              <PrintableCard key={printable.id} printable={printable} />
+            {items.map((printable, index) => (
+              <PrintableCard key={printable.id} printable={printable} index={index} />
             ))}
           </div>
         ) : null}

@@ -11,7 +11,8 @@
     "coloringAll": "全部著色圖",
     "imagination": "奇想國度",
     "byAge": "依年齡",
-    "popular": "熱門"
+    "popular": "熱門",
+    "animals": "可愛動物"
   },
   "language": "語言",
   "header": {
@@ -159,6 +160,7 @@
     "imagination": "✨ 奇想國度",
     "byAge": "👶 依年齡挑選",
     "popular": "🔥 熱門著色圖",
+    "animals": "🐶 可愛動物",
     "about": "關於 DOOLIA",
     "faq": "常見問題",
     "privacy": "隱私權政策",

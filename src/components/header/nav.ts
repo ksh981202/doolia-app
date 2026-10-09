@@ -20,10 +20,10 @@ export const HEADER_NAV_ITEMS = [
     path: '/category?tab=age',
   },
   {
-    id: 'popular',
-    labelKey: 'nav.popular',
-    icon: '🔥',
-    path: '/category?sort=popular',
+    id: 'animals',
+    labelKey: 'nav.animals',
+    icon: '🐶',
+    path: '/category?theme=animals',
   },
 ] as const
 
@@ -35,14 +35,14 @@ export function isHeaderNavActive(item: HeaderNavItem, pathname: string, search:
   const theme = search.get('theme') ?? search.get('tag') ?? search.get('category') ?? ''
   const tab = search.get('tab') ?? ''
   const age = search.get('age') ?? ''
-  const sort = search.get('sort') ?? ''
   const hasAge = tab === 'age' || age === '2-3' || age === '4-5' || age === '6-7'
   const isImagination = theme === 'imagination' || pathname.includes('/imagination')
+  const isAnimals = theme === 'animals' || pathname.includes('/animals')
 
   if (item.id === 'imagination') return isImagination
-  if (item.id === 'age') return hasAge && !isImagination
-  if (item.id === 'popular') return sort === 'popular' && !isImagination && !hasAge
-  return !isImagination && !hasAge && sort !== 'popular'
+  if (item.id === 'age') return hasAge && !isImagination && !isAnimals
+  if (item.id === 'animals') return isAnimals && !isImagination && !hasAge
+  return !isImagination && !hasAge && !isAnimals
 }
 
 export const CATEGORY_NAV = CATALOG_GROUPS.map((group) => ({

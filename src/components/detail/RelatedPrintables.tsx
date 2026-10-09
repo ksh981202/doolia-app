@@ -38,8 +38,8 @@ export function RelatedPrintables({
         ) : null}
       </div>
       <div className="grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-4">
-        {related.map((printable) => (
-          <PrintableCard key={printable.id} printable={printable} variant="catalog" />
+        {related.map((printable, index) => (
+          <PrintableCard key={printable.id} printable={printable} variant="catalog" index={index} />
         ))}
       </div>
     </section>

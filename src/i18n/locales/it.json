@@ -11,7 +11,8 @@
     "coloringAll": "Tutti i disegni da colorare",
     "imagination": "Immaginazione",
     "byAge": "Per età",
-    "popular": "Popolari"
+    "popular": "Popolari",
+    "animals": "Animali carini"
   },
   "language": "Lingua",
   "header": {
@@ -159,6 +160,7 @@
     "imagination": "✨ Terra dell'immaginazione",
     "byAge": "👶 Per età",
     "popular": "🔥 Popolari ora",
+    "animals": "🐶 Animali carini",
     "about": "Chi è DOOLIA",
     "faq": "Domande frequenti",
     "privacy": "Privacy",

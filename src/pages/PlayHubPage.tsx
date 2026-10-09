@@ -315,8 +315,8 @@ export function PlayHubPage() {
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-            {popular.map((printable) => (
-              <PrintableCard key={printable.id} printable={printable} variant="catalog" />
+            {popular.map((printable, index) => (
+              <PrintableCard key={printable.id} printable={printable} variant="catalog" index={index} />
             ))}
           </div>
         )}

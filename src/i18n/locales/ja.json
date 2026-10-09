@@ -11,7 +11,8 @@
     "coloringAll": "ぬりえ一覧",
     "imagination": "想像の国",
     "byAge": "年齢別",
-    "popular": "人気"
+    "popular": "人気",
+    "animals": "かわいい動物"
   },
   "language": "言語",
   "header": {
@@ -159,6 +160,7 @@
     "imagination": "✨ ふしぎな想像の国",
     "byAge": "👶 年齢別ぬりえ",
     "popular": "🔥 人気のぬりえ",
+    "animals": "🐶 かわいい動物",
     "about": "DOOLIAについて",
     "faq": "よくある質問",
     "privacy": "プライバシーポリシー",

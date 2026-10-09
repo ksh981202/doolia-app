@@ -11,7 +11,8 @@
     "coloringAll": "Tất cả tranh tô màu",
     "imagination": "Tưởng tượng",
     "byAge": "Theo tuổi",
-    "popular": "Phổ biến"
+    "popular": "Phổ biến",
+    "animals": "Động vật dễ thương"
   },
   "language": "Ngôn ngữ",
   "header": {
@@ -159,6 +160,7 @@
     "imagination": "✨ Xứ sở tưởng tượng",
     "byAge": "👶 Theo độ tuổi",
     "popular": "🔥 Đang phổ biến",
+    "animals": "🐶 Động vật dễ thương",
     "about": "Giới thiệu DOOLIA",
     "faq": "Câu hỏi thường gặp",
     "privacy": "Chính sách bảo mật",

@@ -11,7 +11,8 @@
     "coloringAll": "All coloring pages",
     "imagination": "Imagination",
     "byAge": "By age",
-    "popular": "Popular"
+    "popular": "Popular",
+    "animals": "Cute animals"
   },
   "language": "Language",
   "header": {
@@ -159,6 +160,7 @@
     "imagination": "✨ Imagination Land",
     "byAge": "👶 Browse by Age",
     "popular": "🔥 Popular Now",
+    "animals": "🐶 Cute animals",
     "about": "About DOOLIA",
     "faq": "FAQ",
     "privacy": "Privacy Policy",

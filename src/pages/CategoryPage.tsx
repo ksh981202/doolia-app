@@ -145,6 +145,10 @@ export function CategoryPage() {
     const search = next.toString()
     return <Navigate to={`${categoryPath(categoryAlias.slug)}${search ? `?${search}` : ''}`} replace />
   }
+  if (browseAll && params.get('theme') && params.get('theme') !== 'all') {
+    const search = params.toString()
+    return <Navigate to={`${categoryPath(DEFAULT_CATEGORY_SLUG)}${search ? `?${search}` : ''}`} replace />
+  }
   if (browseAll && params.get('tab') === 'age') {
     const next = new URLSearchParams(params)
     next.delete('tab')
@@ -371,11 +375,12 @@ export function CategoryPage() {
             </div>
           ) : (
             <div className={CARD_GRID}>
-              {items.map((printable) => (
+              {items.map((printable, index) => (
                 <PrintableCard
                   key={printable.slug || printable.id}
                   printable={printable}
                   variant="catalog"
+                  index={index}
                 />
               ))}
             </div>

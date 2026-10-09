@@ -7,7 +7,7 @@ const CATEGORY_LINKS = [
   { to: '/category/coloring-pages', key: 'footer.allColoring' as const },
   { to: '/category/coloring-pages?theme=imagination', key: 'footer.imagination' as const },
   { to: '/category/coloring-pages?age=2-3', key: 'footer.byAge' as const },
-  { to: '/category/coloring-pages?sort=popular', key: 'footer.popular' as const },
+  { to: '/category?theme=animals', key: 'footer.animals' as const },
 ]
 
 const LEGAL_LINKS = [
@@ -56,7 +56,7 @@ export function Footer() {
                 {CATEGORY_LINKS.map((item) => (
                   <li key={item.to}>
                     <Link to={item.to} className={MENU_LINK}>
-                      {t(item.key)}
+                      {t(item.key, item.key === 'footer.animals' ? '🐶 귀여운 동물' : undefined)}
                     </Link>
                   </li>
                 ))}

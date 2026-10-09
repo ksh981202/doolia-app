@@ -32,8 +32,8 @@ export function PrintableGrid() {
 
   return (
     <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-      {data.map((printable) => (
-        <PrintableCard key={printable.id} printable={printable} />
+      {data.map((printable, index) => (
+        <PrintableCard key={printable.id} printable={printable} index={index} />
       ))}
     </div>
   )

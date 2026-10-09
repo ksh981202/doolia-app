@@ -1,7 +1,9 @@
+import { useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { getCategoryThemes } from '@/shared/config/categories'
 import { printablePath } from '@/shared/config/catalog'
+import { cn } from '@/shared/lib/cn'
 import { pickLocalized } from '@/shared/lib/detailCopy'
 import { matchesQuery } from '@/services/printableService'
 import { getDisplayImageUrl } from '@/shared/utils/printableAssets'
@@ -11,6 +13,7 @@ import type { Printable } from '@/types/printable'
 type PrintableCardProps = {
   printable: Printable
   variant?: 'home' | 'catalog'
+  index?: number
 }
 
 function displayImage(printable: Printable) {
@@ -55,7 +58,7 @@ function resolveThemeOption(printable: Printable) {
   )
 }
 
-export function PrintableCard({ printable }: PrintableCardProps) {
+export function PrintableCard({ printable, index = Number.POSITIVE_INFINITY }: PrintableCardProps) {
   const { t, i18n } = useTranslation()
   const locale = i18n.language || i18n.resolvedLanguage || 'ko'
   const title = pickLocalized(printable, 'title', locale) || printable.title
@@ -67,6 +70,17 @@ export function PrintableCard({ printable }: PrintableCardProps) {
     printable.theme_en ||
     t(`categories.${printable.category}`, '')
   const { likesCount, viewsCount } = usePrintableSocial(printable)
+  const src = getDisplayImageUrl(displayImage(printable), 640)
+  const originalSrc = displayImage(printable)
+  const priority = index < 8
+  const imgRef = useRef<HTMLImageElement>(null)
+  const [loadedSrc, setLoadedSrc] = useState('')
+  const loaded = loadedSrc === src
+
+  useLayoutEffect(() => {
+    const img = imgRef.current
+    if (img?.complete && img.naturalWidth > 0) setLoadedSrc(src)
+  }, [src])
 
   return (
     <Link
@@ -80,19 +94,37 @@ export function PrintableCard({ printable }: PrintableCardProps) {
         img.src = getDisplayImageUrl(line, 640)
       }}
     >
-      <div className="relative flex aspect-[3/4] items-center justify-center overflow-hidden bg-slate-50/40 p-4">
+      <div className="relative flex aspect-[3/4] items-center justify-center overflow-hidden bg-slate-100 p-4">
+        <div
+          className={cn(
+            'absolute inset-0 bg-slate-100 transition-opacity duration-300',
+            loaded ? 'pointer-events-none opacity-0' : 'animate-pulse opacity-100',
+          )}
+          aria-hidden
+        />
         <span className="pointer-events-none absolute top-12 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-full bg-slate-900/80 px-2.5 py-1 text-[11px] font-bold text-white opacity-0 shadow-sm backdrop-blur-xs transition-opacity duration-300 group-hover:opacity-100">
           🖨️ {t('detail.previewBw', '흑백 도안 미리보기')}
         </span>
         <img
-          src={getDisplayImageUrl(displayImage(printable), 640)}
+          ref={imgRef}
+          src={src}
           alt={title}
-          className="h-full w-full object-contain transition-all duration-300 ease-in-out group-hover:scale-105 group-hover:contrast-125 group-hover:grayscale"
-          loading="lazy"
+          width={480}
+          height={640}
+          className={cn(
+            'relative z-[1] h-full w-full object-contain transition-all duration-300 ease-in-out group-hover:scale-105 group-hover:contrast-125 group-hover:grayscale',
+            loaded ? 'opacity-100' : 'opacity-0',
+          )}
+          loading={priority ? 'eager' : 'lazy'}
           decoding="async"
+          fetchpriority={priority ? 'high' : 'low'}
+          onLoad={() => setLoadedSrc(src)}
           onError={(event) => {
-            const original = displayImage(printable)
-            if (original && event.currentTarget.src !== original) event.currentTarget.src = original
+            if (originalSrc && event.currentTarget.src !== originalSrc) {
+              event.currentTarget.src = originalSrc
+              return
+            }
+            setLoadedSrc(src)
           }}
         />
       </div>

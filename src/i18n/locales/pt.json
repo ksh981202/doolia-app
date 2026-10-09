@@ -11,7 +11,8 @@
     "coloringAll": "Todos os desenhos para colorir",
     "imagination": "Imaginação",
     "byAge": "Por idade",
-    "popular": "Populares"
+    "popular": "Populares",
+    "animals": "Animais fofos"
   },
   "language": "Idioma",
   "header": {
@@ -159,6 +160,7 @@
     "imagination": "✨ Terra da imaginação",
     "byAge": "👶 Por idade",
     "popular": "🔥 Populares agora",
+    "animals": "🐶 Animais fofos",
     "about": "Sobre a DOOLIA",
     "faq": "Perguntas frequentes",
     "privacy": "Política de privacidade",

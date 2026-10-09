@@ -11,7 +11,8 @@
     "coloringAll": "Tous les coloriages",
     "imagination": "Imagination",
     "byAge": "Par âge",
-    "popular": "Populaires"
+    "popular": "Populaires",
+    "animals": "Animaux mignons"
   },
   "language": "Langue",
   "header": {
@@ -159,6 +160,7 @@
     "imagination": "✨ Pays de l'imagination",
     "byAge": "👶 Par âge",
     "popular": "🔥 Populaires maintenant",
+    "animals": "🐶 Animaux mignons",
     "about": "À propos de DOOLIA",
     "faq": "Questions fréquentes",
     "privacy": "Politique de confidentialité",
