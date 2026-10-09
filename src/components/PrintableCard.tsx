@@ -86,7 +86,7 @@ export function PrintableCard({ printable, index = Number.POSITIVE_INFINITY }: P
     <Link
       to={printablePath(printable.slug || printable.id)}
       state={{ printable }}
-      className="group block cursor-pointer overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-2xs transition-all hover:-translate-y-0.5 hover:border-emerald-500/50 hover:shadow-md"
+      className="group block min-w-0 cursor-pointer overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-2xs transition-all hover:-translate-y-0.5 hover:border-emerald-500/50 hover:shadow-md"
       onPointerDown={() => {
         const line = printable.image_bw_url || printable.line_art_url
         if (!line) return
@@ -129,16 +129,16 @@ export function PrintableCard({ printable, index = Number.POSITIVE_INFINITY }: P
         />
       </div>
 
-      <div className="flex flex-1 flex-col justify-between bg-white p-3.5 sm:p-4">
-        <div>
-          <p className="mb-1 line-clamp-1 text-[12.5px] font-bold leading-tight tracking-tight text-emerald-600 sm:text-[13px]">
+      <div className="flex min-w-0 flex-1 flex-col justify-between bg-white p-3.5 sm:p-4">
+        <div className="min-w-0">
+          <p className="mb-1 line-clamp-1 min-w-0 break-words text-[12.5px] font-bold leading-tight tracking-tight text-emerald-600 sm:text-[13px]">
             {theme ? `${age} · ${theme}` : age}
           </p>
-          <h3 className="line-clamp-2 break-words text-[16px] font-bold leading-snug tracking-tight text-slate-800 transition-colors group-hover:text-emerald-600 sm:text-[17px]">
+          <h3 className="line-clamp-2 min-w-0 break-words text-[16px] font-bold leading-snug tracking-tight text-slate-800 transition-colors group-hover:text-emerald-600 sm:text-[17px]">
             {title}
           </h3>
         </div>
-        <div className="mt-2.5 flex items-center justify-between border-t border-slate-100/90 pt-2 text-slate-500">
+        <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100/90 pt-2 text-slate-500">
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1 text-[13.5px] font-semibold leading-none transition-colors hover:text-rose-500">
               <span className="text-[15px] leading-none text-rose-500">♥</span>

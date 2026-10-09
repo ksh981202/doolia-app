@@ -115,19 +115,33 @@ export function PrintableDetailPage() {
   return (
     <div className="bg-page">
       <main className="py-6 sm:py-8">
-        <nav className="mb-6 flex items-center gap-2 text-sm font-medium text-slate-500" aria-label="Breadcrumb">
-          {crumbs.map((crumb, index) => (
-            <span key={`${crumb.label}-${index}`} className="inline-flex min-w-0 items-center gap-2">
-              {index > 0 ? <ChevronRight size={14} className="shrink-0 text-slate-400" /> : null}
-              {crumb.to ? (
-                <Link to={crumb.to} className="shrink-0 hover:text-emerald-600">
-                  {crumb.label}
-                </Link>
-              ) : (
-                <span className="truncate font-bold text-slate-800">{crumb.label}</span>
-              )}
-            </span>
-          ))}
+        <nav
+          className="mb-6 flex flex-wrap items-center gap-1.5 overflow-hidden py-1.5 text-xs text-slate-500"
+          aria-label="Breadcrumb"
+        >
+          {crumbs.map((crumb, index) => {
+            const isLast = index === crumbs.length - 1
+            return (
+              <span key={`${crumb.label}-${index}`} className="inline-flex min-w-0 max-w-full items-center gap-1.5">
+                {index > 0 ? <ChevronRight size={14} className="shrink-0 text-slate-400" /> : null}
+                {crumb.to ? (
+                  <Link to={crumb.to} className="min-w-0 max-w-[40vw] truncate hover:text-emerald-600 sm:max-w-none">
+                    {crumb.label}
+                  </Link>
+                ) : (
+                  <span
+                    className={
+                      isLast
+                        ? 'min-w-0 max-w-[130px] truncate font-bold text-slate-800 sm:max-w-xs md:max-w-md'
+                        : 'min-w-0 truncate'
+                    }
+                  >
+                    {crumb.label}
+                  </span>
+                )}
+              </span>
+            )
+          })}
         </nav>
 
         <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-12">

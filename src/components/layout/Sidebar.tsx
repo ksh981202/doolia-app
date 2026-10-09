@@ -95,13 +95,13 @@ export function Sidebar({ activeSlug, onNavigate }: SidebarProps) {
         </span>
       </Link>
 
-      <nav className="flex min-h-0 flex-1 flex-col gap-1.5 overflow-y-auto" aria-label="카테고리">
+      <nav className="flex min-h-0 flex-1 flex-col gap-1.5 overflow-y-auto" aria-label={t('category.menu', { defaultValue: '카테고리' })}>
         {CATALOG_NAV_GROUPS.map((group) => (
           <AccordionCard
             key={group.id}
             open={isOpen(group.id)}
             icon={group.icon}
-            title={group.name}
+            title={t(group.labelKey ?? `category.${group.id}`, { defaultValue: group.name })}
             onToggle={() => toggle(group.id)}
           >
             {group.items.map((item) => (
@@ -112,7 +112,7 @@ export function Sidebar({ activeSlug, onNavigate }: SidebarProps) {
                 icon={item.icon}
                 onClick={onNavigate}
               >
-                {t(`categories.${item.id}`, item.name)}
+                {t(item.labelKey ?? `categories.${item.id}`, { defaultValue: item.name })}
               </SubMenuLink>
             ))}
           </AccordionCard>
@@ -171,7 +171,7 @@ function SubMenuLink({
           />
         </span>
       )}
-      <span className="tracking-tight">{children}</span>
+      <span className="min-w-0 break-words leading-snug tracking-tight">{children}</span>
     </Link>
   )
 }
@@ -194,14 +194,14 @@ function AccordionCard({
       <button
         type="button"
         onClick={onToggle}
-        className="flex w-full items-center justify-between rounded-xl px-2.5 py-2.5 text-[15px] font-bold tracking-tight text-slate-800 transition-colors hover:text-emerald-700"
+        className="flex w-full min-w-0 items-center justify-between gap-2 rounded-xl px-2.5 py-2.5 text-[15px] font-bold tracking-tight text-slate-800 transition-colors hover:text-emerald-700"
         aria-expanded={open}
       >
-        <span className="flex items-center">
+        <span className="flex min-w-0 items-center">
           <span className="mr-2.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-sm">
             {icon}
           </span>
-          <span>{title}</span>
+          <span className="min-w-0 break-words leading-snug">{title}</span>
         </span>
         <span className="text-xs text-slate-400">{open ? '▲' : '▼'}</span>
       </button>

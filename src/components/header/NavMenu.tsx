@@ -30,10 +30,10 @@ export function NavMenu({
           to={item.path}
           onClick={() => onSelect?.(item)}
           className={cn(
-            'flex items-center gap-2 font-bold transition-all',
+            'flex min-w-0 items-center gap-2 font-bold transition-all',
             mobile
               ? 'w-full justify-start gap-3 rounded-xl px-3.5 py-3 text-left text-[14.5px] text-slate-800 hover:bg-emerald-50 hover:text-emerald-700'
-              : 'shrink-0 rounded-xl px-3.5 py-2 text-[16px] text-slate-800 hover:bg-slate-50 hover:text-emerald-600',
+              : 'min-w-0 rounded-xl px-3.5 py-2 text-[16px] text-slate-800 hover:bg-slate-50 hover:text-emerald-600',
             isHeaderNavActive(item, pathname, search)
               ? mobile
                 ? 'bg-emerald-50 text-emerald-700'
@@ -42,7 +42,7 @@ export function NavMenu({
           )}
         >
           <span className="text-[18px] leading-none">{item.icon}</span>
-          <span className={cn('font-bold leading-none', mobile ? 'text-[14.5px]' : 'text-[16px]')}>
+          <span className={cn('min-w-0 break-words font-bold leading-snug', mobile ? 'text-[14.5px]' : 'text-[16px]')}>
             {t(item.labelKey, {
               defaultValue: item.id === 'animals' ? '🐶 귀여운 동물' : '🎨 전체 도안',
             })}

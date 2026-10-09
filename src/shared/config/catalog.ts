@@ -102,12 +102,14 @@ export type CatalogNavItem = {
   name: string
   path: string
   icon?: string
+  labelKey?: string
 }
 
 export type CatalogNavGroup = {
   id: string
   name: string
   icon: string
+  labelKey?: string
   items: CatalogNavItem[]
 }
 
@@ -116,16 +118,18 @@ export const CATALOG_NAV_GROUPS: CatalogNavGroup[] = [
   {
     id: 'kids-age',
     name: '키즈 연령별',
+    labelKey: 'category.byAge',
     icon: '👶',
     items: [
-      { id: 'age-2-3', name: '2~3세 (영아 첫 색칠)', path: '/category/coloring-pages?age=2-3' },
-      { id: 'age-4-5', name: '4~5세 (유아 창의 발달)', path: '/category/coloring-pages?age=4-5' },
-      { id: 'age-6-7', name: '6~7세+ (예비초등 집중)', path: '/category/coloring-pages?age=6-7' },
+      { id: 'age-2-3', name: '2~3세 (영아 첫 색칠)', labelKey: 'category.age_toddler', path: '/category/coloring-pages?age=2-3' },
+      { id: 'age-4-5', name: '4~5세 (유아 창의 발달)', labelKey: 'category.age_preschool', path: '/category/coloring-pages?age=4-5' },
+      { id: 'age-6-7', name: '6~7세+ (예비초등 집중)', labelKey: 'category.age_school', path: '/category/coloring-pages?age=6-7' },
     ],
   },
   {
     id: 'kids-theme',
     name: '키즈 테마별',
+    labelKey: 'category.byTheme',
     icon: '🎨',
     items: KIDS_THEME_NAV.map((item) => ({
       id: item.id,
@@ -137,6 +141,7 @@ export const CATALOG_NAV_GROUPS: CatalogNavGroup[] = [
   {
     id: 'senior-art',
     name: '온가족 힐링 컬러링',
+    labelKey: 'category.healingColoring',
     icon: '🌿',
     items: HEALING_THEMES.map((item) => ({
       id: item.id,

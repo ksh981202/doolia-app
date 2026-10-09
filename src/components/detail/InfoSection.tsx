@@ -40,27 +40,27 @@ export function InfoSection({ printable }: { printable: Printable }) {
   return (
     <aside className="min-w-0 w-full">
       <div>
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center rounded-xl border border-amber-200/60 bg-amber-50 px-3 py-1.5 text-[13px] font-bold text-amber-800">
+        <div className="mb-2 flex flex-wrap items-center gap-2">
+          <span className="inline-flex max-w-full items-center rounded-xl border border-amber-200/60 bg-amber-50 px-3 py-1.5 text-[13px] font-bold leading-snug break-words text-amber-800">
             {age}
           </span>
-          <span className="inline-flex items-center rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-1.5 text-[13px] font-bold text-emerald-700">
+          <span className="inline-flex max-w-full items-center rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-1.5 text-[13px] font-bold leading-snug break-words text-emerald-700">
             {category}
           </span>
         </div>
-        <h1 className="my-2.5 break-all text-[22px] font-extrabold leading-snug tracking-tight text-slate-900 sm:text-[26px] md:text-[28px]">
+        <h1 className="my-2.5 text-xl font-extrabold leading-snug break-words text-slate-900 sm:text-2xl lg:text-3xl">
           {title}
         </h1>
-        <div className="mb-5 flex items-center gap-3.5 text-[13px] font-medium text-slate-500 sm:mb-6">
-          <div className="flex items-center gap-1.5">
-            <Heart className={cn('h-4 w-4 text-rose-500', isLiked && 'fill-rose-500')} />
-            <span>
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-2 text-[13px] font-medium text-slate-500 sm:mb-6">
+          <div className="flex min-w-0 items-center gap-1.5">
+            <Heart className={cn('h-4 w-4 shrink-0 text-rose-500', isLiked && 'fill-rose-500')} />
+            <span className="min-w-0 break-words">
               {likesCount} {t('detail.likes')}
             </span>
           </div>
-          <div className="flex items-center gap-1.5">
-            <Eye className="h-4 w-4 text-slate-400" />
-            <span>
+          <div className="flex min-w-0 items-center gap-1.5">
+            <Eye className="h-4 w-4 shrink-0 text-slate-400" />
+            <span className="min-w-0 break-words">
               {viewsCount.toLocaleString(locale)} {t('detail.views')}
             </span>
           </div>
@@ -156,7 +156,7 @@ export function InfoSection({ printable }: { printable: Printable }) {
       </div>
 
       <div className="mt-3.5 rounded-xl border border-slate-200/80 bg-slate-50 p-3 text-slate-500 shadow-2xs">
-        <div className="mb-2 flex items-center justify-between gap-2 border-b border-slate-200/60 pb-2">
+        <div className="mb-2 flex flex-wrap items-center justify-between gap-2 border-b border-slate-200/60 pb-2">
           <div className="flex min-w-0 items-center gap-2 text-[14px] font-bold text-slate-800">
             <span className="text-[15px] leading-none" aria-hidden>
               🛡️

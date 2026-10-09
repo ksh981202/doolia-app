@@ -93,20 +93,20 @@ export function Header() {
           <Logo />
         </div>
 
-        <nav className="hidden items-center justify-center gap-3 md:flex lg:gap-4" aria-label="주요 메뉴">
+        <nav className="hidden min-w-0 items-center justify-center gap-2 overflow-hidden md:flex lg:gap-4" aria-label="주요 메뉴">
           {HEADER_NAV_ITEMS.map((menu) => (
             <Link
               key={menu.id}
               to={menu.path}
               className={cn(
-                'inline-flex items-center gap-2 rounded-2xl border border-slate-200/70 bg-slate-50/90 px-3.5 py-2 text-[15px] font-bold text-slate-700 shadow-2xs transition-all duration-200 hover:scale-[1.02] hover:border-emerald-300 hover:bg-emerald-50/80 hover:text-emerald-700 hover:shadow-xs lg:text-[15.5px]',
+                'inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-2xl border border-slate-200/70 bg-slate-50/90 px-2.5 py-2 text-[13.5px] font-bold text-slate-700 shadow-2xs transition-all duration-200 hover:scale-[1.02] hover:border-emerald-300 hover:bg-emerald-50/80 hover:text-emerald-700 hover:shadow-xs lg:gap-2 lg:px-3.5 lg:text-[15.5px]',
                 isHeaderNavActive(menu, location.pathname, params)
                   ? 'border-emerald-300 bg-emerald-50/80 text-emerald-700 shadow-xs'
                   : '',
               )}
             >
-              <span className="text-[17px] leading-none">{menu.icon}</span>
-              <span>
+              <span className="shrink-0 text-[17px] leading-none">{menu.icon}</span>
+              <span className="min-w-0 truncate">
                 {t(menu.labelKey, {
                   defaultValue: menu.id === 'animals' ? '🐶 귀여운 동물' : '🎨 전체 도안',
                 })}

@@ -23,7 +23,7 @@ const CARD =
 const MENU_HEADING =
   'mb-4 flex items-center gap-1.5 text-[13.5px] font-extrabold uppercase tracking-wider text-slate-900'
 const MENU_LINK =
-  'flex items-center gap-2.5 text-[14.5px] font-bold text-slate-700 transition-colors hover:text-emerald-600 sm:text-[15px]'
+  'flex min-w-0 items-center gap-2.5 break-words text-[14.5px] font-bold leading-snug text-slate-700 transition-colors hover:text-emerald-600 sm:text-[15px]'
 
 export function Footer() {
   const { t } = useTranslation()

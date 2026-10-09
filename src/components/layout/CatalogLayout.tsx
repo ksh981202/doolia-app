@@ -1,5 +1,6 @@
 import { Menu } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Outlet, useParams, useSearchParams } from 'react-router-dom'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { getCatalogTopic } from '@/shared/config/catalog'
@@ -7,6 +8,7 @@ import { isSituationId } from '@/shared/config/playSituations'
 import { resolveTypeSlug } from '@/shared/config/smartFilters'
 
 export function CatalogLayout() {
+  const { t } = useTranslation()
   const { slug, situationId } = useParams()
   const [params] = useSearchParams()
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -26,11 +28,11 @@ export function CatalogLayout() {
           <button
             type="button"
             onClick={() => setSidebarOpen(true)}
-            aria-label="카테고리 메뉴"
+            aria-label={t('category.menu', { defaultValue: '카테고리 메뉴' })}
             className="mb-4 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-sm font-bold text-slate-800 shadow-sm lg:hidden"
           >
             <Menu size={16} />
-            <span>카테고리</span>
+            <span>{t('category.menu', { defaultValue: '카테고리' })}</span>
           </button>
           <Outlet />
         </div>
@@ -41,7 +43,7 @@ export function CatalogLayout() {
           <button
             type="button"
             className="absolute inset-0 bg-ink/40"
-            aria-label="메뉴 닫기"
+            aria-label={t('category.closeMenu', { defaultValue: '메뉴 닫기' })}
             onClick={() => setSidebarOpen(false)}
           />
           <div className="relative h-full w-64 min-w-64 shadow-2xl lg:w-72">

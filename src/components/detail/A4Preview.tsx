@@ -148,29 +148,29 @@ export function A4Preview({ printable }: { printable: Printable }) {
             onZoom={() => setIsZoomed(true)}
           />
 
-          <div className="relative grid w-full grid-cols-2 gap-3">
+          <div className="relative flex w-full flex-wrap items-center justify-between gap-2">
             <button
               type="button"
               onClick={toggleLike}
               className={cn(
-                'flex h-11 cursor-pointer items-center justify-center gap-2 rounded-xl border bg-white text-[14px] font-medium text-slate-700 transition-all hover:bg-slate-50 active:scale-[0.99]',
+                'flex h-11 min-w-0 flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl border bg-white px-2 text-[14px] font-medium text-slate-700 transition-all hover:bg-slate-50 active:scale-[0.99]',
                 isLiked ? 'border-rose-200 bg-rose-50/80 text-rose-600' : 'border-slate-200',
               )}
               aria-pressed={isLiked}
               aria-label={likesLabel}
             >
-              <Heart className={cn('h-4 w-4 text-rose-500', isLiked && 'fill-rose-500')} />
-              <span>
+              <Heart className={cn('h-4 w-4 shrink-0 text-rose-500', isLiked && 'fill-rose-500')} />
+              <span className="min-w-0 truncate">
                 {likesLabel} {likesCount}
               </span>
             </button>
             <button
               type="button"
               onClick={() => void share()}
-              className="flex h-11 cursor-pointer items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white text-[14px] font-medium text-slate-700 transition-all hover:bg-slate-50 active:scale-[0.99]"
+              className="flex h-11 min-w-0 flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-2 text-[14px] font-medium text-slate-700 transition-all hover:bg-slate-50 active:scale-[0.99]"
             >
-              <Share2 className="h-4 w-4 text-slate-600" />
-              <span>{t('detail.share', '공유하기')}</span>
+              <Share2 className="h-4 w-4 shrink-0 text-slate-600" />
+              <span className="min-w-0 truncate">{t('detail.share', '공유하기')}</span>
             </button>
             {shareMsg ? (
               <p

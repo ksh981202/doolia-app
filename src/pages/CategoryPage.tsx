@@ -29,11 +29,11 @@ import {
 } from '@/shared/config/smartFilters'
 import { cn } from '@/shared/lib/cn'
 
-const CARD_GRID = 'mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4'
+const CARD_GRID = 'mt-6 grid min-w-0 grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4'
 
 function filterChipClass(active: boolean) {
   return cn(
-    'inline-flex shrink-0 items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-[13.5px] font-medium transition-all sm:text-sm',
+    'inline-flex max-w-full items-center gap-1.5 rounded-xl px-3 py-1.5 text-left text-[12.5px] font-medium leading-snug break-words sm:px-3.5 sm:text-sm',
     active
       ? 'bg-emerald-600 font-bold text-white shadow-sm'
       : 'border border-slate-200/90 bg-white text-slate-700 hover:bg-slate-50',
@@ -49,6 +49,7 @@ function SortSelect({
   onChange: (value: string) => void
   align?: 'lg'
 }) {
+  const { t } = useTranslation()
   return (
     <label
       className={cn(
@@ -56,14 +57,14 @@ function SortSelect({
         align === 'lg' ? 'lg:pt-5' : 'sm:pt-0.5',
       )}
     >
-      정렬
+      {t('category.sort', { defaultValue: '정렬' })}
       <select
         value={value}
         onChange={(event) => onChange(event.target.value)}
         className="h-10 rounded-full border border-line bg-white px-3 text-xs font-bold text-ink sm:text-sm"
       >
-        <option value="popular">인기순</option>
-        <option value="latest">최신순</option>
+        <option value="popular">{t('category.sortPopular', { defaultValue: '인기순' })}</option>
+        <option value="latest">{t('category.sortLatest', { defaultValue: '최신순' })}</option>
       </select>
     </label>
   )
@@ -93,7 +94,8 @@ export function CategoryPage() {
   const sortParam = params.get('sort')
   const sort = sortParam === 'popular' || sortParam === 'latest' ? sortParam : browseAll ? 'latest' : 'popular'
   const query = params.get('q') ?? ''
-  const ageLabel = AGE_FILTERS.find((item) => item.id === age)?.label ?? '전체'
+  const ageFilter = AGE_FILTERS.find((item) => item.id === age)
+  const ageLabel = t(ageFilter?.labelKey ?? 'category.all', { defaultValue: ageFilter?.label ?? '전체' })
 
   const items = useMemo(() => {
     if (!match && !browseAll) return []
@@ -178,14 +180,16 @@ export function CategoryPage() {
   }
 
   const title = isSenior
-    ? healingTheme?.name ?? t('categories.senior-art', match?.topic.label ?? '온가족 힐링 컬러링')
+    ? healingTheme
+      ? t(`categories.${healingTheme.id}`, { defaultValue: healingTheme.name })
+      : t('category.healingColoring', { defaultValue: match?.topic.label ?? '온가족 힐링 컬러링' })
     : match
       ? parentTheme && parentTheme.id !== 'all'
-        ? t(`categories.${parentTheme.id}`, parentTheme.name)
-        : t(`categories.${match.topic.id}`, match.topic.label)
+        ? t(`categories.${parentTheme.id}`, { defaultValue: parentTheme.name })
+        : t(`categories.${match.topic.id}`, { defaultValue: match.topic.label })
       : age === 'all'
-        ? t('catalog.allCategory', '전체 색칠도안 (ALL)')
-        : `${ageLabel} 맞춤 도안`
+        ? t('catalog.allCategory', { defaultValue: '전체 색칠도안 (ALL)' })
+        : t('category.ageCustom', { defaultValue: '{{age}} 맞춤 도안', age: ageLabel })
   const emoji = isSenior
     ? healingTheme?.icon || match?.topic.emoji || '🌿'
     : match
@@ -193,31 +197,33 @@ export function CategoryPage() {
       : age === 'all'
         ? '🎨'
         : '👶'
+  const homeCrumb = { label: t('category.home', { defaultValue: '홈' }), to: '/' }
+  const groupLabel =
+    match?.group.id === 'healing'
+      ? t('category.healingColoring', { defaultValue: match.group.label })
+      : t('category.byTheme', { defaultValue: match?.group.label ?? '키즈 테마별' })
   const crumbs = isSenior
     ? [
-        { label: '홈', to: '/' },
+        homeCrumb,
         {
-          label: '온가족 힐링 컬러링',
+          label: t('category.healingColoring', { defaultValue: '온가족 힐링 컬러링' }),
           ...(healingTheme ? { to: categoryPath('senior-art') } : {}),
         },
-        ...(healingTheme ? [{ label: healingTheme.name }] : []),
+        ...(healingTheme ? [{ label: t(`categories.${healingTheme.id}`, { defaultValue: healingTheme.name }) }] : []),
       ]
     : match
       ? [
-          { label: '홈', to: '/' },
-          { label: match.group.label, to: '/category' },
+          homeCrumb,
+          { label: groupLabel, to: '/category' },
           ...(parentTheme && parentTheme.id !== 'all'
-            ? [{ label: parentTheme.name }]
-            : [{ label: match.topic.label }]),
+            ? [{ label: t(`categories.${parentTheme.id}`, { defaultValue: parentTheme.name }) }]
+            : [{ label: t(`categories.${match.topic.id}`, { defaultValue: match.topic.label }) }]),
         ]
       : age === 'all'
-        ? [
-            { label: '홈', to: '/' },
-            { label: '전체 색칠도안' },
-          ]
+        ? [homeCrumb, { label: t('category.allColoring', { defaultValue: '전체 색칠도안' }) }]
         : [
-            { label: '홈', to: '/' },
-            { label: '전체 색칠도안', to: '/category' },
+            homeCrumb,
+            { label: t('category.allColoring', { defaultValue: '전체 색칠도안' }), to: '/category' },
             { label: ageLabel },
           ]
 
@@ -253,7 +259,7 @@ export function CategoryPage() {
           {isSenior ? (
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0 flex-1">
-                <p className="mb-1.5 text-sm font-bold text-slate-700">세부 주제</p>
+                <p className="mb-1.5 text-sm font-bold text-slate-700">{t('category.subtheme', { defaultValue: '세부 주제' })}</p>
                 <ThemeFilter
                   value={themeLocked && showSubChips ? sub : theme}
                   onChange={(id) => setFilter(themeLocked && showSubChips ? 'sub' : 'theme', id)}
@@ -280,8 +286,8 @@ export function CategoryPage() {
                 )}
               >
                 <div className="min-w-0 flex-1">
-                  <p className="mb-1.5 text-sm font-bold text-slate-700">연령</p>
-                  <div className="flex flex-wrap items-center gap-1.5" role="tablist" aria-label="연령 필터">
+                  <p className="mb-1.5 text-sm font-bold text-slate-700">{t('category.age', { defaultValue: '연령' })}</p>
+                  <div className="flex min-w-0 flex-wrap items-center gap-1.5" role="tablist" aria-label={t('category.age', { defaultValue: '연령 필터' })}>
                     {AGE_FILTERS.map((item) => (
                       <button
                         key={item.id}
@@ -291,7 +297,7 @@ export function CategoryPage() {
                         onClick={() => setFilter('age', item.id)}
                         className={filterChipClass(age === item.id)}
                       >
-                        {item.label}
+                        {t(item.labelKey, { defaultValue: item.label })}
                       </button>
                     ))}
                   </div>
@@ -310,7 +316,7 @@ export function CategoryPage() {
               {themeLocked ? (
                 showSubChips ? (
                   <div className="min-w-0">
-                    <p className="mb-1.5 text-sm font-bold text-slate-700">세부 주제</p>
+                    <p className="mb-1.5 text-sm font-bold text-slate-700">{t('category.subtheme', { defaultValue: '세부 주제' })}</p>
                     <ThemeFilter
                       value={sub}
                       onChange={(id) => setFilter('sub', id)}
@@ -323,7 +329,7 @@ export function CategoryPage() {
               ) : (
                 <div className="min-w-0 space-y-3">
                   <div>
-                    <p className="mb-1.5 text-sm font-bold text-slate-700">주제</p>
+                    <p className="mb-1.5 text-sm font-bold text-slate-700">{t('category.theme', { defaultValue: '주제' })}</p>
                     <ThemeFilter
                       value={theme}
                       onChange={(id) => setFilter('theme', id)}
@@ -333,9 +339,16 @@ export function CategoryPage() {
                   </div>
                   {showSubChips ? (
                     <div className="mt-3 rounded-2xl border border-emerald-100/80 bg-emerald-50/50 p-3.5">
-                      <p className="mb-2 flex items-center gap-1.5 text-xs font-bold text-emerald-800 sm:text-sm">
-                        <span aria-hidden>{parentTheme?.icon || '✨'}</span>
-                        <span>{parentTheme?.name || '이 테마'} 세부 도안 모아보기</span>
+                      <p className="mb-2 flex min-w-0 items-start gap-1.5 text-xs font-bold leading-snug text-emerald-800 sm:text-sm">
+                        <span aria-hidden className="shrink-0">{parentTheme?.icon || '✨'}</span>
+                        <span className="min-w-0 break-words">
+                          {t('category.themeGather', {
+                            defaultValue: '{{theme}} 세부 도안 모아보기',
+                            theme: parentTheme
+                              ? t(`categories.${parentTheme.id}`, { defaultValue: parentTheme.name })
+                              : t('category.theme', { defaultValue: '이 테마' }),
+                          })}
+                        </span>
                       </p>
                       <ThemeFilter
                         value={sub}
@@ -362,15 +375,15 @@ export function CategoryPage() {
             <div className="rounded-2xl border border-dashed border-line bg-white px-6 py-12 text-center">
               <p className="text-sm font-semibold text-muted sm:text-base">
                 {match
-                  ? '해당 카테고리의 도안이 곧 업데이트됩니다!'
-                  : '해당 조건의 도안이 아직 없습니다. 다른 필터를 선택해 보세요!'}
+                  ? t('category.emptyCategory', { defaultValue: '해당 카테고리의 도안이 곧 업데이트됩니다!' })
+                  : t('category.emptyFilter', { defaultValue: '해당 조건의 도안이 아직 없습니다. 다른 필터를 선택해 보세요!' })}
               </p>
               <button
                 type="button"
                 onClick={resetFilters}
                 className="mt-5 inline-flex h-11 items-center justify-center rounded-full bg-emerald-600 px-5 text-sm font-bold text-white hover:bg-emerald-700"
               >
-                필터 초기화
+                {t('category.resetFilters', { defaultValue: '필터 초기화' })}
               </button>
             </div>
           ) : (

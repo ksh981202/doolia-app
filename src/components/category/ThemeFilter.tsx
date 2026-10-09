@@ -10,9 +10,10 @@ type ThemeFilterProps = {
   showExpandCaret?: boolean
 }
 
-function chipClass(active: boolean) {
+function chipClass(active: boolean, variant: 'parent' | 'sub') {
   return cn(
-    'inline-flex min-h-[44px] shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-4 text-[13.5px] transition-all',
+    'inline-flex min-h-[44px] max-w-full items-center gap-1 rounded-full px-3 text-left text-[12.5px] leading-snug transition-all sm:px-4 sm:text-[13.5px]',
+    variant === 'sub' ? 'shrink-0 whitespace-nowrap' : 'whitespace-normal break-words',
     active
       ? 'border border-emerald-600 bg-emerald-600 font-bold text-white shadow-sm shadow-emerald-600/20'
       : 'border border-slate-200/90 bg-white font-medium text-slate-600 shadow-[0_1px_2px_rgba(0,0,0,0.03)] hover:border-emerald-300 hover:bg-emerald-50/40 hover:text-emerald-700',
@@ -44,7 +45,11 @@ export function ThemeFilter({
           : 'flex flex-wrap content-start items-center gap-1.5',
       )}
       role="tablist"
-      aria-label={variant === 'sub' ? '세부 주제 필터' : '주제 필터'}
+      aria-label={
+        variant === 'sub'
+          ? t('category.subtheme', { defaultValue: '세부 주제 필터' })
+          : t('category.theme', { defaultValue: '주제 필터' })
+      }
     >
       {chips.map((item) => (
         <button
@@ -53,7 +58,7 @@ export function ThemeFilter({
           role="tab"
           aria-selected={value === item.id}
           onClick={() => onChange(item.id)}
-          className={chipClass(value === item.id)}
+          className={chipClass(value === item.id, variant)}
         >
           {chipLabel(item, variant, t(`categories.${item.id}`, item.name))}
           {expandCaret && value === item.id && item.id !== 'all' ? (
