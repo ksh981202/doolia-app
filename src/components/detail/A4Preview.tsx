@@ -50,7 +50,7 @@ export function A4Preview({ printable }: { printable: Printable }) {
   const [isZoomed, setIsZoomed] = useState(false)
   const [shareMsg, setShareMsg] = useState('')
   const printingRef = useRef(false)
-  const { isLiked, likesCount, toggleLike } = usePrintableSocial(printable)
+  const { isLiked, toggleLike } = usePrintableSocial(printable)
   const setViewMode = useDownloadStore((state) => state.setViewMode)
 
   useEffect(() => {
@@ -64,7 +64,7 @@ export function A4Preview({ printable }: { printable: Printable }) {
   const previewFallback = mode === 'color' ? colorSrc : lineSrc
   const title = printable.title || printable.title_ko
   const printAlt = seoPrintableAlt(printable.title_ko || title)
-  const likesLabel = t('detail.likes', '좋아요')
+  const likeLabel = t('detail.like', '좋아요')
 
   useEffect(() => {
     prefetchImage(getDisplayImageUrl(lineSrc, THUMB_WIDTH))
@@ -155,11 +155,11 @@ export function A4Preview({ printable }: { printable: Printable }) {
                 isLiked ? 'border-rose-200 bg-rose-50/80 text-rose-600' : 'border-slate-200',
               )}
               aria-pressed={isLiked}
-              aria-label={likesLabel}
+              aria-label={likeLabel}
             >
               <Heart className={cn('h-4 w-4 shrink-0 text-rose-500', isLiked && 'fill-rose-500')} />
               <span className="min-w-0 truncate">
-                {likesLabel} {likesCount}
+                {likeLabel}
               </span>
             </button>
             <button

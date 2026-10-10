@@ -4,7 +4,6 @@ import { incrementPrintableLikes, incrementPrintableViews } from '@/services/pri
 import type { Printable } from '@/types/printable'
 
 const LIKE_PREFIX = 'doolia_likes_'
-const VIEW_PREFIX = 'doolia_viewed_'
 
 function storageKey(printable: Printable) {
   return printable.slug || printable.id
@@ -30,22 +29,6 @@ function writeLiked(keys: string[], liked: boolean) {
     }
   } catch {
     /* ignore quota / private mode */
-  }
-}
-
-function hasSessionView(key: string) {
-  try {
-    return sessionStorage.getItem(`${VIEW_PREFIX}${key}`) === 'true'
-  } catch {
-    return false
-  }
-}
-
-function markSessionView(key: string) {
-  try {
-    sessionStorage.setItem(`${VIEW_PREFIX}${key}`, 'true')
-  } catch {
-    /* ignore */
   }
 }
 
@@ -81,23 +64,26 @@ export const usePrintableEngagement = create<EngagementState>((set, get) => ({
     const key = storageKey(printable)
     get().hydrate(printable)
     const nextLiked = !get().liked[key]
+    // 낙관적 업데이트: ID 가드 없이 화면에 즉시 반영
     set((state) => ({
       liked: { ...state.liked, [key]: nextLiked },
       likes: { ...state.likes, [key]: Math.max(0, (state.likes[key] ?? 0) + (nextLiked ? 1 : -1)) },
     }))
+    // 로컬 스토리지에 상태 저장 (새로고침 후 유지)
     writeLiked(likeKeys(printable), nextLiked)
+    // 비동기 RPC 호출 (ID 가드 제거, 화면 상태와 무관하게 백그라운드 실행)
     void incrementPrintableLikes(printable.id, nextLiked ? 1 : -1)
   },
 
   recordView: (printable) => {
     const key = storageKey(printable)
     get().hydrate(printable)
-    if (hasSessionView(key)) return
-    markSessionView(key)
+    // 낙관적 업데이트: SessionStorage 가드 없이 화면에 즉시 반영
     set((state) => ({
       views: { ...state.views, [key]: (state.views[key] ?? Math.max(0, printable.views ?? 0)) + 1 },
     }))
-    void incrementPrintableViews(printable.id)
+    // 비동기 RPC 호출 (ID 가드 제거, 화면 상태와 무관하게 백그라운드 실행)
+    void incrementPrintableViews(printable.id || printable.slug)
   },
 }))
 

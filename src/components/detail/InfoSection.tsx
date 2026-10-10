@@ -28,7 +28,7 @@ const TEXT_WRAP = 'min-w-0 break-words [overflow-wrap:anywhere]'
 export function InfoSection({ printable }: { printable: Printable }) {
   const { t, i18n } = useTranslation()
   const openModal = useDownloadStore((state) => state.openModal)
-  const { isLiked, likesCount, viewsCount } = usePrintableSocial(printable)
+  const { isLiked, viewsCount, toggleLike } = usePrintableSocial(printable)
   const locale = i18n.language || i18n.resolvedLanguage || 'ko'
   const title = detailTitle(printable, locale)
   const age = detailAgeLabel(printable, locale)
@@ -52,12 +52,18 @@ export function InfoSection({ printable }: { printable: Printable }) {
           {title}
         </h1>
         <div className="mb-5 flex flex-wrap items-center justify-start gap-4 text-[13px] font-medium text-slate-500 sm:mb-6 sm:gap-5">
-          <div className="flex min-w-0 items-center gap-1.5">
+          <button
+            type="button"
+            onClick={() => toggleLike()}
+            className="flex min-w-0 items-center gap-1.5 cursor-pointer hover:text-rose-600 transition-colors"
+            aria-label={isLiked ? '좋아요 취소' : '좋아요'}
+            aria-pressed={isLiked}
+          >
             <Heart className={cn('h-4 w-4 shrink-0 text-rose-500', isLiked && 'fill-rose-500')} />
             <span className="min-w-0 break-words">
-              {likesCount} {t('detail.likes')}
+              {t('detail.likes')}
             </span>
-          </div>
+          </button>
           <span className="shrink-0 text-slate-300">·</span>
           <div className="flex min-w-0 items-center gap-1.5">
             <Eye className="h-4 w-4 shrink-0 text-slate-400" />

@@ -47,6 +47,7 @@ export function PrintableDetailPage() {
 
   const relatedPool = useMemo(() => catalog.data ?? DEMO_PRINTABLES, [catalog.data])
   const recordView = usePrintableEngagement((state) => state.recordView)
+  const hydrate = usePrintableEngagement((state) => state.hydrate)
 
   useLayoutEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
@@ -54,8 +55,9 @@ export function PrintableDetailPage() {
 
   useEffect(() => {
     if (!printable) return
+    hydrate(printable)
     recordView(printable)
-  }, [printable, recordView])
+  }, [printable, recordView, hydrate])
 
   useEffect(() => {
     if (!printable) return

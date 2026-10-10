@@ -235,12 +235,16 @@ export async function fetchPrintableById(id: string): Promise<Printable | null> 
 }
 
 export async function incrementPrintableViews(id: string) {
-  if (!supabase || id.startsWith('demo-') || id.startsWith('mock-')) return
-  await supabase.rpc('increment_printable_views', { p_id: id })
+  if (!supabase) return
+  try {
+    await supabase.rpc('increment_printable_views', { p_id: id })
+  } catch {
+    /* RPC may not be deployed yet — local UI update still works */
+  }
 }
 
 export async function incrementPrintableLikes(id: string, delta: 1 | -1) {
-  if (!supabase || id.startsWith('demo-') || id.startsWith('mock-')) return
+  if (!supabase) return
   try {
     const primary = await supabase.rpc('increment_printable_likes', { p_id: id, p_delta: delta })
     if (!primary.error) return
@@ -251,6 +255,10 @@ export async function incrementPrintableLikes(id: string, delta: 1 | -1) {
 }
 
 export async function incrementPrintableDownloads(id: string) {
-  if (!supabase || id.startsWith('demo-') || id.startsWith('mock-')) return
-  await supabase.rpc('increment_printable_downloads', { p_id: id })
+  if (!supabase) return
+  try {
+    await supabase.rpc('increment_printable_downloads', { p_id: id })
+  } catch {
+    /* RPC may not be deployed yet — local UI update still works */
+  }
 }
