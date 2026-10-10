@@ -6,32 +6,9 @@ function escapeHtml(value: string) {
     .replace(/"/g, '&quot;')
 }
 
-export const PRINT_BRAND_FOOTER_KO =
-  '🎨 DOOLIA (둘리아) | 아이들의 상상력을 키우는 무료 색칠도안'
-export const PRINT_BRAND_FOOTER_EN =
-  '🎨 DOOLIA | Free Printable Coloring Pages for Kids & Family'
-export const PRINT_BRAND_FOOTER_SITE = 'https://doolia.com'
-
-export function detectPrintLanguage() {
-  if (typeof document === 'undefined') return 'ko'
-  let stored = ''
-  try {
-    stored = localStorage.getItem('doolia_lang') || localStorage.getItem('doolia-lang') || ''
-  } catch {
-    stored = ''
-  }
-  const currentLang = document.documentElement.lang || stored || 'ko'
-  return currentLang
-}
-
-export function isKoreanPrintLang(lang?: string | null) {
-  const currentLang = (lang || detectPrintLanguage()).toLowerCase()
-  return currentLang.startsWith('ko')
-}
-
-export function printBrandFooterLeft(lang?: string | null) {
-  return isKoreanPrintLang(lang) ? PRINT_BRAND_FOOTER_KO : PRINT_BRAND_FOOTER_EN
-}
+export const PRINT_BRAND_FOOTER_LEFT = 'DOOLIA | doolia.app'
+export const PRINT_BRAND_FOOTER_RIGHT =
+  '© DOOLIA. For Personal & Educational Use Only. Commercial Use & Resale Prohibited.'
 
 /** Isolated print-window CSS. Height 100% only — 100vh + large @page margin overflows onto page 2. */
 export const PRINT_DOCUMENT_STYLES = `@page {
@@ -85,7 +62,7 @@ header, footer, nav, .no-print, button, .modal-backdrop, .print-footer {
   height: 22px;
   margin-top: 6px;
   padding-top: 4px;
-  border-top: 1px dashed #cbd5e1;
+  border-top: 1px solid #cbd5e1;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -100,6 +77,8 @@ header, footer, nav, .no-print, button, .modal-backdrop, .print-footer {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-weight: 600;
+  color: #334155;
 }
 .print-brand-footer .brand-right {
   flex-shrink: 0;
@@ -110,8 +89,6 @@ export function printDocumentHtml(title: string, imgUrl: string, autoPrint = tru
   const safeTitle = escapeHtml(title || 'DOOLIA Printable')
   const safeUrl = escapeHtml(imgUrl)
   const onload = autoPrint ? ' onload="window.focus(); window.print();"' : ''
-  const currentLang = document.documentElement.lang || localStorage.getItem('doolia_lang') || localStorage.getItem('doolia-lang') || 'ko'
-  const isKorean = currentLang.startsWith('ko')
   return `<!DOCTYPE html>
 <html>
   <head>
@@ -125,8 +102,8 @@ export function printDocumentHtml(title: string, imgUrl: string, autoPrint = tru
         <img class="printable-image" src="${safeUrl}" alt="${safeTitle}"${onload} />
       </div>
       <div class="print-brand-footer">
-        <span class="brand-left">${isKorean ? PRINT_BRAND_FOOTER_KO : PRINT_BRAND_FOOTER_EN}</span>
-        <span class="brand-right">${PRINT_BRAND_FOOTER_SITE}</span>
+        <span class="brand-left">${PRINT_BRAND_FOOTER_LEFT}</span>
+        <span class="brand-right">${PRINT_BRAND_FOOTER_RIGHT}</span>
       </div>
     </div>
   </body>

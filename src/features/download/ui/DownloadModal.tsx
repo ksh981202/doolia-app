@@ -19,6 +19,8 @@ import { prefetchPrintImage, printPrintable } from '@/shared/lib/printPage'
 import { getDisplayImageUrl, printableLineArtUrl, printableViewUrl } from '@/shared/utils/printableAssets'
 import { useDownloadStore } from '@/shared/store/useDownloadStore'
 
+const HIDDEN_IMAGE_CACHE = new Map<string, HTMLImageElement>()
+
 function AffiliateMedia({ affiliate, alt }: { affiliate: AffiliateItem; alt: string }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const videoSrc = resolveAffiliateVideoUrl(affiliate)
@@ -138,6 +140,7 @@ function DownloadModalBody({
   const affiliateCta = t(`affiliate.${affiliateKey}.cta_btn`, {
     defaultValue: pickAffiliateText(affiliate.ctaText, lang),
   })
+  const previewImageRef = useRef<HTMLImageElement>(null)
 
   useEffect(() => {
     if (AD_COUNTDOWN_SECONDS <= 0) return
@@ -158,6 +161,21 @@ function DownloadModalBody({
   }, [printable, originalSrc])
 
   useEffect(() => {
+    const url = printableLineArtUrl(printable) || originalSrc
+    if (!url) return
+
+    const image = new Image()
+    image.crossOrigin = 'anonymous'
+    image.onload = () => {
+      HIDDEN_IMAGE_CACHE.set(url, image)
+    }
+    image.onerror = () => {
+      console.warn(`[PDF Cache] 이미지 캐시 실패: ${url}`)
+    }
+    image.src = url
+  }, [printable, originalSrc])
+
+  useEffect(() => {
     void incrementAffiliateImpression(affiliate.id)
   }, [affiliate.id])
 
@@ -167,10 +185,13 @@ function DownloadModalBody({
     setGenerating(true)
     try {
       const { generatePrintablePdf } = await import('@/shared/lib/generatePrintablePdf')
-      await generatePrintablePdf(printable, { variant: viewMode })
+      const fallbackImage = HIDDEN_IMAGE_CACHE.get(printableViewUrl(printable, viewMode))
+      await generatePrintablePdf(printable, { variant: viewMode, fallbackImage })
       await incrementPrintableDownloads(printable.id)
     } catch (caught) {
-      setError(caught instanceof Error && caught.message ? caught.message : 'PDF를 만들지 못했습니다.')
+      const errorMessage = caught instanceof Error ? caught.message : String(caught)
+      console.error('[PDF Download Error]', errorMessage)
+      setError(errorMessage.includes('이미지 로딩 실패') ? '도안 이미지를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.' : 'PDF를 만들지 못했습니다.')
     } finally {
       setGenerating(false)
     }
@@ -273,6 +294,13 @@ function DownloadModalBody({
               ) : (
                 <p className="text-xs font-semibold text-slate-400">{t('detail.notFound', '미리보기 없음')}</p>
               )}
+              <img
+                ref={previewImageRef}
+                src={originalSrc}
+                alt=""
+                className="hidden"
+                crossOrigin="anonymous"
+              />
             </div>
 
             {error ? <p className="text-center text-sm font-bold text-red-600">{error}</p> : null}

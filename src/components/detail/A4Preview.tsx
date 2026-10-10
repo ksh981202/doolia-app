@@ -9,8 +9,8 @@ import {
   prefetchPrintImage,
   isMobilePrintHost,
   printPrintable,
-  printBrandFooterLeft,
-  PRINT_BRAND_FOOTER_SITE,
+  PRINT_BRAND_FOOTER_LEFT,
+  PRINT_BRAND_FOOTER_RIGHT,
 } from '@/shared/lib/printPage'
 import { getDisplayImageUrl, printableColorUrl, printableLineArtUrl } from '@/shared/utils/printableAssets'
 import { useDownloadStore } from '@/shared/store/useDownloadStore'
@@ -45,9 +45,7 @@ function waitForImage(url: string) {
 }
 
 export function A4Preview({ printable }: { printable: Printable }) {
-  const { t, i18n } = useTranslation()
-  const isKorean = (i18n.language || i18n.resolvedLanguage || '').startsWith('ko')
-  const brandLeft = printBrandFooterLeft(isKorean ? 'ko' : 'en')
+  const { t } = useTranslation()
   const [mode, setMode] = useState<PreviewMode>('color')
   const [isZoomed, setIsZoomed] = useState(false)
   const [shareMsg, setShareMsg] = useState('')
@@ -190,8 +188,8 @@ export function A4Preview({ printable }: { printable: Printable }) {
             {lineSrc ? <img className="printable-image" src={lineSrc} alt={printAlt} /> : null}
           </div>
           <div className="print-brand-footer">
-            <span className="brand-left">{brandLeft}</span>
-            <span className="brand-right">{PRINT_BRAND_FOOTER_SITE}</span>
+            <span className="brand-left">{PRINT_BRAND_FOOTER_LEFT}</span>
+            <span className="brand-right">{PRINT_BRAND_FOOTER_RIGHT}</span>
           </div>
         </div>,
         document.body,

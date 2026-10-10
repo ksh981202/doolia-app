@@ -34,10 +34,16 @@ function decodeImage(src: string, cors: boolean) {
   })
 }
 
-async function loadLineArt(url: string) {
+async function loadImageFromFetch(url: string): Promise<HTMLImageElement> {
   try {
-    const response = await fetch(url, { mode: 'cors' })
-    if (!response.ok) throw new Error(`이미지 응답 오류 (${response.status})`)
+    const response = await fetch(url, {
+      mode: 'cors',
+      credentials: 'omit',
+      cache: 'no-cache',
+    })
+    if (!response.ok) {
+      throw new Error(`이미지 응답 오류 (${response.status})`)
+    }
     const blob = await response.blob()
     const objectUrl = URL.createObjectURL(blob)
     try {
@@ -45,8 +51,38 @@ async function loadLineArt(url: string) {
     } finally {
       URL.revokeObjectURL(objectUrl)
     }
-  } catch {
-    return decodeImage(url, true)
+  } catch (error) {
+    throw new Error(`fetch 실패: ${error instanceof Error ? error.message : String(error)}`)
+  }
+}
+
+async function loadImageFromDomCache(url: string): Promise<HTMLImageElement> {
+  return new Promise<HTMLImageElement>((resolve, reject) => {
+    const image = new Image()
+    image.crossOrigin = 'anonymous'
+    image.onload = () => resolve(image)
+    image.onerror = () => reject(new Error('DOM 캐시도 실패'))
+    image.src = url
+  })
+}
+
+async function loadLineArt(url: string, fallbackImage?: HTMLImageElement) {
+  try {
+    return await loadImageFromFetch(url)
+  } catch (fetchError) {
+    console.warn(`[PDF] fetch 실패, fallback 시도: ${fetchError instanceof Error ? fetchError.message : String(fetchError)}`)
+    
+    if (fallbackImage) {
+      console.log('[PDF] DOM 캐시 이미지 사용')
+      return fallbackImage
+    }
+    
+    // 최후 fallback: 직접 URL 로드
+    try {
+      return await loadImageFromDomCache(url)
+    } catch (domError) {
+      throw new Error(`이미지 로딩 실패 (fetch: ${fetchError instanceof Error ? fetchError.message : String(fetchError)}, dom: ${domError instanceof Error ? domError.message : String(domError)})`)
+    }
   }
 }
 
@@ -84,13 +120,13 @@ function rasterizeA4Page(image: HTMLImageElement) {
 
 export async function generatePrintablePdf(
   printable: Printable,
-  options?: { variant?: PrintableViewMode },
+  options?: { variant?: PrintableViewMode; fallbackImage?: HTMLImageElement },
 ) {
   const variant = options?.variant ?? 'bw'
   const url = printableViewUrl(printable, variant)
   if (!url) throw new Error('다운로드할 선화 이미지가 없습니다.')
 
-  const image = await loadLineArt(url)
+  const image = await loadLineArt(url, options?.fallbackImage)
   const pixelWidth = image.naturalWidth || image.width
   const pixelHeight = image.naturalHeight || image.height
   if (!pixelWidth || !pixelHeight) throw new Error('이미지 크기를 읽지 못했습니다.')
