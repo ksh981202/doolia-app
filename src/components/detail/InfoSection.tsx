@@ -51,13 +51,14 @@ export function InfoSection({ printable }: { printable: Printable }) {
         <h1 className="my-2.5 text-xl font-extrabold leading-snug break-words text-slate-900 sm:text-2xl lg:text-3xl">
           {title}
         </h1>
-        <div className="mb-5 flex flex-wrap items-center justify-between gap-2 text-[13px] font-medium text-slate-500 sm:mb-6">
+        <div className="mb-5 flex flex-wrap items-center justify-start gap-4 text-[13px] font-medium text-slate-500 sm:mb-6 sm:gap-5">
           <div className="flex min-w-0 items-center gap-1.5">
             <Heart className={cn('h-4 w-4 shrink-0 text-rose-500', isLiked && 'fill-rose-500')} />
             <span className="min-w-0 break-words">
               {likesCount} {t('detail.likes')}
             </span>
           </div>
+          <span className="shrink-0 text-slate-300">·</span>
           <div className="flex min-w-0 items-center gap-1.5">
             <Eye className="h-4 w-4 shrink-0 text-slate-400" />
             <span className="min-w-0 break-words">
