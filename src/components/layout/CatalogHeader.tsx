@@ -32,7 +32,7 @@ export function CatalogHeader({ onMenu }: CatalogHeaderProps) {
         type="button"
         onClick={onMenu}
         className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-line lg:hidden"
-        aria-label="카테고리 메뉴"
+        aria-label={t('header.categoryMenu', { defaultValue: '카테고리 메뉴' })}
       >
         <Menu size={18} />
       </button>
@@ -54,7 +54,7 @@ export function CatalogHeader({ onMenu }: CatalogHeaderProps) {
         type="button"
         onClick={() => navigate('/bookmarks')}
         className="relative inline-flex h-10 w-10 items-center justify-center rounded-full border border-line text-ink"
-        aria-label="북마크"
+        aria-label={t('header.bookmarks', { defaultValue: '북마크' })}
       >
         <Bookmark size={18} />
         {bookmarkCount > 0 ? (

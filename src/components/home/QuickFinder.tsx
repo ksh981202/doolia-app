@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import {
   FINDER_AGES,
@@ -9,6 +10,7 @@ import {
 import { cn } from '@/shared/lib/cn'
 
 export function QuickFinder() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [age, setAge] = useState<string | null>(null)
   const [theme, setTheme] = useState<string | null>(null)
@@ -22,7 +24,7 @@ export function QuickFinder() {
 
   return (
     <div className="mx-auto mt-6 max-w-2xl rounded-3xl border border-emerald-100 bg-white/90 p-4 text-left shadow-[0_18px_40px_rgba(5,150,105,0.10)] sm:p-5">
-      <FinderRow label="연령">
+      <FinderRow label={t('common.age', { defaultValue: '연령' })}>
         {FINDER_AGES.map((item) => (
           <Chip
             key={item.id}
@@ -32,7 +34,7 @@ export function QuickFinder() {
           />
         ))}
       </FinderRow>
-      <FinderRow label="주제">
+      <FinderRow label={t('common.theme', { defaultValue: '주제' })}>
         {FINDER_THEMES.map((item) => (
           <Chip
             key={item.id}
@@ -42,7 +44,7 @@ export function QuickFinder() {
           />
         ))}
       </FinderRow>
-      <FinderRow label="유형">
+      <FinderRow label={t('common.type', { defaultValue: '유형' })}>
         {FINDER_TYPES.map((item) => (
           <Chip
             key={item.id}
@@ -58,7 +60,7 @@ export function QuickFinder() {
           onClick={find}
           className="flex h-12 w-full items-center justify-center rounded-2xl bg-emerald-600 text-sm font-extrabold text-white shadow-lg shadow-emerald-600/20 transition hover:bg-emerald-700 hover:shadow-xl"
         >
-          맞춤 도안 찾기
+          {t('common.findCustom', { defaultValue: '맞춤 도안 찾기' })}
         </button>
       </div>
     </div>

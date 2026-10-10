@@ -5,7 +5,7 @@ import { cn } from '@/shared/lib/cn'
 type ThemeFilterProps = {
   value: string
   onChange: (id: string) => void
-  options?: ThemeOption[]
+  options?: (ThemeOption & { labelKey?: string })[]
   variant?: 'parent' | 'sub'
   showExpandCaret?: boolean
 }
@@ -20,7 +20,7 @@ function chipClass(active: boolean, variant: 'parent' | 'sub') {
   )
 }
 
-function chipLabel(item: ThemeOption, variant: 'parent' | 'sub', name: string) {
+function chipLabel(item: ThemeOption & { labelKey?: string }, variant: 'parent' | 'sub', name: string) {
   if (variant === 'sub' || !item.icon) return name
   return `${item.icon} ${name}`
 }
@@ -65,7 +65,11 @@ export function ThemeFilter({
             variant,
             item.id === 'all'
               ? t('common.all', { defaultValue: '전체' })
-              : t(`categories.${item.id}`, { defaultValue: item.name }),
+              : t(
+                  (item as { labelKey?: string }).labelKey ||
+                    (variant === 'sub' ? `subthemes.${item.id}` : `categories.${item.id}`),
+                  { defaultValue: item.name },
+                ),
           )}
           {expandCaret && value === item.id && item.id !== 'all' ? (
             <span aria-hidden className="text-[10px] leading-none opacity-90">

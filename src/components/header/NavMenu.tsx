@@ -22,7 +22,7 @@ export function NavMenu({
           ? 'flex flex-col gap-1'
           : 'hidden items-center justify-center gap-2 md:flex lg:gap-2.5'
       }
-      aria-label="주요 메뉴"
+      aria-label={t('nav.mainMenu', { defaultValue: '주요 메뉴' })}
     >
       {HEADER_NAV_ITEMS.map((item) => (
         <Link
