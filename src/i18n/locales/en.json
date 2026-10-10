@@ -301,5 +301,65 @@
   },
   "printable": {
     "btn_print_pdf_floating": "🖨️ Print PDF (US Letter / A4)"
+  },
+  "affiliate": {
+    "badge": "🎨 Recommended Supplies for Fun Art Play",
+    "guide": "Look for these details",
+    "affiliate_01_crayons": {
+      "title": "Ultra-Clean Washable Crayons for Toddlers",
+      "pain_point": "Worried about messy crayon marks on hands, clothes, or walls?",
+      "point1": "Easily washes from skin and most fabrics with warm water",
+      "point2": "100% Non-toxic safe formula with break-resistant design",
+      "cta_btn": "View Safe Washable Crayons ↗"
+    },
+    "affiliate_02_colored_pencils": {
+      "title": "Jumbo Triangular Colored Pencils for Easy Grip",
+      "pain_point": "Does your child tire quickly from gripping thin pencils?",
+      "point1": "Ergonomic triangular shape naturally guides proper grip",
+      "point2": "Thick, smooth lead delivers vibrant colors with minimal effort",
+      "cta_btn": "View Jumbo Triangular Pencils ↗"
+    },
+    "affiliate_03_markers": {
+      "title": "Ultra-Washable Long-Lasting Kids Marker Pens",
+      "pain_point": "Tired of dried-out markers with lost caps?",
+      "point1": "Ultra-washable water-based ink cleans easily from skin and clothes",
+      "point2": "Durable pressure-resistant nib won’t push in under hard pressing",
+      "cta_btn": "View Washable Marker Pens ↗"
+    },
+    "affiliate_04_water_brush": {
+      "title": "No-Spill Water Brush Pens for Mess-Free Watercolor",
+      "pain_point": "Constantly worried about tipped-over water cups while painting?",
+      "point1": "Built-in refillable water reservoir eliminates messy water spills",
+      "point2": "High-quality flexible nylon bristles that keep their shape",
+      "cta_btn": "View Water Brush Pens ↗"
+    },
+    "affiliate_05_art_smock": {
+      "title": "Waterproof Long Sleeve Art Smock for Mess-Free Play",
+      "pain_point": "Afraid of paint and marker stains ruining favorite clothes?",
+      "point1": "Full waterproof coverage with snug elastic cuffs keeps clothes spotless",
+      "point2": "Lightweight breathable fabric that wipes clean in seconds",
+      "cta_btn": "View Waterproof Art Smocks ↗"
+    },
+    "affiliate_06_craft_mat": {
+      "title": "Extra Large Silicone Craft Mat with Cleaning Cup",
+      "pain_point": "Stressing over marker bleed-through and table scratches?",
+      "point1": "100% Food-grade non-stick silicone washes clean with water",
+      "point2": "Built-in paint wells and brush holders keep craft time tidy",
+      "cta_btn": "View Silicone Craft Mats ↗"
+    },
+    "affiliate_07_safety_scissors": {
+      "title": "Safe Blunt-Tip Preschool Training Scissors",
+      "pain_point": "Afraid of accidental cuts when your toddler practices scissor skills?",
+      "point1": "Safety blades only cut paper, keeping skin, hair, and clothes safe",
+      "point2": "Spring-assisted lever automatically reopens for effortless cutting",
+      "cta_btn": "View Safe Toddler Scissors ↗"
+    },
+    "affiliate_08_kids_art_set": {
+      "title": "All-In-One Deluxe Kids Art Supplies Gift Set",
+      "pain_point": "Tired of buying separate supplies and dealing with messy clutter?",
+      "point1": "Complete variety including crayons, colored pencils, and markers",
+      "point2": "Portable carry case encourages self-cleanup and easy travel",
+      "cta_btn": "View Deluxe Kids Art Sets ↗"
+    }
   }
 }

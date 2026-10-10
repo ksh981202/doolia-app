@@ -301,5 +301,65 @@
   },
   "printable": {
     "btn_print_pdf_floating": "🖨️ Imprimer PDF (A4)"
+  },
+  "affiliate": {
+    "badge": "🎨 Fournitures recommandées pour un coloriage amusant",
+    "guide": "Vérifiez ces points",
+    "affiliate_01_crayons": {
+      "title": "Craies de coloriage ultra-lavables et sûres pour tout-petits",
+      "pain_point": "Peur des taches de craie sur les mains, les vêtements ou les murs ?",
+      "point1": "Se nettoie facilement de la peau et des vêtements à l’eau",
+      "point2": "Formule non toxique et corps ultra-résistant aux chutes",
+      "cta_btn": "Découvrir les craies lavables ↗"
+    },
+    "affiliate_02_colored_pencils": {
+      "title": "Crayons de couleur triangulaires jumbo faciles à tenir",
+      "pain_point": "Votre enfant se fatigue-t-il vite avec des crayons trop fins ?",
+      "point1": "Forme triangulaire ergonomique guidant la bonne prise en main",
+      "point2": "Mine épaisse et douce offrant des couleurs vives sans forcer",
+      "cta_btn": "Découvrir les crayons triangulaires ↗"
+    },
+    "affiliate_03_markers": {
+      "title": "Feutres lavables et durables pour enfants",
+      "pain_point": "Marre des feutres qui sèchent sans leur bouchon ?",
+      "point1": "Encre à base d’eau ultra-lavable sur la peau et le textile",
+      "point2": "Pointe bloquée ultra-résistante à la pression des enfants",
+      "cta_btn": "Découvrir les feutres lavables ↗"
+    },
+    "affiliate_04_water_brush": {
+      "title": "Pinceaux à réservoir d’eau sans risque de renverser l’eau",
+      "pain_point": "Toujours peur que le gobelet d’eau ne se renverse sur la table ?",
+      "point1": "Réservoir d’eau intégré éliminant les risques de renversement",
+      "point2": "Poils en nylon souples et durables qui gardent leur forme",
+      "cta_btn": "Découvrir les pinceaux à eau ↗"
+    },
+    "affiliate_05_art_smock": {
+      "title": "Tablier de peinture imperméable à manches longues pour enfant",
+      "pain_point": "Peur que la peinture n’abîme les beaux vêtements de votre enfant ?",
+      "point1": "Protection imperméable intégrale avec poignets élastiqués",
+      "point2": "Tissu léger et respirant nettoyable d’un simple coup d’éponge",
+      "cta_btn": "Découvrir les tabliers de peinture ↗"
+    },
+    "affiliate_06_craft_mat": {
+      "title": "Grand tapis en silicone pour activités manuelles et peinture",
+      "pain_point": "Inquiet des traces de feutre qui traversent sur la table ?",
+      "point1": "Silicone de qualité alimentaire 100% sûr, lavable à l’eau",
+      "point2": "Godets de peinture et porte-pinceaux intégrés très pratiques",
+      "cta_btn": "Découvrir les tapis en silicone ↗"
+    },
+    "affiliate_07_safety_scissors": {
+      "title": "Ciseaux de sécurité à bouts ronds pour tout-petits",
+      "pain_point": "Peur des coupures lorsque votre enfant apprend à découper ?",
+      "point1": "Lames sécurisées coupant uniquement le papier, sans danger pour la peau",
+      "point2": "Ressort d’ouverture automatique facilitant la découpe",
+      "cta_btn": "Découvrir les ciseaux de sécurité ↗"
+    },
+    "affiliate_08_kids_art_set": {
+      "title": "Coffret d’art complet pour enfant avec mallette de transport",
+      "pain_point": "Fatigué d’acheter les fournitures séparément et du désordre ?",
+      "point1": "Large variété d’outils : craies, crayons de couleur et feutres",
+      "point2": "Mallette avec poignée facilitant le rangement et le transport",
+      "cta_btn": "Découvrir les coffrets d’art ↗"
+    }
   }
 }

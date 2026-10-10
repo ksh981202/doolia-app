@@ -2,16 +2,16 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 
 export const LANGUAGES = [
-  { code: 'ko', label: '한국어', flag: '🇰🇷' },
-  { code: 'en', label: 'English', flag: '🇺🇸' },
-  { code: 'ja', label: '日本語', flag: '🇯🇵' },
-  { code: 'zh', label: '繁體中文', flag: '🇹🇼' },
-  { code: 'es', label: 'Español', flag: '🇪🇸' },
-  { code: 'pt', label: 'Português', flag: '🇧🇷' },
-  { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
-  { code: 'fr', label: 'Français', flag: '🇫🇷' },
-  { code: 'it', label: 'Italiano', flag: '🇮🇹' },
-  { code: 'vi', label: 'Tiếng Việt', flag: '🇻🇳' },
+  { code: 'ko', label: 'KO', flag: '🇰🇷', name: '한국어' },
+  { code: 'en', label: 'EN', flag: '🇺🇸', name: 'English' },
+  { code: 'ja', label: 'JA', flag: '🇯🇵', name: '日本語' },
+  { code: 'zh', label: 'ZH', flag: '🇹🇼', name: '繁體中文' },
+  { code: 'es', label: 'ES', flag: '🇪🇸', name: 'Español' },
+  { code: 'pt', label: 'PT', flag: '🇧🇷', name: 'Português' },
+  { code: 'de', label: 'DE', flag: '🇩🇪', name: 'Deutsch' },
+  { code: 'fr', label: 'FR', flag: '🇫🇷', name: 'Français' },
+  { code: 'it', label: 'IT', flag: '🇮🇹', name: 'Italiano' },
+  { code: 'vi', label: 'VI', flag: '🇻🇳', name: 'Tiếng Việt' },
 ] as const
 
 export type LanguageCode = (typeof LANGUAGES)[number]['code']

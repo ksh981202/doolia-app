@@ -301,5 +301,65 @@
   },
   "printable": {
     "btn_print_pdf_floating": "🖨️ Imprimir PDF (Carta / A4)"
+  },
+  "affiliate": {
+    "badge": "🎨 Materiales recomendados para colorear y divertirse",
+    "guide": "Revisa estos detalles",
+    "affiliate_01_crayons": {
+      "title": "Crayones lavables seguros que se limpian con agua",
+      "pain_point": "¿Te preocupan las manchas de crayón en manos, ropa o paredes?",
+      "point1": "Se limpia fácilmente de la piel y telas con agua y jabón",
+      "point2": "Fórmula no tóxica y diseño resistente a roturas",
+      "cta_btn": "Ver crayones lavables recomendados ↗"
+    },
+    "affiliate_02_colored_pencils": {
+      "title": "Lápices de colores triangulares jumbo para un fácil agarre",
+      "pain_point": "¿Tu peque se cansa rápido de sujetar lápices delgados?",
+      "point1": "Forma triangular ergonómica para un agarre correcto natural",
+      "point2": "Mina gruesa y suave que pinta con colores vivos sin esfuerzo",
+      "cta_btn": "Ver lápices triangulares jumbo ↗"
+    },
+    "affiliate_03_markers": {
+      "title": "Rotuladores lavables y duraderos para niños",
+      "pain_point": "¿Cansado de rotuladores secos porque se pierden las tapas?",
+      "point1": "Tinta a base de agua lavable fácilmente de piel y ropa",
+      "point2": "Punta resistente que no se hunde ante la presión fuerte",
+      "cta_btn": "Ver rotuladores lavables ↗"
+    },
+    "affiliate_04_water_brush": {
+      "title": "Pinceles de agua antiderrames para pintar sin desastres",
+      "pain_point": "¿Sufres pensando que el vaso de agua se derramará al pintar?",
+      "point1": "Depósito de agua integrado para pintar sin ensuciar la mesa",
+      "point2": "Cerdas de nailon de alta calidad flexibles y duraderas",
+      "cta_btn": "Ver pinceles con depósito de agua ↗"
+    },
+    "affiliate_05_art_smock": {
+      "title": "Mandil impermeable de manga larga para pintar sin manchas",
+      "pain_point": "¿Temes que la pintura arruine la ropa favorita de tu peque?",
+      "point1": "Cobertura impermeable total con puños elásticos ajustados",
+      "point2": "Tejido ligero y transpirable que se limpia con una toallita húmeda",
+      "cta_btn": "Ver mandiles impermeables ↗"
+    },
+    "affiliate_06_craft_mat": {
+      "title": "Tapete de silicona extra grande para manualidades infantiles",
+      "pain_point": "¿Te agobia que los rotuladores traspasen y manchen la mesa?",
+      "point1": "Silicona de grado alimentario 100% segura y lavable con agua",
+      "point2": "Compartimentos integrados para pintura y soportes para pinceles",
+      "cta_btn": "Ver tapetes de silicona para manualidades ↗"
+    },
+    "affiliate_07_safety_scissors": {
+      "title": "Tijeras de seguridad con punta redonda para preescolar",
+      "pain_point": "¿Miedo a que tu hijo se corte al practicar con las tijeras?",
+      "point1": "Cuchillas seguras que solo cortan papel, no la piel ni la ropa",
+      "point2": "Palanca con resorte que ayuda a abrir la tijera sin esfuerzo",
+      "cta_btn": "Ver tijeras de seguridad para niños ↗"
+    },
+    "affiliate_08_kids_art_set": {
+      "title": "Set completo de arte para niños con estuche portátil",
+      "pain_point": "¿Cansado de comprar materiales sueltos y del desorden en casa?",
+      "point1": "Gran variedad con crayones, lápices de colores y rotuladores",
+      "point2": "Estuche portátil con asa que enseña a ordenar y fácil de llevar",
+      "cta_btn": "Ver sets de arte para niños ↗"
+    }
   }
 }

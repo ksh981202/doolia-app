@@ -301,5 +301,65 @@
   },
   "printable": {
     "btn_print_pdf_floating": "🖨️ A4 PDF drucken"
+  },
+  "affiliate": {
+    "badge": "🎨 Empfohlenes Zubehör für fröhlichen Malspaß",
+    "guide": "Achten Sie auf diese Punkte",
+    "affiliate_01_crayons": {
+      "title": "Leicht abwaschbare Wachsmalstifte für Kleinkinder",
+      "pain_point": "Sorge vor Flecken an Händen, Kleidung oder Wänden?",
+      "point1": "Lässt sich leicht mit Wasser und Seife von Haut und Kleidung reinigen",
+      "point2": "Ungiftige, sichere Inhaltsstoffe und bruchfestes Design",
+      "cta_btn": "Abwaschbare Wachsmalstifte ansehen ↗"
+    },
+    "affiliate_02_colored_pencils": {
+      "title": "Jumbo Dreikant-Buntstifte für kleine Kinderhände",
+      "pain_point": "Ermüden die Finger Ihres Kindes schnell beim Malen?",
+      "point1": "Ergonomische Dreikantform für die richtige Stifthaltung",
+      "point2": "Dicke, weiche Mine für leuchtende Farben ohne viel Druck",
+      "cta_btn": "Jumbo Buntstifte ansehen ↗"
+    },
+    "affiliate_03_markers": {
+      "title": "Abwaschbare und langlebige Filzstifte für Kinder",
+      "pain_point": "Ärgern Sie sich über ausgetrocknete Stifte ohne Kappe?",
+      "point1": "Wasserbasierte Tinte lässt sich leicht von Haut und Textilien auswaschen",
+      "point2": "Robuste Spitze, die auch bei starkem Druck nicht eindrückt",
+      "cta_btn": "Abwaschbare Filzstifte ansehen ↗"
+    },
+    "affiliate_04_water_brush": {
+      "title": "Auslaufsichere Wassertankpinsel für sauberen Malspaß",
+      "pain_point": "Ständige Sorge vor umkippenden Wasserbechern beim Malen?",
+      "point1": "Integrierter Wassertank verhindert verschüttetes Wasser am Tisch",
+      "point2": "Hochwertige flexible Nylonborsten für saubere Pinselstriche",
+      "cta_btn": "Wassertankpinsel ansehen ↗"
+    },
+    "affiliate_05_art_smock": {
+      "title": "Wasserdichter Malkittel mit langen Ärmeln für Kinder",
+      "pain_point": "Angst, dass Farben die Lieblingskleidung ruinieren?",
+      "point1": "Vollständiger Nässeschutz mit bequemen elastischen Bündchen",
+      "point2": "Leichter, atmungsaktiver Stoff, der sich leicht abwischen lässt",
+      "cta_btn": "Wasserdichte Malkittel ansehen ↗"
+    },
+    "affiliate_06_craft_mat": {
+      "title": "Extra große Silikon-Bastelmatte für saubere Tische",
+      "pain_point": "Angst vor durchdrückenden Stiften und Kratzern auf dem Tisch?",
+      "point1": "100% lebensmittelechtes Silikon, schnell abwaschbar",
+      "point2": "Integrierte Farbvertiefungen und Pinselhalter für Ordnung",
+      "cta_btn": "Silikon-Bastelmatten ansehen ↗"
+    },
+    "affiliate_07_safety_scissors": {
+      "title": "Kindersichere Schere mit abgerundeter Spitze",
+      "pain_point": "Angst vor Schnittverletzungen bei den ersten Scherversuchen?",
+      "point1": "Sicherheitsklingen schneiden nur Papier, keine Haut oder Haare",
+      "point2": "Federunterstützung erleichtert das Schneiden für kleine Hände",
+      "cta_btn": "Kindersichere Scheren ansehen ↗"
+    },
+    "affiliate_08_kids_art_set": {
+      "title": "All-in-One Malset im praktischen Koffer für Kinder",
+      "pain_point": "Genervt vom Nachkaufen einzelner Stifte und dem Chaos im Zimmer?",
+      "point1": "Riesige Auswahl an Buntstiften, Wachsmalern und Filzstiften",
+      "point2": "Tragbarer Koffer fördert spielerisch das Aufräumen nach dem Malen",
+      "cta_btn": "Malsets für Kinder ansehen ↗"
+    }
   }
 }

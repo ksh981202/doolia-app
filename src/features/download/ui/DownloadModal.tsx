@@ -120,13 +120,24 @@ function DownloadModalBody({
   const originalSrc = printableViewUrl(printable, viewMode)
   const previewSrc = getDisplayImageUrl(originalSrc, 1000)
   const affiliateLink = getAffiliateLink(affiliate, lang)
-  const affiliateBadge = pickAffiliateText(affiliate.badge, lang)
-  const affiliateHeadline = pickAffiliateText(affiliate.headline, lang)
-  const affiliatePain = pickAffiliateText(affiliate.painPoint, lang)
-  const affiliateGuide = pickAffiliateText(AFFILIATE_GUIDE_TITLE, lang)
-  const affiliateBenefit1 = pickAffiliateText(affiliate.benefit1, lang)
-  const affiliateBenefit2 = pickAffiliateText(affiliate.benefit2, lang)
-  const affiliateCta = pickAffiliateText(affiliate.ctaText, lang)
+  const affiliateKey = affiliate.id.startsWith('affiliate_') ? affiliate.id : `affiliate_${affiliate.id}`
+  const affiliateBadge = t('affiliate.badge', { defaultValue: pickAffiliateText(affiliate.badge, lang) })
+  const affiliateHeadline = t(`affiliate.${affiliateKey}.title`, {
+    defaultValue: pickAffiliateText(affiliate.headline, lang),
+  })
+  const affiliatePain = t(`affiliate.${affiliateKey}.pain_point`, {
+    defaultValue: pickAffiliateText(affiliate.painPoint, lang),
+  })
+  const affiliateGuide = t('affiliate.guide', { defaultValue: pickAffiliateText(AFFILIATE_GUIDE_TITLE, lang) })
+  const affiliateBenefit1 = t(`affiliate.${affiliateKey}.point1`, {
+    defaultValue: pickAffiliateText(affiliate.benefit1, lang),
+  })
+  const affiliateBenefit2 = t(`affiliate.${affiliateKey}.point2`, {
+    defaultValue: pickAffiliateText(affiliate.benefit2, lang),
+  })
+  const affiliateCta = t(`affiliate.${affiliateKey}.cta_btn`, {
+    defaultValue: pickAffiliateText(affiliate.ctaText, lang),
+  })
 
   useEffect(() => {
     if (AD_COUNTDOWN_SECONDS <= 0) return

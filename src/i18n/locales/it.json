@@ -301,5 +301,65 @@
   },
   "printable": {
     "btn_print_pdf_floating": "🖨️ Stampa PDF (A4)"
+  },
+  "affiliate": {
+    "badge": "🎨 Materiali consigliati per un disegno divertente",
+    "guide": "Controlla questi dettagli",
+    "affiliate_01_crayons": {
+      "title": "Pastelli a cera ultra lavabili e sicuri per bambini",
+      "pain_point": "Preoccupato per i segni di pastello su mani, vestiti o pareti?",
+      "point1": "Si lava via facilmente da pelle e vestiti con acqua e sapone",
+      "point2": "Formula atossica e sicura con corpo resistente alle rotture",
+      "cta_btn": "Scopri i pastelli lavabili ↗"
+    },
+    "affiliate_02_colored_pencils": {
+      "title": "Matite colorate triangolari jumbo per una presa facile",
+      "pain_point": "Il tuo bambino si stanca subito impugnando matite sottili?",
+      "point1": "Forma triangolare ergonomica per imparare a impugnare bene",
+      "point2": "Mina spessa e morbida per colori vivaci con poco sforzo",
+      "cta_btn": "Scopri le matite triangolari jumbo ↗"
+    },
+    "affiliate_03_markers": {
+      "title": "Pennarelli lavabili e durevoli per bambini",
+      "pain_point": "Stanco dei pennarelli che si seccano senza cappuccio?",
+      "point1": "Inchiostro a base d’acqua lavabile da pelle e tessuti",
+      "point2": "Punta resistente che non rientra nemmeno se premuta forte",
+      "cta_btn": "Scopri i pennarelli lavabili ↗"
+    },
+    "affiliate_04_water_brush": {
+      "title": "Pennelli con serbatoio d’acqua a prova di schizzi",
+      "pain_point": "Ansia che il bicchiere d’acqua si rovesci durante la pittura?",
+      "point1": "Serbatoio d’acqua ricaricabile integrato per dipingere in ordine",
+      "point2": "Setole in nylon resistenti che non perdono la forma",
+      "cta_btn": "Scopri i pennelli con serbatoio ↗"
+    },
+    "affiliate_05_art_smock": {
+      "title": "Grembiule impermeabile a maniche lunghe per piccoli artisti",
+      "pain_point": "Paura che i colori macchino i vestiti preferiti del tuo bimbo?",
+      "point1": "Protezione impermeabile completa con polsini elasticizzati",
+      "point2": "Tessuto leggero e traspirante facile da pulire con un panno",
+      "cta_btn": "Scopri i grembiuli impermeabili ↗"
+    },
+    "affiliate_06_craft_mat": {
+      "title": "Tappetino in silicone extra large per lavoretti e pittura",
+      "pain_point": "Preoccupato per i segni di pennarello che rovinano il tavolo?",
+      "point1": "Silicone alimentare sicuro, si lava in un attimo con acqua",
+      "point2": "Scomparti per colori e porta pennelli integrati salva-spazio",
+      "cta_btn": "Scopri i tappetini in silicone ↗"
+    },
+    "affiliate_07_safety_scissors": {
+      "title": "Forbici di sicurezza a punta arrotondata per bambini",
+      "pain_point": "Ansia da tagli quando il bambino impara a usare le forbici?",
+      "point1": "Lame di sicurezza che tagliano solo la carta, non la pelle",
+      "point2": "Leva a molla che aiuta la riapertura automatica della forbice",
+      "cta_btn": "Scopri le forbici di sicurezza ↗"
+    },
+    "affiliate_08_kids_art_set": {
+      "title": "Set artistico completo per bambini in pratica valigetta",
+      "pain_point": "Stanco di comprare accessori sparsi e del disordine in casa?",
+      "point1": "Grande varietà con pastelli, matite colorate e pennarelli",
+      "point2": "Valigetta portatile che insegna l’ordine e comoda da portare in giro",
+      "cta_btn": "Scopri i set artistici per bambini ↗"
+    }
   }
 }

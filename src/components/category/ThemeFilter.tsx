@@ -12,8 +12,8 @@ type ThemeFilterProps = {
 
 function chipClass(active: boolean, variant: 'parent' | 'sub') {
   return cn(
-    'inline-flex min-h-[44px] max-w-full items-center gap-1 rounded-full px-3 text-left text-[12.5px] leading-snug transition-all sm:px-4 sm:text-[13.5px]',
-    variant === 'sub' ? 'shrink-0 whitespace-nowrap' : 'whitespace-normal break-words',
+    'inline-flex min-h-[44px] items-center gap-1 rounded-full px-3 text-left text-[12.5px] leading-snug transition-all sm:px-4 sm:text-[13.5px]',
+    variant === 'sub' ? 'shrink-0 whitespace-nowrap' : 'max-w-full whitespace-normal break-words',
     active
       ? 'border border-emerald-600 bg-emerald-600 font-bold text-white shadow-sm shadow-emerald-600/20'
       : 'border border-slate-200/90 bg-white font-medium text-slate-600 shadow-[0_1px_2px_rgba(0,0,0,0.03)] hover:border-emerald-300 hover:bg-emerald-50/40 hover:text-emerald-700',
@@ -41,7 +41,7 @@ export function ThemeFilter({
     <div
       className={cn(
         variant === 'sub'
-          ? 'flex flex-nowrap items-center gap-2 overflow-x-auto scrollbar-none py-1.5 px-1 -mx-1 [-webkit-overflow-scrolling:touch]'
+          ? 'no-scrollbar flex min-w-0 w-full max-w-full items-center gap-2 overflow-x-auto scroll-smooth py-1.5 px-0.5 sm:flex-wrap [-webkit-overflow-scrolling:touch]'
           : 'flex flex-wrap content-start items-center gap-1.5',
       )}
       role="tablist"

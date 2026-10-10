@@ -301,5 +301,65 @@
   },
   "printable": {
     "btn_print_pdf_floating": "🖨️ Imprimir PDF (A4 / Carta)"
+  },
+  "affiliate": {
+    "badge": "🎨 Materiais recomendados para uma pintura divertida",
+    "guide": "Confira estes pontos",
+    "affiliate_01_crayons": {
+      "title": "Gizes de cera laváveis e seguros que saem com água",
+      "pain_point": "Preocupado com manchas de giz nas mãos, roupas ou paredes?",
+      "point1": "Sai facilmente da pele e tecidos com água e sabão",
+      "point2": "Fórmula atóxica segura e resistente a quebras",
+      "cta_btn": "Ver gizes de cera laváveis ↗"
+    },
+    "affiliate_02_colored_pencils": {
+      "title": "Lápis de cor triangulares jumbo para pegada confortável",
+      "pain_point": "Seu filho se cansa rápido segurando lápis finos?",
+      "point1": "Design triangular ergonômico que ajuda na pegada correta",
+      "point2": "Mina grossa e macia com cores vibrantes sem esforço",
+      "cta_btn": "Ver lápis de cor triangulares jumbo ↗"
+    },
+    "affiliate_03_markers": {
+      "title": "Canetinhas laváveis e duráveis para crianças",
+      "pain_point": "Cansado de canetinhas secas por ficarem destampadas?",
+      "point1": "Tinta à base de água super lavável da pele e tecidos",
+      "point2": "Ponta durável e resistente que não afunda com a pressão",
+      "cta_btn": "Ver canetinhas laváveis ↗"
+    },
+    "affiliate_04_water_brush": {
+      "title": "Pincéis com reservatório de água sem sujeira nem derramamento",
+      "pain_point": "Preocupado com copos de água virando durante a pintura?",
+      "point1": "Reservatório de água integrado que elimina bagunça e sujeira",
+      "point2": "Cerdas de nylon duráveis que mantêm a ponta perfeita",
+      "cta_btn": "Ver pincéis com reservatório ↗"
+    },
+    "affiliate_05_art_smock": {
+      "title": "Avental impermeável de manga longa para pintura infantil",
+      "pain_point": "Preocupado com manchas de tinta estragando as roupas do seu filho?",
+      "point1": "Proteção impermeável completa com punhos elásticos confortáveis",
+      "point2": "Tecido leve e respirável que limpa fácil com pano úmido",
+      "cta_btn": "Ver aventais impermeáveis ↗"
+    },
+    "affiliate_06_craft_mat": {
+      "title": "Tapete de silicone grande para atividades artísticas infantis",
+      "pain_point": "Preocupado com canetinhas manchando a mesa de casa?",
+      "point1": "Silicone de grau alimentício atóxico e super fácil de lavar",
+      "point2": "Divisórias integradas para tintas e suporte para pincéis",
+      "cta_btn": "Ver tapetes de silicone para artesanato ↗"
+    },
+    "affiliate_07_safety_scissors": {
+      "title": "Tesouras infantis de segurança com ponta arredondada",
+      "pain_point": "Medo de acidentes quando a criança usa tesoura sozinha?",
+      "point1": "Lâminas que cortam apenas papel, sem risco para pele ou roupas",
+      "point2": "Mola auxiliar que reabre a tesoura facilitando o corte",
+      "cta_btn": "Ver tesouras de segurança infantil ↗"
+    },
+    "affiliate_08_kids_art_set": {
+      "title": "Kit completo de pintura e arte infantil em maleta",
+      "pain_point": "Cansado de comprar materiais separados e da bagunça de lápis espalhados?",
+      "point1": "Variedade completa com gizes, lápis de cor e canetinhas",
+      "point2": "Maleta prática com alça que estimula a organização autônoma",
+      "cta_btn": "Ver kits de arte infantil ↗"
+    }
   }
 }

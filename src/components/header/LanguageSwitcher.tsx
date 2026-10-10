@@ -1,15 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { LANGUAGES, loadLocaleResource } from '@/i18n'
+import { LANGUAGES, loadLocaleResource, resolveLanguage } from '@/i18n'
 import { cn } from '@/shared/lib/cn'
 
 export function LanguageSwitcher({ listPlacement = 'bottom' }: { listPlacement?: 'bottom' | 'top' }) {
-  const { i18n, t } = useTranslation()
+  const { i18n } = useTranslation()
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
-  const current =
-    LANGUAGES.find((item) => i18n.resolvedLanguage?.startsWith(item.code) || i18n.language.startsWith(item.code)) ??
-    LANGUAGES[0]
+  const currentLangObj =
+    LANGUAGES.find((lang) => lang.code === resolveLanguage(i18n.language || i18n.resolvedLanguage)) ?? LANGUAGES[0]
+
+  const changeLanguage = (code: (typeof LANGUAGES)[number]['code']) => {
+    void loadLocaleResource(code)
+    setOpen(false)
+  }
 
   useEffect(() => {
     if (!open) return
@@ -25,41 +29,38 @@ export function LanguageSwitcher({ listPlacement = 'bottom' }: { listPlacement?:
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
-        className="inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3 text-sm font-bold text-gray-700 transition hover:border-emerald-300 hover:text-emerald-700"
+        className="inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3 transition hover:border-emerald-300"
         aria-expanded={open}
         aria-haspopup="listbox"
-        aria-label={t('language')}
+        aria-label={currentLangObj.name}
       >
-        <span aria-hidden>🌐</span>
-        <span className="text-xs font-black tracking-wide">{current.code.toUpperCase()}</span>
+        <span className="text-[14px]">🌐</span>
+        <span className="text-[12.5px] font-bold text-slate-700 sm:text-[13px]">{currentLangObj.label}</span>
       </button>
       {open ? (
         <ul
           role="listbox"
           className={cn(
-            'absolute z-50 max-h-[min(70vh,420px)] min-w-[200px] overflow-y-auto rounded-2xl border border-gray-100 bg-white py-1 shadow-xl',
+            'absolute z-50 max-h-[min(70vh,420px)] min-w-[200px] overflow-y-auto rounded-2xl border border-gray-100 bg-white p-1 shadow-xl',
             listPlacement === 'top' ? 'bottom-full left-0 mb-2' : 'right-0 mt-2',
           )}
         >
-          {LANGUAGES.map((item) => {
-            const active = item.code === current.code
+          {LANGUAGES.map((lang) => {
+            const active = lang.code === currentLangObj.code
             return (
-              <li key={item.code}>
+              <li key={lang.code}>
                 <button
                   type="button"
                   role="option"
                   aria-selected={active}
-                  onClick={() => {
-                    void loadLocaleResource(item.code)
-                    setOpen(false)
-                  }}
+                  onClick={() => changeLanguage(lang.code)}
                   className={cn(
-                    'flex w-full items-center gap-2.5 px-3.5 py-2.5 text-left text-sm font-semibold',
-                    active ? 'bg-emerald-50 text-emerald-700' : 'text-gray-700 hover:bg-gray-50',
+                    'flex w-full items-center gap-2.5 rounded-xl px-3.5 py-2 text-left hover:bg-emerald-50',
+                    active ? 'bg-emerald-50 text-emerald-700' : 'text-slate-700',
                   )}
                 >
-                  <span>{item.flag}</span>
-                  <span>{item.label}</span>
+                  <span className="flag-emoji text-base leading-none">{lang.flag}</span>
+                  <span className="text-[13.5px] font-medium text-slate-700">{lang.name}</span>
                 </button>
               </li>
             )

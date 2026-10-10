@@ -301,5 +301,65 @@
   },
   "printable": {
     "btn_print_pdf_floating": "🖨️ In PDF A4"
+  },
+  "affiliate": {
+    "badge": "🎨 Gợi ý dụng cụ vẽ cho giờ chơi thêm vui",
+    "guide": "Hãy chú ý những điểm này",
+    "affiliate_01_crayons": {
+      "title": "Sáp màu an toàn, dễ dàng tẩy rửa bằng nước cho bé",
+      "pain_point": "Bạn lo lắng vết sáp màu dính vào tay, quần áo hay tường?",
+      "point1": "Dễ dàng rửa sạch khỏi da và quần áo chỉ bằng nước xà phòng",
+      "point2": "Thành phần không độc hại, thân bút cứng cáp khó gãy",
+      "cta_btn": "Xem sáp màu an toàn dễ rửa ↗"
+    },
+    "affiliate_02_colored_pencils": {
+      "title": "Bút chì màu tam giác thân to trợ lực cho bé",
+      "pain_point": "Bé có thường mỏi tay và bỏ dở khi tô màu không?",
+      "point1": "Thân bút tam giác công thái học giúp bé cầm bút chuẩn",
+      "point2": "Ngòi to mềm mại, tô màu đậm nét chỉ với lực nhẹ",
+      "cta_btn": "Xem bút chì màu tam giác chống mỏi ↗"
+    },
+    "affiliate_03_markers": {
+      "title": "Bút lông màu gốc nước dễ tẩy rửa, lâu khô mực cho bé",
+      "pain_point": "Bực mình vì bút lông bị khô mực do bé quên đậy nắp?",
+      "point1": "Mực gốc nước dễ dàng giặt sạch khỏi da và vải",
+      "point2": "Đầu bút chắc chắn không bị thụt vào khi bé ấn mạnh",
+      "cta_btn": "Xem bút lông màu gốc nước dễ tẩy ↗"
+    },
+    "affiliate_04_water_brush": {
+      "title": "Bút cọ tích hợp bình chứa nước thông minh không lo đổ nước",
+      "pain_point": "Bạn có sợ bé làm đổ cốc nước rửa cọ khi vẽ màu nước không?",
+      "point1": "Bình chứa nước ngay trên thân bút, không cần cốc nước rườm rà",
+      "point2": "Lông cọ nylon đàn hồi cao cấp, không bị tưa hay rụng lông",
+      "cta_btn": "Xem bộ bút cọ nước tiện lợi ↗"
+    },
+    "affiliate_05_art_smock": {
+      "title": "Áo yếm vẽ tranh chống thấm nước toàn thân cho bé thỏa sức sáng tạo",
+      "pain_point": "Bạn sợ vết màu nước làm hỏng bộ quần áo đẹp của bé?",
+      "point1": "Chống thấm nước tuyệt đối kết hợp bo chun cổ tay gọn gàng",
+      "point2": "Chất liệu vải siêu nhẹ thoáng khí, lau sạch bằng khăn ướt trong tích tắc",
+      "cta_btn": "Xem áo yếm vẽ tranh chống thấm ↗"
+    },
+    "affiliate_06_craft_mat": {
+      "title": "Thảm vẽ tranh silicon cỡ lớn bảo vệ bàn học sạch sẽ",
+      "pain_point": "Lo lắng mực bút thấm qua giấy làm ố bẩn mặt bàn?",
+      "point1": "Chất liệu silicon thực phẩm an toàn, rửa sạch trôi màu chỉ với nước",
+      "point2": "Tích hợp khay pha màu và rãnh gác cọ tiện lợi, gọn gàng",
+      "cta_btn": "Xem thảm silicon vẽ tranh cỡ lớn ↗"
+    },
+    "affiliate_07_safety_scissors": {
+      "title": "Kéo cắt giấy an toàn đầu bo tròn không lo đứt tay cho bé",
+      "pain_point": "Bạn luôn lo bé cắt vào tay khi tập dùng kéo thủ công?",
+      "point1": "Lưỡi kéo an toàn chỉ cắt được giấy, không làm đứt da hay quần áo",
+      "point2": "Lò xo trợ lực tự động mở miệng kéo giúp bé cắt không tốn sức",
+      "cta_btn": "Xem kéo an toàn cho trẻ em ↗"
+    },
+    "affiliate_08_kids_art_set": {
+      "title": "Hộp bút vẽ nghệ thuật đa năng cao cấp cho bé",
+      "pain_point": "Mệt mỏi vì phải mua lẻ từng món và phòng luôn bừa bộn sau khi vẽ?",
+      "point1": "Đầy đủ sáp màu, bút lông, bút chì màu và phụ kiện vẽ",
+      "point2": "Hộp vali có quai xách tiện lợi giúp bé rèn luyện tính ngăn nắp",
+      "cta_btn": "Xem bộ hộp quà dụng cụ vẽ cao cấp ↗"
+    }
   }
 }

@@ -1,6 +1,15 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+@font-face {
+  font-family: "Twemoji Country Flags";
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+1F1E6-1F1FF, U+1F3F4, U+E0062-E007F;
+  src: url("https://cdn.jsdelivr.net/npm/country-flag-emoji-polyfill@0.1.8/dist/TwemojiCountryFlags.woff2")
+    format("woff2");
+}
+
 @theme {
   --font-display: "Fredoka", ui-rounded, sans-serif;
   --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
@@ -48,12 +57,25 @@
   font-family: var(--font-display);
 }
 
+@utility flag-emoji {
+  font-family: "Twemoji Country Flags", "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+}
+
 @utility scrollbar-none {
   scrollbar-width: none;
   -ms-overflow-style: none;
   &::-webkit-scrollbar {
     display: none;
   }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 @layer components {
