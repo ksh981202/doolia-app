@@ -60,7 +60,13 @@ export function ThemeFilter({
           onClick={() => onChange(item.id)}
           className={chipClass(value === item.id, variant)}
         >
-          {chipLabel(item, variant, t(`categories.${item.id}`, item.name))}
+          {chipLabel(
+            item,
+            variant,
+            item.id === 'all'
+              ? t('common.all', { defaultValue: '전체' })
+              : t(`categories.${item.id}`, { defaultValue: item.name }),
+          )}
           {expandCaret && value === item.id && item.id !== 'all' ? (
             <span aria-hidden className="text-[10px] leading-none opacity-90">
               ▾

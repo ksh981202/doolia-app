@@ -15,6 +15,9 @@
     "animals": "Animais fofos"
   },
   "language": "Idioma",
+  "common": {
+    "all": "Todos"
+  },
   "header": {
     "searchPlaceholder": "Buscar desenhos ou ideias de brincadeiras..."
   },
@@ -173,6 +176,15 @@
     "resetFilters": "Redefinir filtros",
     "emptyCategory": "Novos desenhos desta categoria chegam em breve!",
     "emptyFilter": "Ainda não há desenhos com estes filtros. Tente outra opção.",
+    "results_for": "Resultados para \"{{query}}\"",
+    "searchBadge": "Busca",
+    "searchLabel": "Busca :",
+    "searchCollection": "coleção para colorir",
+    "searchCount": "{{count}} desenhos",
+    "viewAll": "Ver todos os desenhos",
+    "emptySearch": "Ainda não há desenhos de \"{{query}}\"",
+    "emptySearchHint": "A DOOLIA já está desenhando novidades! Confira primeiro estes temas populares.",
+    "clearSearch": "Limpar busca",
     "themeGather": "Ver {{theme}} em detalhe",
     "menu": "Categorias",
     "closeMenu": "Fechar menu"

@@ -15,6 +15,9 @@
     "animals": "Animaux mignons"
   },
   "language": "Langue",
+  "common": {
+    "all": "Tous"
+  },
   "header": {
     "searchPlaceholder": "Rechercher des coloriages ou des idées..."
   },
@@ -173,6 +176,15 @@
     "resetFilters": "Réinitialiser les filtres",
     "emptyCategory": "De nouveaux coloriages arrivent bientôt dans cette catégorie !",
     "emptyFilter": "Aucun coloriage ne correspond à ces filtres. Essayez une autre option.",
+    "results_for": "Résultats pour « {{query}} »",
+    "searchBadge": "Recherche",
+    "searchLabel": "Recherche :",
+    "searchCollection": "coloriages",
+    "searchCount": "{{count}} coloriages",
+    "viewAll": "Voir tous les coloriages",
+    "emptySearch": "Pas encore de coloriages « {{query}} »",
+    "emptySearchHint": "DOOLIA prépare de nouveaux dessins ! Découvrez d’abord ces thèmes populaires.",
+    "clearSearch": "Effacer la recherche",
     "themeGather": "Voir {{theme}} en détail",
     "menu": "Catégories",
     "closeMenu": "Fermer le menu"

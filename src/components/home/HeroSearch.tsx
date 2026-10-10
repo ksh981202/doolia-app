@@ -1,21 +1,34 @@
 import { Search } from 'lucide-react'
 import type { FormEvent } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 import { QuickFinder } from '@/components/home/QuickFinder'
-import { POPULAR_KEYWORDS } from '@/shared/config/categories'
+import { categorySearchPath } from '@/shared/config/catalog'
 import { cn } from '@/shared/lib/cn'
-import { scrollToPopularGallery, useGalleryStore } from '@/shared/store/useGalleryStore'
+
+const HERO_TAGS = [
+  { id: 'dino', q: '공룡' },
+  { id: 'unicorn', q: '유니콘' },
+  { id: 'car', q: '자동차' },
+  { id: 'imagination', q: '상상나라' },
+  { id: 'animals', q: '귀여운 동물' },
+] as const
 
 export function HeroSearch() {
   const { t } = useTranslation()
-  const query = useGalleryStore((state) => state.query)
-  const setQuery = useGalleryStore((state) => state.setQuery)
-  const applyKeyword = useGalleryStore((state) => state.applyKeyword)
+  const navigate = useNavigate()
+  const [query, setQuery] = useState('')
+
+  const goToSearch = (keyword: string) => {
+    const next = keyword.trim()
+    if (!next) return
+    navigate(categorySearchPath(next))
+  }
 
   const submit = (event: FormEvent) => {
     event.preventDefault()
-    setQuery(query.trim())
-    scrollToPopularGallery()
+    goToSearch(query)
   }
 
   return (
@@ -48,29 +61,26 @@ export function HeroSearch() {
             type="submit"
             className="h-12 shrink-0 rounded-full bg-brand-dark px-5 text-sm font-extrabold text-white hover:bg-brand-deep"
           >
-            검색
+            {t('home.searchBtn', '검색')}
           </button>
         </form>
 
         <QuickFinder />
 
         <div className="mt-5 flex flex-wrap justify-center gap-2">
-          {POPULAR_KEYWORDS.map((keyword) => (
+          {HERO_TAGS.map((tag) => (
             <button
-              key={keyword}
+              key={tag.id}
               type="button"
-              onClick={() => {
-                applyKeyword(keyword)
-                scrollToPopularGallery()
-              }}
+              onClick={() => goToSearch(tag.q)}
               className={cn(
                 'rounded-full px-3 py-1.5 text-sm font-bold',
-                query === keyword
+                query === tag.q
                   ? 'bg-brand-dark text-white'
                   : 'bg-white text-brand-deep ring-1 ring-brand-dark/20 hover:bg-brand-soft',
               )}
             >
-              #{keyword}
+              {t(`home.tags.${tag.id}`, { defaultValue: tag.q })}
             </button>
           ))}
         </div>

@@ -8,7 +8,7 @@ import { HEADER_NAV_ITEMS, isHeaderNavActive } from '@/components/header/nav'
 import { LanguageSwitcher } from '@/components/header/LanguageSwitcher'
 import { Logo } from '@/components/header/Logo'
 import { NavMenu } from '@/components/header/NavMenu'
-import { DEFAULT_CATEGORY_SLUG, categoryPath } from '@/shared/config/catalog'
+import { categorySearchPath } from '@/shared/config/catalog'
 import { TOUCH_ICON, cn } from '@/shared/lib/cn'
 
 const iconButtonClass =
@@ -18,13 +18,12 @@ export function Header() {
   const { t } = useTranslation()
   const location = useLocation()
   const navigate = useNavigate()
-  const [params, setParams] = useSearchParams()
+  const [params] = useSearchParams()
   const urlQuery = params.get('q') ?? ''
   const [query, setQuery] = useState(urlQuery)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const searchInputRef = useRef<HTMLInputElement>(null)
-  const isCategory = location.pathname.startsWith('/category')
 
   useEffect(() => {
     setQuery(urlQuery)
@@ -36,11 +35,9 @@ export function Header() {
   }, [location.pathname, location.search])
 
   useEffect(() => {
-    if (!isMobileMenuOpen && !isSearchOpen) return
+    if (!isMobileMenuOpen) return
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape') return
-      setIsMobileMenuOpen(false)
-      setIsSearchOpen(false)
+      if (event.key === 'Escape') setIsMobileMenuOpen(false)
     }
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
@@ -49,11 +46,16 @@ export function Header() {
       document.body.style.overflow = previousOverflow
       window.removeEventListener('keydown', onKeyDown)
     }
-  }, [isMobileMenuOpen, isSearchOpen])
+  }, [isMobileMenuOpen])
 
   useEffect(() => {
     if (!isSearchOpen) return
     searchInputRef.current?.focus()
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsSearchOpen(false)
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
   }, [isSearchOpen])
 
   useEffect(() => {
@@ -67,18 +69,8 @@ export function Header() {
   }, [location.hash, location.pathname])
 
   const applyQuery = (value: string) => {
-    const nextQuery = value.trim()
     setIsSearchOpen(false)
-    if (!isCategory) {
-      navigate(
-        `${categoryPath(DEFAULT_CATEGORY_SLUG)}${nextQuery ? `?q=${encodeURIComponent(nextQuery)}` : ''}`,
-      )
-      return
-    }
-    const next = new URLSearchParams(params)
-    if (nextQuery) next.set('q', nextQuery)
-    else next.delete('q')
-    setParams(next, { replace: true })
+    navigate(categorySearchPath(value))
   }
 
   const submitSearch = (event: FormEvent) => {
@@ -93,40 +85,63 @@ export function Header() {
           <Logo />
         </div>
 
-        <nav className="hidden min-w-0 items-center justify-center gap-2 overflow-hidden md:flex lg:gap-4" aria-label="주요 메뉴">
-          {HEADER_NAV_ITEMS.map((menu) => (
-            <Link
-              key={menu.id}
-              to={menu.path}
-              className={cn(
-                'inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-2xl border border-slate-200/70 bg-slate-50/90 px-2.5 py-2 text-[13.5px] font-bold text-slate-700 shadow-2xs transition-all duration-200 hover:scale-[1.02] hover:border-emerald-300 hover:bg-emerald-50/80 hover:text-emerald-700 hover:shadow-xs lg:gap-2 lg:px-3.5 lg:text-[15.5px]',
-                isHeaderNavActive(menu, location.pathname, params)
-                  ? 'border-emerald-300 bg-emerald-50/80 text-emerald-700 shadow-xs'
-                  : '',
-              )}
+        {isSearchOpen ? (
+          <form
+            onSubmit={submitSearch}
+            className="flex min-w-0 items-center gap-2 rounded-2xl border border-emerald-200 bg-white px-3 py-1.5 shadow-xs"
+          >
+            <Search size={16} className="shrink-0 text-slate-400" />
+            <input
+              ref={searchInputRef}
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder={t('header.searchPlaceholder', '도안 이름, 놀이 아이디어를 검색하세요')}
+              className="h-9 min-w-0 flex-1 bg-transparent text-sm font-medium text-slate-800 outline-none placeholder:text-slate-400"
+            />
+            <button
+              type="submit"
+              className="rounded-xl bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white transition hover:bg-emerald-700"
             >
-              <span className="shrink-0 text-[17px] leading-none">{menu.icon}</span>
-              <span className="min-w-0 truncate">
-                {t(menu.labelKey, {
-                  defaultValue: menu.id === 'animals' ? '🐶 귀여운 동물' : '🎨 전체 도안',
-                })}
-              </span>
-            </Link>
-          ))}
-        </nav>
+              {t('home.searchBtn', '검색')}
+            </button>
+          </form>
+        ) : (
+          <nav className="hidden min-w-0 items-center justify-center gap-2 overflow-hidden md:flex lg:gap-4" aria-label="주요 메뉴">
+            {HEADER_NAV_ITEMS.map((menu) => (
+              <Link
+                key={menu.id}
+                to={menu.path}
+                className={cn(
+                  'inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-2xl border border-slate-200/70 bg-slate-50/90 px-2.5 py-2 text-[13.5px] font-bold text-slate-700 shadow-2xs transition-all duration-200 hover:scale-[1.02] hover:border-emerald-300 hover:bg-emerald-50/80 hover:text-emerald-700 hover:shadow-xs lg:gap-2 lg:px-3.5 lg:text-[15.5px]',
+                  isHeaderNavActive(menu, location.pathname, params)
+                    ? 'border-emerald-300 bg-emerald-50/80 text-emerald-700 shadow-xs'
+                    : '',
+                )}
+              >
+                <span className="shrink-0 text-[17px] leading-none">{menu.icon}</span>
+                <span className="min-w-0 truncate">
+                  {t(menu.labelKey, {
+                    defaultValue: menu.id === 'animals' ? '🐶 귀여운 동물' : '🎨 전체 도안',
+                  })}
+                </span>
+              </Link>
+            ))}
+          </nav>
+        )}
 
         <div className="flex items-center justify-self-end gap-2">
           <button
             type="button"
             onClick={() => {
               setIsMobileMenuOpen(false)
-              setIsSearchOpen(true)
+              setIsSearchOpen((open) => !open)
             }}
-            aria-label={t('home.searchBtn', '검색')}
+            aria-label={isSearchOpen ? t('detail.back', '닫기') : t('home.searchBtn', '검색')}
             aria-expanded={isSearchOpen}
-            className={cn(iconButtonClass, 'max-sm:hidden')}
+            className={iconButtonClass}
           >
-            <Search size={18} />
+            {isSearchOpen ? <X size={18} /> : <Search size={18} />}
           </button>
           <LanguageSwitcher />
           {isLocalAdminHost() ? (
@@ -155,50 +170,6 @@ export function Header() {
           </button>
         </div>
       </div>
-
-      {isSearchOpen
-        ? createPortal(
-            <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label={t('home.searchBtn', '검색')}>
-              <button
-                type="button"
-                className="absolute inset-0 bg-slate-900/40 backdrop-blur-xs"
-                aria-label={t('detail.back', '닫기')}
-                onClick={() => setIsSearchOpen(false)}
-              />
-              <div className="relative mx-auto mt-20 w-full max-w-xl px-4">
-                <form
-                  onSubmit={submitSearch}
-                  className="flex items-center gap-2 rounded-2xl border border-slate-100 bg-white p-2.5 shadow-2xl"
-                >
-                  <Search size={18} className="ml-2 shrink-0 text-slate-400" />
-                  <input
-                    ref={searchInputRef}
-                    type="search"
-                    value={query}
-                    onChange={(event) => setQuery(event.target.value)}
-                    placeholder={t('header.searchPlaceholder', '도안 이름, 놀이 아이디어를 검색하세요')}
-                    className="h-11 min-w-0 flex-1 bg-transparent text-sm font-medium text-slate-800 outline-none placeholder:text-slate-400"
-                  />
-                  <button
-                    type="submit"
-                    className="rounded-xl bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white transition hover:bg-emerald-700"
-                  >
-                    {t('home.searchBtn', '검색')}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setIsSearchOpen(false)}
-                    aria-label={t('detail.back', '닫기')}
-                    className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200"
-                  >
-                    <X size={16} />
-                  </button>
-                </form>
-              </div>
-            </div>,
-            document.body,
-          )
-        : null}
 
       {isMobileMenuOpen
         ? createPortal(

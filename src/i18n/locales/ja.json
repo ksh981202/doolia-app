@@ -15,6 +15,9 @@
     "animals": "かわいい動物"
   },
   "language": "言語",
+  "common": {
+    "all": "すべて"
+  },
   "header": {
     "searchPlaceholder": "ぬりえの名前や遊びのアイデアを検索"
   },
@@ -173,6 +176,15 @@
     "resetFilters": "フィルターをリセット",
     "emptyCategory": "このカテゴリーのぬりえは近日公開予定です！",
     "emptyFilter": "条件に合うぬりえがまだありません。別のフィルターを試してください。",
+    "results_for": "「{{query}}」の検索結果",
+    "searchBadge": "検索",
+    "searchLabel": "検索語 :",
+    "searchCollection": "ぬりえコレクション",
+    "searchCount": "{{count}}件のぬりえ",
+    "viewAll": "すべてのぬりえを見る",
+    "emptySearch": "まだ「{{query}}」のぬりえがありません",
+    "emptySearchHint": "DOOLIAがもうすぐ新しいぬりえを描きます！まずは人気のテーマを見てみましょう。",
+    "clearSearch": "検索をクリア",
     "themeGather": "{{theme}} の詳細ぬりえ",
     "menu": "カテゴリー",
     "closeMenu": "メニューを閉じる"

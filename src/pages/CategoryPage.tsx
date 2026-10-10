@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Navigate, useParams, useSearchParams } from 'react-router-dom'
+import { Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { ThemeFilter } from '@/components/category/ThemeFilter'
 import { PrintableCard } from '@/components/PrintableCard'
 import { SubpageHeader } from '@/components/layout/SubpageHeader'
@@ -18,6 +18,7 @@ import {
   CATALOG_SLUG_ALIASES,
   DEFAULT_CATEGORY_SLUG,
   categoryPath,
+  categorySearchPath,
   getCatalogTopic,
   matchesTopicCategory,
 } from '@/shared/config/catalog'
@@ -30,6 +31,13 @@ import {
 import { cn } from '@/shared/lib/cn'
 
 const CARD_GRID = 'mt-6 grid min-w-0 grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4'
+
+const SEARCH_SUGGESTIONS = [
+  { id: 'dinosaur', icon: '🦕', labelKey: 'categories.dinosaur', fallback: '공룡 세상' },
+  { id: 'princess', icon: '👑', labelKey: 'categories.princess', fallback: '공주 & 판타지' },
+  { id: 'vehicles', icon: '🚗', labelKey: 'categories.vehicles', fallback: '자동차 & 탈것' },
+  { id: 'animals', icon: '🐶', labelKey: 'categories.animals', fallback: '귀여운 동물' },
+] as const
 
 function filterChipClass(active: boolean) {
   return cn(
@@ -73,6 +81,7 @@ function SortSelect({
 export function CategoryPage() {
   const { t } = useTranslation()
   const { slug } = useParams()
+  const navigate = useNavigate()
   const [params, setParams] = useSearchParams()
   const typeSlug = resolveTypeSlug(params.get('type'))
   const categoryQuerySlug = getCatalogTopic(params.get('category') ?? undefined)?.topic.id
@@ -93,7 +102,9 @@ export function CategoryPage() {
   const showSubChips = Boolean(theme !== 'all' && subOptions?.length)
   const sortParam = params.get('sort')
   const sort = sortParam === 'popular' || sortParam === 'latest' ? sortParam : browseAll ? 'latest' : 'popular'
-  const query = params.get('q') ?? ''
+  const searchQuery = (params.get('q') ?? '').trim()
+  const query = searchQuery
+  const isSearch = searchQuery.length > 0
   const ageFilter = AGE_FILTERS.find((item) => item.id === age)
   const ageLabel = t(ageFilter?.labelKey ?? 'category.all', { defaultValue: ageFilter?.label ?? '전체' })
 
@@ -179,7 +190,7 @@ export function CategoryPage() {
     return <Navigate to={categoryPath(DEFAULT_CATEGORY_SLUG)} replace />
   }
 
-  const title = isSenior
+  const categoryTitle = isSenior
     ? healingTheme
       ? t(`categories.${healingTheme.id}`, { defaultValue: healingTheme.name })
       : t('category.healingColoring', { defaultValue: match?.topic.label ?? '온가족 힐링 컬러링' })
@@ -190,13 +201,17 @@ export function CategoryPage() {
       : age === 'all'
         ? t('catalog.allCategory', { defaultValue: '전체 색칠도안 (ALL)' })
         : t('category.ageCustom', { defaultValue: '{{age}} 맞춤 도안', age: ageLabel })
-  const emoji = isSenior
-    ? healingTheme?.icon || match?.topic.emoji || '🌿'
-    : match
-      ? parentTheme?.icon || match.topic.emoji
-      : age === 'all'
-        ? '🎨'
-        : '👶'
+  const resultsFor = t('category.results_for', { defaultValue: '"{{query}}" 검색 결과', query: searchQuery })
+  const title = isSearch ? resultsFor : categoryTitle
+  const emoji = isSearch
+    ? '🔍'
+    : isSenior
+      ? healingTheme?.icon || match?.topic.emoji || '🌿'
+      : match
+        ? parentTheme?.icon || match.topic.emoji
+        : age === 'all'
+          ? '🎨'
+          : '👶'
   const homeCrumb = { label: t('category.home', { defaultValue: '홈' }), to: '/' }
   const groupLabel =
     match?.group.id === 'healing'
@@ -226,6 +241,17 @@ export function CategoryPage() {
             { label: t('category.allColoring', { defaultValue: '전체 색칠도안' }), to: '/category' },
             { label: ageLabel },
           ]
+  const searchCrumbs = [
+    homeCrumb,
+    {
+      label: match
+        ? t(`categories.${match.topic.id}`, { defaultValue: match.topic.label })
+        : t('category.allColoring', { defaultValue: '전체 색칠도안' }),
+      to: match ? categoryPath(match.topic.id) : '/category',
+    },
+    { label: resultsFor },
+  ]
+  const headerCrumbs = isSearch ? searchCrumbs : crumbs
 
   const setFilter = (key: 'age' | 'theme' | 'sub', value: string) => {
     const next = new URLSearchParams(params)
@@ -245,9 +271,55 @@ export function CategoryPage() {
     setParams(next)
   }
 
+  const clearSearch = () => {
+    navigate(categorySearchPath(), { replace: true })
+  }
+
+  const openTheme = (themeId: string) => {
+    navigate(`${categoryPath(DEFAULT_CATEGORY_SLUG)}?theme=${encodeURIComponent(themeId)}`)
+  }
+
   return (
     <div>
-      <SubpageHeader crumbs={crumbs} title={title} emoji={emoji} />
+      <SubpageHeader crumbs={headerCrumbs} title={title} emoji={emoji} hideTitle={isSearch} />
+      {isSearch ? (
+        <div className="relative mb-8 flex flex-col justify-between gap-4 overflow-hidden rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:p-7">
+          <div className="flex items-center gap-4">
+            <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl border border-emerald-100 bg-emerald-50 text-2xl shadow-inner">
+              🔍
+            </div>
+            <div>
+              <div className="mb-1 flex flex-wrap items-center gap-2">
+                <span className="rounded-md bg-emerald-50/80 px-2.5 py-0.5 text-[11px] font-bold tracking-wider text-emerald-700">
+                  {t('category.searchBadge', { defaultValue: 'Search' })}
+                </span>
+                <span
+                  className={cn(
+                    'rounded-full px-2 py-0.5 text-[11.5px] font-semibold',
+                    items.length > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-700',
+                  )}
+                >
+                  {t('category.searchCount', { defaultValue: '{{count}}개의 도안', count: items.length })}
+                </span>
+              </div>
+              <h1 className="mt-0.5 flex flex-wrap items-center gap-1.5 text-lg font-bold tracking-tight text-slate-800 sm:text-[21px]">
+                <span className="font-extrabold text-emerald-600">"{searchQuery}"</span>
+                <span>{t('category.searchCollection', { defaultValue: '색칠도안 모음' })}</span>
+              </h1>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={clearSearch}
+            className="inline-flex shrink-0 items-center justify-center gap-2 self-start rounded-xl bg-slate-100 px-4 py-2.5 text-xs font-semibold text-slate-600 transition-all duration-150 hover:bg-slate-200 active:scale-95 sm:self-auto sm:text-[12.5px]"
+          >
+            <svg className="h-3.5 w-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            <span>{t('category.viewAll', { defaultValue: '전체 도안 보기' })}</span>
+          </button>
+        </div>
+      ) : null}
 
       <div>
         <div
@@ -370,6 +442,36 @@ export function CategoryPage() {
               {Array.from({ length: 8 }).map((_, index) => (
                 <div key={index} className="aspect-[3/4] animate-pulse rounded-2xl bg-brand-soft" />
               ))}
+            </div>
+          ) : items.length === 0 && isSearch ? (
+            <div className="rounded-3xl border border-slate-200/80 bg-white px-6 py-12 text-center shadow-sm sm:px-10 sm:py-14">
+              <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-3xl bg-emerald-50 text-3xl shadow-inner">
+                🎨
+              </div>
+              <h2 className="text-base font-bold tracking-tight text-slate-800 sm:text-lg">
+                {t('category.emptySearch', {
+                  defaultValue: '아직 "{{query}}" 도안이 준비되지 않았어요',
+                  query: searchQuery,
+                })}
+              </h2>
+              <p className="mx-auto mt-1.5 max-w-md text-xs font-normal text-slate-500 sm:text-[13.5px]">
+                {t('category.emptySearchHint', {
+                  defaultValue: '둘리아가 곧 새로운 도안을 그려올게요! 아래 인기 도안들을 먼저 만나보세요.',
+                })}
+              </p>
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
+                {SEARCH_SUGGESTIONS.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => openTheme(item.id)}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs font-medium text-slate-700 transition-all hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-800 active:scale-95 sm:text-[12.5px]"
+                  >
+                    <span aria-hidden>{item.icon}</span>
+                    <span>{t(item.labelKey, { defaultValue: item.fallback })}</span>
+                  </button>
+                ))}
+              </div>
             </div>
           ) : items.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-line bg-white px-6 py-12 text-center">

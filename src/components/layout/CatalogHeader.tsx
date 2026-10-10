@@ -2,7 +2,7 @@ import { Bookmark, Menu, Search } from 'lucide-react'
 import { type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import { DEFAULT_CATEGORY_SLUG, categoryPath } from '@/shared/config/catalog'
+import { categorySearchPath } from '@/shared/config/catalog'
 import { useBookmarkStore } from '@/shared/store/useBookmarkStore'
 
 type CatalogHeaderProps = {
@@ -13,19 +13,12 @@ export function CatalogHeader({ onMenu }: CatalogHeaderProps) {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation()
-  const [params, setParams] = useSearchParams()
+  const [params] = useSearchParams()
   const bookmarkCount = useBookmarkStore((state) => state.ids.length)
   const query = params.get('q') ?? ''
 
   const applyQuery = (value: string) => {
-    if (!location.pathname.startsWith('/category')) {
-      navigate(`${categoryPath(DEFAULT_CATEGORY_SLUG)}?q=${encodeURIComponent(value)}`)
-      return
-    }
-    const next = new URLSearchParams(params)
-    if (value) next.set('q', value)
-    else next.delete('q')
-    setParams(next, { replace: true })
+    navigate(categorySearchPath(value), { replace: location.pathname.startsWith('/category') })
   }
 
   const submit = (event: FormEvent) => {

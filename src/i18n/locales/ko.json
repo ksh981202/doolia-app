@@ -15,6 +15,9 @@
     "animals": "귀여운 동물"
   },
   "language": "언어",
+  "common": {
+    "all": "전체"
+  },
   "header": {
     "searchPlaceholder": "도안 이름, 놀이 아이디어를 검색하세요"
   },
@@ -173,6 +176,15 @@
     "resetFilters": "필터 초기화",
     "emptyCategory": "해당 카테고리의 도안이 곧 업데이트됩니다!",
     "emptyFilter": "해당 조건의 도안이 아직 없습니다. 다른 필터를 선택해 보세요!",
+    "results_for": "\"{{query}}\" 검색 결과",
+    "searchBadge": "검색",
+    "searchLabel": "검색어 :",
+    "searchCollection": "색칠도안 모음",
+    "searchCount": "{{count}}개의 도안",
+    "viewAll": "전체 도안 보기",
+    "emptySearch": "아직 \"{{query}}\" 도안이 준비되지 않았어요",
+    "emptySearchHint": "둘리아가 곧 새로운 도안을 그려올게요! 아래 인기 도안들을 먼저 만나보세요.",
+    "clearSearch": "검색어 지우기",
     "themeGather": "{{theme}} 세부 도안 모아보기",
     "menu": "카테고리",
     "closeMenu": "메뉴 닫기"

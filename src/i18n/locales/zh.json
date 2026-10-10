@@ -15,6 +15,9 @@
     "animals": "可愛動物"
   },
   "language": "語言",
+  "common": {
+    "all": "全部"
+  },
   "header": {
     "searchPlaceholder": "搜尋著色圖名稱或遊戲靈感..."
   },
@@ -173,6 +176,15 @@
     "resetFilters": "重設篩選",
     "emptyCategory": "此分類圖稿即將更新！",
     "emptyFilter": "目前沒有符合條件的圖稿，請試試其他篩選。",
+    "results_for": "「{{query}}」的搜尋結果",
+    "searchBadge": "搜尋",
+    "searchLabel": "關鍵字 :",
+    "searchCollection": "著色圖集",
+    "searchCount": "{{count}} 張圖稿",
+    "viewAll": "查看全部圖稿",
+    "emptySearch": "「{{query}}」的圖稿還沒準備好",
+    "emptySearchHint": "DOOLIA 很快會畫上新圖稿！先看看下面的熱門主題吧。",
+    "clearSearch": "清除搜尋",
     "themeGather": "瀏覽 {{theme}} 細項圖稿",
     "menu": "分類",
     "closeMenu": "關閉選單"

@@ -15,6 +15,9 @@
     "animals": "Animales lindos"
   },
   "language": "Idioma",
+  "common": {
+    "all": "Todos"
+  },
   "header": {
     "searchPlaceholder": "Busca dibujos o ideas para jugar..."
   },
@@ -173,6 +176,15 @@
     "resetFilters": "Restablecer filtros",
     "emptyCategory": "¡Pronto habrá más dibujos en esta categoría!",
     "emptyFilter": "Aún no hay dibujos con estos filtros. Prueba otra opción.",
+    "results_for": "Resultados para \"{{query}}\"",
+    "searchBadge": "Buscar",
+    "searchLabel": "Búsqueda :",
+    "searchCollection": "colección para colorear",
+    "searchCount": "{{count}} dibujos",
+    "viewAll": "Ver todos los dibujos",
+    "emptySearch": "Aún no hay dibujos de \"{{query}}\"",
+    "emptySearchHint": "¡DOOLIA dibujará nuevos diseños pronto! Prueba primero estos temas populares.",
+    "clearSearch": "Borrar búsqueda",
     "themeGather": "Ver {{theme}} en detalle",
     "menu": "Categorías",
     "closeMenu": "Cerrar menú"

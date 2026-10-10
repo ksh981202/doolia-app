@@ -2,7 +2,7 @@ import { Bookmark, ChevronLeft, Menu, Search } from 'lucide-react'
 import { type FormEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import { DEFAULT_CATEGORY_SLUG, categoryPath } from '@/shared/config/catalog'
+import { categorySearchPath } from '@/shared/config/catalog'
 import { cn } from '@/shared/lib/cn'
 import { useBookmarkStore } from '@/shared/store/useBookmarkStore'
 
@@ -19,7 +19,7 @@ export function TopSearchHeader({ onMenu, variant = 'sticky' }: TopSearchHeaderP
   const { t } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation()
-  const [params, setParams] = useSearchParams()
+  const [params] = useSearchParams()
   const bookmarkCount = useBookmarkStore((state) => state.ids.length)
   const urlQuery = params.get('q') ?? ''
   const [query, setQuery] = useState(urlQuery)
@@ -36,15 +36,7 @@ export function TopSearchHeader({ onMenu, variant = 'sticky' }: TopSearchHeaderP
   }, [urlQuery])
 
   const applyQuery = (value: string) => {
-    const nextQuery = value.trim()
-    if (!isCategory) {
-      navigate(`${categoryPath(DEFAULT_CATEGORY_SLUG)}${nextQuery ? `?q=${encodeURIComponent(nextQuery)}` : ''}`)
-      return
-    }
-    const next = new URLSearchParams(params)
-    if (nextQuery) next.set('q', nextQuery)
-    else next.delete('q')
-    setParams(next, { replace: true })
+    navigate(categorySearchPath(value), { replace: isCategory })
   }
 
   const submit = (event: FormEvent) => {

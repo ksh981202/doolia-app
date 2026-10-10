@@ -337,6 +337,12 @@ export function categoryPath(slug: string) {
   return `/category/${slug}`
 }
 
+/** 전역 검색: theme/age 등 기존 필터를 제거하고 q만 남긴다. */
+export function categorySearchPath(query = '') {
+  const q = query.trim()
+  return `${categoryPath(DEFAULT_CATEGORY_SLUG)}${q ? `?q=${encodeURIComponent(q)}` : ''}`
+}
+
 /** 상세 페이지. 카드 클릭 시 즉시 navigate 하는 경로 (데이터 대기 없음) */
 export function printablePath(slug: string) {
   return `/printable/${slug}`

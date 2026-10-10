@@ -15,6 +15,9 @@
     "animals": "Động vật dễ thương"
   },
   "language": "Ngôn ngữ",
+  "common": {
+    "all": "Tất cả"
+  },
   "header": {
     "searchPlaceholder": "Tìm kiếm tranh tô màu, ý tưởng chơi..."
   },
@@ -173,6 +176,15 @@
     "resetFilters": "Xóa bộ lọc",
     "emptyCategory": "Tranh của danh mục này sẽ sớm được cập nhật!",
     "emptyFilter": "Chưa có tranh phù hợp bộ lọc này. Hãy thử tùy chọn khác.",
+    "results_for": "Kết quả cho \"{{query}}\"",
+    "searchBadge": "Tìm kiếm",
+    "searchLabel": "Từ khóa :",
+    "searchCollection": "bộ tranh tô màu",
+    "searchCount": "{{count}} tranh",
+    "viewAll": "Xem tất cả tranh",
+    "emptySearch": "Chưa có tranh \"{{query}}\"",
+    "emptySearchHint": "DOOLIA sẽ sớm vẽ thêm tranh mới! Hãy xem các chủ đề nổi bật bên dưới trước nhé.",
+    "clearSearch": "Xóa tìm kiếm",
     "themeGather": "Xem chi tiết {{theme}}",
     "menu": "Danh mục",
     "closeMenu": "Đóng menu"

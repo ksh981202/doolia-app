@@ -10,11 +10,12 @@ type SubpageHeaderProps = {
   crumbs: SubpageCrumb[]
   title: string
   emoji?: string
+  hideTitle?: boolean
 }
 
-export function SubpageHeader({ crumbs, title, emoji }: SubpageHeaderProps) {
+export function SubpageHeader({ crumbs, title, emoji, hideTitle }: SubpageHeaderProps) {
   return (
-    <div className="mb-6 space-y-1.5">
+    <div className={hideTitle ? 'mb-3 space-y-1.5' : 'mb-6 space-y-1.5'}>
       <nav
         className="flex flex-wrap items-center gap-1.5 overflow-hidden py-1.5 text-xs font-medium text-slate-500"
         aria-label="breadcrumb"
@@ -42,10 +43,12 @@ export function SubpageHeader({ crumbs, title, emoji }: SubpageHeaderProps) {
           )
         })}
       </nav>
-      <h1 className="flex min-w-0 flex-wrap items-center gap-2 text-xl font-extrabold leading-snug text-slate-900 sm:text-2xl lg:text-3xl">
-        {emoji ? <span className="shrink-0">{emoji}</span> : null}
-        <span className="min-w-0 break-words [overflow-wrap:anywhere]">{title}</span>
-      </h1>
+      {hideTitle ? null : (
+        <h1 className="flex min-w-0 flex-wrap items-center gap-2 text-xl font-extrabold leading-snug text-slate-900 sm:text-2xl lg:text-3xl">
+          {emoji ? <span className="shrink-0">{emoji}</span> : null}
+          <span className="min-w-0 break-words [overflow-wrap:anywhere]">{title}</span>
+        </h1>
+      )}
     </div>
   )
 }

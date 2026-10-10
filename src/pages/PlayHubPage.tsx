@@ -5,7 +5,7 @@ import { Search } from 'lucide-react'
 import { PrintableCard } from '@/components/PrintableCard'
 import { usePrintablesQuery } from '@/features/gallery/model/usePrintablesQuery'
 import { selectHomePrintables } from '@/services/printableService'
-import { printablePath } from '@/shared/config/catalog'
+import { categorySearchPath, printablePath } from '@/shared/config/catalog'
 import { pickLocalized } from '@/shared/lib/detailCopy'
 import { getDisplayImageUrl } from '@/shared/utils/printableAssets'
 import type { Printable } from '@/types/printable'
@@ -157,7 +157,7 @@ export function PlayHubPage() {
   const goToSearch = (keyword: string) => {
     const next = keyword.trim()
     if (!next) return
-    navigate(`/category/coloring-pages?q=${encodeURIComponent(next)}`)
+    navigate(categorySearchPath(next))
   }
 
   const handleSearchSubmit = (event: FormEvent) => {

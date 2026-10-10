@@ -53,6 +53,10 @@ export function userSearchHaystack(item: Printable) {
     item.description_fr,
     item.description_it,
     item.description_vi,
+    item.theme_ko,
+    item.theme_en,
+    item.category,
+    ...item.tags,
   ]
     .filter(Boolean)
     .join(' ')

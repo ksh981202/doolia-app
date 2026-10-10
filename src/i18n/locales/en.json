@@ -15,6 +15,9 @@
     "animals": "Cute animals"
   },
   "language": "Language",
+  "common": {
+    "all": "All"
+  },
   "header": {
     "searchPlaceholder": "Search printables, play ideas..."
   },
@@ -173,6 +176,15 @@
     "resetFilters": "Reset filters",
     "emptyCategory": "New printables for this category are coming soon!",
     "emptyFilter": "No printables match these filters. Try another option!",
+    "results_for": "Results for \"{{query}}\"",
+    "searchBadge": "Search",
+    "searchLabel": "Search :",
+    "searchCollection": "coloring pages",
+    "searchCount": "{{count}} printables",
+    "viewAll": "View all pages",
+    "emptySearch": "We don't have \"{{query}}\" pages yet",
+    "emptySearchHint": "Doolia is drawing new pages soon! Try these popular themes first.",
+    "clearSearch": "Clear search",
     "themeGather": "Browse {{theme}} in detail",
     "menu": "Categories",
     "closeMenu": "Close menu"

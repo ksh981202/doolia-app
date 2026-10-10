@@ -15,6 +15,9 @@
     "animals": "Animali carini"
   },
   "language": "Lingua",
+  "common": {
+    "all": "Tutti"
+  },
   "header": {
     "searchPlaceholder": "Cerca disegni o idee di gioco..."
   },
@@ -173,6 +176,15 @@
     "resetFilters": "Reimposta filtri",
     "emptyCategory": "Presto arriveranno nuovi disegni in questa categoria!",
     "emptyFilter": "Nessun disegno corrisponde a questi filtri. Prova un'altra opzione.",
+    "results_for": "Risultati per \"{{query}}\"",
+    "searchBadge": "Ricerca",
+    "searchLabel": "Ricerca :",
+    "searchCollection": "disegni da colorare",
+    "searchCount": "{{count}} disegni",
+    "viewAll": "Vedi tutti i disegni",
+    "emptySearch": "Non abbiamo ancora disegni di \"{{query}}\"",
+    "emptySearchHint": "DOOLIA sta per disegnare nuove pagine! Prova prima questi temi popolari.",
+    "clearSearch": "Cancella ricerca",
     "themeGather": "Sfoglia {{theme}} nel dettaglio",
     "menu": "Categorie",
     "closeMenu": "Chiudi menu"

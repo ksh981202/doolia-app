@@ -15,6 +15,9 @@
     "animals": "Süße Tiere"
   },
   "language": "Sprache",
+  "common": {
+    "all": "Alle"
+  },
   "header": {
     "searchPlaceholder": "Malvorlagen oder Spielideen suchen..."
   },
@@ -173,6 +176,15 @@
     "resetFilters": "Filter zurücksetzen",
     "emptyCategory": "Neue Motive in dieser Kategorie folgen bald!",
     "emptyFilter": "Keine Motive passend zu diesen Filtern. Bitte andere Option wählen.",
+    "results_for": "Ergebnisse für \"{{query}}\"",
+    "searchBadge": "Suche",
+    "searchLabel": "Suche :",
+    "searchCollection": "Malvorlagen",
+    "searchCount": "{{count}} Motive",
+    "viewAll": "Alle Motive ansehen",
+    "emptySearch": "Für \"{{query}}\" gibt es noch keine Motive",
+    "emptySearchHint": "DOOLIA malt bald neue Seiten! Entdecke zuerst diese beliebten Themen.",
+    "clearSearch": "Suche löschen",
     "themeGather": "{{theme}} im Detail ansehen",
     "menu": "Kategorien",
     "closeMenu": "Menü schließen"
