@@ -21,7 +21,8 @@
     "age": "Idade",
     "theme": "Tema",
     "type": "Tipo",
-    "findCustom": "Buscar desenhos personalizados"
+    "findCustom": "Buscar desenhos personalizados",
+    "brand_slogan": "Desenhos para colorir grátis que estimulam a imaginação"
   },
   "header": {
     "searchPlaceholder": "Buscar desenhos ou ideias de brincadeiras...",
@@ -157,7 +158,10 @@
     "previewBw": "Prévia em P/B",
     "allAges": "Todas as idades",
     "notFound": "Não encontramos este desenho.",
-    "back": "Voltar"
+    "back": "Voltar",
+    "print_now_pdf": "Imprimir grátis agora (PDF)",
+    "like": "Curtir",
+    "link_copied": "Link copiado!"
   },
   "categories": {
     "coloring-pages": "Desenhos para colorir",

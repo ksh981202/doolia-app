@@ -56,7 +56,7 @@ export function InfoSection({ printable }: { printable: Printable }) {
             type="button"
             onClick={() => toggleLike()}
             className="flex min-w-0 items-center gap-1.5 cursor-pointer hover:text-rose-600 transition-colors"
-            aria-label={isLiked ? '좋아요 취소' : '좋아요'}
+            aria-label={t('detail.like', '좋아요')}
             aria-pressed={isLiked}
           >
             <Heart className={cn('h-4 w-4 shrink-0 text-rose-500', isLiked && 'fill-rose-500')} />

@@ -21,7 +21,8 @@
     "age": "Edad",
     "theme": "Tema",
     "type": "Tipo",
-    "findCustom": "Buscar dibujos personalizados"
+    "findCustom": "Buscar dibujos personalizados",
+    "brand_slogan": "Dibujos para colorear gratis que despiertan la imaginación"
   },
   "header": {
     "searchPlaceholder": "Busca dibujos o ideas para jugar...",
@@ -157,7 +158,10 @@
     "previewBw": "Vista previa en B/N",
     "allAges": "Todas las edades",
     "notFound": "No encontramos este dibujo.",
-    "back": "Volver"
+    "back": "Volver",
+    "print_now_pdf": "Imprimir gratis ahora (PDF)",
+    "like": "Me gusta",
+    "link_copied": "¡Enlace copiado!"
   },
   "categories": {
     "coloring-pages": "Dibujos para colorear",

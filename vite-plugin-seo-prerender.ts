@@ -18,13 +18,20 @@ function slugFromUrl(url = '') {
 }
 
 function attach(server: ViteDevServer | PreviewServer, rootDir: string) {
-  server.middlewares.use((req: IncomingMessage, res: ServerResponse, next: () => void) => {
+  server.middlewares.use((req: IncomingMessage, res: ServerResponse, next: (error?: unknown) => void) => {
     const slug = slugFromUrl(req.url ?? '')
     if (!slug || slug === 'index.html') return next()
     const file = prerenderFile(rootDir, slug)
     if (!file) return next()
-    res.setHeader('Content-Type', 'text/html; charset=utf-8')
-    res.end(readFileSync(file))
+    const html = readFileSync(file, 'utf-8')
+    // Dev server must inject the Vite client + React refresh preamble, or the page renders blank.
+    const ready = 'transformIndexHtml' in server ? server.transformIndexHtml(req.url ?? '/', html) : Promise.resolve(html)
+    ready
+      .then((output) => {
+        res.setHeader('Content-Type', 'text/html; charset=utf-8')
+        res.end(output)
+      })
+      .catch(next)
   })
 }
 

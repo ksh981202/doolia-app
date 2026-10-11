@@ -21,7 +21,8 @@
     "age": "年齡",
     "theme": "主題",
     "type": "類型",
-    "findCustom": "尋找自訂圖稿"
+    "findCustom": "尋找自訂圖稿",
+    "brand_slogan": "培養孩子想像力的免費著色圖"
   },
   "header": {
     "searchPlaceholder": "搜尋著色圖名稱或遊戲靈感...",
@@ -157,7 +158,10 @@
     "previewBw": "黑白線稿預覽",
     "allAges": "全年齡",
     "notFound": "找不到這張圖。",
-    "back": "返回"
+    "back": "返回",
+    "print_now_pdf": "立即免費列印 (PDF)",
+    "like": "喜歡",
+    "link_copied": "已複製連結"
   },
   "categories": {
     "coloring-pages": "兒童著色圖",

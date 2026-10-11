@@ -48,7 +48,7 @@ export function A4Preview({ printable }: { printable: Printable }) {
   const { t } = useTranslation()
   const [mode, setMode] = useState<PreviewMode>('color')
   const [isZoomed, setIsZoomed] = useState(false)
-  const [shareMsg, setShareMsg] = useState('')
+  const [shareToast, setShareToast] = useState<{ id: number; message: string } | null>(null)
   const printingRef = useRef(false)
   const { isLiked, toggleLike } = usePrintableSocial(printable)
   const setViewMode = useDownloadStore((state) => state.setViewMode)
@@ -83,17 +83,32 @@ export function A4Preview({ printable }: { printable: Printable }) {
   }, [previewSrc])
 
   useEffect(() => {
-    if (!shareMsg) return
-    const timer = window.setTimeout(() => setShareMsg(''), 2000)
+    if (!shareToast) return
+    const timer = window.setTimeout(() => setShareToast(null), 2000)
     return () => window.clearTimeout(timer)
-  }, [shareMsg])
+  }, [shareToast])
+
+  const showShareToast = (message: string) => setShareToast({ id: Date.now(), message })
 
   const share = async () => {
+    const url = window.location.href
+    if (typeof navigator.share === 'function') {
+      try {
+        await navigator.share({
+          title: title || 'DOOLIA Coloring Pages',
+          text: `${title || 'DOOLIA'} | ${t('common.brand_slogan', '아이의 상상력을 키우는 무료 색칠도안')}`,
+          url,
+        })
+        return
+      } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') return
+      }
+    }
     try {
-      await navigator.clipboard.writeText(window.location.href)
-      setShareMsg(t('detail.linkCopied', '링크를 복사했어요'))
+      await navigator.clipboard.writeText(url)
+      showShareToast(t('detail.link_copied', '링크가 복사되었습니다'))
     } catch {
-      setShareMsg(t('detail.copyFailed', '복사에 실패했어요'))
+      showShareToast(t('detail.copyFailed', '복사에 실패했어요'))
     }
   }
 
@@ -168,14 +183,15 @@ export function A4Preview({ printable }: { printable: Printable }) {
               className="flex h-11 min-w-0 flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-2 text-[14px] font-medium text-slate-700 transition-all hover:bg-slate-50 active:scale-[0.99]"
             >
               <Share2 className="h-4 w-4 shrink-0 text-slate-600" />
-              <span className="min-w-0 truncate">{t('detail.share', '공유하기')}</span>
+              <span className="min-w-0 truncate">{t('detail.share', '공유')}</span>
             </button>
-            {shareMsg ? (
+            {shareToast ? (
               <p
+                key={shareToast.id}
                 role="status"
                 className="pointer-events-none absolute -top-10 right-0 z-10 rounded-full bg-slate-900 px-3 py-1.5 text-xs font-bold text-white shadow-md"
               >
-                {shareMsg}
+                {shareToast.message}
               </p>
             ) : null}
           </div>

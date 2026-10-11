@@ -278,7 +278,7 @@ function DownloadModalBody({
               </div>
               <h2
                 id="download-modal-title"
-                className="mb-2 truncate text-[18px] font-bold leading-snug tracking-tight text-slate-900 sm:mb-3 sm:text-[20px]"
+                className="mb-2 line-clamp-2 text-[18px] font-bold leading-snug tracking-tight text-slate-900 break-keep sm:mb-3 sm:text-[20px] sm:break-words"
               >
                 {title}
               </h2>
@@ -342,7 +342,7 @@ function DownloadModalBody({
               <span className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-emerald-50 px-3.5 py-1 text-[13px] font-bold tracking-tight text-emerald-900 sm:text-[13.5px]">
                 {affiliateBadge}
               </span>
-              <h3 className="mt-1.5 line-clamp-1 text-[18px] font-bold leading-snug tracking-tight text-slate-900 sm:text-[20px]">
+              <h3 className="mt-1.5 line-clamp-2 text-base font-bold leading-snug tracking-tight text-slate-800 break-keep sm:text-lg sm:break-words">
                 {affiliateHeadline}
               </h3>
             </div>
@@ -360,7 +360,7 @@ function DownloadModalBody({
             <div>
               <div className="my-2 flex items-center justify-center gap-2.5 rounded-xl border border-amber-200/80 bg-amber-50/90 px-4 py-2.5">
                 <span className="flex-shrink-0 text-base">⚠️</span>
-                <p className="text-center text-[13.5px] font-semibold leading-normal tracking-tight text-amber-950 sm:text-[14px]">
+                <p className="min-w-0 text-center text-[13.5px] font-semibold leading-normal tracking-tight text-amber-950 break-keep sm:text-[14px] sm:break-words">
                   {affiliatePain}
                 </p>
               </div>
@@ -368,16 +368,16 @@ function DownloadModalBody({
               <div className="space-y-2 rounded-xl border border-slate-100 bg-slate-50 p-3.5">
                 <p className="mb-1 flex items-center gap-1.5 text-[12.5px] font-bold text-slate-700">
                   <span>💡</span>
-                  <span>{affiliateGuide}</span>
+                  <span className="min-w-0 break-keep sm:break-words">{affiliateGuide}</span>
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-start gap-2 text-[13px] font-medium leading-snug text-slate-700 sm:text-[13.5px]">
                     <span className="mt-0.5 flex-shrink-0 font-bold text-emerald-500">✓</span>
-                    <span>{affiliateBenefit1}</span>
+                    <span className="min-w-0 break-keep sm:break-words">{affiliateBenefit1}</span>
                   </li>
                   <li className="flex items-start gap-2 text-[13px] font-medium leading-snug text-slate-700 sm:text-[13.5px]">
                     <span className="mt-0.5 flex-shrink-0 font-bold text-emerald-500">✓</span>
-                    <span>{affiliateBenefit2}</span>
+                    <span className="min-w-0 break-keep sm:break-words">{affiliateBenefit2}</span>
                   </li>
                 </ul>
               </div>

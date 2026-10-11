@@ -24,6 +24,7 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const searchInputRef = useRef<HTMLInputElement>(null)
+  const mobileSearchInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     setQuery(urlQuery)
@@ -50,7 +51,8 @@ export function Header() {
 
   useEffect(() => {
     if (!isSearchOpen) return
-    searchInputRef.current?.focus()
+    const isDesktop = window.matchMedia('(min-width: 768px)').matches
+    ;(isDesktop ? searchInputRef : mobileSearchInputRef).current?.focus()
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setIsSearchOpen(false)
     }
@@ -78,6 +80,9 @@ export function Header() {
     applyQuery(query)
   }
 
+  const isHome = location.pathname === '/'
+  const showSearch = !isHome && isSearchOpen
+
   return (
     <header className="no-print sticky top-0 z-40 w-full border-b border-gray-100 bg-white/90 backdrop-blur-md">
       <div className="mx-auto grid h-16 w-full max-w-7xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-4 sm:h-20 sm:gap-4 sm:px-6 lg:px-8">
@@ -85,10 +90,10 @@ export function Header() {
           <Logo />
         </div>
 
-        {isSearchOpen ? (
+        {showSearch ? (
           <form
             onSubmit={submitSearch}
-            className="flex min-w-0 items-center gap-2 rounded-2xl border border-emerald-200 bg-white px-3 py-1.5 shadow-xs"
+            className="hidden min-w-0 items-center gap-2 rounded-2xl border border-emerald-200 bg-white px-3 py-1.5 shadow-xs md:flex"
           >
             <Search size={16} className="shrink-0 text-slate-400" />
             <input
@@ -131,18 +136,20 @@ export function Header() {
         )}
 
         <div className="flex items-center justify-self-end gap-2">
-          <button
-            type="button"
-            onClick={() => {
-              setIsMobileMenuOpen(false)
-              setIsSearchOpen((open) => !open)
-            }}
-            aria-label={isSearchOpen ? t('detail.back', '닫기') : t('home.searchBtn', '검색')}
-            aria-expanded={isSearchOpen}
-            className={iconButtonClass}
-          >
-            {isSearchOpen ? <X size={18} /> : <Search size={18} />}
-          </button>
+          {isHome ? null : (
+            <button
+              type="button"
+              onClick={() => {
+                setIsMobileMenuOpen(false)
+                setIsSearchOpen((open) => !open)
+              }}
+              aria-label={isSearchOpen ? t('detail.back', '닫기') : t('home.searchBtn', '검색')}
+              aria-expanded={isSearchOpen}
+              className={iconButtonClass}
+            >
+              {isSearchOpen ? <X size={18} /> : <Search size={18} />}
+            </button>
+          )}
           <LanguageSwitcher />
           {isLocalAdminHost() ? (
             <button
@@ -170,6 +177,35 @@ export function Header() {
           </button>
         </div>
       </div>
+
+      {showSearch ? (
+        <form
+          onSubmit={submitSearch}
+          role="search"
+          className="absolute inset-0 z-50 flex items-center bg-white px-4 md:hidden"
+        >
+          <Search className="h-5 w-5 shrink-0 text-slate-400" aria-hidden />
+          <input
+            ref={mobileSearchInputRef}
+            type="search"
+            enterKeyHint="search"
+            autoFocus
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder={t('header.searchPlaceholder', '도안 이름, 놀이 아이디어를 검색하세요')}
+            aria-label={t('header.searchPlaceholder', '도안 이름, 놀이 아이디어를 검색하세요')}
+            className="w-full min-w-0 bg-transparent px-3 py-2 text-base text-slate-800 outline-none placeholder:text-slate-400 [&::-webkit-search-cancel-button]:appearance-none"
+          />
+          <button
+            type="button"
+            onClick={() => setIsSearchOpen(false)}
+            aria-label={t('detail.back', '닫기')}
+            className="shrink-0 p-2 text-lg leading-none text-slate-500 hover:text-slate-800"
+          >
+            ✕
+          </button>
+        </form>
+      ) : null}
 
       {isMobileMenuOpen
         ? createPortal(

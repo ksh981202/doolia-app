@@ -209,16 +209,21 @@ export async function fetchPrintables(
   return scoped.map((row) => normalizePrintable(row))
 }
 
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
 export async function fetchPrintableById(id: string): Promise<Printable | null> {
   const demo = findDemo(id)
   if (!supabase) return demo
 
-  const byId = await supabase.from('printables').select('*').eq('id', id).maybeSingle()
-  if (byId.error) throw byId.error
-  if (byId.data) {
-    const row = byId.data as PrintableInput
-    if (row.published === false) return null
-    return normalizePrintable(row)
+  // printables.id is a uuid column; querying it with a slug like "gl410" fails with 22P02.
+  if (UUID_PATTERN.test(id)) {
+    const byId = await supabase.from('printables').select('*').eq('id', id).maybeSingle()
+    if (byId.error) throw byId.error
+    if (byId.data) {
+      const row = byId.data as PrintableInput
+      if (row.published === false) return null
+      return normalizePrintable(row)
+    }
   }
 
   const bySlug = await supabase.from('printables').select('*').eq('slug', id).maybeSingle()

@@ -21,7 +21,8 @@
     "age": "Age",
     "theme": "Theme",
     "type": "Type",
-    "findCustom": "Find Custom Printables"
+    "findCustom": "Find Custom Printables",
+    "brand_slogan": "Free coloring pages that grow your child's imagination"
   },
   "header": {
     "searchPlaceholder": "Search printables, play ideas...",
@@ -157,7 +158,10 @@
     "previewBw": "B&W preview",
     "allAges": "All ages",
     "notFound": "We could not find this printable.",
-    "back": "Go back"
+    "back": "Go back",
+    "print_now_pdf": "Print for Free Now (PDF)",
+    "like": "Like",
+    "link_copied": "Link copied to clipboard!"
   },
   "categories": {
     "coloring-pages": "Coloring Pages",

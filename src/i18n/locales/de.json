@@ -21,7 +21,8 @@
     "age": "Alter",
     "theme": "Thema",
     "type": "Typ",
-    "findCustom": "Benutzerdefinierte Vorlagen finden"
+    "findCustom": "Benutzerdefinierte Vorlagen finden",
+    "brand_slogan": "Kostenlose Malvorlagen, die die Fantasie deines Kindes fördern"
   },
   "header": {
     "searchPlaceholder": "Malvorlagen oder Spielideen suchen...",
@@ -157,7 +158,10 @@
     "previewBw": "Vorschau Schwarz-Weiß",
     "allAges": "Jedes Alter",
     "notFound": "Diese Vorlage wurde nicht gefunden.",
-    "back": "Zurück"
+    "back": "Zurück",
+    "print_now_pdf": "Jetzt kostenlos drucken (PDF)",
+    "like": "Gefällt mir",
+    "link_copied": "Link kopiert!"
   },
   "categories": {
     "coloring-pages": "Ausmalbilder",

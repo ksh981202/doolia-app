@@ -32,13 +32,13 @@ export function LightboxModal({ open, src, title, onClose, onPrint }: LightboxMo
       onClick={onClose}
       role="dialog"
       aria-modal="true"
-      aria-label="도안 크게 보기"
+      aria-label={t('detail.zoomIn', '크게 보기')}
     >
       <button
         type="button"
         onClick={onClose}
         className="absolute right-3 top-3 z-10 flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-full text-2xl font-bold text-white hover:bg-white/10 hover:text-emerald-400 sm:right-5 sm:top-5"
-        aria-label="닫기"
+        aria-label={t('detail.back', '닫기')}
       >
         ✕
       </button>
@@ -55,9 +55,10 @@ export function LightboxModal({ open, src, title, onClose, onPrint }: LightboxMo
             event.stopPropagation()
             onPrint()
           }}
-          className="absolute bottom-6 left-1/2 flex -translate-x-1/2 cursor-pointer items-center gap-2 rounded-full bg-emerald-600 px-5 py-3 text-sm font-extrabold text-white shadow-xl shadow-emerald-600/30 transition hover:bg-emerald-500"
+          className="absolute bottom-5 left-1/2 flex max-w-[calc(100vw-1.5rem)] -translate-x-1/2 cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-full bg-emerald-600 px-4 py-3 text-[13px] font-extrabold text-white shadow-xl shadow-emerald-600/30 transition hover:bg-emerald-500 sm:bottom-6 sm:gap-2 sm:px-6 sm:text-sm"
         >
-          {t('printable.btn_print_pdf_floating', '🖨️ Print PDF (US Letter / A4)')}
+          <span aria-hidden>🖨️</span>
+          <span>{t('detail.print_now_pdf', '지금 무료로 바로 인쇄하기 (PDF)')}</span>
         </button>
       ) : null}
     </div>

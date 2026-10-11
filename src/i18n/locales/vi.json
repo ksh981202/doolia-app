@@ -21,7 +21,8 @@
     "age": "Tuổi",
     "theme": "Chủ đề",
     "type": "Loại",
-    "findCustom": "Tìm tranh tùy chỉnh"
+    "findCustom": "Tìm tranh tùy chỉnh",
+    "brand_slogan": "Tranh tô màu miễn phí nuôi dưỡng trí tưởng tượng của bé"
   },
   "header": {
     "searchPlaceholder": "Tìm kiếm tranh tô màu, ý tưởng chơi...",
@@ -157,7 +158,10 @@
     "previewBw": "Xem trước nét đen trắng",
     "allAges": "Mọi độ tuổi",
     "notFound": "Không tìm thấy tranh này.",
-    "back": "Quay lại"
+    "back": "Quay lại",
+    "print_now_pdf": "In miễn phí ngay (PDF)",
+    "like": "Thích",
+    "link_copied": "Đã sao chép liên kết!"
   },
   "categories": {
     "coloring-pages": "Tranh tô màu",

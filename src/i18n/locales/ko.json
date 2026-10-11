@@ -21,7 +21,8 @@
     "age": "연령",
     "theme": "주제",
     "type": "유형",
-    "findCustom": "맞춤 도안 찾기"
+    "findCustom": "맞춤 도안 찾기",
+    "brand_slogan": "아이의 상상력을 키우는 무료 색칠도안"
   },
   "header": {
     "searchPlaceholder": "도안 이름, 놀이 아이디어를 검색하세요",
@@ -145,7 +146,7 @@
     "affiliateDisclaimer": "제휴 활동의 일환으로 일정 수수료를 지급받을 수 있습니다.",
     "affiliateImgAlt": "미술 놀이 준비물",
     "relatedTitle": "🎨 함께 추천하는 도안",
-    "share": "공유하기",
+    "share": "공유",
     "thumbnailBw": "흑백 도안",
     "thumbnailColor": "컬러 예시",
     "viewColorHint": "좌측 썸네일로 색칠 예시 확인",
@@ -157,7 +158,10 @@
     "previewBw": "흑백 도안 미리보기",
     "allAges": "전연령",
     "notFound": "도안을 찾을 수 없어요.",
-    "back": "뒤로 가기"
+    "back": "뒤로 가기",
+    "print_now_pdf": "지금 무료로 바로 인쇄하기 (PDF)",
+    "like": "좋아요",
+    "link_copied": "링크가 복사되었습니다"
   },
   "categories": {
     "coloring-pages": "키즈 색칠도안",

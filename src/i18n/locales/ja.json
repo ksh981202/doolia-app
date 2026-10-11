@@ -21,7 +21,8 @@
     "age": "年齢",
     "theme": "テーマ",
     "type": "タイプ",
-    "findCustom": "カスタム図案を探す"
+    "findCustom": "カスタム図案を探す",
+    "brand_slogan": "子どもの想像力を育てる無料ぬりえ"
   },
   "header": {
     "searchPlaceholder": "ぬりえの名前や遊びのアイデアを検索",
@@ -157,7 +158,10 @@
     "previewBw": "白黒ぬりえプレビュー",
     "allAges": "全年齢",
     "notFound": "ぬりえが見つかりません。",
-    "back": "戻る"
+    "back": "戻る",
+    "print_now_pdf": "今すぐ無料で印刷する (PDF)",
+    "like": "いいね",
+    "link_copied": "リンクをコピーしました"
   },
   "categories": {
     "coloring-pages": "キッズぬりえ",

@@ -21,7 +21,8 @@
     "age": "Âge",
     "theme": "Thème",
     "type": "Type",
-    "findCustom": "Trouver des coloriages personnalisés"
+    "findCustom": "Trouver des coloriages personnalisés",
+    "brand_slogan": "Coloriages gratuits qui nourrissent l'imagination des enfants"
   },
   "header": {
     "searchPlaceholder": "Rechercher des coloriages ou des idées...",
@@ -157,7 +158,10 @@
     "previewBw": "Aperçu N&B",
     "allAges": "Tous âges",
     "notFound": "Coloriage introuvable.",
-    "back": "Retour"
+    "back": "Retour",
+    "print_now_pdf": "Imprimer gratuitement (PDF)",
+    "like": "J'aime",
+    "link_copied": "Lien copié !"
   },
   "categories": {
     "coloring-pages": "Coloriages",
