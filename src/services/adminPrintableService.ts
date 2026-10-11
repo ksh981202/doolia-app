@@ -266,7 +266,10 @@ export async function listAdminPrintables(): Promise<AdminPrintable[]> {
 }
 
 export async function savePrintable(draft: PrintableDraft) {
-  const slug = str(draft.slug).replace(/_[bc]$/i, '') || str(draft.slug)
+  const slug = str(draft.slug).replace(/_[bc]$/i, '').toLowerCase()
+  if (slug && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
+    throw new Error('slug는 영문 소문자, 숫자, 하이픈만 사용할 수 있습니다.')
+  }
   const id = str(draft.id) || (await findPrintableIdBySlug(slug)) || crypto.randomUUID()
   const row = draftToRow({ ...draft, id, slug })
   const record: AdminPrintable = {
@@ -293,24 +296,20 @@ async function findPrintableIdBySlug(slug: string) {
   if (!slug) return ''
   const variants = [slug, `${slug}_b`, `${slug}_c`]
   const local = readLocal().find((item) => variants.includes(item.slug))
-  try {
-    const remote = await adminDb<{ id: string; slug: string }>({
-      action: 'select',
-      table: 'printables',
-      columns: ['id', 'slug'],
-      in: { column: 'slug', values: variants },
-    })
-    const rows = remote.rows ?? []
-    return (
-      rows.find((item) => item.slug === slug)?.id ||
-      rows.find((item) => item.slug === `${slug}_b`)?.id ||
-      rows.find((item) => item.slug === `${slug}_c`)?.id ||
-      local?.id ||
-      ''
-    )
-  } catch {
-    return local?.id ?? ''
-  }
+  const remote = await adminDb<{ id: string; slug: string }>({
+    action: 'select',
+    table: 'printables',
+    columns: ['id', 'slug'],
+    in: { column: 'slug', values: variants },
+  })
+  const rows = remote.rows ?? []
+  return (
+    rows.find((item) => item.slug === slug)?.id ||
+    rows.find((item) => item.slug === `${slug}_b`)?.id ||
+    rows.find((item) => item.slug === `${slug}_c`)?.id ||
+    local?.id ||
+    ''
+  )
 }
 
 async function deleteLegacyVariantRows(slug: string) {

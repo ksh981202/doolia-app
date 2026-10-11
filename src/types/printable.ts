@@ -66,6 +66,7 @@ export type Printable = {
   description_fr: string
   description_it?: string
   description_vi?: string
+  subtheme?: string
   tags: string[]
   imagination_question?: string
   difficulty?: PrintableDifficulty
@@ -128,6 +129,8 @@ export type PrintableInput = {
   description_fr?: string | null
   description_it?: string | null
   description_vi?: string | null
+  subtheme?: string | null
+  sub_theme?: string | null
   tags?: string[] | null
   imagination_question?: string | null
   difficulty?: PrintableDifficulty | string | null
@@ -218,6 +221,7 @@ export function normalizePrintable(row: PrintableInput): Printable {
     description_fr: text(row.description_fr),
     description_it: text(row.description_it),
     description_vi: text(row.description_vi),
+    subtheme: text(row.subtheme) || text(row.sub_theme),
     tags: row.tags ?? [],
     imagination_question: text(row.imagination_question) || undefined,
     difficulty: resolveDifficulty(row),

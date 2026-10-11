@@ -31,6 +31,17 @@ export function matchesQuery(item: Printable, query: string) {
 const LATIN_SEARCH_TOKEN = /^[a-z0-9][a-z0-9'-]*$/i
 
 export function userSearchHaystack(item: Printable) {
+  const themes = [item.theme_ko, item.theme_en]
+    .filter(Boolean)
+    .map((theme) => theme.toLowerCase())
+  const searchableTags = item.tags.filter((tag) => {
+    const value = tag.trim().toLowerCase()
+    if (!value || value === 'hidden' || value.startsWith('cat:')) return false
+    if (value === 'coloring-pages' || value === '키즈 색칠도안') return false
+    return !themes.some((theme) =>
+      theme.split(/[&/|,·]+/).map((part) => part.trim()).filter(Boolean).some((part) => part === value),
+    )
+  })
   return [
     item.title,
     item.title_ko,
@@ -53,14 +64,71 @@ export function userSearchHaystack(item: Printable) {
     item.description_fr,
     item.description_it,
     item.description_vi,
-    item.theme_ko,
-    item.theme_en,
-    item.category,
-    ...item.tags,
+    item.subtheme,
+    ...searchableTags,
   ]
     .filter(Boolean)
     .join(' ')
     .toLowerCase()
+}
+
+function userSearchFields(item: Printable) {
+  return {
+    titles: [
+      item.title,
+      item.title_ko,
+      item.title_en,
+      item.title_ja,
+      item.title_zh,
+      item.title_es,
+      item.title_pt,
+      item.title_de,
+      item.title_fr,
+      item.title_it,
+      item.title_vi,
+    ]
+      .filter((value): value is string => Boolean(value))
+      .map((value) => value.toLowerCase()),
+    descriptions: [
+      item.description_ko,
+      item.description_en,
+      item.description_ja,
+      item.description_zh,
+      item.description_es,
+      item.description_pt,
+      item.description_de,
+      item.description_fr,
+      item.description_it,
+      item.description_vi,
+    ]
+      .filter((value): value is string => Boolean(value))
+      .map((value) => value.toLowerCase()),
+  }
+}
+
+export function userSearchRelevance(item: Printable, query: string) {
+  const clauses = query
+    .replace(/^#/, '')
+    .trim()
+    .split('|')
+    .map((part) => part.trim().toLowerCase())
+    .filter(Boolean)
+  if (!clauses.length) return 0
+
+  const { titles, descriptions } = userSearchFields(item)
+  const subtheme = item.subtheme?.toLowerCase() ?? ''
+  const haystack = userSearchHaystack(item)
+  return Math.min(
+    ...clauses.map((clause) => {
+      const tokens = clause.split(/\s+/).filter(Boolean)
+      if (titles.some((title) => title.includes(clause))) return 0
+      if (titles.some((title) => tokens.every((token) => title.includes(token)))) return 1
+      if (subtheme.includes(clause)) return 2
+      if (descriptions.some((description) => description.includes(clause))) return 3
+      if (haystack.includes(clause)) return 4
+      return 5
+    }),
+  )
 }
 
 function userSearchTokenMatches(haystack: string, token: string) {

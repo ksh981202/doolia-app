@@ -345,5 +345,5 @@ export function categorySearchPath(query = '') {
 
 /** 상세 페이지. 카드 클릭 시 즉시 navigate 하는 경로 (데이터 대기 없음) */
 export function printablePath(slug: string) {
-  return `/printable/${slug}`
+  return `/printable/${encodeURIComponent(slug)}`
 }

@@ -146,6 +146,12 @@ export function parsePrintableSheet(text: string): { rows: ParsedPrintableRow[];
       }
     })
     hydrateMatchingFields(row)
+    const slug = row.slug.replace(/_[bc]$/i, '').trim().toLowerCase()
+    if (slug && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
+      errors.push(`${index + 2}행: slug는 영문 소문자, 숫자, 하이픈만 사용할 수 있습니다.`)
+      return
+    }
+    row.slug = slug
     if (!row.title_ko && !row.slug) {
       errors.push(`${index + 2}행: title_ko 또는 slug가 필요합니다.`)
       return

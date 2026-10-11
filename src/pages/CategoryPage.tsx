@@ -6,7 +6,7 @@ import { PrintableCard } from '@/components/PrintableCard'
 import { SubpageHeader } from '@/components/layout/SubpageHeader'
 import { usePrintablesQuery } from '@/features/gallery/model/usePrintablesQuery'
 import { logSearchKeyword } from '@/features/search/lib/logSearchKeyword'
-import { matchesQuery, matchesUserSearch } from '@/services/printableService'
+import { matchesQuery, matchesUserSearch, userSearchRelevance } from '@/services/printableService'
 import {
   getCategoryThemes,
   getThemeSubCategories,
@@ -267,11 +267,15 @@ export function CategoryPage() {
         if (!subOption || subOption.id === 'all') return true
         return matchesSubtabQuery(item, subOption.query ?? '')
       })
-      .sort((a, b) =>
-        sort === 'latest'
+      .sort((a, b) => {
+        if (query) {
+          const relevanceDifference = userSearchRelevance(a, query) - userSearchRelevance(b, query)
+          if (relevanceDifference) return relevanceDifference
+        }
+        return sort === 'latest'
           ? +new Date(b.created_at) - +new Date(a.created_at)
-          : b.downloads - a.downloads || +new Date(b.created_at) - +new Date(a.created_at),
-      )
+          : b.downloads - a.downloads || +new Date(b.created_at) - +new Date(a.created_at)
+      })
   }, [age, browseAll, data, isSenior, match, query, sort, sub, subOptions, theme, themeOptions])
 
   useEffect(() => {
