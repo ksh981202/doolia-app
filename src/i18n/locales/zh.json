@@ -122,7 +122,7 @@
     "copyrightMailBody": "您好，我想就以下圖稿提出權利侵害／著作權詢問。\n\n- 圖稿 ID: {{slug}}\n- 名稱: {{title}}\n- 頁面 URL: {{url}}\n- 詢問與請求:\n",
     "modalSubTitle": "FREE PRINTABLE",
     "printPreview": "PRINT PREVIEW",
-    "downloadBtn": "儲存免費 PDF",
+    "downloadBtn": "免費保存PDF",
     "printNowBtn": "立即列印",
     "dpiBadge": "300 DPI HD",
     "affiliatePick": "✨ DOOLIA'S CHOICE",

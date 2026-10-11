@@ -122,7 +122,7 @@
     "copyrightMailBody": "Olá, envio uma consulta de direitos autorais sobre este material.\n\n- ID: {{slug}}\n- Título: {{title}}\n- URL da página: {{url}}\n- Pedido:\n",
     "modalSubTitle": "FREE PRINTABLE",
     "printPreview": "PRINT PREVIEW",
-    "downloadBtn": "Salvar PDF grátis",
+    "downloadBtn": "Salvar PDF",
     "printNowBtn": "Imprimir agora",
     "dpiBadge": "300 DPI HD",
     "affiliatePick": "✨ DOOLIA'S CHOICE",

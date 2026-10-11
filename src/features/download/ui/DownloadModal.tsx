@@ -305,28 +305,30 @@ function DownloadModalBody({
 
             {error ? <p className="text-center text-sm font-bold text-red-600">{error}</p> : null}
 
-            <div className="grid grid-cols-2 gap-2 pt-1">
+            <div className="flex gap-2 pt-1">
               <button
                 type="button"
                 onClick={handleDirectPrint}
-                className="flex h-[46px] cursor-pointer items-center justify-center gap-2 rounded-xl bg-emerald-600 px-3 text-[14.5px] font-bold text-white shadow-sm transition-all hover:bg-emerald-700 active:scale-[0.98]"
+                className="flex min-w-0 flex-1 cursor-pointer items-center justify-center rounded-xl bg-emerald-600 px-2.5 py-2.5 text-white shadow-sm transition-all hover:bg-emerald-700 active:scale-[0.98] sm:px-4 sm:py-3"
               >
-                <Printer className="h-4 w-4 shrink-0" />
-                <span className="truncate">{t('detail.printNowBtn', '즉시 바로 인쇄')}</span>
+                <Printer className="mr-1.5 h-4 w-4 shrink-0" />
+                <span className="whitespace-nowrap text-[12px] font-bold tracking-tight sm:text-sm">
+                  {t('detail.printNowBtn', '지금 바로 인쇄')}
+                </span>
               </button>
               <button
                 type="button"
                 onClick={() => void handleDownload()}
                 disabled={!ready}
                 className={cn(
-                  'flex h-[46px] items-center justify-center gap-2 rounded-xl px-3 text-[14.5px] font-bold transition-all',
+                  'flex min-w-0 flex-1 items-center justify-center rounded-xl px-2.5 py-2.5 transition-all sm:px-4 sm:py-3',
                   ready
                     ? 'cursor-pointer bg-slate-100 text-slate-700 hover:bg-slate-200 active:scale-[0.98]'
                     : 'cursor-not-allowed bg-slate-100 text-slate-400',
                 )}
               >
-                <Download className="h-4 w-4 shrink-0" />
-                <span className="truncate">
+                <Download className="mr-1.5 h-4 w-4 shrink-0" />
+                <span className="whitespace-nowrap text-[12px] font-bold tracking-tight sm:text-sm">
                   {generating
                     ? 'PDF 생성 중...'
                     : secondsLeft > 0
