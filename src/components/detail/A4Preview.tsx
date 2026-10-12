@@ -12,7 +12,12 @@ import {
   PRINT_BRAND_FOOTER_LEFT,
   PRINT_BRAND_FOOTER_RIGHT,
 } from '@/shared/lib/printPage'
-import { getDisplayImageUrl, printableColorUrl, printableLineArtUrl } from '@/shared/utils/printableAssets'
+import {
+  getCdnImageUrl,
+  getDisplayImageUrl,
+  printableColorUrl,
+  printableLineArtUrl,
+} from '@/shared/utils/printableAssets'
 import { useDownloadStore } from '@/shared/store/useDownloadStore'
 import { usePrintableSocial } from '@/shared/store/usePrintableEngagement'
 import type { Printable } from '@/types/printable'
@@ -136,7 +141,7 @@ export function A4Preview({ printable }: { printable: Printable }) {
         <div className="flex shrink-0 flex-col gap-3">
           <ThumbnailButton
             src={getDisplayImageUrl(lineSrc, THUMB_WIDTH)}
-            fallbackSrc={lineSrc}
+            fallbackSrc={getCdnImageUrl(lineSrc)}
             label={t('detail.thumbnailBw', '흑백 도안')}
             alt={printAlt}
             active={mode === 'line'}
@@ -144,7 +149,7 @@ export function A4Preview({ printable }: { printable: Printable }) {
           />
           <ThumbnailButton
             src={getDisplayImageUrl(colorSrc, THUMB_WIDTH)}
-            fallbackSrc={colorSrc}
+            fallbackSrc={getCdnImageUrl(colorSrc)}
             label={t('detail.thumbnailColor', '컬러 예시')}
             alt={printAlt}
             active={mode === 'color'}
@@ -155,7 +160,7 @@ export function A4Preview({ printable }: { printable: Printable }) {
         <div className="flex min-w-0 flex-1 flex-col gap-3">
           <A4Paper
             src={previewSrc}
-            fallbackSrc={previewFallback}
+            fallbackSrc={getCdnImageUrl(previewFallback)}
             title={printAlt}
             zoomLabel={t('detail.zoomIn', '크게 보기')}
             onZoom={() => setIsZoomed(true)}

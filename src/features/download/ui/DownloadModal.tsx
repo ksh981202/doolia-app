@@ -16,7 +16,12 @@ import {
 import { TOUCH_ICON, cn } from '@/shared/lib/cn'
 import { detailTitle } from '@/shared/lib/detailCopy'
 import { prefetchPrintImage, printPrintable } from '@/shared/lib/printPage'
-import { getDisplayImageUrl, printableLineArtUrl, printableViewUrl } from '@/shared/utils/printableAssets'
+import {
+  getCdnImageUrl,
+  getDisplayImageUrl,
+  printableLineArtUrl,
+  printableViewUrl,
+} from '@/shared/utils/printableAssets'
 import { useDownloadStore } from '@/shared/store/useDownloadStore'
 
 const HIDDEN_IMAGE_CACHE = new Map<string, HTMLImageElement>()
@@ -121,6 +126,7 @@ function DownloadModalBody({
   const title = detailTitle(printable, i18n.language || i18n.resolvedLanguage)
   const originalSrc = printableViewUrl(printable, viewMode)
   const previewSrc = getDisplayImageUrl(originalSrc, 1000)
+  const cdnOriginalSrc = getCdnImageUrl(originalSrc)
   const affiliateLink = getAffiliateLink(affiliate, lang)
   const affiliateKey = affiliate.id.startsWith('affiliate_') ? affiliate.id : `affiliate_${affiliate.id}`
   const affiliateBadge = t('affiliate.badge', { defaultValue: pickAffiliateText(affiliate.badge, lang) })
@@ -290,6 +296,11 @@ function DownloadModalBody({
                   src={previewSrc}
                   alt={title}
                   className="max-h-[42vh] w-full select-none object-contain sm:max-h-[500px]"
+                  onError={(event) => {
+                    if (cdnOriginalSrc && event.currentTarget.src !== cdnOriginalSrc) {
+                      event.currentTarget.src = cdnOriginalSrc
+                    }
+                  }}
                 />
               ) : (
                 <p className="text-xs font-semibold text-slate-400">{t('detail.notFound', '미리보기 없음')}</p>

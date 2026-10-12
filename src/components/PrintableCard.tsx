@@ -6,7 +6,7 @@ import { printablePath } from '@/shared/config/catalog'
 import { cn } from '@/shared/lib/cn'
 import { pickLocalized } from '@/shared/lib/detailCopy'
 import { matchesQuery } from '@/services/printableService'
-import { getDisplayImageUrl } from '@/shared/utils/printableAssets'
+import { getCdnImageUrl, getDisplayImageUrl } from '@/shared/utils/printableAssets'
 import { usePrintableSocial } from '@/shared/store/usePrintableEngagement'
 import type { Printable } from '@/types/printable'
 
@@ -70,8 +70,9 @@ export function PrintableCard({ printable, index = Number.POSITIVE_INFINITY }: P
     printable.theme_en ||
     t(`categories.${printable.category}`, '')
   const { likesCount, viewsCount } = usePrintableSocial(printable)
-  const src = getDisplayImageUrl(displayImage(printable), 640)
   const originalSrc = displayImage(printable)
+  const src = getDisplayImageUrl(originalSrc, 640)
+  const cdnSrc = getCdnImageUrl(originalSrc)
   const priority = index < 8
   const imgRef = useRef<HTMLImageElement>(null)
   const [loadedSrc, setLoadedSrc] = useState('')
@@ -120,8 +121,8 @@ export function PrintableCard({ printable, index = Number.POSITIVE_INFINITY }: P
           {...({ fetchpriority: priority ? 'high' : 'low' } as any)}
           onLoad={() => setLoadedSrc(src)}
           onError={(event) => {
-            if (originalSrc && event.currentTarget.src !== originalSrc) {
-              event.currentTarget.src = originalSrc
+            if (cdnSrc && event.currentTarget.src !== cdnSrc) {
+              event.currentTarget.src = cdnSrc
               return
             }
             setLoadedSrc(src)

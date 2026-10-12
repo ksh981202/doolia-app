@@ -7,7 +7,7 @@ import { usePrintablesQuery } from '@/features/gallery/model/usePrintablesQuery'
 import { selectHomePrintables } from '@/services/printableService'
 import { categorySearchPath, printablePath } from '@/shared/config/catalog'
 import { pickLocalized } from '@/shared/lib/detailCopy'
-import { getDisplayImageUrl } from '@/shared/utils/printableAssets'
+import { getCdnImageUrl, getDisplayImageUrl } from '@/shared/utils/printableAssets'
 import type { Printable } from '@/types/printable'
 
 const POPULAR_TAGS = [
@@ -105,6 +105,7 @@ function HeroColorImage({
 }) {
   const { i18n } = useTranslation()
   const originalSrc = colorImage(printable)
+  const cdnSrc = getCdnImageUrl(originalSrc)
   return (
     <img
       src={getDisplayImageUrl(originalSrc, width)}
@@ -113,8 +114,8 @@ function HeroColorImage({
       loading="lazy"
       decoding="async"
       onError={(event) => {
-        if (event.currentTarget.src !== originalSrc) {
-          event.currentTarget.src = originalSrc
+        if (event.currentTarget.src !== cdnSrc) {
+          event.currentTarget.src = cdnSrc
         }
       }}
     />
@@ -127,6 +128,8 @@ function HeroSplitPreview({ printable }: { printable: Printable }) {
   const lineOriginalSrc = lineImage(printable)
   const colorSrc = getDisplayImageUrl(colorOriginalSrc, 640)
   const lineSrc = getDisplayImageUrl(lineOriginalSrc, 640)
+  const colorCdnSrc = getCdnImageUrl(colorOriginalSrc)
+  const lineCdnSrc = getCdnImageUrl(lineOriginalSrc)
   const grayscaleFallback = lineOriginalSrc === colorOriginalSrc
   const alt = pickLocalized(printable, 'title', i18n.language) || printable.title
 
@@ -139,8 +142,8 @@ function HeroSplitPreview({ printable }: { printable: Printable }) {
         decoding="async"
         {...{ fetchPriority: 'high', fetchpriority: 'high' }}
         onError={(event) => {
-          if (event.currentTarget.src !== colorOriginalSrc) {
-            event.currentTarget.src = colorOriginalSrc
+          if (event.currentTarget.src !== colorCdnSrc) {
+            event.currentTarget.src = colorCdnSrc
           }
         }}
       />
@@ -155,8 +158,8 @@ function HeroSplitPreview({ printable }: { printable: Printable }) {
           filter: grayscaleFallback ? 'grayscale(100%) contrast(150%)' : undefined,
         }}
         onError={(event) => {
-          if (event.currentTarget.src !== lineOriginalSrc) {
-            event.currentTarget.src = lineOriginalSrc
+          if (event.currentTarget.src !== lineCdnSrc) {
+            event.currentTarget.src = lineCdnSrc
           }
         }}
       />

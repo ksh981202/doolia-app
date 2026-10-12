@@ -83,8 +83,7 @@ function resizeOptions(width: number) {
   return `width=${Math.max(1, Math.round(width))},format=auto,quality=${DISPLAY_QUALITY}`
 }
 
-/** Screen preview URL (≈1000px). Keep the original for PDF / print. */
-export function getDisplayImageUrl(url: string, width = DEFAULT_DISPLAY_WIDTH): string {
+export function getCdnImageUrl(url: string): string {
   if (!url) return ''
   const trimmed = url.trim()
   if (!trimmed || /^(data:|blob:)/i.test(trimmed)) return trimmed
@@ -104,6 +103,25 @@ export function getDisplayImageUrl(url: string, width = DEFAULT_DISPLAY_WIDTH): 
     parsed.hostname = cdn.hostname
     parsed.port = cdn.port
   }
+
+  return parsed.toString()
+}
+
+/** Screen preview URL (≈1000px). Keep the original for PDF / print. */
+export function getDisplayImageUrl(url: string, width = DEFAULT_DISPLAY_WIDTH): string {
+  if (!url) return ''
+  const trimmed = url.trim()
+  if (!trimmed || /^(data:|blob:)/i.test(trimmed)) return trimmed
+
+  const cdnUrl = getCdnImageUrl(trimmed)
+  let parsed: URL
+  try {
+    parsed = new URL(cdnUrl)
+  } catch {
+    return trimmed
+  }
+
+  if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return trimmed
 
   const options = resizeOptions(width)
   const zone = resizeOrigin()
