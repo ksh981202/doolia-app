@@ -1,221 +1,299 @@
 /**
- * Audit printable image size and TTFB.
+ * Measures printable image download performance and inspects card loading hints.
  * Usage: npx tsx scripts/verify-image-performance.ts
  */
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { performance } from 'node:perf_hooks'
 import { createClient } from '@supabase/supabase-js'
 
-type SlowImageAudit = {
+const PAGE_SIZE = 500
+const SAMPLE_SIZE = 25
+const CONCURRENCY = 6
+const TIMEOUT_MS = 30_000
+const LARGE_IMAGE_BYTES = 200 * 1024
+
+type PrintableRow = {
+  id: string
+  slug: string | null
+  title_ko: string | null
+  created_at: string | null
+  image_bw_url: string | null
+  image_color_url: string | null
+}
+
+type ImageResult = {
   slug: string
-  titleKo: string
-  thumbnailUrl: string
-  sizeKB: number
-  format: string
-  loadTimeMs: number
-  status: 'FAST' | 'SLOW' | 'WARNING'
+  title: string
+  kind: 'color' | 'bw'
+  url: string
+  status: number | 'ERROR'
+  bytes: number
+  ttfbMs: number | null
+  downloadMs: number | null
+  cacheStatus: string
+  cacheControl: string
+  contentType: string
+  error: string | null
 }
 
 function loadEnv() {
   for (const name of ['.env', '.env.local', '.env.development']) {
-    try {
-      for (const raw of readFileSync(resolve(process.cwd(), name), 'utf8').split(/\r?\n/)) {
-        const line = raw.trim()
-        if (!line || line.startsWith('#')) continue
-        const cut = line.indexOf('=')
-        if (cut < 1) continue
-        const key = line.slice(0, cut).trim()
-        let value = line.slice(cut + 1).trim()
-        if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
-          value = value.slice(1, -1)
-        }
-        if (!(key in process.env)) process.env[key] = value
+    const path = resolve(process.cwd(), name)
+    if (!existsSync(path)) continue
+
+    for (const raw of readFileSync(path, 'utf8').split(/\r?\n/)) {
+      const line = raw.trim()
+      if (!line || line.startsWith('#')) continue
+      const separator = line.indexOf('=')
+      if (separator < 1) continue
+
+      const key = line.slice(0, separator).trim()
+      let value = line.slice(separator + 1).trim()
+      if (
+        (value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))
+      ) {
+        value = value.slice(1, -1)
       }
-    } catch {
-      /* optional */
+      if (process.env[key] === undefined) process.env[key] = value
     }
   }
 }
 
-function pickUrl(row: {
-  image_bw_url?: string | null
-  image_color_url?: string | null
-  line_art_url?: string | null
-  color_image_url?: string | null
-}) {
-  return (
-    String(row.image_color_url || row.color_image_url || row.image_bw_url || row.line_art_url || '').trim()
-  )
-}
-
-function looksWebp(url: string, contentType: string) {
-  return /\.webp(\?|$)/i.test(url) || /image\/webp/i.test(contentType)
-}
-
-async function probe(url: string) {
-  const started = Date.now()
-  const res = await fetch(url, { method: 'GET' })
-  const loadTimeMs = Date.now() - started
-  const contentType = res.headers.get('content-type') || ''
-  let bytes = Number.parseInt(res.headers.get('content-length') || '0', 10) || 0
-  const rangeTotal = res.headers.get('content-range')?.match(/\/(\d+)$/)?.[1]
-  if (!bytes && rangeTotal) bytes = Number.parseInt(rangeTotal, 10)
-  if (!bytes) {
-    bytes = Buffer.from(await res.arrayBuffer()).byteLength
-  } else {
-    await res.body?.cancel().catch(() => undefined)
-  }
-
-  return {
-    ok: res.status >= 200 && res.status < 400,
-    status: res.status,
-    loadTimeMs,
-    sizeKB: Math.round(bytes / 1024),
-    format: contentType.split(';')[0] || 'unknown',
+function safeUrl(value: string) {
+  try {
+    const url = new URL(value)
+    return `${url.origin}${url.pathname}`
+  } catch {
+    return '(invalid URL)'
   }
 }
 
-async function mapPool<T, R>(items: T[], limit: number, worker: (item: T, index: number) => Promise<R>) {
-  const out: R[] = new Array(items.length)
+async function getAllPrintables() {
+  const url = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL
+  const key =
+    process.env.VITE_SUPABASE_ANON_KEY ||
+    process.env.SUPABASE_ANON_KEY ||
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!url || !key) {
+    throw new Error(
+      'Supabase URL/key가 없습니다. .env의 VITE_SUPABASE_URL 및 VITE_SUPABASE_ANON_KEY를 확인하세요.',
+    )
+  }
+
+  const supabase = createClient(url, key)
+  const rows: PrintableRow[] = []
+  for (let offset = 0; ; offset += PAGE_SIZE) {
+    const { data, error } = await supabase
+      .from('printables')
+      .select('id, slug, title_ko, created_at, image_bw_url, image_color_url')
+      .order('created_at', { ascending: false })
+      .order('id', { ascending: true })
+      .range(offset, offset + PAGE_SIZE - 1)
+
+    if (error) throw new Error(`Supabase 도안 조회 실패: ${error.message}`)
+    if (!data) throw new Error('Supabase 도안 조회 결과가 비어 있습니다.')
+
+    rows.push(...(data as PrintableRow[]))
+    if (data.length < PAGE_SIZE) break
+  }
+  return rows
+}
+
+function chooseSample(rows: PrintableRow[]) {
+  const count = Math.min(SAMPLE_SIZE, rows.length)
+  if (count === rows.length) return rows
+  return Array.from({ length: count }, (_, index) => {
+    const rowIndex = Math.round((index * (rows.length - 1)) / (count - 1))
+    return rows[rowIndex]
+  })
+}
+
+async function measureImage(
+  row: PrintableRow,
+  kind: 'color' | 'bw',
+  rawUrl: string,
+): Promise<ImageResult> {
+  const result: ImageResult = {
+    slug: row.slug || row.id,
+    title: row.title_ko || '(제목 없음)',
+    kind,
+    url: safeUrl(rawUrl),
+    status: 'ERROR',
+    bytes: 0,
+    ttfbMs: null,
+    downloadMs: null,
+    cacheStatus: '-',
+    cacheControl: '-',
+    contentType: '-',
+    error: null,
+  }
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS)
+  const startedAt = performance.now()
+
+  try {
+    const response = await fetch(rawUrl, { signal: controller.signal })
+    const headersAt = performance.now()
+    result.status = response.status
+    result.ttfbMs = headersAt - startedAt
+    result.cacheStatus = response.headers.get('cf-cache-status') || '(없음)'
+    result.cacheControl = response.headers.get('cache-control') || '(없음)'
+    result.contentType = response.headers.get('content-type') || '(없음)'
+
+    if (response.body) {
+      const reader = response.body.getReader()
+      try {
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
+          result.bytes += value.byteLength
+        }
+      } finally {
+        reader.releaseLock()
+      }
+    }
+    result.downloadMs = performance.now() - startedAt
+  } catch (error) {
+    result.error = error instanceof Error ? error.message : String(error)
+    result.downloadMs = performance.now() - startedAt
+  } finally {
+    clearTimeout(timeout)
+  }
+
+  return result
+}
+
+async function mapPool<T, R>(
+  items: T[],
+  limit: number,
+  worker: (item: T) => Promise<R>,
+): Promise<R[]> {
+  const output = new Array<R>(items.length)
   let next = 0
   async function run() {
     while (next < items.length) {
-      const index = next
-      next += 1
-      out[index] = await worker(items[index], index)
+      const index = next++
+      output[index] = await worker(items[index])
     }
   }
   await Promise.all(Array.from({ length: Math.min(limit, items.length) }, () => run()))
-  return out
+  return output
 }
 
-async function auditImagePerformance() {
+function inspectCardLoading() {
+  const path = resolve(process.cwd(), 'src/components/PrintableCard.tsx')
+  if (!existsSync(path)) {
+    console.log('\n[프론트엔드 이미지 태그] src/components/PrintableCard.tsx를 찾지 못했습니다.')
+    return
+  }
+
+  const source = readFileSync(path, 'utf8')
+  const imgTag = source.match(/<img\b[\s\S]*?>/)?.[0]
+  if (!imgTag) {
+    console.log('\n[프론트엔드 이미지 태그] img 태그를 찾지 못했습니다.')
+    return
+  }
+
+  const loading = imgTag.match(/\bloading\s*=\s*\{([^}]+)\}/)?.[1]?.trim()
+  const fetchPriority = imgTag.match(/\bfetchpriority\s*:\s*([^,}]+)/)?.[1]?.trim()
+  console.log('\n[프론트엔드 이미지 태그] src/components/PrintableCard.tsx')
+  console.log(`  loading: ${loading ? `{${loading}}` : '(설정 없음)'}`)
+  console.log(`  fetchpriority: ${fetchPriority || '(설정 없음)'}`)
+}
+
+function average(values: number[]) {
+  return values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : null
+}
+
+function formatMs(value: number | null) {
+  return value === null ? '-' : `${value.toFixed(1)} ms`
+}
+
+async function main() {
   loadEnv()
-  console.log('═══════════════════════════════════════════════════════════════')
-  console.log('⚡ DOOLIA 도안 이미지 용량 & 로딩 속도 정밀 점검')
-  console.log('═══════════════════════════════════════════════════════════════\n')
+  console.log('=== DOOLIA 도안 이미지 성능 및 CDN 응답 정밀 진단 ===')
 
-  const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || ''
-  const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_KEY || ''
-  if (!supabaseUrl || !supabaseKey) {
-    console.error('❌ Supabase URL/KEY 가 .env 에 없습니다.')
-    process.exitCode = 1
-    return
-  }
+  const allRows = await getAllPrintables()
+  const sample = chooseSample(allRows)
+  const imageTargets = sample.flatMap((row) =>
+    ([
+      ['color', row.image_color_url],
+      ['bw', row.image_bw_url],
+    ] as const)
+      .filter((entry): entry is readonly ['color' | 'bw', string] =>
+        Boolean(entry[1]?.trim()),
+      )
+      .map(([kind, imageUrl]) => ({ row, kind, imageUrl })),
+  )
+  const missingUrls = sample.reduce(
+    (count, row) =>
+      count + Number(!row.image_color_url?.trim()) + Number(!row.image_bw_url?.trim()),
+    0,
+  )
 
-  const supabase = createClient(supabaseUrl, supabaseKey)
-  const { data: printables, error } = await supabase
-    .from('printables')
-    .select('id, slug, title_ko, image_bw_url, image_color_url, line_art_url, color_image_url')
-    .order('id', { ascending: false })
-    .limit(500)
+  console.log(
+    `DB 등록 ${allRows.length}개 중 ${sample.length}개 도안 표본 · 이미지 URL ${imageTargets.length}개 측정 · URL 누락 ${missingUrls}개`,
+  )
+  console.log(`실제 GET 다운로드 · 동시 측정 ${CONCURRENCY}개 · 제한 시간 ${TIMEOUT_MS / 1000}초`)
+  console.log('\n[이미지별 결과]')
 
-  if (error || !printables) {
-    console.error('❌ Supabase 데이터 조회 실패:', error?.message)
-    process.exitCode = 1
-    return
-  }
-
-  console.log(`📦 전체 등록 도안 수: ${printables.length}개\n`)
-  console.log('🚀 이미지 로딩 속도 및 용량 측정 중 (잠시만 기다려주세요)...')
-
-  const slowList: SlowImageAudit[] = []
-  let probed = 0
-  let missing = 0
-  let webpCount = 0
-  let heavySizeCount = 0
-  let slowTtfbCount = 0
-  let notWebpCount = 0
-  const sizes: number[] = []
-  const times: number[] = []
-
-  await mapPool(printables, 8, async (item) => {
-    const targetUrl = pickUrl(item)
-    if (!targetUrl) {
-      missing += 1
-      return
-    }
-    probed += 1
-    try {
-      const result = await probe(targetUrl)
-      sizes.push(result.sizeKB)
-      times.push(result.loadTimeMs)
-      const isWebp = looksWebp(targetUrl, result.format)
-      if (isWebp) webpCount += 1
-      else notWebpCount += 1
-      if (result.sizeKB > 300) heavySizeCount += 1
-      if (result.loadTimeMs > 400) slowTtfbCount += 1
-
-      const isHeavy = !result.ok || result.sizeKB > 300 || !isWebp
-      if (isHeavy) {
-        slowList.push({
-          slug: String(item.slug || item.id),
-          titleKo: String(item.title_ko || '제목 없음'),
-          thumbnailUrl: targetUrl,
-          sizeKB: result.sizeKB,
-          format: result.ok ? result.format : `HTTP ${result.status}`,
-          loadTimeMs: result.loadTimeMs,
-          status: !result.ok || result.sizeKB > 500 ? 'WARNING' : 'SLOW',
-        })
-      }
-    } catch {
-      slowList.push({
-        slug: String(item.slug || item.id),
-        titleKo: String(item.title_ko || '제목 없음'),
-        thumbnailUrl: targetUrl,
-        sizeKB: 0,
-        format: 'ERROR',
-        loadTimeMs: 9999,
-        status: 'WARNING',
-      })
-    }
-  })
-
-  slowList.sort((a, b) => b.sizeKB - a.sizeKB || b.loadTimeMs - a.loadTimeMs)
-
-  console.log('\n───────────────────────────────────────────────────────────────')
-  console.log('📊 [지연 유발 및 대용량 의심 이미지 분석 결과]')
-  console.log('───────────────────────────────────────────────────────────────')
-
-  if (slowList.length === 0) {
-    console.log('✨ 모든 도안 이미지가 초경량 WebP 포맷이며 빠르게 로딩됩니다.')
-  } else {
-    slowList.slice(0, 15).forEach((item, idx) => {
-      const badge = item.status === 'WARNING' ? '🚨 [대용량 경고]' : '⚠️ [지연 발생]'
-      console.log(`${badge} ${idx + 1}. [${item.slug}] ${item.titleKo}`)
-      console.log(`   - 파일 용량 : ${item.sizeKB} KB (권장: 100KB 미만)`)
-      console.log(`   - 응답 속도 : ${item.loadTimeMs} ms`)
-      console.log(`   - 포맷 타입 : ${item.format}`)
-      console.log(`   - 이미지 URL: ${item.thumbnailUrl}`)
-      console.log('')
-    })
-    if (slowList.length > 15) {
-      console.log(`   … 외 ${slowList.length - 15}개`)
+  const results = await mapPool(imageTargets, CONCURRENCY, ({ row, kind, imageUrl }) =>
+    measureImage(row, kind, imageUrl),
+  )
+  for (const result of results) {
+    const status = result.status === 'ERROR' ? 'ERROR' : `HTTP ${result.status}`
+    const sizeKB = `${(result.bytes / 1024).toFixed(1)} KB`
+    console.log(
+      `  ${status.padEnd(9)} ${result.slug} [${result.kind}] ${sizeKB} (${result.bytes.toLocaleString()} B) · TTFB ${formatMs(result.ttfbMs)} · 전체 ${formatMs(result.downloadMs)}`,
+    )
+    console.log(
+      `    ${result.url} · cf-cache-status: ${result.cacheStatus} · cache-control: ${result.cacheControl}`,
+    )
+    if (result.status === 'ERROR') console.log(`    오류: ${result.error}`)
+    if (result.bytes >= LARGE_IMAGE_BYTES) {
+      console.log('    ⚠ 200 KB 이상 고용량 이미지')
     }
   }
 
-  const avgSize = sizes.length ? Math.round(sizes.reduce((a, b) => a + b, 0) / sizes.length) : 0
-  const avgTime = times.length ? Math.round(times.reduce((a, b) => a + b, 0) / times.length) : 0
-  const maxSize = sizes.length ? Math.max(...sizes) : 0
-  const maxTime = times.length ? Math.max(...times) : 0
+  const successful = results.filter(
+    (result) => typeof result.status === 'number' && result.status >= 200 && result.status < 300,
+  )
+  const failures = results.filter(
+    (result) => result.status === 'ERROR' || result.status < 200 || result.status >= 300,
+  )
+  const large = successful.filter((result) => result.bytes >= LARGE_IMAGE_BYTES)
+  const ttfbValues = successful.flatMap((result) =>
+    result.ttfbMs === null ? [] : [result.ttfbMs],
+  )
+  const downloadValues = successful.flatMap((result) =>
+    result.downloadMs === null ? [] : [result.downloadMs],
+  )
+  const cacheHits = results.filter((result) => result.cacheStatus.toLowerCase() === 'hit').length
+  const cacheMisses = results.filter(
+    (result) => result.cacheStatus.toLowerCase() === 'miss',
+  ).length
+  const cacheDynamics = results.filter(
+    (result) => result.cacheStatus.toLowerCase() === 'dynamic',
+  ).length
 
-  const over100 = sizes.filter((n) => n > 100).length
-  const over300 = sizes.filter((n) => n > 300).length
-  const over500 = sizes.filter((n) => n > 500).length
-  const sortedTimes = [...times].sort((a, b) => a - b)
-  const p50 = sortedTimes[Math.floor(sortedTimes.length * 0.5)] || 0
-  const p95 = sortedTimes[Math.floor(sortedTimes.length * 0.95)] || 0
+  console.log('\n[요약]')
+  console.log(`  성공 HTTP 2xx: ${successful.length}/${results.length} · 실패/비2xx: ${failures.length}`)
+  console.log(
+    `  평균 TTFB: ${formatMs(average(ttfbValues))} · 평균 전체 다운로드: ${formatMs(average(downloadValues))}`,
+  )
+  console.log(
+    `  200 KB 이상: ${large.length}개${large.length ? ` (${large.map((item) => `${item.slug}/${item.kind} ${(item.bytes / 1024).toFixed(1)} KB`).join(', ')})` : ''}`,
+  )
+  console.log(
+    `  Cloudflare 캐시: HIT ${cacheHits} · MISS ${cacheMisses} · DYNAMIC ${cacheDynamics} · 기타/헤더 없음 ${results.length - cacheHits - cacheMisses - cacheDynamics}`,
+  )
+  console.log(`  이미지 URL 누락: ${missingUrls}개`)
 
-  console.log('═══════════════════════════════════════════════════════════════')
-  console.log(`🎯 점검 요약: 전체 ${printables.length}개 중 측정 ${probed}개 · URL 없음 ${missing}개`)
-  console.log(`   WebP 비율: ${probed ? Math.round((webpCount / probed) * 100) : 0}% (${webpCount}/${probed}) · 비WebP ${notWebpCount}개`)
-  console.log(`   평균 용량: ${avgSize} KB · 최대 ${maxSize} KB`)
-  console.log(`   용량 구간: >100KB ${over100}개 · >300KB ${over300}개 · >500KB ${over500}개`)
-  console.log(`   평균 TTFB: ${avgTime} ms · p50 ${p50} ms · p95 ${p95} ms · 최대 ${maxTime} ms`)
-  console.log(`   TTFB >400ms: ${slowTtfbCount}개 (R2 origin 지연, 용량과 별개)`)
-  console.log(`   최적화 필요 도안(용량>300KB 또는 비WebP/오류): ${slowList.length}개`)
-  console.log(`   대용량 파일(>300KB): ${heavySizeCount}개`)
-  console.log('═══════════════════════════════════════════════════════════════\n')
+  inspectCardLoading()
+
+  if (failures.length || missingUrls) process.exitCode = 1
 }
 
-await auditImagePerformance()
+await main()
