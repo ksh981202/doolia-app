@@ -94,24 +94,58 @@ function lineImage(printable: Printable) {
   return printable.image_bw_url || printable.line_art_url || colorImage(printable)
 }
 
+function HeroColorImage({
+  printable,
+  width,
+  className,
+}: {
+  printable: Printable
+  width: number
+  className: string
+}) {
+  const { i18n } = useTranslation()
+  const originalSrc = colorImage(printable)
+  return (
+    <img
+      src={getDisplayImageUrl(originalSrc, width)}
+      alt={pickLocalized(printable, 'title', i18n.language) || printable.title}
+      className={className}
+      loading="lazy"
+      decoding="async"
+      onError={(event) => {
+        if (event.currentTarget.src !== originalSrc) {
+          event.currentTarget.src = originalSrc
+        }
+      }}
+    />
+  )
+}
+
 function HeroSplitPreview({ printable }: { printable: Printable }) {
   const { i18n } = useTranslation()
-  const colorSrc = colorImage(printable)
-  const lineSrc = lineImage(printable)
-  const grayscaleFallback = lineSrc === colorSrc
+  const colorOriginalSrc = colorImage(printable)
+  const lineOriginalSrc = lineImage(printable)
+  const colorSrc = getDisplayImageUrl(colorOriginalSrc, 640)
+  const lineSrc = getDisplayImageUrl(lineOriginalSrc, 640)
+  const grayscaleFallback = lineOriginalSrc === colorOriginalSrc
   const alt = pickLocalized(printable, 'title', i18n.language) || printable.title
 
   return (
     <div className="relative h-full w-full overflow-hidden rounded-xl bg-slate-50">
       <img
-        src={getDisplayImageUrl(colorSrc, 640)}
+        src={colorSrc}
         alt={alt}
         className="h-full w-full object-contain"
         decoding="async"
         {...{ fetchPriority: 'high', fetchpriority: 'high' }}
+        onError={(event) => {
+          if (event.currentTarget.src !== colorOriginalSrc) {
+            event.currentTarget.src = colorOriginalSrc
+          }
+        }}
       />
       <img
-        src={getDisplayImageUrl(lineSrc, 640)}
+        src={lineSrc}
         alt=""
         className="absolute inset-0 h-full w-full object-contain"
         decoding="async"
@@ -119,6 +153,11 @@ function HeroSplitPreview({ printable }: { printable: Printable }) {
         style={{
           clipPath: 'polygon(58% 0%, 100% 0%, 100% 100%, 42% 100%)',
           filter: grayscaleFallback ? 'grayscale(100%) contrast(150%)' : undefined,
+        }}
+        onError={(event) => {
+          if (event.currentTarget.src !== lineOriginalSrc) {
+            event.currentTarget.src = lineOriginalSrc
+          }
         }}
       />
       <span
@@ -134,7 +173,7 @@ function HeroSplitPreview({ printable }: { printable: Printable }) {
 }
 
 export function PlayHubPage() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [searchKeyword, setSearchKeyword] = useState('')
   const { data, isLoading } = usePrintablesQuery()
@@ -227,12 +266,10 @@ export function PlayHubPage() {
                     state={{ printable: left }}
                     className="absolute top-4 -left-2 h-[260px] w-[185px] -translate-x-12 -rotate-12 rounded-2xl border border-slate-200/90 bg-white p-2 shadow-lg transition-transform duration-300 hover:-rotate-12 sm:h-52 sm:w-40 sm:translate-x-0 sm:-rotate-[8deg]"
                   >
-                    <img
-                      src={getDisplayImageUrl(printableImage(left), 400)}
-                      alt={pickLocalized(left, 'title', i18n.language) || left.title}
+                    <HeroColorImage
+                      printable={left}
+                      width={400}
                       className="h-full w-full rounded-xl bg-slate-50 object-contain"
-                      loading="lazy"
-                      decoding="async"
                     />
                   </Link>
                 ) : (
@@ -244,12 +281,10 @@ export function PlayHubPage() {
                     state={{ printable: right }}
                     className="absolute top-4 -right-2 h-[260px] w-[185px] translate-x-12 rotate-12 rounded-2xl border border-slate-200/90 bg-white p-2 shadow-lg transition-transform duration-300 hover:rotate-12 sm:h-52 sm:w-40 sm:translate-x-0 sm:rotate-[8deg]"
                   >
-                    <img
-                      src={getDisplayImageUrl(printableImage(right), 400)}
-                      alt={pickLocalized(right, 'title', i18n.language) || right.title}
+                    <HeroColorImage
+                      printable={right}
+                      width={400}
                       className="h-full w-full rounded-xl bg-slate-50 object-contain"
-                      loading="lazy"
-                      decoding="async"
                     />
                   </Link>
                 ) : (
