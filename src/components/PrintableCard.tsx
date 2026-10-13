@@ -73,7 +73,7 @@ export function PrintableCard({ printable, index = Number.POSITIVE_INFINITY }: P
   const originalSrc = displayImage(printable)
   const src = getDisplayImageUrl(originalSrc, 640)
   const cdnSrc = getCdnImageUrl(originalSrc)
-  const priority = index < 8
+  const priority = index < 2
   const imgRef = useRef<HTMLImageElement>(null)
   const [loadedSrc, setLoadedSrc] = useState('')
   const loaded = loadedSrc === src
