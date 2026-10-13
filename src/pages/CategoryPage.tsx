@@ -272,9 +272,16 @@ export function CategoryPage() {
           const relevanceDifference = userSearchRelevance(a, query) - userSearchRelevance(b, query)
           if (relevanceDifference) return relevanceDifference
         }
-        return sort === 'latest'
-          ? +new Date(b.created_at) - +new Date(a.created_at)
-          : b.downloads - a.downloads || +new Date(b.created_at) - +new Date(a.created_at)
+        if (sort === 'latest') {
+          return +new Date(b.created_at) - +new Date(a.created_at)
+        }
+        const getScore = (item: typeof a & { likes_count?: number; views_count?: number }) =>
+          ((item.downloads || 0) * 3) +
+          ((item.likes || item.likes_count || 0) * 2) +
+          ((item.views || item.views_count || 0) * 1)
+        const scoreA = getScore(a)
+        const scoreB = getScore(b)
+        return scoreB - scoreA || +new Date(b.created_at) - +new Date(a.created_at)
       })
   }, [age, browseAll, data, isSenior, match, query, sort, sub, subOptions, theme, themeOptions])
 
