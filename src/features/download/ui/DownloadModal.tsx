@@ -10,7 +10,6 @@ import {
   type AffiliateItem,
   getAffiliateLink,
   pickAffiliateText,
-  prefetchAffiliateMedia,
   resolveAffiliateVideoUrl,
 } from '@/shared/config/affiliates'
 import { TOUCH_ICON, cn } from '@/shared/lib/cn'
@@ -66,7 +65,7 @@ function AffiliateMedia({ affiliate, alt }: { affiliate: AffiliateItem; alt: str
           loop
           muted
           playsInline
-          preload="auto"
+          preload="metadata"
           disablePictureInPicture
           className="h-full w-full object-cover"
           onError={() => setShowVideo(false)}
@@ -80,10 +79,6 @@ function AffiliateMedia({ affiliate, alt }: { affiliate: AffiliateItem; alt: str
 
 export function DownloadModal() {
   const { isOpen, printable, affiliate, closeModal } = useDownloadStore()
-
-  useEffect(() => {
-    prefetchAffiliateMedia()
-  }, [])
 
   useEffect(() => {
     if (!isOpen) return

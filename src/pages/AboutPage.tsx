@@ -36,6 +36,9 @@ export function AboutPage() {
               src="/images/about/about-story1.webp"
               alt={t('about.section1_title', { defaultValue: 'Freedom beyond Lines' })}
               className="h-full w-full object-cover"
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
             />
           </div>
           <div className="relative min-w-0">
@@ -60,9 +63,12 @@ export function AboutPage() {
         <div className="grid items-center gap-10 sm:gap-16 md:grid-cols-2">
           <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-slate-100 bg-slate-100 shadow-sm md:order-2">
             <img
-              src="/images/about/about-story3.webp"
+              src="/images/about/about-story2.webp"
               alt={t('about.section2_title', { defaultValue: 'Dialogue in Colors' })}
               className="h-full w-full object-cover"
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
             />
           </div>
           <div className="relative min-w-0 md:order-1">
@@ -87,9 +93,12 @@ export function AboutPage() {
         <div className="grid items-center gap-10 sm:gap-16 md:grid-cols-2">
           <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-slate-100 bg-slate-100 shadow-sm">
             <img
-              src="/images/about/about-story2.webp"
+              src="/images/about/about-story3.webp"
               alt={t('about.section3_title', { defaultValue: 'Crafted for Little Hands' })}
               className="h-full w-full object-cover"
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
             />
           </div>
           <div className="relative min-w-0">

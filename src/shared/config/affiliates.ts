@@ -643,18 +643,3 @@ export function getAffiliateLink(item: AffiliateItem, lang: string): string {
 export function resolveAffiliateVideoUrl(item: AffiliateItem): string {
   return item.videoUrl
 }
-
-export function prefetchAffiliateMedia(items?: AffiliateItem[]) {
-  if (typeof document === 'undefined') return
-  for (const item of items ?? getActiveAffiliatePool()) {
-    const poster = new Image()
-    poster.decoding = 'async'
-    poster.src = item.image
-    const video = document.createElement('video')
-    video.muted = true
-    video.preload = 'auto'
-    video.playsInline = true
-    video.src = item.videoUrl
-    video.load()
-  }
-}

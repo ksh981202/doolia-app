@@ -4,7 +4,6 @@ import {
   AFFILIATE_ITEMS,
   type AffiliateItem,
   type LocalizedText,
-  prefetchAffiliateMedia,
   setActiveAffiliatePool,
 } from '@/shared/config/affiliates'
 
@@ -97,7 +96,6 @@ export function emptyAffiliateDraft(): AffiliateRecord {
 export async function fetchPublicAffiliateItems(): Promise<AffiliateItem[]> {
   if (!supabase) {
     setActiveAffiliatePool(AFFILIATE_ITEMS)
-    prefetchAffiliateMedia(AFFILIATE_ITEMS)
     return AFFILIATE_ITEMS
   }
   const { data, error } = await supabase
@@ -109,12 +107,10 @@ export async function fetchPublicAffiliateItems(): Promise<AffiliateItem[]> {
     .order('sort_order', { ascending: true })
   if (error || !data?.length) {
     setActiveAffiliatePool(AFFILIATE_ITEMS)
-    prefetchAffiliateMedia(AFFILIATE_ITEMS)
     return AFFILIATE_ITEMS
   }
   const items = (data as AffiliateRecord[]).map(recordToAffiliateItem)
   setActiveAffiliatePool(items)
-  prefetchAffiliateMedia(items)
   return items
 }
 

@@ -143,21 +143,21 @@ export function InfoSection({ printable }: { printable: Printable }) {
         <span className={TEXT_WRAP}>{t('detail.printCta')}</span>
       </button>
 
-      <div className="mt-3 grid min-w-0 grid-cols-2 gap-3">
-        <div className="flex min-w-0 items-center justify-center gap-2 rounded-xl border border-slate-200/70 bg-slate-50 px-3 py-2.5 text-slate-700">
-          <svg className="h-4 w-4 shrink-0 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <div className="mt-3 grid min-w-0 grid-cols-2 gap-2 sm:gap-3">
+        <div className="flex min-w-0 items-center justify-center gap-1.5 rounded-xl border border-slate-200/70 bg-slate-50 px-2.5 py-1.5 text-center text-slate-700 sm:gap-2 sm:px-3 sm:py-2">
+          <svg className="h-3.5 w-3.5 shrink-0 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          <span className="truncate text-[13px] font-semibold tracking-tight sm:text-[13.5px]">
+          <span className="min-w-0 whitespace-normal break-keep text-[11px] font-semibold leading-tight tracking-tight sm:text-xs">
             {t('detail.specFit', '표준 용지 맞춤')}
           </span>
         </div>
-        <div className="flex min-w-0 items-center justify-center gap-2 rounded-xl border border-slate-200/70 bg-slate-50 px-3 py-2.5 text-slate-700">
-          <svg className="h-4 w-4 shrink-0 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <div className="flex min-w-0 items-center justify-center gap-1.5 rounded-xl border border-slate-200/70 bg-slate-50 px-2.5 py-1.5 text-center text-slate-700 sm:gap-2 sm:px-3 sm:py-2">
+          <svg className="h-3.5 w-3.5 shrink-0 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
           </svg>
-          <span className="truncate text-[13px] font-semibold tracking-tight sm:text-[13.5px]">
-            {t('detail.specQuality', '선명한 고화질 인쇄')}
+          <span className="min-w-0 whitespace-normal break-keep text-[11px] font-semibold leading-tight tracking-tight sm:text-xs">
+            {t('detail.specQuality', '고화질 인쇄')}
           </span>
         </div>
       </div>
