@@ -1,4 +1,4 @@
-import { ChevronRight } from 'lucide-react'
+import { Check, ChevronRight, Plus } from 'lucide-react'
 import { useEffect, useLayoutEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useLocation, useParams } from 'react-router-dom'
@@ -6,6 +6,7 @@ import { A4Preview } from '@/components/detail/A4Preview'
 import { DetailSkeleton } from '@/components/detail/DetailSkeleton'
 import { InfoSection } from '@/components/detail/InfoSection'
 import { RelatedPrintables } from '@/components/detail/RelatedPrintables'
+import { usePrintableCollection } from '@/features/collection/usePrintableCollection'
 import { usePrintableQuery, usePrintablesQuery } from '@/features/gallery/model/usePrintablesQuery'
 import { DEMO_PRINTABLES } from '@/services/printableService'
 import { categoryPath, getAllCatalogTopics, matchesTopicCategory } from '@/shared/config/catalog'
@@ -44,6 +45,7 @@ export function PrintableDetailPage() {
   const catalog = usePrintablesQuery()
   const demo = DEMO_PRINTABLES.find((item) => matchesKey(item, id))
   const printable = data ?? seeded ?? demo
+  const { isInCollection, addToCollection, removeFromCollection } = usePrintableCollection()
 
   const relatedPool = useMemo(() => catalog.data ?? DEMO_PRINTABLES, [catalog.data])
   const recordView = usePrintableEngagement((state) => state.recordView)
@@ -107,6 +109,7 @@ export function PrintableDetailPage() {
   const title = detailTitle(printable, i18n.language || i18n.resolvedLanguage)
   const topic = catalogTopic(printable)
   const topicLabel = t(`categories.${topic.id}`, topic.label)
+  const inCollection = isInCollection(printable.slug)
 
   const crumbs: Crumb[] = [
     { label: t('nav.home'), to: '/' },
@@ -147,7 +150,33 @@ export function PrintableDetailPage() {
         </nav>
 
         <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-12">
-          <div className="min-w-0 w-full lg:col-span-7">
+          <div className="relative min-w-0 w-full lg:col-span-7">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault()
+                if (inCollection) {
+                  removeFromCollection(printable.slug)
+                } else {
+                  addToCollection({
+                    slug: printable.slug,
+                    title: printable.title,
+                    image_bw_url: printable.image_bw_url,
+                    theme: (printable as { theme?: string }).theme || printable.theme_ko || '',
+                    age_group: printable.age_group,
+                  })
+                }
+              }}
+              className={`absolute top-4 right-4 z-10 w-11 h-11 rounded-full flex items-center justify-center shadow-lg transition-all transform active:scale-95 ${
+                inCollection
+                  ? 'bg-emerald-600 text-white shadow-emerald-200'
+                  : 'bg-white/90 hover:bg-white text-slate-700 hover:text-emerald-600 backdrop-blur-sm border border-slate-200/60'
+              }`}
+              title={inCollection ? '바구니에서 제외' : '도안 바구니에 담기'}
+              aria-label="도안 바구니에 담기"
+            >
+              {inCollection ? <Check className="w-5 h-5 stroke-[2.5]" /> : <Plus className="w-5 h-5 stroke-[2.5]" />}
+            </button>
             <A4Preview key={printable.id || printable.slug} printable={{ ...printable, title }} />
           </div>
           <div className="flex min-w-0 w-full flex-col gap-6 lg:col-span-5">

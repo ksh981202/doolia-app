@@ -2371,25 +2371,19 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://doolia.app/printable/gl377</loc>
-    <lastmod>2026-10-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://doolia.app/printable/gl355</loc>
     <lastmod>2026-10-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://doolia.app/printable/gl456</loc>
-    <lastmod>2026-10-13</lastmod>
+    <loc>https://doolia.app/printable/gl377</loc>
+    <lastmod>2026-10-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://doolia.app/printable/gl457</loc>
+    <loc>https://doolia.app/printable/gl456</loc>
     <lastmod>2026-10-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -3007,12 +3001,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://doolia.app/printable/princess-in-party-dress-with-lace-ribbons-coloring-page</loc>
-    <lastmod>2026-10-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://doolia.app/printable/autumn-craft-pasting-maple-leaves-coloring-page</loc>
     <lastmod>2026-10-13</lastmod>
     <changefreq>weekly</changefreq>
@@ -3043,12 +3031,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://doolia.app/printable/cheerful-butterfly-fluttering-near-flower-buds-coloring-page</loc>
-    <lastmod>2026-10-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://doolia.app/printable/mighty-tyrannosaurus-rex-in-prehistoric-forest-coloring-page</loc>
     <lastmod>2026-10-13</lastmod>
     <changefreq>weekly</changefreq>
@@ -3073,13 +3055,31 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://doolia.app/printable/sunset-stroll-by-park-water-fountain-coloring-page</loc>
+    <lastmod>2026-10-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://doolia.app/printable/gl457</loc>
+    <lastmod>2026-10-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://doolia.app/printable/friendly-police-officer-guiding-with-flag-coloring-page</loc>
     <lastmod>2026-10-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://doolia.app/printable/sunset-stroll-by-park-water-fountain-coloring-page</loc>
+    <loc>https://doolia.app/printable/princess-in-party-dress-with-lace-ribbons-coloring-page</loc>
+    <lastmod>2026-10-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://doolia.app/printable/cheerful-butterfly-fluttering-near-flower-buds-coloring-page</loc>
     <lastmod>2026-10-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>

@@ -4,6 +4,7 @@ import { Footer } from '@/components/layout/Footer'
 import { MainHeader } from '@/components/layout/MainHeader'
 import { PAGE_SHELL } from '@/shared/lib/cn'
 import { useDownloadStore } from '@/shared/store/useDownloadStore'
+import { CollectionFloatingBar } from '@/features/collection/CollectionFloatingBar'
 
 const DownloadModal = lazy(() =>
   import('@/features/download/ui/DownloadModal').then((module) => ({ default: module.DownloadModal })),
@@ -34,6 +35,7 @@ export function AppLayout() {
       </main>
       <Footer />
       <DeferredDownloadModal />
+      <CollectionFloatingBar />
     </div>
   )
 }

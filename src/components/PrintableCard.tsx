@@ -1,6 +1,7 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState, type MouseEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
+import { Check, Plus } from 'lucide-react'
 import { getCategoryThemes } from '@/shared/config/categories'
 import { printablePath } from '@/shared/config/catalog'
 import { cn } from '@/shared/lib/cn'
@@ -8,6 +9,7 @@ import { pickLocalized } from '@/shared/lib/detailCopy'
 import { matchesQuery } from '@/services/printableService'
 import { getCdnImageUrl, getDisplayImageUrl } from '@/shared/utils/printableAssets'
 import { usePrintableSocial } from '@/shared/store/usePrintableEngagement'
+import { usePrintableCollection } from '@/features/collection/usePrintableCollection'
 import type { Printable } from '@/types/printable'
 
 type PrintableCardProps = {
@@ -70,6 +72,27 @@ export function PrintableCard({ printable, index = Number.POSITIVE_INFINITY }: P
     printable.theme_en ||
     t(`categories.${printable.category}`, '')
   const { likesCount, viewsCount } = usePrintableSocial(printable)
+  const { isInCollection, addToCollection, removeFromCollection } = usePrintableCollection()
+  const slug = printable.slug || printable.id
+  const inCollection = isInCollection(slug)
+
+  const handleToggleCollection = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    if (inCollection) {
+      removeFromCollection(slug)
+    } else {
+      addToCollection({
+        slug,
+        title,
+        image_bw_url: printable.image_bw_url || printable.line_art_url || originalSrc,
+        theme: printable.theme_ko || printable.theme_en || '',
+        age_group: printable.age_group || '',
+      })
+    }
+  }
+
   const originalSrc = displayImage(printable)
   const src = getDisplayImageUrl(originalSrc, 640)
   const cdnSrc = getCdnImageUrl(originalSrc)
@@ -106,6 +129,19 @@ export function PrintableCard({ printable, index = Number.POSITIVE_INFINITY }: P
         <span className="pointer-events-none absolute top-12 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-full bg-slate-900/80 px-2.5 py-1 text-[11px] font-bold text-white opacity-0 shadow-sm backdrop-blur-xs transition-opacity duration-300 group-hover:opacity-100">
           🖨️ {t('detail.previewBw', '흑백 도안 미리보기')}
         </span>
+        <button
+          type="button"
+          onClick={handleToggleCollection}
+          aria-label={inCollection ? '바구니에서 제거' : '바구니에 담기'}
+          className={cn(
+            'absolute top-3 right-3 z-20 flex h-8 w-8 items-center justify-center rounded-full shadow-sm backdrop-blur-xs transition-all duration-200',
+            inCollection
+              ? 'bg-emerald-600 text-white shadow-emerald-600/30 hover:bg-emerald-700 hover:scale-105'
+              : 'bg-white/80 text-slate-700 hover:bg-white hover:text-slate-900 hover:scale-105',
+          )}
+        >
+          {inCollection ? <Check className="h-4 w-4 stroke-[2.5]" /> : <Plus className="h-4 w-4 stroke-[2.5]" />}
+        </button>
         <img
           ref={imgRef}
           src={src}
