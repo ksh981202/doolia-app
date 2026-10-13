@@ -7,7 +7,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { createClient } from '@supabase/supabase-js'
 
-const SITE = 'https://doolia.com'
+const SITE = 'https://doolia.app'
 const LOCALES = ['ko', 'en', 'ja', 'zh', 'es', 'pt', 'de', 'fr', 'it', 'vi'] as const
 
 type Row = {
