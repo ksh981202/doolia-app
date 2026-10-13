@@ -2143,12 +2143,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://doolia.com/printable/gl415</loc>
-    <lastmod>2026-10-12</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://doolia.com/printable/gl423</loc>
     <lastmod>2026-10-12</lastmod>
     <changefreq>weekly</changefreq>
@@ -3055,13 +3049,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://doolia.com/printable/mighty-tyrannosaurus-rex-in-prehistoric-forest-coloring-page</loc>
+    <loc>https://doolia.com/printable/cheerful-butterfly-fluttering-near-flower-buds-coloring-page</loc>
     <lastmod>2026-10-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://doolia.com/printable/cheerful-butterfly-fluttering-near-flower-buds-coloring-page</loc>
+    <loc>https://doolia.com/printable/mighty-tyrannosaurus-rex-in-prehistoric-forest-coloring-page</loc>
     <lastmod>2026-10-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -3081,6 +3075,12 @@
   <url>
     <loc>https://doolia.com/printable/friendly-police-officer-guiding-with-flag-coloring-page</loc>
     <lastmod>2026-10-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://doolia.com/printable/gl415</loc>
+    <lastmod>2026-10-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>

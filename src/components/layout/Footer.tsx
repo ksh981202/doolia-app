@@ -29,7 +29,7 @@ export function Footer() {
   const { t } = useTranslation()
 
   return (
-    <footer className="no-print mt-6 border-t border-slate-200/80 bg-slate-50/70 pt-6 pb-10 sm:mt-8 sm:pb-12">
+    <footer className="no-print mt-6 border-t border-slate-200/80 bg-slate-50/70 pt-6 pb-8 sm:mt-8 sm:pb-6">
       <div className={PAGE_SHELL}>
         <div className="grid grid-cols-1 items-stretch gap-5 sm:gap-6 md:grid-cols-3">
           <div className={CARD}>
@@ -87,9 +87,10 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-6 flex flex-col items-center justify-between gap-2 border-t border-slate-200/60 pt-6 text-[12.5px] text-slate-400 sm:flex-row">
-          <p>{t('footer.copyright', { year: new Date().getFullYear(), brand: BRAND.name })}</p>
-          <p>{t('footer.designedFor')}</p>
+        <div className="mt-6 border-t border-slate-200/60 pt-6">
+          <p className="text-center text-xs text-gray-400">
+            {t('footer.copyright', { year: new Date().getFullYear(), brand: BRAND.name })}
+          </p>
         </div>
       </div>
     </footer>

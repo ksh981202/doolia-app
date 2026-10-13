@@ -1,0 +1,4 @@
+[Strict Cost-Saving Rules]
+1. Only read and edit the specific files explicitly requested.
+2. Never run 'npm run lint' or 'git diff' unless requested.
+3. Keep edits concise and finish immediately after task completion.
