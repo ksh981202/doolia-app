@@ -7,8 +7,7 @@ function escapeHtml(value: string) {
 }
 
 export const PRINT_BRAND_FOOTER_LEFT = 'DOOLIA | doolia.app'
-export const PRINT_BRAND_FOOTER_RIGHT =
-  '© DOOLIA. For Personal & Educational Use Only. Commercial Use & Resale Prohibited.'
+export const PRINT_BRAND_FOOTER_RIGHT = ''
 
 /** Isolated print-window CSS. Height 100% only — 100vh + large @page margin overflows onto page 2. */
 export const PRINT_DOCUMENT_STYLES = `@page {
@@ -103,7 +102,6 @@ export function printDocumentHtml(title: string, imgUrl: string, autoPrint = tru
       </div>
       <div class="print-brand-footer">
         <span class="brand-left">${PRINT_BRAND_FOOTER_LEFT}</span>
-        <span class="brand-right">${PRINT_BRAND_FOOTER_RIGHT}</span>
       </div>
     </div>
   </body>

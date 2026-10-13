@@ -1,14 +1,12 @@
 export const PRINT_FOOTER_BRAND = 'DOOLIA'
 export const PRINT_FOOTER_SITE = 'doolia.app'
-export const PRINT_FOOTER_LEGAL =
-  '© DOOLIA. For Personal & Educational Use Only. Commercial Use & Resale Prohibited.'
+export const PRINT_FOOTER_LEGAL = ''
 
 export function printFooterMarkup() {
   return `<div class="print-footer">
   <div class="print-footer-brand">
     <span class="print-footer-name">${PRINT_FOOTER_BRAND} | ${PRINT_FOOTER_SITE}</span>
   </div>
-  <div class="print-footer-legal">${PRINT_FOOTER_LEGAL}</div>
 </div>`
 }
 
@@ -37,16 +35,5 @@ export function drawPrintFooter(
   ctx.fillStyle = '#334155'
   const leftText = `${PRINT_FOOTER_BRAND} | ${PRINT_FOOTER_SITE}`
   ctx.fillText(leftText, sideMargin, midY)
-  const leftWidth = ctx.measureText(leftText).width
-
-  ctx.textAlign = 'right'
-  ctx.fillStyle = '#94a3b8'
-  ctx.font = `500 ${textSize}px "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif`
-  const maxLegal = pageWidth - sideMargin * 2 - leftWidth - pageWidth * 0.18
-  let legal = PRINT_FOOTER_LEGAL
-  while (ctx.measureText(legal).width > maxLegal && legal.length > 20) {
-    legal = `${legal.slice(0, -2)}…`
-  }
-  ctx.fillText(legal, pageWidth - sideMargin, midY)
   ctx.restore()
 }

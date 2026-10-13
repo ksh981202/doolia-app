@@ -10,7 +10,6 @@ import {
   isMobilePrintHost,
   printPrintable,
   PRINT_BRAND_FOOTER_LEFT,
-  PRINT_BRAND_FOOTER_RIGHT,
 } from '@/shared/lib/printPage'
 import {
   getCdnImageUrl,
@@ -210,7 +209,6 @@ export function A4Preview({ printable }: { printable: Printable }) {
           </div>
           <div className="print-brand-footer">
             <span className="brand-left">{PRINT_BRAND_FOOTER_LEFT}</span>
-            <span className="brand-right">{PRINT_BRAND_FOOTER_RIGHT}</span>
           </div>
         </div>,
         document.body,
