@@ -2359,14 +2359,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://doolia.app/printable/gl261</loc>
-    <lastmod>2026-10-09</lastmod>
+    <loc>https://doolia.app/printable/gl453</loc>
+    <lastmod>2026-10-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://doolia.app/printable/gl453</loc>
-    <lastmod>2026-10-12</lastmod>
+    <loc>https://doolia.app/printable/gl261</loc>
+    <lastmod>2026-10-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -3049,12 +3049,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://doolia.app/printable/sweet-strawberry-jam-glazed-donut-coloring-page</loc>
-    <lastmod>2026-10-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://doolia.app/printable/sunset-stroll-by-park-water-fountain-coloring-page</loc>
     <lastmod>2026-10-13</lastmod>
     <changefreq>weekly</changefreq>
@@ -3080,6 +3074,12 @@
   </url>
   <url>
     <loc>https://doolia.app/printable/cheerful-butterfly-fluttering-near-flower-buds-coloring-page</loc>
+    <lastmod>2026-10-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://doolia.app/printable/sweet-strawberry-jam-glazed-donut-coloring-page</loc>
     <lastmod>2026-10-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>

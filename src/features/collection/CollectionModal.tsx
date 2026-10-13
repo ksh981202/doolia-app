@@ -227,12 +227,37 @@ const COLLECTION_DICTIONARY: Record<string, CollectionTexts> = {
   },
 }
 
+async function fetchImageAsDataUrl(url: string): Promise<string> {
+  if (url.startsWith('data:')) return url
+
+  // 구 R2 공개 주소를 CORS가 허용된 공식 CDN 주소로 자동 정규화
+  let targetUrl = url
+  if (targetUrl.includes('pub-1c8b49597bc74e7b9406c9d7110f708d.r2.dev')) {
+    targetUrl = targetUrl.replace(
+      'https://pub-1c8b49597bc74e7b9406c9d7110f708d.r2.dev',
+      'https://cdn.doolia.app'
+    )
+  }
+
+  const response = await fetch(targetUrl, { mode: 'cors' })
+  if (!response.ok) throw new Error(`Failed to fetch image: ${response.statusText}`)
+  const blob = await response.blob()
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onloadend = () => resolve(reader.result as string)
+    reader.onerror = reject
+    reader.readAsDataURL(blob)
+  })
+}
+
 function loadImageForCanvas(url: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image()
-    img.crossOrigin = 'anonymous'
+    if (!url.startsWith('data:')) {
+      img.crossOrigin = 'anonymous'
+    }
     img.onload = () => resolve(img)
-    img.onerror = () => reject(new Error(`Failed to load image: ${url}`))
+    img.onerror = () => reject(new Error(`Failed to load image`))
     img.src = url
   })
 }
@@ -352,7 +377,8 @@ export function CollectionModal({ isOpen, onClose }: CollectionModalProps) {
 
       for (let i = 0; i < items.length; i++) {
         const item = items[i]
-        const img = await loadImageForCanvas(item.image_bw_url)
+        const dataUrl = await fetchImageAsDataUrl(item.image_bw_url)
+        const img = await loadImageForCanvas(dataUrl)
         const imgData = rasterizeA4Image(img)
 
         if (i > 0) {
