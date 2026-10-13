@@ -227,78 +227,10 @@ const COLLECTION_DICTIONARY: Record<string, CollectionTexts> = {
   },
 }
 
-async function fetchImageAsDataUrl(url: string): Promise<string> {
-  if (url.startsWith('data:')) return url
-
-  // 구 R2 공개 주소를 CORS가 허용된 공식 CDN 주소로 자동 정규화
-  let targetUrl = url
-  if (targetUrl.includes('pub-1c8b49597bc74e7b9406c9d7110f708d.r2.dev')) {
-    targetUrl = targetUrl.replace(
-      'https://pub-1c8b49597bc74e7b9406c9d7110f708d.r2.dev',
-      'https://cdn.doolia.app'
-    )
-  }
-
-  const response = await fetch(targetUrl, { mode: 'cors' })
-  if (!response.ok) throw new Error(`Failed to fetch image: ${response.statusText}`)
-  const blob = await response.blob()
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onloadend = () => resolve(reader.result as string)
-    reader.onerror = reject
-    reader.readAsDataURL(blob)
-  })
-}
-
-function loadImageForCanvas(url: string): Promise<HTMLImageElement> {
-  return new Promise((resolve, reject) => {
-    const img = new Image()
-    if (!url.startsWith('data:')) {
-      img.crossOrigin = 'anonymous'
-    }
-    img.onload = () => resolve(img)
-    img.onerror = () => reject(new Error(`Failed to load image`))
-    img.src = url
-  })
-}
-
-function rasterizeA4Image(img: HTMLImageElement): string {
-  const canvas = document.createElement('canvas')
-  canvas.width = 1240
-  canvas.height = 1754
-  const ctx = canvas.getContext('2d')
-  if (!ctx) throw new Error('Could not get canvas context')
-
-  ctx.fillStyle = '#ffffff'
-  ctx.fillRect(0, 0, canvas.width, canvas.height)
-
-  const marginX = 60
-  const marginTop = 60
-  const footerHeight = 70
-  const maxArtW = canvas.width - marginX * 2
-  const maxArtH = canvas.height - marginTop - footerHeight
-
-  const nw = img.naturalWidth || img.width
-  const nh = img.naturalHeight || img.height
-  const fit = Math.min(maxArtW / nw, maxArtH / nh)
-  const drawW = nw * fit
-  const drawH = nh * fit
-  const drawX = (canvas.width - drawW) / 2
-  const drawY = marginTop + (maxArtH - drawH) / 2
-
-  ctx.drawImage(img, drawX, drawY, drawW, drawH)
-
-  ctx.fillStyle = '#94a3b8'
-  ctx.font = '500 20px -apple-system, BlinkMacSystemFont, sans-serif'
-  ctx.fillText('DOOLIA | doolia.app', marginX, canvas.height - 35)
-
-  return canvas.toDataURL('image/jpeg', 0.92)
-}
-
 export function CollectionModal({ isOpen, onClose }: CollectionModalProps) {
   const { t, i18n } = useTranslation()
   const { items, removeFromCollection, clearCollection } = usePrintableCollection()
-  const [isDownloadingPdf, setIsDownloadingPdf] = useState(false)
+  const [isPdfGenerating, setIsPdfGenerating] = useState(false)
   const [isPrinting, setIsPrinting] = useState(false)
 
   const affiliateItem: AffiliateItem =
@@ -363,38 +295,90 @@ export function CollectionModal({ isOpen, onClose }: CollectionModalProps) {
   }
 
   const handleDownloadPdfBundle = async () => {
-    if (items.length === 0 || isDownloadingPdf) return
-    setIsDownloadingPdf(true)
+    if (items.length === 0 || isPdfGenerating) return;
+    setIsPdfGenerating(true);
 
     try {
-      const { jsPDF } = await import('jspdf')
+      const { default: jsPDF } = await import('jspdf');
       const doc = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
         format: 'a4',
         compress: true,
-      })
+      });
 
       for (let i = 0; i < items.length; i++) {
-        const item = items[i]
-        const dataUrl = await fetchImageAsDataUrl(item.image_bw_url)
-        const img = await loadImageForCanvas(dataUrl)
-        const imgData = rasterizeA4Image(img)
-
-        if (i > 0) {
-          doc.addPage('a4', 'portrait')
+        const item = items[i];
+        // 1. 구 R2 도메인을 CORS가 완벽히 열린 공식 cdn.doolia.app으로 강제 정규화
+        let cleanUrl = item.image_bw_url;
+        if (cleanUrl.includes('pub-1c8b49597bc74e7b9406c9d7110f708d.r2.dev')) {
+          cleanUrl = cleanUrl.replace('https://pub-1c8b49597bc74e7b9406c9d7110f708d.r2.dev', 'https://cdn.doolia.app');
         }
-        doc.addImage(imgData, 'JPEG', 0, 0, 210, 297, undefined, 'FAST')
+
+        // 2. 브라우저 캐시 오염을 우회하여 항상 순수 CORS 응답을 보장하도록 요청
+        const response = await fetch(cleanUrl, {
+          mode: 'cors',
+          credentials: 'omit',
+          cache: 'no-cache',
+        });
+        if (!response.ok) throw new Error(`이미지 로드 실패 (${response.status}): ${cleanUrl}`);
+        const blob = await response.blob();
+        const objectUrl = URL.createObjectURL(blob);
+
+        try {
+          const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+            const image = new Image();
+            image.onload = () => resolve(image);
+            image.onerror = reject;
+            image.src = objectUrl;
+          });
+
+          // 2. A4 캔버스 생성 및 고화질 렌더링
+          const canvas = document.createElement('canvas');
+          canvas.width = 1240;
+          canvas.height = 1754;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) throw new Error('Canvas context 생성 실패');
+
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          // 이미지 비율 유지 맞춤
+          const margin = 60;
+          const maxWidth = canvas.width - margin * 2;
+          const maxHeight = canvas.height - margin * 2 - 80;
+          const scale = Math.min(maxWidth / img.naturalWidth, maxHeight / img.naturalHeight);
+          const drawWidth = img.naturalWidth * scale;
+          const drawHeight = img.naturalHeight * scale;
+          const drawX = (canvas.width - drawWidth) / 2;
+          const drawY = margin + (maxHeight - drawHeight) / 2;
+
+          ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+
+          // 하단 브랜드 푸터 텍스트
+          ctx.fillStyle = '#94a3b8';
+          ctx.font = 'bold 24px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('DOOLIA | doolia.app', canvas.width / 2, canvas.height - 40);
+
+          const pageDataUrl = canvas.toDataURL('image/jpeg', 0.92);
+
+          // 3. PDF 페이지 추가
+          if (i > 0) doc.addPage('a4', 'portrait');
+          doc.addImage(pageDataUrl, 'JPEG', 0, 0, 210, 297, undefined, 'FAST');
+        } finally {
+          URL.revokeObjectURL(objectUrl);
+        }
       }
 
-      doc.save('doolia-coloring-collection.pdf')
+      doc.save('doolia-coloring-collection.pdf');
     } catch (error) {
-      console.error('[CollectionModal] Failed to download PDF bundle:', error)
-      alert('PDF 생성 중 문제가 발생했습니다. 다시 시도해 주세요.')
+      console.error('[CollectionModal PDF Error]', error);
+      alert(t('collection.pdfError', 'PDF 생성 중 문제가 발생했습니다. 다시 시도해 주세요.'));
     } finally {
-      setIsDownloadingPdf(false)
+      setIsPdfGenerating(false);
     }
-  }
+  };
   return (
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 print:hidden">
@@ -495,10 +479,10 @@ export function CollectionModal({ isOpen, onClose }: CollectionModalProps) {
                     <button
                       type="button"
                       onClick={handleDownloadPdfBundle}
-                      disabled={isDownloadingPdf}
+                      disabled={isPdfGenerating}
                       className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-700 shadow-xs transition-all hover:bg-slate-200 active:scale-[0.98] disabled:opacity-70 cursor-pointer"
                     >
-                      {isDownloadingPdf ? (
+                      {isPdfGenerating ? (
                         <>
                           <Loader2 className="h-4 w-4 animate-spin text-slate-500" />
                           <span>{dict.pdfGenerating}</span>
