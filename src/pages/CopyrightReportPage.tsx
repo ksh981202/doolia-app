@@ -41,8 +41,39 @@ const ETHICS_CARDS = [
 const FIELD_CLASS =
   'w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 outline-none transition-all placeholder:text-slate-400 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10'
 
+const PROOF_LABELS: Record<string, string> = {
+  ko: '원본 저작물 증빙 링크 (URL) 또는 공인 등록번호',
+  en: 'Original Work Proof Link (URL) or Registration Number',
+  zh: '原作證明連結 (URL) 或官方登記字號',
+  ja: '著作物の証明リンク (URL) または登録番号',
+  es: 'Enlace de prueba de la obra original (URL) o número de registro',
+  de: 'Nachweis-Link des Originalwerks (URL) oder Registrierungsnummer',
+  fr: "Lien de preuve de l'œuvre originale (URL) ou numéro d'enregistrement",
+  pt: 'Link de comprovação da obra original (URL) ou número de registro',
+  it: "Link di prova dell'opera originale (URL) o numero di registrazione",
+  vi: 'Liên kết chứng minh tác phẩm gốc (URL) hoặc số đăng ký',
+}
+
+const PROOF_HELP: Record<string, string> = {
+  ko: '정당한 권리자임을 확인할 수 있는 공식 웹사이트, SNS 게시물 링크 또는 저작권 등록번호를 입력해주세요.',
+  en: 'Please provide an official website, social post link, or registration number proving you are the rightful copyright holder.',
+  zh: '請提供可證明您為合法權利人的官方網站、社群發布連結或著作權登記字號。',
+  ja: '正当な権利者であることを確認できる公式サイト、SNS投稿リンク、または著作権登録番号を入力してください.',
+}
+
+const PROOF_PLACEHOLDERS: Record<string, string> = {
+  ko: 'https://... 또는 저작권 등록번호 (예: 제 C-XXXX호)',
+  en: 'https://... or registration number (e.g., #C-XXXX)',
+  zh: 'https://... 或著作權登記字號',
+  ja: 'https://... または登録番号',
+}
+
 export function CopyrightReportPage() {
   const { t, i18n } = useTranslation()
+  const lang = (i18n.language || 'ko').slice(0, 2)
+  const proofLabel = PROOF_LABELS[lang] || PROOF_LABELS.en
+  const proofHelp = PROOF_HELP[lang] || PROOF_HELP.en
+  const proofPlaceholder = PROOF_PLACEHOLDERS[lang] || PROOF_PLACEHOLDERS.en
   const [params] = useSearchParams()
   const slugOrId = (params.get('slug') || params.get('printableId') || '').trim()
   const queried = usePrintableQuery(slugOrId || undefined)
@@ -73,6 +104,7 @@ export function CopyrightReportPage() {
   const [reporterName, setReporterName] = useState('')
   const [goodFaithAgreed, setGoodFaithAgreed] = useState(false)
   const [reportType, setReportType] = useState<ReportType>('copyright')
+  const [proofUrl, setProofUrl] = useState('')
   const [content, setContent] = useState('')
   const [error, setError] = useState('')
   const [sent, setSent] = useState(false)
@@ -85,6 +117,9 @@ export function CopyrightReportPage() {
       printable
         ? `${window.location.origin}${printablePath(printable.slug || printable.id)}`
         : window.location.href
+    const finalContent = proofUrl.trim()
+      ? `[증빙 자료]: ${proofUrl.trim()}\n\n${content.trim()}`
+      : content.trim()
     const input = {
       printableId: printable?.id || '',
       printableSlug: printable?.slug || slugOrId,
@@ -94,7 +129,7 @@ export function CopyrightReportPage() {
       reporterEmail: email,
       goodFaithAgreed,
       reportType,
-      content,
+      content: finalContent,
     }
     const invalid = validateCopyrightReport(input)
     if (invalid) {
@@ -257,6 +292,23 @@ export function CopyrightReportPage() {
                     </option>
                   ))}
                 </select>
+              </div>
+
+              <div>
+                <label htmlFor="report-proof-url" className="mb-1.5 block text-sm font-bold text-slate-700">
+                  {proofLabel}
+                </label>
+                <p className="mb-1.5 text-xs text-slate-500">
+                  {proofHelp}
+                </p>
+                <input
+                  id="report-proof-url"
+                  type="text"
+                  value={proofUrl}
+                  onChange={(event) => setProofUrl(event.target.value)}
+                  placeholder={proofPlaceholder}
+                  className={FIELD_CLASS}
+                />
               </div>
 
               <div>

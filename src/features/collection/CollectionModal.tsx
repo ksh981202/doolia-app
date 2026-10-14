@@ -3,10 +3,10 @@ import { X, Trash2, Printer, Download, Sparkles, Loader2, ExternalLink, Check } 
 import { useTranslation } from 'react-i18next'
 import { usePrintableCollection, type CollectionItem } from './usePrintableCollection'
 import {
-  AFFILIATE_ITEMS,
   AFFILIATE_GUIDE_TITLE,
   type AffiliateItem,
   getAffiliateLink,
+  getNextAffiliateItem,
   pickAffiliateText,
   resolveAffiliateVideoUrl,
 } from '@/shared/config/affiliates'
@@ -233,8 +233,13 @@ export function CollectionModal({ isOpen, onClose }: CollectionModalProps) {
   const [isPdfGenerating, setIsPdfGenerating] = useState(false)
   const [isPrinting, setIsPrinting] = useState(false)
 
-  const affiliateItem: AffiliateItem =
-    AFFILIATE_ITEMS.find((a) => a.id === '08_kids_art_set') || AFFILIATE_ITEMS[0]
+  const [affiliateItem, setAffiliateItem] = useState<AffiliateItem>(getNextAffiliateItem);
+
+  useEffect(() => {
+    if (isOpen) {
+      setAffiliateItem(getNextAffiliateItem());
+    }
+  }, [isOpen]);
   const lang = (i18n.language || 'ko').slice(0, 2)
   const dict = COLLECTION_DICTIONARY[lang] || COLLECTION_DICTIONARY.ko
   const affiliateLink = getAffiliateLink(affiliateItem, lang)
@@ -520,7 +525,7 @@ export function CollectionModal({ isOpen, onClose }: CollectionModalProps) {
                 </div>
 
                 {/* 메인 헤더: 상품 제목 */}
-                <h3 className="text-base md:text-lg font-bold text-slate-800 leading-snug mb-3">
+                <h3 className="text-lg sm:text-xl font-bold text-slate-900 leading-snug mb-3">
                   {affiliateHeadline}
                 </h3>
 
@@ -536,23 +541,23 @@ export function CollectionModal({ isOpen, onClose }: CollectionModalProps) {
                 </a>
 
                 {/* 노란색 공감 박스 */}
-                <div className="bg-amber-50/80 border border-amber-200/60 rounded-xl p-3 text-xs text-amber-900 font-medium mb-3 flex items-start gap-2">
+                <div className="bg-amber-50/80 border border-amber-200/60 rounded-xl p-3 text-xs sm:text-sm font-semibold text-amber-950 leading-relaxed mb-3 flex items-start gap-2">
                   <span className="text-sm shrink-0">⚠️</span>
                   <p className="min-w-0 leading-relaxed font-semibold">{affiliatePain}</p>
                 </div>
 
                 {/* 체크포인트 리스트 (체크 아이콘과 함께 주요 특장점 2줄) */}
                 <div className="space-y-2 rounded-xl border border-slate-100 bg-white/70 p-3.5 mb-3">
-                  <p className="mb-1 flex items-center gap-1.5 text-xs font-bold text-slate-700">
+                  <p className="text-xs sm:text-sm font-bold text-slate-800 mb-2 flex items-center gap-1.5">
                     <span>💡</span>
                     <span>{t('affiliate.guideTitle', { defaultValue: pickAffiliateText(AFFILIATE_GUIDE_TITLE, lang) || '이런 점을 확인해보세요' })}</span>
                   </p>
-                  <ul className="space-y-1.5 text-xs text-slate-700">
-                    <li className="flex items-start gap-2 font-medium">
+                  <ul className="space-y-1.5">
+                    <li className="flex items-start gap-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
                       <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-500 font-bold" />
                       <span>{affiliateBenefit1}</span>
                     </li>
-                    <li className="flex items-start gap-2 font-medium">
+                    <li className="flex items-start gap-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
                       <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-500 font-bold" />
                       <span>{affiliateBenefit2}</span>
                     </li>
@@ -567,7 +572,7 @@ export function CollectionModal({ isOpen, onClose }: CollectionModalProps) {
                   target="_blank"
                   rel="noopener noreferrer sponsored"
                   onClick={handleAffiliateClick}
-                  className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md text-sm md:text-base transition-all flex items-center justify-center gap-2 active:scale-[0.99] cursor-pointer"
+                  className="w-full py-3.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-sm sm:text-base font-bold rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
                 >
                   <span>{affiliateCta}</span>
                   <ExternalLink className="h-4 w-4 shrink-0 text-white" />

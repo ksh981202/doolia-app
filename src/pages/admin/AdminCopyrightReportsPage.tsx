@@ -52,6 +52,30 @@ function printableThumb(item: AdminPrintable) {
   return item.image_bw_url || item.line_art_url || item.image_color_url || item.color_image_url || ''
 }
 
+function isHttpUrl(text: string) {
+  return /^https?:\/\//i.test(text.trim())
+}
+
+function parseReportContent(content: string) {
+  const normalized = (content || '').trim()
+  const proofMatch = normalized.match(/^\[증빙 자료\]:\s*([^\n]+)/)
+
+  if (proofMatch) {
+    const proofLink = proofMatch[1].trim()
+    const cleanContent = normalized.replace(/^\[증빙 자료\]:\s*[^\n]+\n*/, '').trim()
+    return { proofLink, cleanContent }
+  }
+
+  // Fallback: Check if the text contains a standalone URL
+  const urlMatch = normalized.match(/(https?:\/\/[^\s]+)/)
+  if (urlMatch) {
+    // If the entire text or a line starts with URL, or just has a URL
+    return { proofLink: urlMatch[1], cleanContent: normalized }
+  }
+
+  return { proofLink: null, cleanContent: normalized }
+}
+
 function buildPrintableMeta(printables: AdminPrintable[]) {
   const byId = new Map(printables.map((item) => [item.id, item]))
   const bySlug = new Map(printables.map((item) => [item.slug, item]))
@@ -234,6 +258,7 @@ export function AdminCopyrightReportsPage() {
                 : report.page_url || ''
             const published = meta?.published ?? true
             const imageUrl = meta?.imageUrl ? getDisplayImageUrl(meta.imageUrl, 240) : ''
+            const { proofLink, cleanContent } = parseReportContent(report.content)
 
             return (
               <div
@@ -317,8 +342,27 @@ export function AdminCopyrightReportsPage() {
                       ) : null}
                     </div>
 
+                    {proofLink && (
+                      <div className="mb-2.5">
+                        {isHttpUrl(proofLink) ? (
+                          <a
+                            href={proofLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold rounded-lg border border-blue-200 transition-colors shadow-xs"
+                          >
+                            <span>🔗 원작자 증빙 링크 확인하기 ↗</span>
+                          </a>
+                        ) : (
+                          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-700 text-xs font-semibold rounded-lg border border-slate-200">
+                            <span>📋 증빙 등록번호: {proofLink}</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     <p className="rounded-lg border border-slate-200/80 bg-white p-3 text-[13px] leading-relaxed font-normal whitespace-pre-wrap text-slate-800">
-                      {report.content}
+                      {cleanContent}
                     </p>
 
                     <div className="pt-1">

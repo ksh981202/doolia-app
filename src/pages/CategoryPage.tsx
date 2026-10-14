@@ -39,6 +39,22 @@ const SEARCH_SUGGESTIONS = [
   { id: 'animals', icon: '🐶', labelKey: 'categories.animals', fallback: '귀여운 동물' },
 ] as const
 
+const POPULAR_SEARCH_I18N_KEYS: Record<string, string> = {
+  '공룡': 'home.tags.dino',
+  '로봇': 'home.tags.robot',
+  '자동차': 'home.tags.car',
+  '스포츠': 'home.tags.sports',
+  '바다': 'home.tags.ocean',
+}
+
+const SEARCH_LOCALIZED_MAP: Record<string, Record<string, string>> = {
+  '공룡': { ko: '공룡', en: 'Dinosaurs', es: 'Dinosaurios', ja: '恐竜', zh: '恐龙', de: 'Dinosaurier', fr: 'Dinosaures', pt: 'Dinossauros', it: 'Dinosauri', vi: 'Khủng long' },
+  '로봇': { ko: '로봇', en: 'Robots', es: 'Robots', ja: 'ロボット', zh: '机器人', de: 'Roboter', fr: 'Robots', pt: 'Robôs', it: 'Robot', vi: 'Robot' },
+  '자동차': { ko: '자동차', en: 'Cars', es: 'Coches', ja: '車', zh: '汽车', de: 'Autos', fr: 'Voitures', pt: 'Carros', it: 'Auto', vi: 'Ô tô' },
+  '스포츠': { ko: '스포츠', en: 'Sports', es: 'Deportes', ja: 'スポーツ', zh: '运动', de: 'Sport', fr: 'Sports', pt: 'Esportes', it: 'Sport', vi: 'Thể thao' },
+  '바다': { ko: '바다', en: 'Ocean', es: 'Océano', ja: '海', zh: '海洋', de: 'Ozean', fr: 'Océan', pt: 'Oceano', it: 'Oceano', vi: 'Đại dương' },
+}
+
 const SUBTHEME_I18N_KEYS: Record<string, string> = {
   'all': 'common.all',
   'puppy': 'subthemes.puppy',
@@ -210,7 +226,7 @@ function SortSelect({
 }
 
 export function CategoryPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { slug } = useParams()
   const navigate = useNavigate()
   const [params, setParams] = useSearchParams()
@@ -238,6 +254,11 @@ export function CategoryPage() {
   const sortParam = params.get('sort')
   const sort = sortParam === 'popular' || sortParam === 'latest' ? sortParam : browseAll ? 'latest' : 'popular'
   const searchQuery = (params.get('q') ?? '').trim()
+  const currentLang = (i18n.language || i18n.resolvedLanguage || 'ko').slice(0, 2).toLowerCase()
+  const fallbackLabel = SEARCH_LOCALIZED_MAP[searchQuery]?.[currentLang] || SEARCH_LOCALIZED_MAP[searchQuery]?.en || searchQuery
+  const displayQuery = POPULAR_SEARCH_I18N_KEYS[searchQuery]
+    ? t(POPULAR_SEARCH_I18N_KEYS[searchQuery], { defaultValue: fallbackLabel })
+    : fallbackLabel
   const query = searchQuery
   const isSearch = searchQuery.length > 0
   const ageFilter = AGE_FILTERS.find((item) => item.id === age)
@@ -347,7 +368,10 @@ export function CategoryPage() {
       : age === 'all'
         ? t('catalog.allCategory', { defaultValue: '전체 색칠도안 (ALL)' })
         : t('category.ageCustom', { defaultValue: '{{age}} 맞춤 도안', age: ageLabel })
-  const resultsFor = t('category.results_for', { defaultValue: '"{{query}}" 검색 결과', query: searchQuery })
+  const resultsFor = t('category.results_for', {
+    defaultValue: `"${displayQuery}" ${t('category.resultsFor', { defaultValue: '검색 결과' })}`,
+    query: displayQuery,
+  })
   const title = isSearch ? resultsFor : categoryTitle
   const emoji = isSearch
     ? '🔍'
@@ -449,7 +473,7 @@ export function CategoryPage() {
                 </span>
               </div>
               <h1 className="mt-0.5 flex flex-wrap items-center gap-1.5 text-lg font-bold tracking-tight text-slate-800 sm:text-[21px]">
-                <span className="font-extrabold text-emerald-600">"{searchQuery}"</span>
+                <span className="font-extrabold text-emerald-600">"{displayQuery}"</span>
                 <span>{t('category.searchCollection', { defaultValue: '색칠도안 모음' })}</span>
               </h1>
             </div>

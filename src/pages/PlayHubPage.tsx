@@ -10,12 +10,49 @@ import { pickLocalized } from '@/shared/lib/detailCopy'
 import { getCdnImageUrl, getDisplayImageUrl } from '@/shared/utils/printableAssets'
 import type { Printable } from '@/types/printable'
 
+const TAG_LOCALIZED_LABELS: Record<string, Record<string, string>> = {
+  dino: {
+    ko: '공룡', en: 'Dinosaurs', es: 'Dinosaurios', ja: '恐竜', zh: '恐龙',
+    de: 'Dinosaurier', fr: 'Dinosaures', pt: 'Dinossauros', it: 'Dinosauri', vi: 'Khủng long'
+  },
+  robot: {
+    ko: '로봇', en: 'Robots', es: 'Robots', ja: 'ロボット', zh: '机器人',
+    de: 'Roboter', fr: 'Robots', pt: 'Robôs', it: 'Robot', vi: 'Robot'
+  },
+  car: {
+    ko: '자동차', en: 'Cars', es: 'Coches', ja: '車', zh: '汽车',
+    de: 'Autos', fr: 'Voitures', pt: 'Carros', it: 'Auto', vi: 'Ô tô'
+  },
+  sports: {
+    ko: '스포츠', en: 'Sports', es: 'Deportes', ja: 'スポーツ', zh: '运动',
+    de: 'Sport', fr: 'Sports', pt: 'Esportes', it: 'Sport', vi: 'Thể thao'
+  },
+  ocean: {
+    ko: '바다', en: 'Ocean', es: 'Océano', ja: '海', zh: '海洋',
+    de: 'Ozean', fr: 'Océan', pt: 'Oceano', it: 'Oceano', vi: 'Đại dương'
+  },
+}
+
+const RECOMMENDED_HEADING: Record<string, string> = {
+  ko: '오늘의 추천 도안',
+  en: "Today's Picks",
+  es: 'Recomendados de hoy',
+  ja: '今日のおすすめ塗り絵',
+  zh: '今日推荐涂色页',
+  pt: 'Desenhos recomendados de hoje',
+  de: 'Empfehlungen des Tages',
+  fr: 'Recommandations du jour',
+  it: 'Consigliati di oggi',
+  vi: 'Gợi ý tô màu hôm nay',
+}
+
+
 const POPULAR_TAGS = [
   { id: 'dino', q: '공룡' },
-  { id: 'unicorn', q: '유니콘' },
+  { id: 'robot', q: '로봇' },
   { id: 'car', q: '자동차' },
-  { id: 'imagination', q: '상상나라' },
-  { id: 'animals', q: '귀여운 동물' },
+  { id: 'sports', q: '스포츠' },
+  { id: 'ocean', q: '바다' },
 ] as const
 
 const WHY_DOOLIA = [
@@ -176,7 +213,9 @@ function HeroSplitPreview({ printable }: { printable: Printable }) {
 }
 
 export function PlayHubPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const currentLang = (i18n.language || i18n.resolvedLanguage || 'ko').slice(0, 2).toLowerCase()
+
   const navigate = useNavigate()
   const [searchKeyword, setSearchKeyword] = useState('')
   const { data, isLoading } = usePrintablesQuery()
@@ -248,16 +287,20 @@ export function PlayHubPage() {
               </form>
               <div className="flex flex-wrap items-center gap-2 pt-1.5">
                 <span className="mr-1 text-[13.5px] font-semibold text-slate-500">{t('home.popularLabel')}</span>
-                {POPULAR_TAGS.map((tag) => (
-                  <button
-                    key={tag.id}
-                    type="button"
-                    onClick={() => goToSearch(tag.q)}
-                    className="rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-[13.5px] font-bold text-slate-700 shadow-2xs transition-all hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-900 active:scale-95"
-                  >
-                    {t(`home.tags.${tag.id}`)}
-                  </button>
-                ))}
+                {POPULAR_TAGS.map((tag) => {
+                  const lang = (i18n.language || 'ko').slice(0, 2).toLowerCase()
+                  const localizedTag = TAG_LOCALIZED_LABELS[tag.id]?.[lang] || TAG_LOCALIZED_LABELS[tag.id]?.en || tag.q
+                  return (
+                    <button
+                      key={tag.id}
+                      type="button"
+                      onClick={() => goToSearch(tag.q)}
+                      className="rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-[13.5px] font-bold text-slate-700 shadow-2xs transition-all hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-900 active:scale-95"
+                    >
+                      {t(`home.tags.${tag.id}`, localizedTag)}
+                    </button>
+                  )
+                })}
               </div>
             </div>
 
@@ -335,13 +378,15 @@ export function PlayHubPage() {
       <section id="popular-gallery" className="scroll-mt-24 pb-4">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-[22px]">
-            {t('home.popularHeading')}
+            {t('home.recommendedHeading', {
+              defaultValue: RECOMMENDED_HEADING[currentLang] ?? RECOMMENDED_HEADING.ko,
+            })}
           </h2>
           <Link
-            to="/category/coloring-pages"
+            to="/category"
             className="flex items-center gap-1 text-[13.5px] font-bold text-slate-500 transition-colors hover:text-emerald-700"
           >
-            <span>{t('home.viewAll')}</span>
+            <span>{t('common.viewAll', { defaultValue: t('home.viewAll', { defaultValue: '전체보기' }) })}</span>
             <span>→</span>
           </Link>
         </div>

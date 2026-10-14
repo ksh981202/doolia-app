@@ -2,37 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://doolia.app/</loc>
-    <lastmod>2026-10-13</lastmod>
+    <lastmod>2026-10-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://doolia.app/category/coloring-pages</loc>
-    <lastmod>2026-10-13</lastmod>
+    <lastmod>2026-10-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://doolia.app/category/senior-art</loc>
-    <lastmod>2026-10-13</lastmod>
+    <lastmod>2026-10-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://doolia.app/parenting-tips</loc>
-    <lastmod>2026-10-13</lastmod>
+    <lastmod>2026-10-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://doolia.app/about</loc>
-    <lastmod>2026-10-13</lastmod>
+    <lastmod>2026-10-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://doolia.app/faq</loc>
-    <lastmod>2026-10-13</lastmod>
+    <lastmod>2026-10-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -2185,12 +2185,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://doolia.app/printable/gl428</loc>
-    <lastmod>2026-10-12</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://doolia.app/printable/gl430</loc>
     <lastmod>2026-10-12</lastmod>
     <changefreq>weekly</changefreq>
@@ -2355,12 +2349,6 @@
   <url>
     <loc>https://doolia.app/printable/gl39</loc>
     <lastmod>2026-10-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://doolia.app/printable/gl453</loc>
-    <lastmod>2026-10-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -2659,13 +2647,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://doolia.app/printable/gl517</loc>
+    <loc>https://doolia.app/printable/gl522</loc>
     <lastmod>2026-10-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://doolia.app/printable/gl522</loc>
+    <loc>https://doolia.app/printable/gl517</loc>
     <lastmod>2026-10-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -2887,12 +2875,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://doolia.app/printable/toddler-captain-steering-ship-wheel-coloring-page</loc>
-    <lastmod>2026-10-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://doolia.app/printable/rocket-ship-blasting-off-coloring-page</loc>
     <lastmod>2026-10-13</lastmod>
     <changefreq>weekly</changefreq>
@@ -2977,13 +2959,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://doolia.app/printable/baby-dinosaurs-in-nest-waiting-for-mother-coloring-page</loc>
+    <loc>https://doolia.app/printable/excavator-loading-sand-into-dump-truck-coloring-page</loc>
     <lastmod>2026-10-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://doolia.app/printable/excavator-loading-sand-into-dump-truck-coloring-page</loc>
+    <loc>https://doolia.app/printable/baby-dinosaurs-in-nest-waiting-for-mother-coloring-page</loc>
     <lastmod>2026-10-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -3049,19 +3031,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://doolia.app/printable/sunset-stroll-by-park-water-fountain-coloring-page</loc>
-    <lastmod>2026-10-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://doolia.app/printable/gl457</loc>
     <lastmod>2026-10-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://doolia.app/printable/friendly-police-officer-guiding-with-flag-coloring-page</loc>
+    <loc>https://doolia.app/printable/sunset-stroll-by-park-water-fountain-coloring-page</loc>
     <lastmod>2026-10-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -3073,7 +3049,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://doolia.app/printable/cheerful-butterfly-fluttering-near-flower-buds-coloring-page</loc>
+    <loc>https://doolia.app/printable/friendly-police-officer-guiding-with-flag-coloring-page</loc>
+    <lastmod>2026-10-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://doolia.app/printable/toddler-captain-steering-ship-wheel-coloring-page</loc>
     <lastmod>2026-10-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -3081,6 +3063,24 @@
   <url>
     <loc>https://doolia.app/printable/sweet-strawberry-jam-glazed-donut-coloring-page</loc>
     <lastmod>2026-10-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://doolia.app/printable/cheerful-butterfly-fluttering-near-flower-buds-coloring-page</loc>
+    <lastmod>2026-10-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://doolia.app/printable/gl428</loc>
+    <lastmod>2026-10-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://doolia.app/printable/gl453</loc>
+    <lastmod>2026-10-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
