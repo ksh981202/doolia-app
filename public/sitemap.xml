@@ -3673,12 +3673,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://doolia.app/printable/crisp-watermelon-wedge-with-a-bite-coloring-page</loc>
-    <lastmod>2026-10-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://doolia.app/printable/brachiosaurus-eating-tall-palm-leaves-coloring-page</loc>
     <lastmod>2026-10-14</lastmod>
     <changefreq>weekly</changefreq>
@@ -3728,6 +3722,12 @@
   </url>
   <url>
     <loc>https://doolia.app/printable/kitten-napping-on-sunny-windowsill-coloring-page</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://doolia.app/printable/crisp-watermelon-wedge-with-a-bite-coloring-page</loc>
     <lastmod>2026-10-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>

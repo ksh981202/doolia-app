@@ -250,15 +250,11 @@ export function PlayHubPage() {
 
   return (
     <div className="min-h-screen bg-white font-sans text-slate-900">
-      <section className="pt-6">
-        <div className="relative mb-10 overflow-hidden rounded-3xl border border-emerald-100/80 bg-gradient-to-br from-emerald-50/70 via-teal-50/30 to-white px-6 py-6 shadow-2xs sm:px-10 sm:py-8">
+      <section className="pt-2 sm:pt-4">
+        <div className="relative mb-10 overflow-hidden rounded-3xl border border-emerald-100/80 bg-gradient-to-br from-emerald-50/70 via-teal-50/30 to-white px-6 py-6 sm:py-7 md:px-10 lg:px-12 lg:py-8 shadow-2xs">
           <div className="grid grid-cols-1 items-center gap-6 lg:grid-cols-12 lg:gap-8">
-            <div className="space-y-4 lg:col-span-7">
-              <div className="inline-flex max-w-full flex-wrap items-center justify-center gap-2 rounded-full border border-emerald-200/60 bg-emerald-600/10 px-3 py-1.5 text-center text-[12px] font-bold text-emerald-900 shadow-2xs backdrop-blur-xs">
-                <span className="text-emerald-700">✨</span>
-                <span className="min-w-0 break-words">{t('home.badge')}</span>
-              </div>
-              <h1 className="text-3xl font-bold leading-tight tracking-tight text-slate-800 sm:text-4xl lg:text-5xl">
+            <div className="lg:col-span-7">
+              <h1 className="mb-5 md:mb-6 text-3xl font-bold leading-tight tracking-tight text-slate-800 sm:text-4xl lg:text-5xl">
                 {t('home.titleLead')} <br className="hidden sm:inline" />
                 <span className="text-emerald-600">{t('home.titleAccent')}</span>
               </h1>
@@ -285,7 +281,7 @@ export function PlayHubPage() {
                   </button>
                 </div>
               </form>
-              <div className="flex flex-wrap items-center gap-2 pt-1.5">
+              <div className="mt-3 md:mt-4 flex flex-wrap items-center gap-2">
                 <span className="mr-1 text-[13.5px] font-semibold text-slate-500">{t('home.popularLabel')}</span>
                 {POPULAR_TAGS.map((tag) => {
                   const lang = (i18n.language || 'ko').slice(0, 2).toLowerCase()
@@ -304,7 +300,7 @@ export function PlayHubPage() {
               </div>
             </div>
 
-            <div className="relative my-2 flex items-center justify-center overflow-hidden py-2 sm:my-6 lg:col-span-5">
+            <div className="relative flex items-center justify-center overflow-hidden lg:col-span-5">
               <div className="relative flex h-[300px] w-[19.5rem] scale-90 items-center justify-center sm:h-72 sm:w-[19rem] sm:scale-100">
                 {left ? (
                   <Link
@@ -351,7 +347,7 @@ export function PlayHubPage() {
             </div>
           </div>
 
-          <div className="mt-6 grid w-full grid-cols-2 gap-2.5 sm:mt-8 sm:gap-3.5 lg:grid-cols-4 lg:gap-4">
+          <div className="mt-5 grid w-full grid-cols-2 gap-2.5 sm:mt-6 sm:gap-3.5 lg:mt-7 lg:grid-cols-4 lg:gap-4">
             {HOT_THEMES.map((item) => (
               <Link
                 key={item.key}
