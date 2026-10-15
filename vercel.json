@@ -5,6 +5,16 @@
   "outputDirectory": "dist",
   "trailingSlash": false,
   "rewrites": [
+    {
+      "source": "/printable/:slug",
+      "has": [
+        {
+          "type": "query",
+          "key": "lang"
+        }
+      ],
+      "destination": "/api/og-printable?slug=:slug"
+    },
     { "source": "/printable/:slug", "destination": "/printable/:slug/index.html" },
     { "source": "/((?!api/|printable/|robots\\.txt|sitemap\\.xml).*)", "destination": "/index.html" }
   ]

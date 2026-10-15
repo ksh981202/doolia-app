@@ -3439,12 +3439,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://doolia.app/printable/kid-chest-trapping-soccer-ball-coloring-page</loc>
-    <lastmod>2026-10-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://doolia.app/printable/playful-baby-piglet-running-in-meadow-coloring-page</loc>
     <lastmod>2026-10-14</lastmod>
     <changefreq>weekly</changefreq>
@@ -4059,6 +4053,12 @@
   <url>
     <loc>https://doolia.app/printable/puppy-chasing-butterfly-in-meadow-coloring-page</loc>
     <lastmod>2026-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://doolia.app/printable/kid-chest-trapping-soccer-ball-coloring-page</loc>
+    <lastmod>2026-10-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
