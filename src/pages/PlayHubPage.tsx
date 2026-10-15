@@ -219,7 +219,25 @@ export function PlayHubPage() {
   const navigate = useNavigate()
   const [searchKeyword, setSearchKeyword] = useState('')
   const { data, isLoading } = usePrintablesQuery()
-  const popular = useMemo(() => selectHomePrintables([...(data ?? [])], 8), [data])
+  const popular = useMemo(() => {
+    const list = [...(data ?? [])]
+    if (list.length <= 8) return selectHomePrintables(list, 8)
+
+    // 3시간 단위 블록 (0 ~ 7) 및 날짜 시드 계산
+    const now = new Date()
+    const timeBlock = Math.floor(now.getHours() / 3)
+    const dayOfYear = Math.floor((now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24))
+    const seed = (dayOfYear * 8) + timeBlock
+
+    // 시드 기반 일관된 셔플 오프셋으로 8장 추천 선별
+    const shuffled = [...list].sort((a, b) => {
+      const hashA = ((a.slug || a.id).split('').reduce((acc, c) => acc + c.charCodeAt(0), 0) + seed) % 1000
+      const hashB = ((b.slug || b.id).split('').reduce((acc, c) => acc + c.charCodeAt(0), 0) + seed) % 1000
+      return hashA - hashB
+    })
+
+    return selectHomePrintables(shuffled, 8)
+  }, [data])
   const showcase = useMemo(() => {
     const ranked = [...(data ?? [])].sort(
       (a, b) => b.downloads - a.downloads || +new Date(b.created_at) - +new Date(a.created_at),

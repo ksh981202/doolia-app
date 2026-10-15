@@ -49,7 +49,7 @@ function waitForImage(url: string) {
 }
 
 export function A4Preview({ printable }: { printable: Printable }) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [mode, setMode] = useState<PreviewMode>('color')
   const [isZoomed, setIsZoomed] = useState(false)
   const [shareToast, setShareToast] = useState<{ id: number; message: string } | null>(null)
@@ -95,7 +95,14 @@ export function A4Preview({ printable }: { printable: Printable }) {
   const showShareToast = (message: string) => setShareToast({ id: Date.now(), message })
 
   const share = async () => {
-    const url = window.location.href
+    const currentLang = (i18n.language || 'ko').slice(0, 2).toLowerCase();
+    const shareUrl = new URL(window.location.href);
+    if (currentLang && currentLang !== 'ko') {
+      shareUrl.searchParams.set('lang', currentLang);
+    } else {
+      shareUrl.searchParams.delete('lang');
+    }
+    const url = shareUrl.toString();
     if (typeof navigator.share === 'function') {
       try {
         await navigator.share({

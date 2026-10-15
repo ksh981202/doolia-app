@@ -29,7 +29,7 @@ function displayImage(printable: Printable) {
 }
 
 function cardAgeLabel(printable: Printable, locale: string, fallback: string) {
-  const hay = [printable.age_group, printable.age_group_en, ...printable.tags].filter(Boolean).join(' ')
+  const hay = [(printable as any).age_ko, printable.age_group, (printable as any).age_en, printable.age_group_en, ...printable.tags].filter(Boolean).join(' ')
   const range = hay.match(/(\d+)\s*[-~–—]\s*(\d+)/)
   const lang = locale.toLowerCase().startsWith('zh') ? 'zh' : locale.slice(0, 2)
   if (!range) return fallback

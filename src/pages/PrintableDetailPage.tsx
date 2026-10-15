@@ -37,6 +37,15 @@ function matchesKey(item: Printable, key: string | undefined) {
 
 export function PrintableDetailPage() {
   const { t, i18n } = useTranslation()
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const urlLang = searchParams.get('lang');
+    const validLangs = ['ko', 'en', 'ja', 'zh', 'es', 'pt', 'de', 'fr', 'it', 'vi'];
+    if (urlLang && validLangs.includes(urlLang) && i18n.language !== urlLang) {
+      i18n.changeLanguage(urlLang);
+    }
+  }, []);
   const { id } = useParams()
   const location = useLocation()
   const fromState = (location.state as DetailLocationState | null)?.printable

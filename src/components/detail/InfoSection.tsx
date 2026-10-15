@@ -39,16 +39,16 @@ export function InfoSection({ printable }: { printable: Printable }) {
   const displayTitle = printable.title_ko || printable.title
 
   const fallbackQuestions: Record<string, string> = {
-    ko: `"${displayTitle}"을(를) 색칠하면서 아이와 함께 어떤 색으로 칠하면 좋을지 이야기해 보세요!`,
-    en: `While coloring "${printable.title_en || displayTitle}", ask your child what colors they would love to use!`,
+    ko: `'${displayTitle}'을(를) 색칠하면서 아이와 함께 어떤 색으로 칠하면 좋을지 이야기해 보세요!`,
+    en: `While coloring '${printable.title_en || displayTitle}', ask your child what colors they would love to use!`,
     ja: `「${printable.title_ja || displayTitle}」を塗りながら、どんな色で塗りたいかお子さまとお話ししてみましょう！`,
     zh: `在為「${printable.title_zh || displayTitle}」塗色的同時，和孩子聊聊想塗上什麼漂亮的顏色吧！`,
-    es: `¡Mientras colorean "${printable.title_es || displayTitle}", pregúntale a tu hijo qué colores le gustaría usar!`,
-    pt: `Enquanto colorem "${printable.title_pt || displayTitle}", converse com a criança sobre quais cores ela gostaria de usar!`,
-    de: `Sprechen Sie beim Ausmalen von „${printable.title_de || displayTitle}“ mit Ihrem Kind darüber, welche Farben es verwenden möchte!`,
-    fr: `En coloriant « ${printable.title_fr || displayTitle} », demandez à votre enfant quelles couleurs il aimerait utiliser !`,
-    it: `Mentre colorate "${printable.title_it || displayTitle}", chiedi al tuo bambino quali colori vorrebbe usare!`,
-    vi: `Khi tô màu "${printable.title_vi || displayTitle}", hãy trò chuyện cùng bé xem bé muốn chọn những màu sắc nào nhé!`,
+    es: `¡Mientras colorean '${printable.title_es || displayTitle}', pregúntale a tu hijo qué colores le gustaría usar!`,
+    pt: `Enquanto colorem '${printable.title_pt || displayTitle}', converse com a criança sobre quais cores ela gostaria de usar!`,
+    de: `Sprechen Sie beim Ausmalen von '${printable.title_de || displayTitle}' mit Ihrem Kind darüber, welche Farben es verwenden möchte!`,
+    fr: `En coloriant '${printable.title_fr || displayTitle}', demandez à votre enfant quelles couleurs il aimerait utiliser !`,
+    it: `Mentre colorate '${printable.title_it || displayTitle}', chiedi al tuo bambino quali colori vorrebbe usare!`,
+    vi: `Khi tô màu '${printable.title_vi || displayTitle}', hãy trò chuyện cùng bé xem bé muốn chọn những màu sắc nào nhé!`,
   }
 
   const effectiveParentGuide =
