@@ -7,13 +7,33 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { createClient } from '@supabase/supabase-js'
 
-const SITE = 'https://doolia.app'
+const SITE = 'https://www.doolia.app'
 const LOCALES = ['ko', 'en', 'ja', 'zh', 'es', 'pt', 'de', 'fr', 'it', 'vi'] as const
+
+type Locale = (typeof LOCALES)[number]
 
 type Row = {
   slug: string
   title_ko: string
+  title_en: string
+  title_ja: string
+  title_zh: string
+  title_es: string
+  title_pt: string
+  title_de: string
+  title_fr: string
+  title_it: string
+  title_vi: string
   description_ko: string
+  description_en: string
+  description_ja: string
+  description_zh: string
+  description_es: string
+  description_pt: string
+  description_de: string
+  description_fr: string
+  description_it: string
+  description_vi: string
   image_color_url: string
   updated_at?: string
   created_at?: string
@@ -74,6 +94,33 @@ function writePrerenders(outRoot: string, template: string, rows: Row[]) {
   }
 }
 
+function getLocalizedPrintableUrl(slugOrUrl: string, locale: Locale) {
+  const slug = slugOrUrl.replace(/^https?:\/\/[^/]+\/printable\//, '').replace(/\?.*$/, '')
+  const base = `${SITE}/printable/${slug}`
+  return locale === 'ko' ? base : `${base}?lang=${locale}`
+}
+
+function hreflangLinks(slugOrUrl: string) {
+  const slug = slugOrUrl.replace(/^https?:\/\/[^/]+\/printable\//, '').replace(/\?.*$/, '')
+  const defaultUrl = `${SITE}/printable/${slug}`
+  const links = LOCALES.map((locale) => {
+    const locUrl = getLocalizedPrintableUrl(slug, locale)
+    return `    <link rel="alternate" hreflang="${locale}" href="${html(locUrl)}" />`
+  })
+  links.push(`    <link rel="alternate" hreflang="x-default" href="${html(defaultUrl)}" />`)
+  return links.join('\n')
+}
+
+function sitemapXhtmlLinks(slug: string) {
+  const defaultUrl = `${SITE}/printable/${slug}`
+  const links = LOCALES.map((locale) => {
+    const locUrl = getLocalizedPrintableUrl(slug, locale)
+    return `    <xhtml:link rel="alternate" hreflang="${locale}" href="${xml(locUrl)}" />`
+  })
+  links.push(`    <xhtml:link rel="alternate" hreflang="x-default" href="${xml(defaultUrl)}" />`)
+  return links.join('\n')
+}
+
 function sitemapXml(rows: Row[]) {
   const staticUrls: Array<{ loc: string; priority: string; changefreq: string }> = [
     { loc: `${SITE}/`, priority: '1.0', changefreq: 'daily' },
@@ -96,6 +143,7 @@ function sitemapXml(rows: Row[]) {
     ...rows.map(
       (row) => `  <url>
     <loc>${SITE}/printable/${xml(row.slug)}</loc>
+${sitemapXhtmlLinks(row.slug)}
     <lastmod>${lastmod(row)}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -103,17 +151,27 @@ function sitemapXml(rows: Row[]) {
     ),
   ]
   return `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${urls.join('\n')}
 </urlset>
 `
 }
 
-function hreflangLinks(url: string) {
-  return [
-    ...LOCALES.map((code) => `    <link rel="alternate" hreflang="${code}" href="${html(url)}" />`),
-    `    <link rel="alternate" hreflang="x-default" href="${html(url)}" />`,
-  ].join('\n')
+function getLocalizedTitle(row: Row, locale: Locale) {
+  const key = `title_${locale}` as keyof Row
+  const val = (row[key] as string | undefined)?.trim()
+  return val || row.title_ko || 'DOOLIA'
+}
+
+function getLocalizedDescription(row: Row, locale: Locale) {
+  const key = `description_${locale}` as keyof Row
+  const val = (row[key] as string | undefined)?.trim()
+  return val || row.description_ko || getLocalizedTitle(row, locale)
+}
+
+function seoTitle(titleKo: string) {
+  return `${titleKo} 무료 색칠도안 프린트 | 둘리아`
 }
 
 function jsonLd(row: Row) {
@@ -128,6 +186,13 @@ function jsonLd(row: Row) {
         description: row.description_ko || title,
         url,
         inLanguage: 'ko',
+        workTranslation: LOCALES.filter((l) => l !== 'ko').map((locale) => ({
+          '@type': 'CreativeWork',
+          inLanguage: locale,
+          url: getLocalizedPrintableUrl(row.slug, locale),
+          name: getLocalizedTitle(row, locale),
+          description: getLocalizedDescription(row, locale),
+        })),
         image: {
           '@type': 'ImageObject',
           url: row.image_color_url,
@@ -144,10 +209,6 @@ function jsonLd(row: Row) {
   }
 }
 
-function seoTitle(titleKo: string) {
-  return `${titleKo} 무료 색칠도안 프린트 | 둘리아`
-}
-
 function injectHead(template: string, row: Row) {
   const title = seoTitle(row.title_ko)
   const description = row.description_ko || title
@@ -157,7 +218,7 @@ function injectHead(template: string, row: Row) {
     <title>${html(title)}</title>
     <meta name="description" content="${html(description)}" />
     <link rel="canonical" href="${html(url)}" />
-${hreflangLinks(url)}
+${hreflangLinks(row.slug)}
     <meta property="og:title" content="${html(title)}" />
     <meta property="og:description" content="${html(description)}" />
     <meta property="og:image" content="${html(image)}" />
@@ -192,17 +253,62 @@ async function fetchRows(): Promise<Row[]> {
   const key = process.env.VITE_SUPABASE_ANON_KEY
   if (!url || !key) throw new Error('VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY 필요')
   const supabase = createClient(url, key)
+  const selectFields = [
+    'slug',
+    'title_ko',
+    'title_en',
+    'title_ja',
+    'title_zh',
+    'title_es',
+    'title_pt',
+    'title_de',
+    'title_fr',
+    'title_it',
+    'title_vi',
+    'description_ko',
+    'description_en',
+    'description_ja',
+    'description_zh',
+    'description_es',
+    'description_pt',
+    'description_de',
+    'description_fr',
+    'description_it',
+    'description_vi',
+    'image_color_url',
+    'created_at',
+    'published',
+  ].join(',')
+
   const { data, error } = await supabase
     .from('printables')
-    .select('slug,title_ko,description_ko,image_color_url,created_at,published')
+    .select(selectFields)
     .eq('published', true)
     .range(0, 999)
   if (error) throw error
   return (data ?? [])
-    .map((row) => ({
+    .map((row: any) => ({
       slug: String(row.slug ?? '').trim(),
       title_ko: String(row.title_ko ?? '').trim(),
+      title_en: String(row.title_en ?? '').trim(),
+      title_ja: String(row.title_ja ?? '').trim(),
+      title_zh: String(row.title_zh ?? '').trim(),
+      title_es: String(row.title_es ?? '').trim(),
+      title_pt: String(row.title_pt ?? '').trim(),
+      title_de: String(row.title_de ?? '').trim(),
+      title_fr: String(row.title_fr ?? '').trim(),
+      title_it: String(row.title_it ?? '').trim(),
+      title_vi: String(row.title_vi ?? '').trim(),
       description_ko: String(row.description_ko ?? '').trim(),
+      description_en: String(row.description_en ?? '').trim(),
+      description_ja: String(row.description_ja ?? '').trim(),
+      description_zh: String(row.description_zh ?? '').trim(),
+      description_es: String(row.description_es ?? '').trim(),
+      description_pt: String(row.description_pt ?? '').trim(),
+      description_de: String(row.description_de ?? '').trim(),
+      description_fr: String(row.description_fr ?? '').trim(),
+      description_it: String(row.description_it ?? '').trim(),
+      description_vi: String(row.description_vi ?? '').trim(),
       image_color_url: String(row.image_color_url ?? '').trim(),
       updated_at: row.updated_at ? String(row.updated_at) : undefined,
       created_at: row.created_at ? String(row.created_at) : undefined,
