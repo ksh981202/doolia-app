@@ -9,7 +9,6 @@ import {
   prefetchPrintImage,
   isMobilePrintHost,
   printPrintable,
-  PRINT_BRAND_FOOTER_LEFT,
 } from '@/shared/lib/printPage'
 import {
   getCdnImageUrl,
@@ -214,8 +213,12 @@ export function A4Preview({ printable }: { printable: Printable }) {
           <div className="printable-art">
             {lineSrc ? <img className="printable-image" src={lineSrc} alt={printAlt} /> : null}
           </div>
-          <div className="print-brand-footer">
-            <span className="brand-left">{PRINT_BRAND_FOOTER_LEFT}</span>
+          <div className="flex items-center justify-between pt-2 pb-1 text-slate-500">
+            <span className="text-[11px] font-medium tracking-wide">DOOLIA | doolia.app</span>
+            <div className="flex items-center gap-1.5">
+              <span className="text-[13px] leading-none select-none">📱</span>
+              <img src="/qr-doolia.png" alt="QR" className="w-[12mm] h-[12mm] object-contain" />
+            </div>
           </div>
         </div>,
         document.body,

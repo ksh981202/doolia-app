@@ -65,7 +65,7 @@ function parseAgeString(raw: string | undefined): { min: number; max: number } |
   return null
 }
 
-function inferAgeRange(item: Printable): { min: number; max: number } | null {
+export function inferAgeRange(item: Printable): { min: number; max: number } | null {
   const fromColumns = parseAgeString(item.age_group_en) ?? parseAgeString(item.age_group)
   if (fromColumns) return fromColumns
 

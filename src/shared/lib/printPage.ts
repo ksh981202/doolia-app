@@ -58,30 +58,33 @@ header, footer, nav, .no-print, button, .modal-backdrop, .print-footer {
   image-rendering: -webkit-optimize-contrast;
 }
 .print-brand-footer {
-  height: 22px;
-  margin-top: 6px;
-  padding-top: 4px;
-  border-top: 1px solid #cbd5e1;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 10.5px;
-  color: #64748b;
-  box-sizing: border-box;
-  flex-shrink: 0;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  min-height: 11mm !important;
+  height: auto !important;
+  margin-top: 3mm !important;
+  padding: 1.5mm 0 0 0 !important;
+  border-top: 1px solid #cbd5e1 !important;
+  box-sizing: border-box !important;
+  font-size: 11px !important;
+  line-height: 1 !important;
 }
-.print-brand-footer .brand-left {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-weight: 600;
-  color: #334155;
+.brand-left {
+  font-size: 11px !important;
+  line-height: 1 !important;
+  font-weight: 600 !important;
+  color: #475569 !important;
+  display: inline-flex !important;
+  align-items: center !important;
 }
-.print-brand-footer .brand-right {
-  flex-shrink: 0;
-  margin-left: 12px;
+.brand-qr {
+  width: 9mm !important;
+  height: 9mm !important;
+  object-fit: contain !important;
+  display: block !important;
+  flex-shrink: 0 !important;
+  margin: 0 !important;
 }`
 
 export function printDocumentHtml(title: string, imgUrl: string, autoPrint = true) {
@@ -102,6 +105,7 @@ export function printDocumentHtml(title: string, imgUrl: string, autoPrint = tru
       </div>
       <div class="print-brand-footer">
         <span class="brand-left">${PRINT_BRAND_FOOTER_LEFT}</span>
+        <img class="brand-qr" src="/qr-doolia.png" alt="QR" />
       </div>
     </div>
   </body>

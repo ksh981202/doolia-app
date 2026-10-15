@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { Check, Plus } from 'lucide-react'
 import { getCategoryThemes } from '@/shared/config/categories'
 import { printablePath } from '@/shared/config/catalog'
+import { inferAgeRange } from '@/shared/config/smartFilters'
 import { cn } from '@/shared/lib/cn'
 import { pickLocalized } from '@/shared/lib/detailCopy'
 import { matchesQuery } from '@/services/printableService'
@@ -28,22 +29,43 @@ function displayImage(printable: Printable) {
   )
 }
 
-function cardAgeLabel(printable: Printable, locale: string, fallback: string) {
-  const hay = [(printable as any).age_ko, printable.age_group, (printable as any).age_en, printable.age_group_en, ...printable.tags].filter(Boolean).join(' ')
-  const range = hay.match(/(\d+)\s*[-~–—]\s*(\d+)/)
-  const lang = locale.toLowerCase().startsWith('zh') ? 'zh' : locale.slice(0, 2)
-  if (!range) return fallback
-  const start = range[1]
-  const end = range[2]
-  if (lang === 'ko') return `${start}~${end}세`
-  if (lang === 'ja') return `${start}〜${end}歳`
-  if (lang === 'zh') return `${start}~${end}歲`
-  if (lang === 'vi') return `${start}-${end} tuổi`
-  if (lang === 'de') return `${start}–${end} Jahre`
-  if (lang === 'fr') return `${start}-${end} ans`
-  if (lang === 'it') return `${start}-${end} anni`
-  if (lang === 'es' || lang === 'pt') return `${start}-${end} años`
-  return `Ages ${start}-${end}`
+function cardAgeLabel(
+  printable: Printable,
+  locale: string,
+  _fallbackLabel: string
+): string {
+  const lang = (locale || 'ko').slice(0, 2).toLowerCase()
+
+  const formatAge = (start: number | string, end: number | string) => {
+    if (lang === 'ko') return `${start}~${end}세`
+    if (lang === 'en') return `Ages ${start}-${end}`
+    if (lang === 'ja') return `${start}〜${end}歳`
+    if (lang === 'zh') return `${start}-${end}岁`
+    if (lang === 'de') return `${start}–${end} Jahre`
+    if (lang === 'fr') return `${start}–${end} ans`
+    if (lang === 'es' || lang === 'pt') return `${start}-${end} años`
+    if (lang === 'it') return `${start}–${end} anni`
+    if (lang === 'vi') return `${start}-${end} tuổi`
+    return `Ages ${start}-${end}`
+  }
+
+  // 1순위: DB에 존재하는 age_group, age_group_en 또는 tags에서 직접 매칭
+  const hay = [printable.age_group, printable.age_group_en, ...(printable.tags || [])]
+    .filter(Boolean)
+    .join(' ')
+  const directMatch = hay.match(/(\d+)\s*[-~–—]\s*(\d+)/)
+  if (directMatch) {
+    return formatAge(directMatch[1], directMatch[2])
+  }
+
+  // 2순위: DB가 비어있는 도안은 사이트 내장 스마트 엔진(inferAgeRange)으로 자동 추론
+  const inferred = inferAgeRange(printable)
+  if (inferred && inferred.min && inferred.max) {
+    return formatAge(inferred.min, inferred.max)
+  }
+
+  // 3순위: 그래도 판정 불가 시 기본 영유아 표준 연령 (4~5세) 강제 반환 (전연령 단어 완전 차단)
+  return formatAge(4, 5)
 }
 
 function resolveThemeOption(printable: Printable) {

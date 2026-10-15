@@ -86,7 +86,7 @@ async function loadLineArt(url: string, fallbackImage?: HTMLImageElement) {
   }
 }
 
-function rasterizeA4Page(image: HTMLImageElement) {
+async function rasterizeA4Page(image: HTMLImageElement, qrImg?: HTMLImageElement | null) {
   const canvas = document.createElement('canvas')
   canvas.width = mmToPx(PAGE_WIDTH_MM)
   canvas.height = mmToPx(PAGE_HEIGHT_MM)
@@ -111,6 +111,21 @@ function rasterizeA4Page(image: HTMLImageElement) {
   ctx.drawImage(image, x, y, drawWidth, drawHeight)
   drawPrintFooter(ctx, canvas.width, canvas.height, footerHeight, margin)
 
+  if (qrImg) {
+    try {
+      // QR 크기를 13mm -> 9.5mm로 조정하여 위아래 2.25mm 안전 여백 확보
+      const qrPx = mmToPx(9.5)
+      const qrX = canvas.width - margin - qrPx
+      // 푸터 밴드 내 수직 완벽 중앙 정렬
+      const qrY = canvas.height - footerHeight + (footerHeight - qrPx) / 2
+
+      // QR 이미지 렌더링
+      ctx.drawImage(qrImg, qrX, qrY, qrPx, qrPx)
+    } catch (err) {
+      console.error('[PDF] QR 코드 그리기 실패:', err)
+    }
+  }
+
   try {
     return canvas.toDataURL('image/png')
   } catch {
@@ -126,7 +141,14 @@ export async function generatePrintablePdf(
   const url = printableViewUrl(printable, variant)
   if (!url) throw new Error('다운로드할 선화 이미지가 없습니다.')
 
-  const image = await loadLineArt(url, options?.fallbackImage)
+  const [image, qrImg] = await Promise.all([
+    loadLineArt(url, options?.fallbackImage),
+    decodeImage('/qr-doolia.png', false).catch((err) => {
+      console.error('[PDF] QR 코드 이미지 로드 실패:', err)
+      return null
+    }),
+  ])
+
   const pixelWidth = image.naturalWidth || image.width
   const pixelHeight = image.naturalHeight || image.height
   if (!pixelWidth || !pixelHeight) throw new Error('이미지 크기를 읽지 못했습니다.')
@@ -139,7 +161,7 @@ export async function generatePrintablePdf(
     compress: true,
   })
 
-  const dataUrl = rasterizeA4Page(image)
+  const dataUrl = await rasterizeA4Page(image, qrImg)
   pdf.addImage(dataUrl, 'PNG', 0, 0, PAGE_WIDTH_MM, PAGE_HEIGHT_MM, undefined, 'FAST')
 
   pdf.save(safePdfFilename(printable.slug || printable.id || printable.title_ko || printable.title, variant))
