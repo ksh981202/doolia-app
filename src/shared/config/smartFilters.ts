@@ -100,11 +100,28 @@ export function inferAgeRange(item: Printable): { min: number; max: number } | n
 }
 
 export function matchesAgeFilter(item: Printable, ageId: string) {
-  if (ageId === 'all') return true
+  if (!ageId || ageId === 'all') return true
+
+  // 1. 도안의 명시적 age_group 및 age_group_en 문자열 추출
+  const rawGroup = (item.age_group || (item as any).age_group_en || '').toString().toLowerCase()
+
+  // 2. 선택된 연령 필터별 1:1 명확한 매칭 판별
+  if (ageId === '2-3') {
+    if (rawGroup.includes('2~3') || rawGroup.includes('2-3')) return true
+  } else if (ageId === '4-5') {
+    if (rawGroup.includes('4~5') || rawGroup.includes('4-5')) return true
+  } else if (ageId === '6-7') {
+    if (rawGroup.includes('6~7') || rawGroup.includes('6-7') || rawGroup.includes('6+') || rawGroup.includes('7+')) return true
+  }
+
+  // 3. rawGroup에서 판별되지 않은 경우에 한해 fallback으로 inferAgeRange 검사 (엄격 매칭)
+  const range = inferAgeRange(item)
+  if (!range) return false // 👈 [핵심 수정: 추론 불가 시 필터 통과 방지]
+
   const filter = AGE_FILTERS.find((entry) => entry.id === ageId)
   if (!filter || filter.id === 'all') return true
-  const range = inferAgeRange(item)
-  if (!range) return true
+
+  // 중첩 연령 범위 매칭
   return range.min <= filter.max && range.max >= filter.min
 }
 
