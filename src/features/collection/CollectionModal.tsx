@@ -92,6 +92,8 @@ interface CollectionTexts {
   btnPdf: string
   pdfGenerating: string
   clearAll: string
+  tabBw: string
+  tabColor: string
 }
 
 const COLLECTION_DICTIONARY: Record<string, CollectionTexts> = {
@@ -108,6 +110,8 @@ const COLLECTION_DICTIONARY: Record<string, CollectionTexts> = {
     btnPdf: '묶음 PDF 다운로드',
     pdfGenerating: 'PDF 생성 중...',
     clearAll: '전체 비우기',
+    tabBw: '흑백 도안',
+    tabColor: '컬러 완성본',
   },
   en: {
     modalAria: 'Review coloring basket',
@@ -122,6 +126,8 @@ const COLLECTION_DICTIONARY: Record<string, CollectionTexts> = {
     btnPdf: 'Download Bundle PDF',
     pdfGenerating: 'Generating PDF...',
     clearAll: 'Clear All',
+    tabBw: 'Black & White',
+    tabColor: 'Color Reference',
   },
   zh: {
     modalAria: '查看已收藏著色圖',
@@ -136,6 +142,8 @@ const COLLECTION_DICTIONARY: Record<string, CollectionTexts> = {
     btnPdf: '下載合併 PDF',
     pdfGenerating: '正在生成 PDF...',
     clearAll: '全部清除',
+    tabBw: '黑白線稿',
+    tabColor: '彩色範例',
   },
   ja: {
     modalAria: '保存したぬりえを確認',
@@ -150,6 +158,8 @@ const COLLECTION_DICTIONARY: Record<string, CollectionTexts> = {
     btnPdf: 'まとめPDF保存',
     pdfGenerating: 'PDF生成中...',
     clearAll: 'すべて削除',
+    tabBw: '白黒の線画',
+    tabColor: 'カラー見本',
   },
   es: {
     modalAria: 'Revisar dibujos seleccionados',
@@ -164,6 +174,8 @@ const COLLECTION_DICTIONARY: Record<string, CollectionTexts> = {
     btnPdf: 'Descargar PDF combinado',
     pdfGenerating: 'Generando PDF...',
     clearAll: 'Vaciar todo',
+    tabBw: 'Blanco y negro',
+    tabColor: 'Color',
   },
   de: {
     modalAria: 'Ausgewählte Ausmalbilder ansehen',
@@ -178,6 +190,8 @@ const COLLECTION_DICTIONARY: Record<string, CollectionTexts> = {
     btnPdf: 'Gebündeltes PDF herunterladen',
     pdfGenerating: 'PDF wird erstellt...',
     clearAll: 'Alles leeren',
+    tabBw: 'Schwarz-Weiß',
+    tabColor: 'Farbe',
   },
   fr: {
     modalAria: 'Voir mon panier de coloriages',
@@ -192,6 +206,8 @@ const COLLECTION_DICTIONARY: Record<string, CollectionTexts> = {
     btnPdf: 'Télécharger le PDF groupé',
     pdfGenerating: 'Génération du PDF...',
     clearAll: 'Tout vider',
+    tabBw: 'Noir et blanc',
+    tabColor: 'Couleur',
   },
   pt: {
     modalAria: 'Ver desenhos selecionados',
@@ -206,6 +222,8 @@ const COLLECTION_DICTIONARY: Record<string, CollectionTexts> = {
     btnPdf: 'Baixar PDF combinado',
     pdfGenerating: 'Gerando PDF...',
     clearAll: 'Limpar tudo',
+    tabBw: 'Preto e branco',
+    tabColor: 'Colorido',
   },
   it: {
     modalAria: 'Rivedi i disegni selezionati',
@@ -220,6 +238,8 @@ const COLLECTION_DICTIONARY: Record<string, CollectionTexts> = {
     btnPdf: 'Scarica PDF combinato',
     pdfGenerating: 'Generazione PDF...',
     clearAll: 'Svuota tutto',
+    tabBw: 'Bianco e nero',
+    tabColor: 'A colori',
   },
   vi: {
     modalAria: 'Xem tranh tô màu đã chọn',
@@ -234,6 +254,8 @@ const COLLECTION_DICTIONARY: Record<string, CollectionTexts> = {
     btnPdf: 'Tải PDF tổng hợp',
     pdfGenerating: 'Đang tạo PDF...',
     clearAll: 'Xóa tất cả',
+    tabBw: 'Tranh đen trắng',
+    tabColor: 'Tranh màu',
   },
 }
 
@@ -242,6 +264,11 @@ export function CollectionModal({ isOpen, onClose }: CollectionModalProps) {
   const { items, removeFromCollection, clearCollection } = usePrintableCollection()
   const [isPdfGenerating, setIsPdfGenerating] = useState(false)
   const [isPrinting, setIsPrinting] = useState(false)
+  const [viewMode, setViewMode] = useState<'bw' | 'color'>('bw');
+  const getItemUrl = (item: CollectionItem) => 
+    viewMode === 'color' 
+      ? (item.image_bw_url ? item.image_bw_url.replace('_b.webp', '_c.webp') : `https://cdn.doolia.app/images/${item.slug}_c.webp`)
+      : (item.image_bw_url || `https://cdn.doolia.app/images/${item.slug}_b.webp`);
 
   const [affiliateItem, setAffiliateItem] = useState<AffiliateItem>(getNextAffiliateItem);
 
@@ -327,7 +354,7 @@ export function CollectionModal({ isOpen, onClose }: CollectionModalProps) {
       for (let i = 0; i < items.length; i++) {
         const item = items[i];
         // 1. 구 R2 도메인을 CORS가 완벽히 열린 공식 cdn.doolia.app으로 강제 정규화
-        let cleanUrl = item.image_bw_url;
+        let cleanUrl = getItemUrl(item);
         if (cleanUrl.includes('pub-1c8b49597bc74e7b9406c9d7110f708d.r2.dev')) {
           cleanUrl = cleanUrl.replace('https://pub-1c8b49597bc74e7b9406c9d7110f708d.r2.dev', 'https://cdn.doolia.app');
         }
@@ -435,13 +462,44 @@ export function CollectionModal({ isOpen, onClose }: CollectionModalProps) {
             {/* A. 왼쪽 영역 */}
             <div className="lg:col-span-7 flex flex-col">
               {/* 헤더 */}
-              <div className="mb-4 pr-8">
-                <h2 className="text-lg md:text-xl font-bold text-slate-900">
-                  {dict.title(items.length)}
-                </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  {dict.subtitle}
-                </p>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                <div>
+                  <h2 className="text-base sm:text-lg font-bold text-slate-800">
+                    {dict.title(items.length)}
+                  </h2>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    {dict.subtitle}
+                  </p>
+                </div>
+
+                {items.length > 0 && (
+                  <div className="inline-flex items-center p-1 bg-slate-100/90 rounded-xl border border-slate-200 shrink-0 self-start sm:self-auto">
+                    <button
+                      type="button"
+                      onClick={() => setViewMode('bw')}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                        viewMode === 'bw'
+                          ? 'bg-slate-900 text-white shadow-sm'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      <span className="select-none">🖨️</span>
+                      <span>{dict.tabBw}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setViewMode('color')}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                        viewMode === 'color'
+                          ? 'bg-emerald-600 text-white shadow-sm'
+                          : 'text-slate-600 hover:text-emerald-700'
+                      }`}
+                    >
+                      <span className="select-none">🎨</span>
+                      <span>{dict.tabColor}</span>
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* 도안 그리드 또는 빈 상태 */}
@@ -464,7 +522,7 @@ export function CollectionModal({ isOpen, onClose }: CollectionModalProps) {
                     >
                       <div className="relative aspect-[3/4] w-full overflow-hidden rounded-xl border border-slate-100 bg-slate-50">
                         <img
-                          src={item.image_bw_url}
+                          src={getItemUrl(item)}
                           alt={item.title}
                           className="aspect-[3/4] object-contain w-full rounded-xl border border-slate-100 bg-slate-50 p-1"
                           loading="lazy"
@@ -658,7 +716,7 @@ export function CollectionModal({ isOpen, onClose }: CollectionModalProps) {
           <div key={`print-${item.slug}-${index}`} className="collection-print-page">
             <div className="collection-print-art">
               <img
-                src={item.image_bw_url}
+                src={getItemUrl(item)}
                 alt={item.title}
                 className="collection-print-image"
               />
