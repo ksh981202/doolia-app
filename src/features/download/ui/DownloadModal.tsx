@@ -158,11 +158,11 @@ function DownloadModalBody({
   }, [])
 
   useEffect(() => {
-    prefetchPrintImage(printableLineArtUrl(printable) || originalSrc)
+    prefetchPrintImage(originalSrc || printableLineArtUrl(printable))
   }, [printable, originalSrc])
 
   useEffect(() => {
-    const url = printableLineArtUrl(printable) || originalSrc
+    const url = originalSrc || printableLineArtUrl(printable)
     if (!url) return
 
     const image = new Image()
@@ -206,7 +206,8 @@ function DownloadModalBody({
 
   const handleDirectPrint = () => {
     const printTitle = title || 'DOOLIA Printable'
-    const ok = printPrintable(printTitle, printableLineArtUrl(printable) || originalSrc)
+    const targetPrintUrl = originalSrc || printableLineArtUrl(printable)
+    const ok = printPrintable(printTitle, targetPrintUrl)
     if (!ok) {
       setError(t('detail.notFound', '도안을 찾을 수 없어요.'))
       return
