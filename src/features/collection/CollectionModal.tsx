@@ -64,6 +64,16 @@ function AffiliateMedia({ affiliate, alt }: { affiliate: AffiliateItem; alt: str
   )
 }
 
+function loadQrImage(src: string): Promise<HTMLImageElement | null> {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => resolve(img);
+    img.onerror = () => resolve(null);
+    img.src = src;
+  });
+}
+
 interface CollectionModalProps {
   isOpen: boolean
   onClose: () => void
@@ -312,6 +322,8 @@ export function CollectionModal({ isOpen, onClose }: CollectionModalProps) {
         compress: true,
       });
 
+      const qrImage = await loadQrImage('/qr-doolia.png');
+
       for (let i = 0; i < items.length; i++) {
         const item = items[i];
         // 1. 구 R2 도메인을 CORS가 완벽히 열린 공식 cdn.doolia.app으로 강제 정규화
@@ -360,11 +372,20 @@ export function CollectionModal({ isOpen, onClose }: CollectionModalProps) {
 
           ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
 
-          // 하단 브랜드 푸터 텍스트
+          // 하단 브랜드 푸터 텍스트 & QR 코드
+          const footerCenterY = canvas.height - 45;
           ctx.fillStyle = '#94a3b8';
           ctx.font = 'bold 24px sans-serif';
           ctx.textAlign = 'center';
-          ctx.fillText('DOOLIA | doolia.app', canvas.width / 2, canvas.height - 40);
+          ctx.textBaseline = 'middle';
+          ctx.fillText('DOOLIA | doolia.app', canvas.width / 2, footerCenterY);
+
+          if (qrImage) {
+            const qrSize = 60;
+            const qrX = canvas.width - margin - qrSize;
+            const qrY = footerCenterY - qrSize / 2;
+            ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
+          }
 
           const pageDataUrl = canvas.toDataURL('image/jpeg', 0.92);
 

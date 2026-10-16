@@ -42,9 +42,14 @@ export function Footer() {
                 <br />
                 <span className="font-semibold text-slate-700">{t('footer.tagline')}</span>
               </p>
-              <span className="mt-3.5 inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-[12px] font-bold text-emerald-700">
-                {t('footer.freeBadge')}
-              </span>
+              <div className="flex flex-col items-start gap-2 mt-3.5 mb-4">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100/80">
+                  <span className="select-none">🌱</span> 100% 회원가입 없는 무료 도안
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-purple-50 text-purple-600 border border-purple-100/80">
+                  <span className="select-none">🎨</span> 창의적 자체 AI 디자인
+                </span>
+              </div>
             </div>
             <p className="mt-3 text-[12px] text-slate-400">{t('footer.affiliate')}</p>
           </div>
