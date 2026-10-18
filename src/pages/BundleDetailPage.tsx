@@ -237,6 +237,33 @@ export default function BundleDetailPage() {
   }, [slug]);
 
   useEffect(() => {
+    if (!bundle) return;
+
+    const title = (bundle as any)?.[`title_${lang}`] || bundle.title_ko || bundle.title || '도안 모음집';
+    const desc = (bundle as any)?.[`recommend_${lang}`] || bundle.recommend_reason || '둘리아 무료 색칠도안 모음집';
+    const firstSlug = bundle.item_slugs?.[0] || bundle.slug || '';
+    const imgUrl = `${import.meta.env.VITE_CDN_URL || 'https://cdn.doolia.app'}/printables/${firstSlug}_c.webp`;
+
+    // 브라우저 탭 타이틀
+    document.title = `${title} | DOOLIA`;
+
+    // SNS 오픈그래프 동적 태그 갱신 헬퍼
+    const setMeta = (property: string, content: string) => {
+      let el = document.querySelector(`meta[property="${property}"]`) as HTMLMetaElement;
+      if (!el) {
+        el = document.createElement('meta');
+        el.setAttribute('property', property);
+        document.head.appendChild(el);
+      }
+      el.setAttribute('content', content);
+    };
+
+    setMeta('og:title', `${title} | DOOLIA`);
+    setMeta('og:description', desc);
+    setMeta('og:image', imgUrl);
+  }, [bundle, lang]);
+
+  useEffect(() => {
     if (AFFILIATE_ITEMS && AFFILIATE_ITEMS.length > 0) {
       const specific = bundle?.affiliate_id
         ? AFFILIATE_ITEMS.find((p) => p.id === bundle.affiliate_id)
@@ -339,8 +366,8 @@ export default function BundleDetailPage() {
           <div className="flex flex-col h-full justify-between space-y-4">
             <div className="flex flex-col mb-4">
               {/* 1행: 좌측 배지 & 우측 흑백/컬러 토글 스위치 (같은 높이 양끝 정렬) */}
-              <div className="flex items-center justify-between gap-2 mb-2.5">
-                <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+              <div className="flex items-center justify-between gap-2 flex-wrap mb-2.5">
+                <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60 shrink-0">
                   {badgeText}
                 </span>
 
