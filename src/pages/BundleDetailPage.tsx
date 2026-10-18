@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ExternalLink } from 'lucide-react';
 import { usePrintablesQuery } from '../features/gallery/model/usePrintablesQuery';
-import { getBundles } from '../services/adminBundleService';
+import { getBundleBySlug } from '../services/adminBundleService';
 import type { AdminBundle } from '../services/adminBundleService';
 import {
   AFFILIATE_ITEMS,
@@ -231,9 +231,8 @@ export default function BundleDetailPage() {
   };
 
   useEffect(() => {
-    const all = getBundles();
-    const found = all.find((b) => b.slug === slug);
-    if (found) setBundle(found);
+    if (!slug) return;
+    getBundleBySlug(slug).then(setBundle);
   }, [slug]);
 
   useEffect(() => {

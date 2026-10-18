@@ -17,19 +17,20 @@ export default function AdminBundlesPage() {
   const [bundles, setBundles] = useState<AdminBundle[]>([])
   const [editingBundle, setEditingBundle] = useState<AdminBundle | null>(null)
 
-  const loadBundles = () => {
-    setBundles(getBundles())
+  const loadBundles = async () => {
+    const data = await getBundles()
+    setBundles(data)
   }
 
   useEffect(() => {
-    loadBundles()
+    void loadBundles()
   }, [])
 
-  const handleDelete = (e: React.MouseEvent, id: string, title: string) => {
+  const handleDelete = async (e: React.MouseEvent, id: string, title: string) => {
     e.stopPropagation()
     if (!confirm(`「${title}」모음집을 삭제할까요?`)) return
-    deleteBundle(id)
-    loadBundles()
+    await deleteBundle(id)
+    await loadBundles()
   }
 
   return (

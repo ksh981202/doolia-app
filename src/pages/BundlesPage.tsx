@@ -79,7 +79,7 @@ export default function BundlesPage() {
   const [bundles, setBundles] = useState<AdminBundle[]>([]);
 
   useEffect(() => {
-    setBundles(getBundles());
+    getBundles().then(setBundles);
   }, []);
 
   return (
