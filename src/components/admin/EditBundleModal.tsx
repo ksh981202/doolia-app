@@ -222,18 +222,29 @@ export default function EditBundleModal({
     }
   }
 
-  const handleSave = (status: 'draft' | 'published') => {
-    updateBundle(bundle.id, {
-      ...formData,
-      recommend_reason: formData.recommend_reason || formData.recommend_ko || '',
-      recommend_ko: formData.recommend_ko || formData.recommend_reason || '',
-      how_to_play: formData.how_to_play || formData.play_ko || '',
-      play_ko: formData.play_ko || formData.how_to_play || '',
-      status,
-    })
-    onSuccess()
-    onClose()
-  }
+  const handleSave = async (publishStatus: 'draft' | 'published' = 'published') => {
+    if (!bundle?.id) return;
+
+    try {
+      // UI 전용 필드 제외 및 DB 페이로드 정제
+      const { raw_i18n, full_content, ...cleanData } = (formData as any);
+
+      const payload = {
+        ...cleanData,
+        status: publishStatus,
+      };
+
+      // Supabase DB 업데이트 완료 대기
+      await updateBundle(bundle.id, payload);
+
+      // 부모 목록 비동기 갱신 대기 후 모달 닫기
+      await onSuccess?.();
+      onClose();
+    } catch (error) {
+      console.error('모음집 저장 실패:', error);
+      alert('모음집 저장 중 오류가 발생했습니다.');
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200">

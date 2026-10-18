@@ -1,5 +1,4 @@
 import { supabase } from '@/lib/supabase'
-import type { AdminPrintable } from '@/services/adminPrintableService'
 
 export interface AdminBundle {
   id: string
@@ -92,24 +91,36 @@ export const createBundle = async (bundleData: Partial<AdminBundle>): Promise<Ad
 };
 
 // 도안 선택 기반 초안 등록
-export const createDraftBundle = async (selectedItems: AdminPrintable[]): Promise<AdminBundle | null> => {
-  const firstItem = selectedItems[0];
-  const newBundle: Partial<AdminBundle> = {
-    title_ko: '새 모음집 초안',
-    title_en: '',
-    slug: `bundle-${Date.now()}`,
-    age_group: '만 2~4세',
-    recommend_reason: '',
-    how_to_play: '',
-    cover_image_url: firstItem?.image_color_url || firstItem?.image_bw_url || '',
-    pdf_download_url: '',
-    affiliate_id: 'scissors',
-    item_slugs: selectedItems.map((item) => item.slug || item.id),
-    item_titles: selectedItems.map((item) => item.title_ko || item.title_en || item.slug || ''),
-    status: 'draft',
-  };
+export const createDraftBundle = async (selectedItems: any[]): Promise<AdminBundle | null> => {
+  try {
+    const firstItem = selectedItems[0];
+    const uniqueSlug = `bundle-${Date.now()}`;
+    const itemSlugs = selectedItems.map((item) => item.slug || item.id);
+    const itemTitles = selectedItems.map((item) => item.title_ko || item.title_en || item.slug || '');
 
-  return await createBundle(newBundle);
+    const payload: any = {
+      title_ko: '새 모음집 초안',
+      title_en: 'New Bundle Draft',
+      slug: uniqueSlug,
+      status: 'draft',
+      cover_image_url: firstItem?.image_color_url || firstItem?.image_bw_url || '',
+      pdf_download_url: '',
+      pdf_color_url: '',
+      affiliate_id: 'scissors',
+      item_slugs: itemSlugs,
+      item_titles: itemTitles,
+      age_group: '만 2~4세',
+      recommend_reason: '',
+      how_to_play: '',
+      recommend_ko: '',
+      play_ko: ''
+    };
+
+    return await createBundle(payload);
+  } catch (e) {
+    console.error('createDraftBundle 실패:', e);
+    throw e;
+  }
 };
 
 // 모음집 수정

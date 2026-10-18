@@ -142,6 +142,26 @@ export function AdminPrintablesPage() {
     setBulkBusy(false)
   }
 
+  const handleCreateBundle = async () => {
+    if (selected.size === 0) {
+      alert('도안을 선택해주세요.')
+      return
+    }
+    const selectedItems = items.filter((item) => selected.has(item.id))
+    try {
+      const created = await createDraftBundle(selectedItems)
+      if (created) {
+        setSelected(new Set())
+        navigate('/admin/bundles')
+      } else {
+        alert('모음집 생성에 실패했습니다. 다시 시도해 주세요.')
+      }
+    } catch (error) {
+      console.error('모음집 생성 실패:', error)
+      alert('모음집 생성 중 오류가 발생했습니다.')
+    }
+  }
+
   const themeOptions = CATEGORY_THEMES['coloring-pages'] ?? []
 
   return (
@@ -202,16 +222,7 @@ export function AdminPrintablesPage() {
             </button>
             <button
               type="button"
-              onClick={() => {
-                if (selected.size === 0) {
-                  alert('도안을 선택해주세요.')
-                  return
-                }
-                const selectedPrintables = items.filter((item) => selected.has(item.id))
-                createDraftBundle(selectedPrintables)
-                setSelected(new Set())
-                navigate('/admin/bundles')
-              }}
+              onClick={() => void handleCreateBundle()}
               className="bg-emerald-600 text-white font-medium px-4 py-2 rounded-lg text-xs hover:bg-emerald-700 transition"
             >
               📚 모음집 생성 ({selected.size}/30)
