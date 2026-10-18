@@ -11,11 +11,26 @@ import { NavMenu } from '@/components/header/NavMenu'
 import { categorySearchPath } from '@/shared/config/catalog'
 import { TOUCH_ICON, cn } from '@/shared/lib/cn'
 
+const BUNDLE_NAV_LABELS: Record<string, string> = {
+  ko: '📚 도안 모음집',
+  en: '📚 Bundles',
+  ja: '📚 ぬりえ集',
+  zh: '📚 塗色集合輯',
+  es: '📚 Colecciones',
+  pt: '📚 Coleções',
+  de: '📚 Sammlungen',
+  fr: '📚 Collections',
+  it: '📚 Raccolte',
+  vi: '📚 Bộ Tranh Tô',
+}
+
 const iconButtonClass =
   `${TOUCH_ICON} rounded-full border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-50 hover:text-emerald-700`
 
 export function Header() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const lang = (i18n.language || 'ko').slice(0, 2)
+  const bundleNavLabel = t('nav.bundles', BUNDLE_NAV_LABELS[lang] || '📚 도안 모음집')
   const location = useLocation()
   const navigate = useNavigate()
   const [params] = useSearchParams()
@@ -132,6 +147,17 @@ export function Header() {
                 </span>
               </Link>
             ))}
+            <Link
+              to="/bundles"
+              className={cn(
+                'inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-2xl border border-slate-200/70 bg-slate-50/90 px-2.5 py-2 text-[13.5px] font-bold text-slate-700 shadow-2xs transition-all duration-200 hover:scale-[1.02] hover:border-emerald-300 hover:bg-emerald-50/80 hover:text-emerald-700 hover:shadow-xs lg:gap-2 lg:px-3.5 lg:text-[15.5px]',
+                location.pathname === '/bundles' || location.pathname.startsWith('/bundles/')
+                  ? 'border-emerald-300 bg-emerald-50/80 text-emerald-700 shadow-xs'
+                  : '',
+              )}
+            >
+              <span className="min-w-0 truncate">{bundleNavLabel}</span>
+            </Link>
           </nav>
         )}
 
@@ -239,6 +265,20 @@ export function Header() {
                     mobile
                     onSelect={() => setIsMobileMenuOpen(false)}
                   />
+                  <div className="mt-2 border-t border-slate-100 pt-2">
+                    <Link
+                      to="/bundles"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={cn(
+                        'flex w-full items-center gap-3 rounded-xl px-3.5 py-3 text-left text-[14.5px] font-bold transition-all',
+                        location.pathname === '/bundles' || location.pathname.startsWith('/bundles/')
+                          ? 'bg-emerald-50 text-emerald-700'
+                          : 'text-slate-800 hover:bg-emerald-50 hover:text-emerald-700',
+                      )}
+                    >
+                      <span>📚 도안 모음집</span>
+                    </Link>
+                  </div>
                 </div>
                 <div className="mt-8 border-t border-slate-100 pt-5">
                   <LanguageSwitcher listPlacement="top" />

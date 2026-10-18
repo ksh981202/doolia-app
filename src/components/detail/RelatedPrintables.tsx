@@ -10,7 +10,6 @@ export function RelatedPrintables({
   current,
   items,
   topicLabel,
-  categoryLabel,
   categoryTo,
 }: {
   current: Printable
@@ -25,14 +24,16 @@ export function RelatedPrintables({
 
   return (
     <section className="mt-12 mb-12">
-      <div className="mb-4 flex items-end justify-between gap-3">
-        <h2 className="text-lg font-bold text-slate-800 sm:text-xl">{topicLabel || t('detail.relatedTitle', '🎨 함께 추천하는 도안')}</h2>
-        {categoryTo && categoryLabel ? (
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+        <h2 className="text-lg font-bold text-slate-800 sm:text-xl">
+          {topicLabel || t('detail.relatedTitle', '🎨 함께 추천하는 도안')}
+        </h2>
+        {categoryTo ? (
           <Link
             to={categoryTo}
-            className="inline-flex shrink-0 items-center gap-0.5 text-sm font-bold text-emerald-700 hover:text-emerald-800"
+            className="inline-flex shrink-0 items-center gap-0.5 text-xs sm:text-sm font-bold text-emerald-700 hover:text-emerald-800"
           >
-            {categoryLabel} {t('detail.viewMore', '더보기')}
+            <span>{t('detail.viewMore', '더보기')}</span>
             <ChevronRight className="h-4 w-4" />
           </Link>
         ) : null}

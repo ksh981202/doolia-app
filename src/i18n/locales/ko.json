@@ -22,7 +22,9 @@
     "theme": "주제",
     "type": "유형",
     "findCustom": "맞춤 도안 찾기",
-    "brand_slogan": "아이의 상상력을 키우는 무료 색칠도안"
+    "brand_slogan": "아이의 상상력을 키우는 무료 색칠도안",
+    "badgeNoSignup": "100% 회원가입 없는 무료 도안",
+    "badgeAiDesign": "창의적 자체 AI 디자인"
   },
   "header": {
     "searchPlaceholder": "도안 이름, 놀이 아이디어를 검색하세요",

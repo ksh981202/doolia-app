@@ -22,7 +22,9 @@
     "theme": "Thème",
     "type": "Type",
     "findCustom": "Trouver des coloriages personnalisés",
-    "brand_slogan": "Coloriages gratuits qui nourrissent l'imagination des enfants"
+    "brand_slogan": "Coloriages gratuits qui nourrissent l'imagination des enfants",
+    "badgeNoSignup": "100% Gratuit et Sans Inscription",
+    "badgeAiDesign": "Design IA Créatif Exclusif"
   },
   "header": {
     "searchPlaceholder": "Rechercher des coloriages ou des idées...",

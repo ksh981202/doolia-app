@@ -22,7 +22,9 @@
     "theme": "テーマ",
     "type": "タイプ",
     "findCustom": "カスタム図案を探す",
-    "brand_slogan": "子どもの想像力を育てる無料ぬりえ"
+    "brand_slogan": "子どもの想像力を育てる無料ぬりえ",
+    "badgeNoSignup": "登録不要の完全無料プリント",
+    "badgeAiDesign": "独自クリエイティブAIデザイン"
   },
   "header": {
     "searchPlaceholder": "ぬりえの名前や遊びのアイデアを検索",

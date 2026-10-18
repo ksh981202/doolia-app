@@ -7,6 +7,8 @@ import { ProtectedAdminLayout } from '@/layouts/AdminLayout'
 import { LocalAdminGate } from '@/admin/AdminGuard'
 
 const PlayHubPage = lazy(() => import('@/pages/PlayHubPage'))
+const BundlesPage = lazy(() => import('@/pages/BundlesPage'))
+const BundleDetailPage = lazy(() => import('@/pages/BundleDetailPage'))
 const PrintableDetailPage = lazy(() => import('@/pages/PrintableDetailPage'))
 const CategoryPage = lazy(() => import('@/pages/CategoryPage'))
 const SituationPage = lazy(() => import('@/pages/SituationPage'))
@@ -24,6 +26,7 @@ const PremiumPage = lazy(() => import('@/pages/LegalPages').then((module) => ({ 
 const AdminLoginPage = lazy(() => import('@/pages/admin/AdminLoginPage'))
 const AdminDashboardPage = lazy(() => import('@/pages/admin/AdminDashboardPage'))
 const AdminPrintablesPage = lazy(() => import('@/pages/admin/AdminPrintablesPage'))
+const AdminBundlesPage = lazy(() => import('@/pages/admin/AdminBundlesPage'))
 const AdminUploadPage = lazy(() => import('@/pages/admin/AdminUploadPage'))
 const AdminTipsPage = lazy(() => import('@/pages/admin/AdminTipsPage'))
 const AdminCopyrightReportsPage = lazy(() => import('@/pages/admin/AdminCopyrightReportsPage'))
@@ -49,6 +52,8 @@ export function AppRouter() {
           <Route element={<AppLayout />}>
             <Route path="/" element={<PlayHubPage />} />
             <Route path="/v2" element={<PlayHubPage />} />
+            <Route path="/bundles" element={<BundlesPage />} />
+            <Route path="/bundles/:slug" element={<BundleDetailPage />} />
             <Route path="/printable/:id" element={<PrintableDetailPage />} />
             <Route path="/printables/:id" element={<PrintableDetailPage />} />
             <Route path="/about" element={<AboutPage />} />
@@ -76,6 +81,7 @@ export function AppRouter() {
             <Route element={<ProtectedAdminLayout />}>
               <Route path="/admin" element={<AdminDashboardPage />} />
               <Route path="/admin/printables" element={<AdminPrintablesPage />} />
+              <Route path="/admin/bundles" element={<AdminBundlesPage />} />
               <Route path="/admin/affiliates" element={<AdminAffiliatesPage />} />
               <Route path="/admin/printables/upload" element={<AdminUploadPage />} />
               <Route path="/admin/tips" element={<AdminTipsPage />} />

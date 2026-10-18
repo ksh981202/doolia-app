@@ -22,7 +22,9 @@
     "theme": "Tema",
     "type": "Tipo",
     "findCustom": "Buscar dibujos personalizados",
-    "brand_slogan": "Dibujos para colorear gratis que despiertan la imaginación"
+    "brand_slogan": "Dibujos para colorear gratis que despiertan la imaginación",
+    "badgeNoSignup": "100% Gratis y Sin Registro",
+    "badgeAiDesign": "Diseño IA Creativo Propio"
   },
   "header": {
     "searchPlaceholder": "Busca dibujos o ideas para jugar...",

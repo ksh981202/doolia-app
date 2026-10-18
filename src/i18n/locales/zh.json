@@ -22,7 +22,9 @@
     "theme": "主題",
     "type": "類型",
     "findCustom": "尋找自訂圖稿",
-    "brand_slogan": "培養孩子想像力的免費著色圖"
+    "brand_slogan": "培養孩子想像力的免費著色圖",
+    "badgeNoSignup": "100% 免註冊免費塗色頁",
+    "badgeAiDesign": "原創創意 AI 專屬設計"
   },
   "header": {
     "searchPlaceholder": "搜尋著色圖名稱或遊戲靈感...",

@@ -252,7 +252,7 @@ export function CategoryPage() {
   const themeLocked = Boolean(!browseAll && theme !== 'all')
   const showSubChips = Boolean(theme !== 'all' && subOptions?.length)
   const sortParam = params.get('sort')
-  const sort = sortParam === 'popular' || sortParam === 'latest' ? sortParam : browseAll ? 'latest' : 'popular'
+  const sort = sortParam === 'popular' || sortParam === 'latest' ? sortParam : 'latest'
   const searchQuery = (params.get('q') ?? '').trim()
   const currentLang = (i18n.language || i18n.resolvedLanguage || 'ko').slice(0, 2).toLowerCase()
   const fallbackLabel = SEARCH_LOCALIZED_MAP[searchQuery]?.[currentLang] || SEARCH_LOCALIZED_MAP[searchQuery]?.en || searchQuery

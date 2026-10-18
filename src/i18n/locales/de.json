@@ -22,7 +22,9 @@
     "theme": "Thema",
     "type": "Typ",
     "findCustom": "Benutzerdefinierte Vorlagen finden",
-    "brand_slogan": "Kostenlose Malvorlagen, die die Fantasie deines Kindes fördern"
+    "brand_slogan": "Kostenlose Malvorlagen, die die Fantasie deines Kindes fördern",
+    "badgeNoSignup": "100% Kostenlos ohne Anmeldung",
+    "badgeAiDesign": "Kreatives In-House-KI-Design"
   },
   "header": {
     "searchPlaceholder": "Malvorlagen oder Spielideen suchen...",

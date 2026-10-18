@@ -22,7 +22,9 @@
     "theme": "Tema",
     "type": "Tipo",
     "findCustom": "Trova disegni personalizzati",
-    "brand_slogan": "Disegni da colorare gratis che fanno crescere l'immaginazione"
+    "brand_slogan": "Disegni da colorare gratis che fanno crescere l'immaginazione",
+    "badgeNoSignup": "100% Gratuito Senza Registrazione",
+    "badgeAiDesign": "Design IA Creativo Originale"
   },
   "header": {
     "searchPlaceholder": "Cerca disegni o idee di gioco...",

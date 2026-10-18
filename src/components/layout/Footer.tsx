@@ -44,10 +44,10 @@ export function Footer() {
               </p>
               <div className="flex flex-col items-start gap-2 mt-3.5 mb-4">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100/80">
-                  <span className="select-none">🌱</span> 100% 회원가입 없는 무료 도안
+                  <span className="select-none">🌱</span> {t('common.badgeNoSignup')}
                 </span>
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-purple-50 text-purple-600 border border-purple-100/80">
-                  <span className="select-none">🎨</span> 창의적 자체 AI 디자인
+                  <span className="select-none">🎨</span> {t('common.badgeAiDesign')}
                 </span>
               </div>
             </div>

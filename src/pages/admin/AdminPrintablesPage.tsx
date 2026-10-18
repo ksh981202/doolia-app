@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { createDraftBundle } from '@/services/adminBundleService'
 import {
   deletePrintable,
   listAdminPrintables,
   setPrintablePublished,
   type AdminPrintable,
 } from '@/services/adminPrintableService'
+import { CATEGORY_THEMES } from '@/shared/config/categories'
 import { printablePath } from '@/shared/config/catalog'
 
 function formatDate(value: string) {
@@ -26,7 +28,9 @@ function errorMessage(error: unknown) {
 }
 
 export function AdminPrintablesPage() {
+  const navigate = useNavigate()
   const [items, setItems] = useState<AdminPrintable[]>([])
+  const [selectedTheme, setSelectedTheme] = useState<string>('all')
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [message, setMessage] = useState('')
   const [messageOk, setMessageOk] = useState(true)
@@ -43,12 +47,42 @@ export function AdminPrintablesPage() {
     void reload()
   }, [])
 
-  const allIds = useMemo(() => items.map((item) => item.id), [items])
+  const filteredItems = useMemo(() => {
+    if (selectedTheme === 'all') return items
+    return items.filter((item) => {
+      const row = item as AdminPrintable & { category_en?: string }
+      return row.theme_en === selectedTheme || row.category_en === selectedTheme
+    })
+  }, [items, selectedTheme])
+
+  const allIds = useMemo(() => filteredItems.map((item) => item.id), [filteredItems])
   const selectedCount = selected.size
-  const allSelected = items.length > 0 && selectedCount === items.length
+  const allSelected = filteredItems.length > 0 && filteredItems.every((item) => selected.has(item.id))
 
   const toggleAll = () => {
-    setSelected(allSelected ? new Set() : new Set(allIds))
+    setSelected((current) => {
+      if (allSelected) {
+        const next = new Set(current)
+        for (const id of allIds) next.delete(id)
+        return next
+      }
+      return new Set([...current, ...allIds])
+    })
+  }
+
+  const selectUpTo30 = () => {
+    setSelected((current) => {
+      const next = new Set(current)
+      for (const item of filteredItems) {
+        if (next.size >= 30) break
+        next.add(item.id)
+      }
+      return next
+    })
+  }
+
+  const clearSelection = () => {
+    setSelected(new Set())
   }
 
   const toggleOne = (id: string) => {
@@ -108,6 +142,8 @@ export function AdminPrintablesPage() {
     setBulkBusy(false)
   }
 
+  const themeOptions = CATEGORY_THEMES['coloring-pages'] ?? []
+
   return (
     <div className="space-y-6">
       <div>
@@ -123,19 +159,73 @@ export function AdminPrintablesPage() {
         </p>
       </div>
 
-      <Link
-        to="/admin/printables/upload"
-        className="flex flex-col gap-3 rounded-2xl border border-emerald-200 bg-gradient-to-r from-emerald-50 to-white p-5 shadow-sm transition hover:border-emerald-400 hover:shadow-md sm:flex-row sm:items-center sm:justify-between"
-      >
-        <div>
-          <p className="text-xs font-extrabold tracking-[0.16em] text-emerald-600">TSV + IMAGE PIPELINE</p>
-          <h2 className="mt-1 text-lg font-extrabold text-ink">대량 자동 업로드 바로가기</h2>
-          <p className="mt-1 text-sm text-muted">메타데이터 TSV와 이미지를 드롭하면 파일명으로 짝을 맞춰 R2·DB에 등록합니다.</p>
+      {/* 테마 필터 탭 & 슬림 액션 바 */}
+      <div className="space-y-3">
+        <div className="flex flex-wrap gap-2 items-center">
+          {themeOptions.map((th) => {
+            const active = selectedTheme === th.id
+            return (
+              <button
+                key={th.id}
+                type="button"
+                onClick={() => setSelectedTheme(th.id)}
+                className={`rounded-lg px-3 py-1.5 text-xs font-medium transition ${
+                  active
+                    ? 'bg-slate-900 text-white shadow-sm'
+                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                }`}
+              >
+                {th.icon ? `${th.icon} ` : ''}{th.name}
+              </button>
+            )
+          })}
         </div>
-        <span className="inline-flex h-11 shrink-0 items-center justify-center rounded-full bg-emerald-600 px-5 text-sm font-extrabold text-white">
-          대량 업로드 열기
-        </span>
-      </Link>
+
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="text-xs font-semibold text-slate-700">
+              선택됨: <span className="text-emerald-600 font-bold">{selected.size}</span> / 30개
+            </span>
+            <button
+              type="button"
+              onClick={selectUpTo30}
+              className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100"
+            >
+              30개 일괄선택
+            </button>
+            <button
+              type="button"
+              onClick={clearSelection}
+              className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-500 hover:bg-slate-50"
+            >
+              선택 해제
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (selected.size === 0) {
+                  alert('도안을 선택해주세요.')
+                  return
+                }
+                const selectedPrintables = items.filter((item) => selected.has(item.id))
+                createDraftBundle(selectedPrintables)
+                setSelected(new Set())
+                navigate('/admin/bundles')
+              }}
+              className="bg-emerald-600 text-white font-medium px-4 py-2 rounded-lg text-xs hover:bg-emerald-700 transition"
+            >
+              📚 모음집 생성 ({selected.size}/30)
+            </button>
+          </div>
+
+          <Link
+            to="/admin/printables/upload"
+            className="inline-flex items-center rounded-lg border border-emerald-300 bg-emerald-50/50 px-3 py-1.5 text-xs font-bold text-emerald-700 hover:bg-emerald-100/70"
+          >
+            TSV 대량 업로드 →
+          </Link>
+        </div>
+      </div>
 
       {message ? (
         <p className={`rounded-xl px-3 py-2 text-sm font-bold ${messageOk ? 'bg-emerald-50 text-emerald-800' : 'bg-red-50 text-red-700'}`}>
@@ -160,7 +250,7 @@ export function AdminPrintablesPage() {
       <div className="mb-3 flex items-center gap-2 px-1">
         <span className="text-sm font-semibold text-slate-700">등록된 도안 목록</span>
         <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-bold text-emerald-700">
-          총 {items.length}개
+          총 {filteredItems.length}개 {filteredItems.length !== items.length ? `(전체 ${items.length}개)` : ''}
         </span>
       </div>
 
@@ -174,7 +264,7 @@ export function AdminPrintablesPage() {
                     type="checkbox"
                     checked={allSelected}
                     onChange={toggleAll}
-                    disabled={!items.length}
+                    disabled={!filteredItems.length}
                     aria-label="전체 선택"
                     className="h-4 w-4 rounded border-slate-300 text-emerald-600"
                   />
@@ -189,14 +279,14 @@ export function AdminPrintablesPage() {
               </tr>
             </thead>
             <tbody>
-              {items.length === 0 ? (
+              {filteredItems.length === 0 ? (
                 <tr>
                   <td colSpan={8} className="px-4 py-16 text-center text-sm font-medium text-slate-400">
                     등록된 도안이 없습니다. 대량 업로드에서 TSV와 이미지를 올려 주세요.
                   </td>
                 </tr>
               ) : (
-                items.map((item, index) => {
+                filteredItems.map((item, index) => {
                   const detailHref = printablePath(item.slug || item.id)
                   return (
                   <tr key={item.id} className="border-b border-slate-50 last:border-b-0 hover:bg-slate-50/70">
@@ -210,7 +300,7 @@ export function AdminPrintablesPage() {
                       />
                     </td>
                     <td className="w-14 px-2 py-3 text-center font-mono text-xs font-medium text-slate-500">
-                      {items.length - index}
+                      {filteredItems.length - index}
                     </td>
                     <td className="px-3 py-3">
                       <a href={detailHref} target="_blank" rel="noopener noreferrer" className="block w-fit">

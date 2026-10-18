@@ -22,7 +22,9 @@
     "theme": "Chủ đề",
     "type": "Loại",
     "findCustom": "Tìm tranh tùy chỉnh",
-    "brand_slogan": "Tranh tô màu miễn phí nuôi dưỡng trí tưởng tượng của bé"
+    "brand_slogan": "Tranh tô màu miễn phí nuôi dưỡng trí tưởng tượng của bé",
+    "badgeNoSignup": "100% Miễn Phí Không Cần Đăng Ký",
+    "badgeAiDesign": "Thiết Kế AI Sáng Tạo Độc Quyền"
   },
   "header": {
     "searchPlaceholder": "Tìm kiếm tranh tô màu, ý tưởng chơi...",

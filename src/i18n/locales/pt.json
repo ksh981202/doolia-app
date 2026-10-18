@@ -22,7 +22,9 @@
     "theme": "Tema",
     "type": "Tipo",
     "findCustom": "Buscar desenhos personalizados",
-    "brand_slogan": "Desenhos para colorir grátis que estimulam a imaginação"
+    "brand_slogan": "Desenhos para colorir grátis que estimulam a imaginação",
+    "badgeNoSignup": "100% Grátis e Sem Cadastro",
+    "badgeAiDesign": "Design de IA Criativo Próprio"
   },
   "header": {
     "searchPlaceholder": "Buscar desenhos ou ideias de brincadeiras...",
