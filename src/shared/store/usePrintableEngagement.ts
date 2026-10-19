@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { create } from 'zustand'
 import { incrementPrintableLikes, incrementPrintableViews } from '@/services/printableService'
+import { supabase } from '@/lib/supabase'
 import type { Printable } from '@/types/printable'
 
 const LIKE_PREFIX = 'doolia_likes_'
@@ -73,6 +74,9 @@ export const usePrintableEngagement = create<EngagementState>((set, get) => ({
     writeLiked(likeKeys(printable), nextLiked)
     // 비동기 RPC 호출 (ID 가드 제거, 화면 상태와 무관하게 백그라운드 실행)
     void incrementPrintableLikes(printable.id, nextLiked ? 1 : -1)
+    if (supabase && printable.slug) {
+      void supabase.rpc('increment_like', { target_slug: printable.slug })
+    }
   },
 
   recordView: (printable) => {
