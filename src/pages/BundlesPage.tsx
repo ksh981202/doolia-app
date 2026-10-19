@@ -77,9 +77,20 @@ export default function BundlesPage() {
   const ui = I18N_BUNDLES_PAGE[lang] || I18N_BUNDLES_PAGE.en || I18N_BUNDLES_PAGE.ko;
 
   const [bundles, setBundles] = useState<AdminBundle[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    getBundles().then(setBundles);
+    getBundles()
+      .then((data) => {
+        setBundles(data || []);
+      })
+      .catch((err) => {
+        console.error(err);
+        setBundles([]);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   return (
@@ -99,7 +110,11 @@ export default function BundlesPage() {
 
       {/* 2. 3열 카드 그리드 (라운드 & 깊은 그림자 책 표지 비주얼) */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {bundles.length === 0 ? (
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-24 min-h-[360px]">
+            <div className="w-9 h-9 border-3 border-emerald-100 border-t-emerald-600 rounded-full animate-spin"></div>
+          </div>
+        ) : bundles.length === 0 ? (
           <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-slate-200 max-w-md mx-auto">
             <span className="text-4xl mb-3 block">📚</span>
             <p className="text-slate-600 font-medium">발행된 모음집이 아직 없습니다.</p>

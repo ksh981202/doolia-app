@@ -188,6 +188,7 @@ export default function BundleDetailPage() {
   const { data: printables } = usePrintablesQuery();
   const { slug } = useParams<{ slug: string }>();
   const [bundle, setBundle] = useState<BundleWithGuide | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [randomAffiliate, setRandomAffiliate] = useState<AffiliateItem | null>(null);
   const [viewMode, setViewMode] = useState<'bw' | 'color'>('color');
@@ -231,8 +232,21 @@ export default function BundleDetailPage() {
   };
 
   useEffect(() => {
-    if (!slug) return;
-    getBundleBySlug(slug).then(setBundle);
+    if (!slug) {
+      setIsLoading(false);
+      return;
+    }
+    getBundleBySlug(slug)
+      .then((data) => {
+        setBundle(data);
+      })
+      .catch((err) => {
+        console.error(err);
+        setBundle(null);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, [slug]);
 
   useEffect(() => {
@@ -301,6 +315,14 @@ export default function BundleDetailPage() {
       void incrementAffiliateImpression(matchedAffiliate.id);
     }
   }, [matchedAffiliate?.id]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center py-24">
+        <div className="w-10 h-10 border-4 border-emerald-100 border-t-emerald-600 rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   if (!bundle) {
     return (

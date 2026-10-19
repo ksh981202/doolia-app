@@ -11,17 +11,17 @@ import { NavMenu } from '@/components/header/NavMenu'
 import { categorySearchPath } from '@/shared/config/catalog'
 import { TOUCH_ICON, cn } from '@/shared/lib/cn'
 
-const BUNDLE_NAV_LABELS: Record<string, string> = {
+const BUNDLE_NAV_I18N: Record<string, string> = {
   ko: '📚 도안 모음집',
-  en: '📚 Bundles',
-  ja: '📚 ぬりえ集',
-  zh: '📚 塗色集合輯',
-  es: '📚 Colecciones',
-  pt: '📚 Coleções',
-  de: '📚 Sammlungen',
-  fr: '📚 Collections',
-  it: '📚 Raccolte',
-  vi: '📚 Bộ Tranh Tô',
+  en: '📚 Coloring Packs',
+  ja: '📚 ぬりえコレクション',
+  zh: '📚 著色畫精選輯',
+  es: '📚 Colecciones de Dibujos',
+  pt: '📚 Coleções de Colorir',
+  de: '📚 Malvorlagen-Pakete',
+  fr: '📚 Cahiers de Coloriage',
+  it: '📚 Raccolte da Colorare',
+  vi: '📚 Tuyển Tập Tranh Tô Màu',
 }
 
 const iconButtonClass =
@@ -30,7 +30,7 @@ const iconButtonClass =
 export function Header() {
   const { t, i18n } = useTranslation()
   const lang = (i18n.language || 'ko').slice(0, 2)
-  const bundleNavLabel = t('nav.bundles', BUNDLE_NAV_LABELS[lang] || '📚 도안 모음집')
+  const bundleNavLabel = t('nav.bundles', BUNDLE_NAV_I18N[lang] || BUNDLE_NAV_I18N.en || '📚 도안 모음집')
   const location = useLocation()
   const navigate = useNavigate()
   const [params] = useSearchParams()
@@ -276,7 +276,9 @@ export function Header() {
                           : 'text-slate-800 hover:bg-emerald-50 hover:text-emerald-700',
                       )}
                     >
-                      <span>📚 도안 모음집</span>
+                      <span>
+                        {BUNDLE_NAV_I18N[lang] || BUNDLE_NAV_I18N.en || '📚 도안 모음집'}
+                      </span>
                     </Link>
                   </div>
                 </div>
