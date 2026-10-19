@@ -84,15 +84,11 @@ export const generateBundlePdf = async ({
       doc.setDrawColor(226, 232, 240);
       doc.line(10, 280, 200, 280);
 
-      // 좌측 브랜딩 텍스트
-      doc.setFont('Helvetica', 'normal');
-      doc.setFontSize(9);
-      doc.setTextColor(71, 85, 105); // #475569 (slate-600)
-      doc.text('DOOLIA · 100% Free Kids Coloring Sheets', 10, 287);
-
-      doc.setFontSize(7.5);
-      doc.setTextColor(148, 163, 184); // #94a3b8
-      doc.text('Print, Color & Imagine! www.doolia.app', 10, 291.5);
+      // 좌측 브랜딩 텍스트 (단일 도안 표준: DOOLIA | doolia.app, 1줄 bold, 10pt, #334155, Y=288)
+      doc.setFont('Helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.setTextColor(51, 65, 85); // #334155
+      doc.text('DOOLIA | doolia.app', 10, 288);
 
       // 우측 QR 코드
       if (qrBase64) {

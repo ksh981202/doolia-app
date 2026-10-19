@@ -68,9 +68,23 @@ const PROOF_PLACEHOLDERS: Record<string, string> = {
   ja: 'https://... または登録番号',
 }
 
+const SUCCESS_I18N: Record<string, { title: string; desc: string; home: string }> = {
+  ko: { title: '접수가 완료되었습니다.', desc: '관리자가 신속히 검토 후 조치하겠습니다.', home: '홈으로 돌아가기' },
+  en: { title: 'Report Submitted Successfully.', desc: 'Our team will review and take action promptly.', home: 'Return to Home' },
+  ja: { title: '受付が完了しました。', desc: '管理者が速やかに確認し対応いたします。', home: 'ホームに戻る' },
+  zh: { title: '申報已完成。', desc: '管理人員將迅速審核並採取相應措施。', home: '返回首頁' },
+  es: { title: 'Reporte enviado con éxito.', desc: 'El equipo revisará y tomará medidas a la brevedad.', home: 'Volver al inicio' },
+  pt: { title: 'Denúncia enviada com sucesso.', desc: 'A equipe analisará e tomará as medidas cabíveis em breve.', home: 'Voltar ao início' },
+  de: { title: 'Meldung erfolgreich übermittelt.', desc: 'Unser Team wird dies schnellstmöglich prüfen und bearbeiten.', home: 'Zur Startseite' },
+  fr: { title: 'Signalement envoyé avec succès.', desc: 'Notre équipe examinera la situation et interviendra rapidement.', home: "Retour à l'accueil" },
+  it: { title: 'Segnalazione inviata con successo.', desc: 'Il team esaminerà la richiesta e interverrà tempestivamente.', home: 'Torna alla Home' },
+  vi: { title: 'Yêu cầu đã được tiếp nhận thành công.', desc: 'Đội ngũ quản trị sẽ nhanh chóng xem xét và xử lý.', home: 'Về trang chủ' },
+};
+
 export function CopyrightReportPage() {
   const { t, i18n } = useTranslation()
-  const lang = (i18n.language || 'ko').slice(0, 2)
+  const lang = (i18n.language || 'ko').slice(0, 2);
+  const successUi = SUCCESS_I18N[lang] || SUCCESS_I18N.en || SUCCESS_I18N.ko;
   const proofLabel = PROOF_LABELS[lang] || PROOF_LABELS.en
   const proofHelp = PROOF_HELP[lang] || PROOF_HELP.en
   const proofPlaceholder = PROOF_PLACEHOLDERS[lang] || PROOF_PLACEHOLDERS.en
@@ -201,15 +215,15 @@ export function CopyrightReportPage() {
               <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-2xl text-emerald-700">
                 ✓
               </div>
-              <h2 className="mt-4 text-xl font-extrabold text-slate-800">접수가 완료되었습니다.</h2>
+              <h2 className="mt-4 text-xl font-extrabold text-slate-800">{successUi.title}</h2>
               <p className="mx-auto mt-2 max-w-sm break-keep text-sm leading-relaxed text-slate-600">
-                관리자가 신속히 검토 후 조치하겠습니다.
+                {successUi.desc}
               </p>
               <Link
                 to="/"
                 className="mt-6 inline-flex min-h-[44px] items-center rounded-2xl bg-emerald-600 px-5 text-sm font-bold text-white hover:bg-emerald-700"
               >
-                홈으로 돌아가기
+                {successUi.home}
               </Link>
             </div>
           ) : (
