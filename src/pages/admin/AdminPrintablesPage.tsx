@@ -31,6 +31,7 @@ export function AdminPrintablesPage() {
   const navigate = useNavigate()
   const [items, setItems] = useState<AdminPrintable[]>([])
   const [selectedTheme, setSelectedTheme] = useState<string>('all')
+  const [searchQuery, setSearchQuery] = useState('')
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [message, setMessage] = useState('')
   const [messageOk, setMessageOk] = useState(true)
@@ -48,12 +49,36 @@ export function AdminPrintablesPage() {
   }, [])
 
   const filteredItems = useMemo(() => {
-    if (selectedTheme === 'all') return items
-    return items.filter((item) => {
-      const row = item as AdminPrintable & { category_en?: string }
-      return row.theme_en === selectedTheme || row.category_en === selectedTheme
-    })
-  }, [items, selectedTheme])
+    let result = items
+    if (selectedTheme !== 'all') {
+      result = result.filter((item) => {
+        const row = item as AdminPrintable & { category_en?: string }
+        return row.theme_en === selectedTheme || row.category_en === selectedTheme
+      })
+    }
+    const query = searchQuery.trim().toLowerCase()
+    if (query) {
+      result = result.filter((item) => {
+        const anyItem = item as any;
+        const tagsStr = Array.isArray(anyItem.tags) 
+          ? anyItem.tags.join(' ') 
+          : (typeof anyItem.tags === 'string' ? anyItem.tags : '');
+
+        return (
+          !query ||
+          (item.title_ko && item.title_ko.toLowerCase().includes(query)) ||
+          (item.title_en && item.title_en.toLowerCase().includes(query)) ||
+          (item.slug && item.slug.toLowerCase().includes(query)) ||
+          (tagsStr && tagsStr.toLowerCase().includes(query)) ||
+          (anyItem.description_ko && anyItem.description_ko.toLowerCase().includes(query)) ||
+          (anyItem.description_en && anyItem.description_en.toLowerCase().includes(query)) ||
+          (anyItem.parent_guide_ko && anyItem.parent_guide_ko.toLowerCase().includes(query)) ||
+          (anyItem.parent_guide_en && anyItem.parent_guide_en.toLowerCase().includes(query))
+        )
+      })
+    }
+    return result
+  }, [items, selectedTheme, searchQuery])
 
   const allIds = useMemo(() => filteredItems.map((item) => item.id), [filteredItems])
   const selectedCount = selected.size
@@ -227,6 +252,25 @@ export function AdminPrintablesPage() {
             >
               📚 모음집 생성 ({selected.size}/30)
             </button>
+          </div>
+
+          <div className="relative flex-1 max-w-xs sm:max-w-sm">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="🔍 도안 제목 또는 파일명 검색..."
+              className="w-full pl-3 pr-8 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 bg-white"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs"
+              >
+                ✕
+              </button>
+            )}
           </div>
 
           <Link

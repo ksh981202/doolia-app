@@ -6,7 +6,6 @@ const SESSION_KEY = 'doolia-admin-ok'
 const SESSION_API = '/api/admin/session'
 
 export function isLocalAdminHost() {
-  if (import.meta.env.DEV) return true
   if (typeof window === 'undefined') return false
   const host = window.location.hostname
   return host === 'localhost' || host === '127.0.0.1'
@@ -68,8 +67,11 @@ export function AdminGuard({ children }: { children: ReactNode }) {
   const location = useLocation()
   const [state, setState] = useState<'checking' | 'ok' | 'no'>('checking')
 
+  if (!isLocalAdminHost()) {
+    return <Navigate to="/" replace />
+  }
+
   useEffect(() => {
-    if (!isLocalAdminHost()) return
     let cancelled = false
     void verifyAdminSession()
       .then((ok) => {
@@ -83,7 +85,6 @@ export function AdminGuard({ children }: { children: ReactNode }) {
     }
   }, [location.pathname])
 
-  if (!isLocalAdminHost()) return <Navigate to="/" replace />
   if (state === 'checking') return <PageFallback />
   if (state === 'no') return <Navigate to="/admin/login" replace state={{ from: location.pathname }} />
   return children
