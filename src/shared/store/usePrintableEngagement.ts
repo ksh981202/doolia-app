@@ -6,11 +6,13 @@ import type { Printable } from '@/types/printable'
 
 const LIKE_PREFIX = 'doolia_likes_'
 
-function storageKey(printable: Printable) {
-  return printable.slug || printable.id
+function storageKey(printable?: Printable | null) {
+  if (!printable) return 'printable_placeholder'
+  return printable.slug || printable.id || 'printable_placeholder'
 }
 
-function likeKeys(printable: Printable) {
+function likeKeys(printable?: Printable | null) {
+  if (!printable) return []
   return Array.from(new Set([printable.id, printable.slug].filter(Boolean))) as string[]
 }
 
@@ -37,9 +39,9 @@ type EngagementState = {
   likes: Record<string, number>
   views: Record<string, number>
   liked: Record<string, boolean>
-  hydrate: (printable: Printable) => void
-  toggleLike: (printable: Printable) => void
-  recordView: (printable: Printable) => void
+  hydrate: (printable?: Printable | null) => void
+  toggleLike: (printable?: Printable | null) => void
+  recordView: (printable?: Printable | null) => void
 }
 
 export const usePrintableEngagement = create<EngagementState>((set, get) => ({
@@ -48,6 +50,7 @@ export const usePrintableEngagement = create<EngagementState>((set, get) => ({
   liked: {},
 
   hydrate: (printable) => {
+    if (!printable) return
     const key = storageKey(printable)
     const already = get().likes[key] !== undefined && get().views[key] !== undefined
     if (already) return
@@ -62,6 +65,7 @@ export const usePrintableEngagement = create<EngagementState>((set, get) => ({
   },
 
   toggleLike: (printable) => {
+    if (!printable) return
     const key = storageKey(printable)
     get().hydrate(printable)
     const nextLiked = !get().liked[key]
@@ -75,11 +79,12 @@ export const usePrintableEngagement = create<EngagementState>((set, get) => ({
     // 비동기 RPC 호출 (ID 가드 제거, 화면 상태와 무관하게 백그라운드 실행)
     void incrementPrintableLikes(printable.id, nextLiked ? 1 : -1)
     if (supabase && printable.slug) {
-      void supabase.rpc('increment_like', { target_slug: printable.slug })
+      void (supabase.rpc('increment_like', { target_slug: printable.slug }) as unknown as Promise<any>).catch(() => {})
     }
   },
 
   recordView: (printable) => {
+    if (!printable) return
     const key = storageKey(printable)
     get().hydrate(printable)
     // 낙관적 업데이트: SessionStorage 가드 없이 화면에 즉시 반영
@@ -91,19 +96,22 @@ export const usePrintableEngagement = create<EngagementState>((set, get) => ({
   },
 }))
 
-export function usePrintableSocial(printable: Printable) {
+export function usePrintableSocial(printable?: Printable | null) {
   const key = storageKey(printable)
   const hydrate = usePrintableEngagement((state) => state.hydrate)
 
   useEffect(() => {
-    hydrate(printable)
+    if (printable) {
+      hydrate(printable)
+    }
   }, [hydrate, printable])
 
   return {
-    isLiked: usePrintableEngagement((state) => state.liked[key] ?? likeKeys(printable).some(readLiked)),
-    likesCount: usePrintableEngagement((state) => state.likes[key] ?? Math.max(0, printable.likes ?? 0)),
-    viewsCount: usePrintableEngagement((state) => state.views[key] ?? Math.max(0, printable.views ?? 0)),
-    toggleLike: () => usePrintableEngagement.getState().toggleLike(printable),
-    recordView: () => usePrintableEngagement.getState().recordView(printable),
+    isLiked: usePrintableEngagement((state) => state.liked[key] ?? (printable ? likeKeys(printable).some(readLiked) : false)),
+    likesCount: usePrintableEngagement((state) => state.likes[key] ?? Math.max(0, printable?.likes ?? 0)),
+    viewsCount: usePrintableEngagement((state) => state.views[key] ?? Math.max(0, printable?.views ?? 0)),
+    toggleLike: () => printable && usePrintableEngagement.getState().toggleLike(printable),
+    recordView: () => printable && usePrintableEngagement.getState().recordView(printable),
   }
 }
+

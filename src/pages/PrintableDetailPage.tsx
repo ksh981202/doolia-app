@@ -8,8 +8,7 @@ import { InfoSection } from '@/components/detail/InfoSection'
 import { RelatedPrintables } from '@/components/detail/RelatedPrintables'
 import { usePrintableCollection } from '@/features/collection/usePrintableCollection'
 import { usePrintableQuery, usePrintablesQuery } from '@/features/gallery/model/usePrintablesQuery'
-import { DEMO_PRINTABLES, incrementPrintableDownloads } from '@/services/printableService'
-import { supabase } from '@/lib/supabase'
+import { DEMO_PRINTABLES } from '@/services/printableService'
 import { categoryPath, getAllCatalogTopics, matchesTopicCategory } from '@/shared/config/catalog'
 import { seoPrintableAlt, seoPrintablePath, seoPrintableTitle } from '@/shared/config/seo'
 import { detailTitle } from '@/shared/lib/detailCopy'
@@ -69,10 +68,6 @@ export function PrintableDetailPage() {
     if (!printable) return
     hydrate(printable)
     recordView(printable)
-    if (supabase && printable.slug) {
-      void supabase.rpc('increment_download', { target_slug: printable.slug })
-      void incrementPrintableDownloads(printable.slug)
-    }
   }, [printable, recordView, hydrate])
 
   useEffect(() => {
