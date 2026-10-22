@@ -125,7 +125,9 @@ export function PrintableCard({ printable, index = Number.POSITIVE_INFINITY }: P
 
   useLayoutEffect(() => {
     const img = imgRef.current
-    if (img?.complete && img.naturalWidth > 0) setLoadedSrc(src)
+    if (img && (img.complete || img.naturalWidth > 0)) {
+      setLoadedSrc(src)
+    }
   }, [src])
 
   return (
@@ -144,7 +146,7 @@ export function PrintableCard({ printable, index = Number.POSITIVE_INFINITY }: P
         <div
           className={cn(
             'absolute inset-0 bg-slate-100 transition-opacity duration-300',
-            loaded ? 'pointer-events-none opacity-0' : 'animate-pulse opacity-100',
+            loaded ? 'pointer-events-none opacity-0' : 'opacity-100',
           )}
           aria-hidden
         />
@@ -171,8 +173,8 @@ export function PrintableCard({ printable, index = Number.POSITIVE_INFINITY }: P
           width={480}
           height={640}
           className={cn(
-            'relative z-[1] h-full w-full object-contain transition-all duration-300 ease-in-out group-hover:scale-105 group-hover:contrast-125 group-hover:grayscale',
-            loaded ? 'opacity-100' : 'opacity-0',
+            'relative z-[1] h-full w-full object-contain transition-opacity duration-200 ease-in-out group-hover:scale-105 group-hover:contrast-125 group-hover:grayscale',
+            loaded ? 'opacity-100' : 'opacity-100',
           )}
           loading={priority ? 'eager' : 'lazy'}
           decoding="async"
