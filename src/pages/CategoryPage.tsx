@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { ThemeFilter } from '@/components/category/ThemeFilter'
@@ -263,6 +263,10 @@ export function CategoryPage() {
   const isSearch = searchQuery.length > 0
   const ageFilter = AGE_FILTERS.find((item) => item.id === age)
   const ageLabel = t(ageFilter?.labelKey ?? 'category.all', { defaultValue: ageFilter?.label ?? '전체' })
+
+  const [visibleCount, setVisibleCount] = useState<number>(24);
+  const currentCategory = slug;
+  useEffect(() => { setVisibleCount(24); }, [theme, age, currentCategory]);
 
   const items = useMemo(() => {
     if (!match && !browseAll) return []
@@ -659,16 +663,28 @@ export function CategoryPage() {
               </button>
             </div>
           ) : (
-            <div className={CARD_GRID}>
-              {items.map((printable, index) => (
-                <PrintableCard
-                  key={printable.slug || printable.id}
-                  printable={printable}
-                  variant="catalog"
-                  index={index}
-                />
-              ))}
-            </div>
+            <>
+              <div className={CARD_GRID}>
+                {items.slice(0, visibleCount).map((printable, index) => (
+                  <PrintableCard
+                    key={printable.slug || printable.id}
+                    printable={printable}
+                    variant="catalog"
+                    index={index}
+                  />
+                ))}
+              </div>
+              {visibleCount < items.length && (
+                <div className="flex justify-center my-8">
+                  <button
+                    onClick={() => setVisibleCount((prev) => prev + 24)}
+                    className="px-6 py-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-sm transition-colors shadow-sm"
+                  >
+                    도안 더보기 ({visibleCount} / {items.length})
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </section>
       </div>
